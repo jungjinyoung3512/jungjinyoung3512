@@ -1348,6 +1348,46 @@
     <div class="course-card">
       <span class="badge">PROGRAM 03 · 다함께 다시 새롭게!</span>
       <h3>AI 시대 창의력 역량 강화 &amp; 성과개선 팀빌딩 아이데이션</h3>
+      <p>개인의 성장과 팀워크의 재정립을 생성형 AI 기반 콘텐츠 창작 및 협업 미션으로 새롭게 설계하는 조직 활성화 과정입니다.</p>
+      <div class="refs">주요 레퍼런스: 국립군산대학교, 서울시 공무원, 현대자동차, 한국환경보전원, 국가대표 선수단(대한근대5종연맹) 등</div>
+    </div>
+
+    <div class="footer-box">
+      <div style="font-size:13px; color:#FBBF24; font-weight:700; margin-bottom:6px;">THANK YOU!</div>
+      <div style="font-family:'Noto Serif KR', serif; font-size:22px; font-weight:700;">강연 크리에이터 · 교육 아티스트 정진영</div>
+      <div style="font-size:14px; color:#CBD5E1; margin-top:8px;">출강 및 맞춤 커리큘럼 문의: <strong style="color:#fff;">010-8544-7009</strong> · <strong style="color:#FBBF24;">star1010245@naver.com</strong></div>
+    </div>
+  </div>
+</body>
+</html>`;
+        }
+
+        function triggerProposalDownload(mode) {
+            const htmlContent = buildPortfolioDocumentHTML();
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+
+            if (mode === 'pdf') {
+                const printWin = window.open(url, '_blank');
+                if (printWin) {
+                    printWin.onload = () => {
+                        setTimeout(() => {
+                            printWin.print();
+                        }, 400);
+                    };
+                }
+            } else {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '2026_포트폴리오_강연크리에이터_정진영.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+
+            closeModal('proposalModal');
+        }
+
         // 5. B2B 강의 의뢰 폼 제출 처리 (star1010245@naver.com 이메일 발송 연동)
         const inquiryForm = document.getElementById('inquiryForm');
         if (inquiryForm) {
