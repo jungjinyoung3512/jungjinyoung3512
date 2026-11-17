@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0A1120">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>절묘한 타이밍 | 정진영 교육 아티스트</title>
+<meta name="description" content="강연장 아이스브레이킹 — 켜지는 원숭이를 정확한 타이밍에 터치하는 순발력 게임">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --bg:#0A1120; --bg2:#0D1626;
+    --panel:#111D31; --panel2:#16243C;
+    --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.16);
+    --amber:#F5A524; --amber-lt:#FFC94A; --amber-soft:rgba(245,165,36,.14);
+    --leaf:#34D399; --cyan:#22D3EE; --rose:#FB7185;
+    --text:#F1F5F9; --muted:#9AA9BF; --dim:#64748B;
+    --sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR",Georgia,serif;
+    --mono:ui-monospace,"SF Mono","Roboto Mono",Menlo,Consolas,monospace;
+  }
+  html{-webkit-text-size-adjust:100%;background:#070D18}
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;overscroll-behavior:none}
+  body{
+    background:var(--bg);color:var(--text);font-family:var(--sans);
+    word-break:keep-all;-webkit-font-smoothing:antialiased;
+    line-height:1.42;letter-spacing:-0.01em;
+    -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(120% 40% at 50% -8%, rgba(245,165,36,.16) 0%, rgba(245,165,36,0) 62%),
+      radial-gradient(90% 34% at 50% 104%, rgba(52,211,153,.09) 0%, rgba(52,211,153,0) 70%);
+    transition:background .45s ease;
+  }
+  body.live::before{
+    background:
+      radial-gradient(120% 52% at 50% -6%, rgba(245,165,36,.26) 0%, rgba(245,165,36,0) 60%),
+      radial-gradient(90% 44% at 50% 104%, rgba(52,211,153,.14) 0%, rgba(52,211,153,0) 70%);
+  }
+  .app{
+    position:relative;z-index:1;width:100%;max-width:430px;margin:0 auto;
+    height:100vh;height:100dvh;display:flex;flex-direction:column;
+    padding:calc(10px + env(safe-area-inset-top)) 16px calc(12px + env(safe-area-inset-bottom));
+    overflow:hidden;
+  }
+  .view{display:none;flex:1;min-height:0;flex-direction:column}
+  .view.on{display:flex}
+
+  /* ================= 입장 ================= */
+  .entry-top{flex:none;text-align:center;padding:14px 0 0}
+  .logo{
+    width:74px;height:74px;margin:0 auto 10px;border-radius:24px;
+    display:flex;align-items:center;justify-content:center;font-size:38px;
+    background:radial-gradient(120% 120% at 50% 20%, #25304a, #131e33);
+    border:1px solid rgba(245,165,36,.34);
+    box-shadow:0 10px 30px rgba(245,165,36,.18), inset 0 0 22px rgba(245,165,36,.08);
+  }
+  .title{font-family:var(--serif);font-weight:900;font-size:28px;letter-spacing:-.04em;margin:0}
+  .title em{font-style:normal;color:var(--amber-lt)}
+  .sub{margin:6px 0 0;font-size:13px;color:var(--muted);font-weight:600}
+  .entry-form{margin-top:auto;margin-bottom:auto;padding:18px 0 0}
+  .field{margin-bottom:11px}
+  .lab{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;font-weight:800;color:var(--dim);letter-spacing:.04em;margin:0 2px 6px}
+  .lab .tag{color:var(--amber);font-weight:800;letter-spacing:0}
+  .inp{
+    width:100%;appearance:none;border:1px solid var(--line2);background:#0E1A2C;
+    color:var(--text);font-family:inherit;font-size:17px;font-weight:700;
+    padding:14px 15px;border-radius:14px;outline:none;letter-spacing:-.01em;
+    transition:border-color .15s,box-shadow .15s;
+  }
+  .inp::placeholder{color:#4E5F78;font-weight:600}
+  .inp:focus{border-color:rgba(245,165,36,.7);box-shadow:0 0 0 3px rgba(245,165,36,.13)}
+  .inp.code{text-transform:uppercase;letter-spacing:.16em;font-size:15px;font-weight:800;text-align:center;padding:11px 12px}
+  .join{
+    width:100%;margin-top:6px;appearance:none;border:0;cursor:pointer;
+    background:linear-gradient(180deg,#FFC24A,#F09B12);color:#241703;
+    font-family:inherit;font-size:18px;font-weight:900;letter-spacing:-.02em;
+    padding:17px;border-radius:16px;
+    box-shadow:0 10px 26px rgba(245,165,36,.28), inset 0 1px 0 rgba(255,255,255,.5);
+    transition:transform .1s,filter .15s;
+  }
+  .join:active{transform:translateY(1px) scale(.995)}
+  .join:disabled{filter:grayscale(.5) brightness(.7);cursor:default}
+  .entry-foot{flex:none;text-align:center;font-size:11.5px;color:var(--dim);line-height:1.6;padding-bottom:4px}
+  .entry-foot b{color:#9FB0C6}
+  .count-pill{
+    display:inline-flex;align-items:center;gap:7px;margin-top:12px;
+    background:#101C30;border:1px solid var(--line);border-radius:99px;
+    padding:8px 15px;font-size:12.5px;font-weight:800;color:#C7D3E4;
+  }
+  .count-pill b{color:var(--amber-lt);font-size:14px}
+  .count-pill .d{width:6px;height:6px;border-radius:50%;background:var(--leaf);box-shadow:0 0 9px var(--leaf)}
+
+  /* ================= 대기 / 플레이 ================= */
+  .stage{flex:1;min-height:0;display:flex;flex-direction:column}
+  .hud{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2px 2px 8px}
+  .hud .side{display:flex;flex-direction:column;gap:1px;min-width:74px}
+  .hud .side.right{align-items:flex-end}
+  .k{font-size:10.5px;font-weight:800;color:var(--dim);letter-spacing:.06em}
+  .v{font-size:16px;font-weight:900;color:#E8EFF8;letter-spacing:-.02em}
+  .v.small{font-size:13px;color:#A9B8CC;letter-spacing:.08em}
+  .score{font-family:var(--mono);font-size:24px;font-weight:800;color:var(--amber-lt);line-height:1.05;font-variant-numeric:tabular-nums}
+  .timer{
+    font-family:var(--mono);font-size:38px;font-weight:800;line-height:1;
+    letter-spacing:-.03em;color:#EAF1FA;font-variant-numeric:tabular-nums;
+    transition:color .2s;
+  }
+  .timer.hot{color:var(--rose)}
+  .timer small{font-size:14px;font-weight:800;color:var(--dim);margin-left:3px}
+  .tbar{flex:none;height:6px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden;margin-bottom:10px}
+  .tbar i{display:block;height:100%;width:100%;border-radius:99px;background:linear-gradient(90deg,#34D399,#F5A524);transition:width .1s linear}
+  .tbar i.hot{background:linear-gradient(90deg,#F5A524,#FB7185)}
+
+  .grid{
+    flex:1;min-height:0;display:grid;
+    grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);
+    gap:9px;
+  }
+  .cell{
+    position:relative;display:flex;align-items:center;justify-content:center;
+    border-radius:17px;overflow:hidden;touch-action:manipulation;
+    background:radial-gradient(78% 78% at 50% 26%, rgba(255,255,255,.05), rgba(255,255,255,.008));
+    border:1px solid rgba(255,255,255,.055);
+    transition:background .16s,border-color .16s,box-shadow .16s,transform .07s;
+  }
+  .cell svg{width:92%;height:92%;display:block}
+  .mon .fur{fill:#1F2E4A;transition:fill .1s}
+  .mon .ear{fill:#1A2740;transition:fill .1s}
+  .mon .earin{fill:#16223A;transition:fill .1s}
+  .mon .face{fill:#1D2B45;transition:fill .1s}
+  .mon .shadow{fill:rgba(0,0,0,.4)}
+  .mon .eye,.mon .nose,.mon .glint,.mon .mouth{opacity:0;transition:opacity .1s}
+  .cell.lit{
+    background:radial-gradient(78% 78% at 50% 26%, rgba(245,165,36,.34), rgba(245,165,36,.05));
+    border-color:rgba(255,201,74,.62);
+    box-shadow:0 0 28px rgba(245,165,36,.34), inset 0 0 20px rgba(245,165,36,.16);
+    animation:pop .16s ease-out;
+  }
+  .cell.lit .fur{fill:#BE7B3C}
+  .cell.lit .ear{fill:#9E6029}
+  .cell.lit .earin{fill:#F6C48C}
+  .cell.lit .face{fill:#FFD9A3}
+  .cell.lit .eye{fill:#2A1A10;opacity:1}
+  .cell.lit .glint{fill:#fff;opacity:.95}
+  .cell.lit .nose{fill:#8A5230;opacity:1}
+  .cell.lit .mouth{fill:none;stroke:#8A5230;stroke-width:3.6;stroke-linecap:round;opacity:1}
+  .cell.bad{animation:shake .26s}
+  .cell.tap{transform:scale(.955)}
+  @keyframes pop{0%{transform:scale(.93)}65%{transform:scale(1.045)}100%{transform:scale(1)}}
+  @keyframes shake{
+    0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}
+    45%{transform:translateX(5px)}70%{transform:translateX(-3px)}
+  }
+  .plus{
+    position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);
+    font-family:var(--mono);font-size:23px;font-weight:900;color:#FFE7A8;
+    text-shadow:0 2px 10px rgba(245,165,36,.9);pointer-events:none;
+    animation:plusUp .62s ease-out forwards;
+  }
+  @keyframes plusUp{
+    0%{opacity:0;transform:translate(-50%,-30%) scale(.7)}
+    25%{opacity:1;transform:translate(-50%,-52%) scale(1.12)}
+    100%{opacity:0;transform:translate(-50%,-118%) scale(1)}
+  }
+
+  .hint{
+    flex:none;margin-top:10px;text-align:center;font-size:12.5px;font-weight:700;
+    color:#A9B8CC;background:#0F1B2D;border:1px solid var(--line);
+    border-radius:13px;padding:11px 12px;line-height:1.5;
+  }
+  .hint b{color:var(--amber-lt)}
+  .hint .dot3{display:inline-block;animation:blink 1.4s infinite}
+  @keyframes blink{0%,100%{opacity:.35}50%{opacity:1}}
+
+  /* 카운트다운 오버레이 */
+  .cd{
+    position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;
+    background:rgba(7,13,24,.72);backdrop-filter:blur(3px);
+  }
+  .cd.on{display:flex}
+  .cd .num{
+    font-family:var(--serif);font-size:150px;font-weight:900;line-height:.9;color:var(--amber-lt);
+    text-shadow:0 8px 46px rgba(245,165,36,.55);
+    animation:cdIn .62s ease-out;
+  }
+  .cd .num.go{font-family:var(--sans);font-size:64px;font-weight:900;letter-spacing:-.03em;color:#7BF3B8;text-shadow:0 8px 40px rgba(52,211,153,.6)}
+  @keyframes cdIn{0%{opacity:0;transform:scale(1.5)}40%{opacity:1;transform:scale(.94)}100%{opacity:1;transform:scale(1)}}
+
+  /* ================= 결과 ================= */
+  .res{flex:1;min-height:0;display:flex;flex-direction:column;padding-top:4px}
+  .res-head{flex:none;text-align:center}
+  .res-head .t{font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--dim)}
+  .res-head .big{font-family:var(--mono);font-size:62px;font-weight:800;line-height:1;margin:6px 0 2px;color:var(--amber-lt);font-variant-numeric:tabular-nums}
+  .res-head .big span{font-size:20px;color:var(--muted);margin-left:4px}
+  .rankcard{
+    margin:8px auto 0;display:inline-flex;align-items:center;gap:9px;
+    background:linear-gradient(180deg,#1A2942,#131F33);border:1px solid rgba(245,165,36,.34);
+    border-radius:14px;padding:10px 18px;font-size:14px;font-weight:800;color:#D6E1EE;
+  }
+  .rankcard b{font-family:var(--serif);font-size:23px;color:var(--amber-lt)}
+  .rankcard .of{color:var(--dim);font-size:12.5px;font-weight:700}
+  .top3{flex:none;margin:16px 0 0;display:flex;flex-direction:column;gap:7px}
+  .t3{
+    display:flex;align-items:center;gap:10px;background:#0F1B2D;border:1px solid var(--line);
+    border-radius:13px;padding:9px 12px;
+  }
+  .t3 .m{font-size:18px;width:24px;text-align:center}
+  .t3 .nm{flex:1;font-size:14.5px;font-weight:800;color:#E6EEF8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .t3 .sc{font-family:var(--mono);font-size:16px;font-weight:800;color:#FFD37A}
+  .t3.g1{background:linear-gradient(90deg,rgba(245,165,36,.18),rgba(245,165,36,.02));border-color:rgba(245,165,36,.45)}
+  .t3.g2{background:linear-gradient(90deg,rgba(203,213,225,.14),rgba(203,213,225,.01));border-color:rgba(203,213,225,.3)}
+  .t3.g3{background:linear-gradient(90deg,rgba(217,119,6,.15),rgba(217,119,6,.01));border-color:rgba(217,119,6,.32)}
+  .t3.me{outline:2px solid rgba(52,211,153,.55);outline-offset:1px}
+  .res-foot{flex:none;margin-top:auto;text-align:center;font-size:12px;color:var(--dim);padding:12px 0 2px;line-height:1.6}
+  .res-foot b{color:#A9B8CC}
+
+  .toast{
+    position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translate(-50%,16px);
+    z-index:90;max-width:88%;background:#1B2942;border:1px solid var(--line2);
+    color:#EAF1FA;font-size:13px;font-weight:700;padding:12px 17px;border-radius:13px;
+    box-shadow:0 14px 40px rgba(0,0,0,.5);opacity:0;pointer-events:none;
+    transition:opacity .2s,transform .2s;text-align:center;
+  }
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+
+  @media (max-height:730px){
+    .logo{width:62px;height:62px;font-size:32px;margin-bottom:8px}
+    .title{font-size:24px}
+    .inp{padding:12px 14px;font-size:16px}
+    .join{padding:15px;font-size:17px}
+    .timer{font-size:33px}
+    .grid{gap:7px}
+    .hint{padding:9px 10px;font-size:12px}
+    .res-head .big{font-size:52px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ===================== 입장 ===================== -->
+  <section class="view on" id="viewEntry">
+    <div class="entry-top">
+      <div class="logo">🐵</div>
+      <h1 class="title">절묘한 <em>타이밍</em></h1>
+      <p class="sub">켜지는 원숭이를 정확히 터치하라!</p>
+    </div>
+
+    <div class="entry-form">
+      <div class="field">
+        <div class="lab"><span>방 코드</span><span class="tag" id="roomTagHint">JY80</span></div>
+        <input class="inp code" id="roomInput" value="JY80" maxlength="8" inputmode="text" autocomplete="off" spellcheck="false" aria-label="방 코드">
+      </div>
+      <div class="field">
+        <div class="lab"><span>내 아이디(닉네임)</span><span class="tag" id="nameLen">0 / 10</span></div>
+        <input class="inp" id="nameInput" maxlength="10" placeholder="예) 김하늘" autocomplete="off" spellcheck="false" aria-label="아이디">
+      </div>
+      <button class="join" id="joinBtn">입장하기</button>
+      <div style="text-align:center">
+        <span class="count-pill"><span class="d"></span>현재 <b id="entryCount">0</b> / 80명</span>
+      </div>
+    </div>
+
+    <div class="entry-foot">
+      진행자가 시작을 누르면 <b>3·2·1</b> 카운트다운 후 <b>36초</b> 동안 진행됩니다.<br>
+      켜진 원숭이를 터치할 때마다 <b>+1점</b>!
+    </div>
+  </section>
+
+  <!-- ===================== 대기 / 플레이 ===================== -->
+  <section class="view" id="viewStage">
+    <div class="stage">
+      <div class="hud">
+        <div class="side">
+          <span class="k" id="hudLeftK">내 점수</span>
+          <span class="score" id="scoreNum">0</span>
+        </div>
+        <div class="timer" id="timer"><span id="timerNum">36.0</span><small>초</small></div>
+        <div class="side right">
+          <span class="k">입장</span>
+          <span class="v small" id="hudCount">0 / 80</span>
+        </div>
+      </div>
+      <div class="tbar" id="tbarWrap" style="visibility:hidden"><i id="tbarFill"></i></div>
+      <div class="grid" id="grid"></div>
+      <div class="hint" id="hint">진행자가 시작을 누르면 <b>3·2·1</b> 후 시작됩니다!<span class="dot3"> ···</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== 결과 ===================== -->
+  <section class="view" id="viewResult">
+    <div class="res">
+      <div class="res-head">
+        <div class="t">MY SCORE</div>
+        <div class="big" id="resScore">0<span>점</span></div>
+        <div class="rankcard">내 순위 <b id="resRank">-</b><span class="of" id="resOf">/ 0명</span></div>
+      </div>
+      <div class="top3" id="top3"></div>
+      <div class="res-foot" id="resFoot">진행자가 <b>재시작</b>을 누르면 다시 도전할 수 있어요.</div>
+    </div>
+  </section>
+</div>
+
+<div class="cd" id="cdOverlay"><div class="num" id="cdNum">3</div></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  const $ = id => document.getElementById(id);
+
+  /* ================= 설정 ================= */
+  const QS = new URLSearchParams(location.search);
+  const DEFAULT_ROOM = "JY80";
+  const MAX_PLAYERS = 80;
+  const GAME_MS = 36000;
+  const COUNT_MS = 3000;
+  const PHASE = [ {to:12000, dur:1050}, {to:24000, dur:750}, {to:36000, dur:480} ];
+
+  function normRoom(v){
+    return String(v || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
+  }
+  let ROOM = normRoom(QS.get("room")) || normRoom(localStorage.getItem("mt_room")) || DEFAULT_ROOM;
+
+  const FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "977342156141",
+    appId: "1:977342156141:web:f9842fcc67a819ce621e64"
+  };
+  const DB_ROOT = "rooms/monkeyTiming/";
+  const JOIN_URL = "https://jungjinyoung3512.github.io/jungjinyoung3512/monkey-timing/";
+
+  /* ================= 상태 ================= */
+  const S = {
+    joined:false, name:"", pid:"",
+    score:0, shownScore:0,
+    running:false, resultShown:false, phase:"wait",
+    startAt:0, round:0, raf:0,
+    spotIdx:-1, spotUntil:0, nextAt:0, litNow:false, lockUntil:0,
+    meta:{}, count:0, offset:0, connected:false,
+    pendingWrite:false, lastWrite:0
+  };
+
+  let db = null, metaRef = null, playersRef = null, meRef = null, countRef = null;
+
+  const nowMs = () => Date.now() + S.offset;
+
+  /* ================= 유틸 ================= */
+  let toastT = 0;
+  function toast(msg, ms){
+    const el = $("toast");
+    el.textContent = msg;
+    el.classList.add("on");
+    clearTimeout(toastT);
+    toastT = setTimeout(() => el.classList.remove("on"), ms || 2400);
+  }
+  function view(name){
+    ["viewEntry","viewStage","viewResult"].forEach(id => $(id).classList.toggle("on", id === name));
+  }
+
+  /* ================= 원숭이 SVG ================= */
+  const MONKEY = '<svg viewBox="0 0 108 108" class="mon" aria-hidden="true">' +
+    '<ellipse class="shadow" cx="54" cy="99" rx="25" ry="4.5"/>' +
+    '<circle class="ear" cx="19" cy="47" r="14.5"/><circle class="ear" cx="89" cy="47" r="14.5"/>' +
+    '<circle class="earin" cx="19" cy="47" r="7.6"/><circle class="earin" cx="89" cy="47" r="7.6"/>' +
+    '<ellipse class="fur" cx="54" cy="55" rx="34" ry="32"/>' +
+    '<ellipse class="face" cx="54" cy="61" rx="25" ry="22.5"/>' +
+    '<ellipse class="eye" cx="44" cy="54" rx="5" ry="6.2"/>' +
+    '<ellipse class="eye" cx="64" cy="54" rx="5" ry="6.2"/>' +
+    '<circle class="glint" cx="45.7" cy="52" r="1.7"/><circle class="glint" cx="65.7" cy="52" r="1.7"/>' +
+    '<ellipse class="nose" cx="50" cy="65" rx="2.2" ry="1.6"/><ellipse class="nose" cx="58" cy="65" rx="2.2" ry="1.6"/>' +
+    '<path class="mouth" d="M46 71 q8 7 16 0"/>' +
+    '</svg>';
+
+  const cells = [];
+  function buildGrid(){
+    const g = $("grid");
+    g.innerHTML = "";
+    cells.length = 0;
+    for (let i = 0; i < 12; i++){
+      const c = document.createElement("div");
+      c.className = "cell";
+      c.dataset.i = String(i);
+      c.innerHTML = MONKEY;
+      c.addEventListener("pointerdown", ev => onCellTap(i, ev, c));
+      g.appendChild(c);
+      cells.push(c);
+    }
+  }
+
+  /* ================= 점수 ================= */
+  function renderScore(){
+    $("scoreNum").textContent = String(Math.max(0, Math.floor(S.score)));
+  }
+
+  function markDirty(){
+    S.pendingWrite = true;
+  }
+  function flushScore(force){
+    if (!S.joined || !meRef || !db) return;
+    if (!S.pendingWrite && !force) return;
+    const t = Date.now();
+    if (!force && t - S.lastWrite < 450) return;
+    S.lastWrite = t;
+    S.pendingWrite = false;
+    try{
+      meRef.update({ s: Math.max(0, Math.floor(S.score)), t: firebase.database.ServerValue.TIMESTAMP });
+    }catch(e){}
+  }
+  setInterval(() => flushScore(false), 460);
+
+  /* ================= 점등 로직 ================= */
+  function phaseDur(el){
+    for (let i = 0; i < PHASE.length; i++){
+      if (el < PHASE[i].to) return PHASE[i].dur;
+    }
+    return PHASE[PHASE.length - 1].dur;
+  }
+
+  function clearLit(){
+    if (S.spotIdx >= 0 && cells[S.spotIdx]) cells[S.spotIdx].classList.remove("lit");
+    S.spotIdx = -1;
+    S.litNow = false;
+  }
+
+  function spawnSpot(el){
+    let idx = Math.floor(Math.random() * 12);
+    if (idx === S.spotIdx){ idx = (idx + 1 + Math.floor(Math.random() * 11)) % 12; }
+    S.spotIdx = idx;
+    S.litNow = true;
+    const dur = phaseDur(el);
+    S.spotUntil = nowMs() + dur;
+    S.nextAt = 0;
+    const c = cells[idx];
+    if (c) c.classList.add("lit");
+  }
+
+  function plusOne(cell){
+    const s = document.createElement("span");
+    s.className = "plus";
+    s.textContent = "+1";
+    cell.appendChild(s);
+    setTimeout(() => { if (s.parentNode) s.parentNode.removeChild(s); }, 640);
+  }
+
+  function onCellTap(i, ev, cell){
+    if (ev && ev.preventDefault) ev.preventDefault();
+    if (!S.running || S.phase !== "play") return;
+    if (nowMs() < (S.lockUntil || 0)) return;
+    if (i === S.spotIdx && S.litNow){
+      S.score += 1;
+      renderScore();
+      markDirty();
+      plusOne(cell);
+      cell.classList.add("tap");
+      setTimeout(() => cell.classList.remove("tap"), 90);
+      if (navigator.vibrate){ try{ navigator.vibrate(12); }catch(e){} }
+      clearLit();
+      S.nextAt = nowMs() + 70;
+    } else {
+      S.lockUntil = nowMs() + 450;
+      cell.classList.remove("bad");
+      void cell.offsetWidth;
+      cell.classList.add("bad");
+      if (navigator.vibrate){ try{ navigator.vibrate([8, 40, 8]); }catch(e){} }
+      setTimeout(() => cell.classList.remove("bad"), 300);
+    }
+  }
+
+  /* ================= 카운트다운 & 타이머 ================= */
+  let cdShown = null;
+  function showCd(n, isGo){
+    const ov = $("cdOverlay"), num = $("cdNum");
+    const key = isGo ? "go" : String(n);
+    if (cdShown === key) return;
+    cdShown = key;
+    ov.classList.add("on");
+    num.classList.toggle("go", !!isGo);
+    num.textContent = isGo ? "시작!" : String(n);
+    num.style.animation = "none";
+    void num.offsetWidth;
+    num.style.animation = "";
+  }
+  function hideCd(){
+    if (cdShown === null) return;
+    cdShown = null;
+    $("cdOverlay").classList.remove("on");
+  }
+
+  function updateTimer(remain){
+    const sec = Math.max(0, remain) / 1000;
+    const num = $("timerNum");
+    if (num) num.textContent = sec.toFixed(1);
+    const ratio = Math.max(0, Math.min(1, remain / GAME_MS));
+    $("tbarFill").style.width = (ratio * 100).toFixed(2) + "%";
+    const hot = remain <= 10000;
+    $("timer").classList.toggle("hot", hot);
+    $("tbarFill").classList.toggle("hot", hot);
+  }
+
+  function loop(){
+    if (!S.running) return;
+    const now = nowMs();
+    const el = now - S.startAt;
+
+    if (el < 0){
+      const n = Math.ceil(-el / 1000);
+      showCd(Math.min(3, Math.max(1, n)), false);
+      updateTimer(GAME_MS);
+      S.raf = requestAnimationFrame(loop);
+      return;
+    }
+    if (el >= GAME_MS){
+      updateTimer(0);
+      finalize();
+      return;
+    }
+    if (S.phase !== "play"){
+      S.phase = "play";
+      showCd(0, true);
+      setTimeout(hideCd, 460);
+      $("hint").innerHTML = "켜진 원숭이를 <b>빠르게</b> 터치!";
+    }
+    updateTimer(GAME_MS - el);
+
+    if (S.litNow && now >= S.spotUntil){
+      clearLit();
+      S.nextAt = now + 30;
+    }
+    if (!S.litNow && el < GAME_MS - 60 && now >= S.nextAt){
+      spawnSpot(el);
+    }
+    S.raf = requestAnimationFrame(loop);
+  }
+
+  /* ================= 게임 시작/종료 ================= */
+  function startRound(startAt, round){
+    S.startAt = Number(startAt) || nowMs();
+    S.round = Number(round) || 0;
+    S.running = true;
+    S.resultShown = false;
+    S.phase = "count";
+    S.score = 0;
+    S.pendingWrite = false;
+    renderScore();
+    $("scoreNum").style.fontSize = "";
+    clearLit();
+    S.nextAt = 0;
+    document.body.classList.add("live");
+    $("tbarWrap").style.visibility = "visible";
+    $("hudLeftK").textContent = "내 점수";
+    $("hint").innerHTML = "곧 시작합니다. <b>3·2·1</b> 후 원숭이가 켜져요!";
+    view("viewStage");
+    cancelAnimationFrame(S.raf);
+    S.raf = requestAnimationFrame(loop);
+
+    if (S.startAt < nowMs() - 200){
+      /* 이미 진행 중인 판에 늦게 합류한 경우 */
+      S.phase = "play";
+      hideCd();
+    }
+  }
+
+  function stopRound(){
+    S.running = false;
+    cancelAnimationFrame(S.raf);
+    clearLit();
+    hideCd();
+    document.body.classList.remove("live");
+    $("tbarWrap").style.visibility = "hidden";
+  }
+
+  function finalize(){
+    if (S.resultShown){
+      stopRound();
+      return;
+    }
+    const wasRunning = S.running;
+    stopRound();
+    updateTimer(0);
+    finalizeRender(wasRunning);
+  }
+
+  function finalizeRender(wasRunning){
+    if (S.resultShown) return;
+    S.resultShown = true;
+    S.pendingWrite = true;
+    flushScore(true);
+    const myScore = S.score;
+    $("resScore").innerHTML = String(myScore) + "<span>점</span>";
+    $("resRank").textContent = "-";
+    $("resOf").textContent = "/ " + (S.count || 0) + "명";
+    $("top3").innerHTML = '<div class="t3"><span class="m">⏳</span><span class="nm">순위 집계 중…</span><span class="sc">-</span></div>';
+    view("viewResult");
+
+    const go = () => {
+      if (!playersRef) return;
+      playersRef.once("value").then(snap => {
+        renderResult(snap.val() || {});
+      }).catch(() => {
+        $("top3").innerHTML = '<div class="t3"><span class="m">🙈</span><span class="nm">순위를 불러오지 못했어요</span><span class="sc">-</span></div>';
+      });
+    };
+    setTimeout(go, wasRunning ? 520 : 120);
+  }
+
+  function renderResult(players){
+    const arr = Object.keys(players || {}).map(id => {
+      const p = players[id] || {};
+      return { id:id, n: p.n || "익명", s: Number(p.s) || 0, t: Number(p.t) || 0 };
+    });
+    arr.sort((a, b) => (b.s - a.s) || (a.t - b.t) || (a.id < b.id ? -1 : 1));
+    const total = arr.length;
+    const idx = arr.findIndex(p => p.id === S.pid);
+    const rank = idx >= 0 ? idx + 1 : 0;
+    const mine = idx >= 0 ? arr[idx].s : S.score;
+
+    $("resScore").innerHTML = String(mine) + "<span>점</span>";
+    $("resRank").textContent = rank > 0 ? String(rank) : "-";
+    $("resOf").textContent = "/ " + total + "명";
+
+    const medals = ["🥇","🥈","🥉"];
+    let html = "";
+    for (let i = 0; i < 3; i++){
+      const p = arr[i];
+      if (!p) break;
+      html += '<div class="t3 g' + (i + 1) + (p.id === S.pid ? " me" : "") + '">' +
+        '<span class="m">' + medals[i] + '</span>' +
+        '<span class="nm">' + esc(p.n) + '</span>' +
+        '<span class="sc">' + p.s + '점</span></div>';
+    }
+    if (!html){
+      html = '<div class="t3"><span class="m">🙈</span><span class="nm">참가자 기록이 없어요</span><span class="sc">-</span></div>';
+    }
+    $("top3").innerHTML = html;
+
+    let foot = "진행자가 <b>재시작</b>을 누르면 다시 도전할 수 있어요.";
+    if (rank === 1) foot = "🏆 <b>1위</b>! 절묘한 타이밍이었습니다!";
+    else if (rank > 0 && rank <= 3) foot = "🎉 <b>TOP 3</b> 진입! 멋진 손놀림이었어요.";
+    else if (rank > 0) foot = "진행자가 <b>재시작</b>을 누르면 다시 도전할 수 있어요.";
+    $("resFoot").innerHTML = foot;
+  }
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+
+  /* ================= 메타 반영 ================= */
+  function onMeta(m){
+    m = m || {};
+    S.meta = m;
+    S.count = Number(m.count) || 0;
+    $("entryCount").textContent = String(S.count);
+    $("hudCount").textContent = S.count + " / 80";
+
+    if (!S.joined) return;
+    const st = m.state || "idle";
+
+    if (st === "cleared"){
+      leaveToEntry("진행자가 참가자를 정리했어요. 다시 입장해 주세요!");
+      return;
+    }
+    if (st === "end"){
+      if (!S.resultShown){ finalize(); }
+      else { stopRound(); }
+      return;
+    }
+    if (st === "count" || st === "run"){
+      const sa = Number(m.startAt) || 0;
+      const rd = Number(m.round) || 0;
+      if (!S.running || sa !== S.startAt || rd !== S.round){
+        startRound(sa, rd);
+      }
+      return;
+    }
+    /* idle */
+    if (S.running) stopRound();
+    if (S.resultShown && !S.running){ /* 결과 화면 유지 */ }
+    goWait();
+  }
+
+  function goWait(){
+    if (!S.joined) { view("viewEntry"); return; }
+    S.phase = "wait";
+    S.score = 0;
+    S.resultShown = false;
+    renderScore();
+    clearLit();
+    document.body.classList.remove("live");
+    $("tbarWrap").style.visibility = "hidden";
+    $("timerNum").textContent = "36.0";
+    $("timer").classList.remove("hot");
+    $("hudLeftK").textContent = "내 아이디";
+    $("scoreNum").textContent = S.name || "-";
+    $("scoreNum").style.fontSize = "15px";
+    $("hint").innerHTML = "진행자가 시작을 누르면 <b>3·2·1</b> 후 시작됩니다!<span class=\"dot3\"> ···</span>";
+    view("viewStage");
+  }
+
+  /* ================= 입장 ================= */
+  function bindRoom(){
+    if (metaRef) metaRef.off();
+    if (playersRef) playersRef.off();
+    if (meRef) meRef.off();
+    metaRef = db.ref(DB_ROOT + ROOM + "/meta");
+    playersRef = db.ref(DB_ROOT + ROOM + "/players");
+    meRef = db.ref(DB_ROOT + ROOM + "/players/" + S.pid);
+    metaRef.on("value", s => onMeta(s.val() || {}));
+  }
+
+  function initFirebase(){
+    if (typeof firebase === "undefined" || !firebase.initializeApp){
+      toast("연결에 실패했어요. 새로고침 해 주세요.", 4000);
+      return;
+    }
+    try{
+      firebase.initializeApp(FB_CONFIG);
+      db = firebase.database();
+      S.pid = localStorage.getItem("mt_pid") || ("p" + Math.random().toString(36).slice(2, 9));
+      localStorage.setItem("mt_pid", S.pid);
+      db.ref(".info/serverTimeOffset").on("value", s => { S.offset = s.val() || 0; });
+      db.ref(".info/connected").on("value", s => { S.connected = !!s.val(); });
+      bindRoom();
+      autoRejoin();
+    }catch(e){
+      toast("연결에 실패했어요. 새로고침 해 주세요.", 4000);
+    }
+  }
+
+  function autoRejoin(){
+    const savedName = localStorage.getItem("mt_name") || "";
+    if (!savedName) return;
+    $("nameInput").value = savedName;
+    $("nameLen").textContent = savedName.length + " / 10";
+    playersRef.child(S.pid).once("value").then(snap => {
+      const p = snap.val();
+      if (!p) return;
+      S.joined = true;
+      S.name = p.n || savedName;
+      S.score = 0;
+      $("nameInput").value = S.name;
+      const st = (S.meta && S.meta.state) || "idle";
+      if (st === "count" || st === "run"){ startRound(S.meta.startAt, S.meta.round); }
+      else goWait();
+    }).catch(() => {});
+  }
+
+  function doJoin(){
+    const nm = ($("nameInput").value || "").trim().slice(0, 10);
+    if (!nm){ toast("아이디를 입력해 주세요."); $("nameInput").focus(); return; }
+    const rm = normRoom($("roomInput").value) || DEFAULT_ROOM;
+    const btn = $("joinBtn");
+    btn.disabled = true;
+    btn.textContent = "입장 중…";
+
+    if (rm !== ROOM){
+      ROOM = rm;
+      localStorage.setItem("mt_room", rm);
+      bindRoom();
+    }
+    playersRef.once("value").then(snap => {
+      const players = snap.val() || {};
+      const n = Object.keys(players).length;
+      const mine = players[S.pid];
+      if (!mine && n >= MAX_PLAYERS){
+        throw new Error("FULL");
+      }
+      return meRef.set({ n: nm, s: 0, t: firebase.database.ServerValue.TIMESTAMP });
+    }).then(() => {
+      S.joined = true;
+      S.name = nm;
+      S.score = 0;
+      localStorage.setItem("mt_name", nm);
+      localStorage.setItem("mt_room", ROOM);
+      const st = (S.meta && S.meta.state) || "idle";
+      if (st === "count" || st === "run"){ startRound(S.meta.startAt, S.meta.round); }
+      else goWait();
+    }).catch(err => {
+      if (err && err.message === "FULL") toast("정원(80명)이 가득 찼어요. 진행자에게 문의해 주세요.", 3200);
+      else toast("입장에 실패했어요. 잠시 후 다시 시도해 주세요.", 3000);
+    }).then(() => {
+      btn.disabled = false;
+      btn.textContent = "입장하기";
+    });
+  }
+
+  function leaveToEntry(msg){
+    try{ if (meRef) meRef.remove(); }catch(e){}
+    S.joined = false;
+    S.name = "";
+    stopRound();
+    view("viewEntry");
+    localStorage.removeItem("mt_name");
+    $("nameInput").value = "";
+    $("nameLen").textContent = "0 / 10";
+    $("scoreNum").style.fontSize = "";
+    if (msg) toast(msg, 3200);
+  }
+
+  /* ================= 부트 ================= */
+  function boot(){
+    $("roomInput").value = ROOM;
+    $("roomTagHint").textContent = ROOM;
+    buildGrid();
+    renderScore();
+    view("viewEntry");
+
+    $("nameInput").addEventListener("input", e => {
+      $("nameLen").textContent = (e.target.value || "").length + " / 10";
+    });
+    $("nameInput").addEventListener("keydown", e => {
+      if (e.key === "Enter"){ e.preventDefault(); doJoin(); }
+    });
+    $("joinBtn").addEventListener("click", doJoin);
+
+    initFirebase();
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && S.running){
+        cancelAnimationFrame(S.raf);
+        S.raf = requestAnimationFrame(loop);
+      }
+    });
+    window.addEventListener("pagehide", () => { try{ flushScore(true); }catch(e){} });
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>
