@@ -2973,11 +2973,13 @@ var qrcode = function() {
     const cw = (W - gap * (cols - 1)) / cols;
     let fs;
     if (grid){
-      fs = Math.min(cw / 9.2, Math.max(96, (H - gap * (rows - 1)) / rows) / 6.2);
-      fs = Math.max(11, Math.min(19, fs));
+      const cap = Math.max(16, Math.min(26, W / 70));
+      fs = Math.min(cw / 9.2, Math.max(96, (H - gap * (rows - 1)) / rows) / 6.2, cap);
+      fs = Math.max(11, fs);
     } else {
-      fs = Math.min(cw / 8.2, ((H - gap * (rows - 1)) / rows) / 8.5);
-      fs = Math.max(11, Math.min(28, fs));
+      const cap = Math.max(24, Math.min(40, W / 46));
+      fs = Math.min(cw / 8.2, ((H - gap * (rows - 1)) / rows) / 6.6, cap);
+      fs = Math.max(11, fs);
     }
     el.sky.style.setProperty("--cols", cols);
     el.sky.style.setProperty("--gap", gap + "px");
@@ -2995,19 +2997,22 @@ var qrcode = function() {
       c = Math.min(c, Math.max(1, Math.floor(W / 185)), 8);
       return Math.max(1, Math.min(n, c));
     }
-    const maxC = Math.max(1, Math.min(n, 9));
-    let best = 1;
-    for (let c = 1; c <= maxC; c++){
+    const hardMax = Math.max(1, Math.min(n, 9));
+    const softMax = Math.max(1, Math.min(n, Math.floor(W / 235), 9));
+    let prefer = -1, eligible = -1;
+    for (let c = 1; c <= hardMax; c++){
       const rows = Math.ceil(n / c);
       const cw = (W - gap * (c - 1)) / c;
       const ch = (H - gap * (rows - 1)) / rows;
-      if (cw >= 198 && ch >= 104) best = c;
+      const fits = (cw >= 196 && ch >= 96);
+      if (fits) eligible = c;
+      if (!fits || c > softMax) continue;
+      const last = n - (rows - 1) * c;          /* 마지막 줄에 놓일 카드 수 */
+      if (last >= c * 0.55 || n % c === 0) prefer = c;   /* 허전한 마지막 줄은 피함 */
     }
-    if (best === 1 && n > 4){
-      /* 메시지가 많아 조건을 못 맞추면 촘촘하게라도 모두 올립니다 */
-      best = Math.max(1, Math.min(maxC, Math.ceil(Math.sqrt(n * 1.7))));
-    }
-    return best;
+    if (prefer > 0) return prefer;
+    if (eligible > 0) return eligible;
+    return hardMax;
   }
 
   /* 넘칠 때 글자를 조금씩 줄여 한 화면에 담습니다 */
