@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0A1120">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>절묘한 타이밍 | 정진영 교육 아티스트</title>
+<title>절묘한 타이밍 | 정진영 강연 크리에이터</title>
 <meta name="description" content="강연장 아이스브레이킹 — 켜지는 원숭이를 정확한 타이밍에 터치하는 순발력 게임">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -330,7 +330,7 @@
   const MAX_PLAYERS = 80;
   const GAME_MS = 36000;
   const COUNT_MS = 3000;
-  const PHASE = [ {to:12000, dur:1050}, {to:24000, dur:750}, {to:36000, dur:480} ];
+  const PHASE = [ {to:12000, dur:780}, {to:24000, dur:540}, {to:36000, dur:350} ];
 
   function normRoom(v){
     return String(v || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
@@ -480,7 +480,7 @@
       clearLit();
       S.nextAt = nowMs() + 70;
     } else {
-      S.lockUntil = nowMs() + 450;
+      S.lockUntil = nowMs() + 350;
       cell.classList.remove("bad");
       void cell.offsetWidth;
       cell.classList.add("bad");
