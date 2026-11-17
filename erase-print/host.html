@@ -26,7 +26,7 @@
     --muted:#9AA9BF;
     --sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
     --serif:"Noto Serif KR",Georgia,serif;
-    --mono:ui-monospace,"SF Mono","Roboto Mono",Menlo,Consolas,monospace;
+    --mono:ui-monospace,"SF Mono","Roboto Mono","Noto Sans Mono CJK KR",Menlo,Consolas,"DejaVu Sans Mono",monospace;
   }
   html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#080E19}
   body{
@@ -183,12 +183,12 @@
     background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
     border:1px solid var(--line);min-height:150px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;
   }
-  .pod.p1{min-height:196px;border-color:rgba(255,201,60,.5);background:linear-gradient(180deg,rgba(255,201,60,.22),rgba(255,201,60,.03));box-shadow:0 20px 50px -30px rgba(255,201,60,.7)}
-  .pod.p2{min-height:170px;border-color:rgba(226,232,240,.34)}
-  .pod.p3{min-height:158px;border-color:rgba(240,178,122,.34)}
-  .pod .medal{font-size:34px;line-height:1}
-  .pod .nm{font-size:16px;font-weight:900;color:#F4F8FD;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
-  .pod .vl{font-family:var(--mono);font-size:26px;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums}
+  .pod.p1{min-height:236px;border-color:rgba(255,201,60,.5);background:linear-gradient(180deg,rgba(255,201,60,.22),rgba(255,201,60,.03));box-shadow:0 20px 50px -30px rgba(255,201,60,.7)}
+  .pod.p2{min-height:196px;border-color:rgba(226,232,240,.34)}
+  .pod.p3{min-height:182px;border-color:rgba(240,178,122,.34)}
+  .pod .medal{font-size:40px;line-height:1}
+  .pod .nm{font-size:18px;font-weight:900;color:#F4F8FD;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+  .pod .vl{font-family:var(--mono);font-size:32px;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums}
   .pod .vl small{font-family:var(--sans);font-size:11px;color:#9AA9BF;margin-left:2px}
   .res-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
   .res-stat{background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:13px;padding:10px 8px;text-align:center}
@@ -964,6 +964,10 @@
     setTimeout(() => { if (!A.muted && H.phase === "finished") loopStart("ending"); }, 1500);
 
     FB.room.update({ "meta/status": "finished", "meta/endAt": serverNow() });
+    $("headTime").textContent = "0.0";
+    $("bigNum").textContent = "0.0";
+    $("bigBar").style.width = "0%";
+    $("runNote").textContent = "마감";
     setBoard("res");
     paintResult();
     toast(manual ? "게임을 마감하고 결과를 공개했습니다." : "36초 종료! 결과 공개", 2400);

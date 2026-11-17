@@ -33,7 +33,7 @@
     --dim:#64748B;
     --sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
     --serif:"Noto Serif KR",Georgia,serif;
-    --mono:ui-monospace,"SF Mono","Roboto Mono",Menlo,Consolas,monospace;
+    --mono:ui-monospace,"SF Mono","Roboto Mono","Noto Sans Mono CJK KR",Menlo,Consolas,"DejaVu Sans Mono",monospace;
   }
   html{-webkit-text-size-adjust:100%;background:#080E19}
   html,body{margin:0;padding:0;height:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
@@ -185,8 +185,9 @@
     background:radial-gradient(70% 60% at 50% 50%, rgba(255,159,28,.10), transparent 70%);
   }
   .pad.active{border-color:rgba(255,201,60,.55);box-shadow:0 20px 60px -30px rgba(255,107,44,.6), inset 0 0 60px -20px rgba(255,107,44,.5)}
-  .fp{width:74%;max-width:290px;height:auto;transition:opacity .25s,filter .25s;pointer-events:none}
-  .fp g.ridge{stroke:#FFB55E;stroke-linecap:round;fill:none}
+  .fp{position:relative;z-index:2;width:88%;max-width:336px;height:auto;transition:opacity .25s,filter .25s;pointer-events:none}
+  .fp-glow{position:absolute;width:74%;max-width:300px;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(255,159,28,.20),rgba(255,107,44,.05) 55%,transparent 72%);filter:blur(6px);pointer-events:none;z-index:1}
+  .fp .ridge{fill:none;stroke:#FFB55E;stroke-linecap:round;stroke-linejoin:round}
   .pad-hint{
     position:absolute;left:0;right:0;bottom:12px;text-align:center;pointer-events:none;
     font-size:11.5px;font-weight:800;color:#F6D3A8;line-height:1.45;letter-spacing:-.01em;
@@ -239,7 +240,7 @@
   .flash.on{opacity:1}
 
   /* ---------- result ---------- */
-  #view-result{gap:0;text-align:center}
+  #view-result{gap:0;text-align:center;align-items:center}
   .res-kicker{font-size:10.5px;font-weight:900;letter-spacing:.16em;color:var(--ember2);margin:10px 0 2px}
   .my-rank{font-family:var(--serif);font-weight:900;font-size:64px;line-height:1.05;letter-spacing:-.05em;color:#FFF}
   .my-rank small{font-family:var(--sans);font-size:20px;font-weight:900;color:#B9C6D8;margin-left:3px}
@@ -247,7 +248,7 @@
   .my-name .orb{width:8px;height:8px;border-radius:50%;background:var(--c,var(--ember))}
   .my-count{margin-top:8px;font-size:12.5px;color:#93A2B8;font-weight:700}
   .my-count b{font-family:var(--mono);font-size:19px;color:var(--gold);font-weight:800}
-  .podiums{margin-top:14px;display:flex;flex-direction:column;gap:7px}
+  .podiums{margin-top:14px;display:flex;flex-direction:column;gap:7px;width:100%}
   .pod{
     display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:14px;
     background:linear-gradient(90deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
@@ -258,7 +259,7 @@
   .pod .nm{flex:1;text-align:left;font-size:13.5px;font-weight:900;color:#EDF2F9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .pod .vl{font-family:var(--mono);font-size:15px;font-weight:800;color:#FFD86B;font-variant-numeric:tabular-nums}
   .pod .vl small{font-family:var(--sans);font-size:10px;color:#9AA9BF;margin-left:2px}
-  .res-list{margin-top:10px;overflow:auto;min-height:0;flex:1;border-top:1px solid var(--line);padding-top:8px}
+  .res-list{margin-top:10px;overflow:auto;min-height:0;flex:1;width:100%;border-top:1px solid var(--line);padding-top:8px}
   .rrow{display:flex;align-items:center;gap:9px;padding:7px 4px;font-size:12px;border-bottom:1px solid rgba(255,255,255,.045)}
   .rrow .rk{width:26px;flex:none;font-family:var(--mono);font-weight:800;color:#8A99AE;text-align:center;font-size:11.5px}
   .rrow .nm{flex:1;text-align:left;font-weight:700;color:#C7D2E1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -266,7 +267,7 @@
   .rrow.me{background:rgba(255,201,60,.10);border-radius:9px;border-bottom-color:transparent}
   .rrow.me .nm{color:#FFE6AE;font-weight:900}
   .rrow.me .vl{color:var(--gold)}
-  .res-foot{flex:none;margin-top:auto;padding-top:10px;font-size:11px;color:#76859B;line-height:1.5}
+  .res-foot{flex:none;margin-top:auto;padding-top:10px;font-size:11px;color:#76859B;line-height:1.5;text-align:center}
 
   .toast{
     position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);
@@ -352,6 +353,7 @@
 
       <div class="pad-wrap">
         <div class="pad" id="pad">
+          <div class="fp-glow"></div>
           <svg class="fp" id="fp" viewBox="0 0 220 268" aria-hidden="true">
             <g id="ridges"></g>
             <g id="smudge"></g>
@@ -479,14 +481,14 @@
   function buildFingerprint(){
     const cx = 110, cy = 132;
     let html = "";
-    const rings = 10;
+    const rings = 11;
     for (let i = rings; i >= 1; i--){
-      const rx = 12 + i * 12.6;
-      const ry = 16 + i * 15.6;
+      const rx = 11 + i * 6.6;
+      const ry = 15 + i * 10.4;
       const rot = (i % 2 ? -1 : 1) * (i * 0.7);
       const dash = i % 3 === 0 ? "34 12" : (i % 3 === 1 ? "52 10" : "none");
       html += '<ellipse class="ridge" cx="' + cx + '" cy="' + cy + '" rx="' + rx.toFixed(1) + '" ry="' + ry.toFixed(1) + '"'
-        + ' transform="rotate(' + rot.toFixed(1) + ' ' + cx + ' ' + cy + ')"'
+        + ' transform="rotate(' + (rot - 5).toFixed(1) + ' ' + cx + ' ' + cy + ')"'
         + ' stroke-width="' + (i <= 3 ? 3.6 : 3.1) + '"'
         + (dash !== "none" ? ' stroke-dasharray="' + dash + '"' : "")
         + ' opacity="' + (0.44 + i * 0.045).toFixed(2) + '"/>';
