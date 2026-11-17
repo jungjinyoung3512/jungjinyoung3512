@@ -2925,6 +2925,10 @@ var qrcode = function() {
     a.preload = "auto";
     a.volume = 0;
     a.muted = !S.sound;
+    a.id = "bgmAudio";
+    a.setAttribute("playsinline", "");
+    a.style.display = "none";
+    try { document.body.appendChild(a); } catch (e) {}
     a.addEventListener("error", () => {
       BGM.failed = true;
       if (BGM.want && S.revealed) ambienceStart();
