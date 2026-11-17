@@ -165,16 +165,16 @@
   #bRun{position:absolute}
   .tup{
     position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
-    background:rgba(7,11,24,.72);backdrop-filter:blur(3px);z-index:8;text-align:center;padding:24px;
-    border-radius:20px;
+    background:rgba(8,13,27,.82);backdrop-filter:blur(4px);z-index:8;text-align:center;padding:20px;
+    border-radius:22px;
   }
   .tup.on{display:flex;animation:tupIn .3s ease-out}
   @keyframes tupIn{from{opacity:0}to{opacity:1}}
-  .tup h2{font-family:var(--serif);font-size:44px;font-weight:900;margin:0;letter-spacing:-.04em;color:#fff;text-shadow:0 0 60px rgba(251,191,36,.45)}
-  .tup .ic{font-size:56px;line-height:1;margin-bottom:10px;filter:drop-shadow(0 10px 26px rgba(251,191,36,.5));animation:breathe 2.4s ease-in-out infinite}
+  .tup h2{font-family:var(--serif);font-size:38px;font-weight:900;margin:0;letter-spacing:-.04em;color:#fff;text-shadow:0 0 60px rgba(251,191,36,.45)}
+  .tup .ic{font-size:46px;line-height:1;margin-bottom:8px;filter:drop-shadow(0 10px 26px rgba(251,191,36,.5));animation:breathe 2.4s ease-in-out infinite}
   @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-  .tup p{font-size:17px;font-weight:900;color:#E8D9B0;margin:12px 0 0}
-  .tup .hint{margin-top:16px;font-size:12.5px;font-weight:800;color:#8FA2C0}
+  .tup p{font-size:15.5px;font-weight:900;color:#E8D9B0;margin:10px 0 0}
+  .tup .hint{margin-top:13px;font-size:12px;font-weight:800;color:#8FA2C0}
   .tup .hint b{color:var(--amber-lt)}
   .tup .dots{margin-top:18px;display:flex;gap:8px}
   .tup .dots i{width:9px;height:9px;border-radius:50%;background:var(--amber);animation:dotb 1.2s infinite}
@@ -201,6 +201,7 @@
   .pod.p3{min-height:122px}
   .pod.p1 .ps{color:#FDE68A}
   .res-totals{display:flex;gap:9px}
+  .res-note{text-align:center;font-size:12px;font-weight:800;color:#6B7D9C;margin:2px 0 -2px}
   .res-list{flex:1;min-height:0;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:20px;background:rgba(14,23,44,.62);padding:14px 14px 10px}
   .rl-wrap{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:4px;padding-right:3px}
   .rr{display:flex;align-items:center;gap:11px;padding:8px 12px;border-radius:11px;background:rgba(24,39,71,.5);font-size:14px;font-weight:800;color:#C9D6EA}
@@ -306,6 +307,13 @@
           <div class="stat"><span>1위</span><b class="small" id="runLead">-</b></div>
         </div>
         <div class="run-note" id="runNote">구구단 문제가 무작위로 나옵니다</div>
+        <div class="tup" id="tupPanel">
+          <div class="ic">⏱️</div>
+          <h2>시간 종료!</h2>
+          <p>결과 발표를 기다리는 중...</p>
+          <div class="hint">진행자가 <b>[🏆 결과보기]</b>를 누르면 공개</div>
+          <div class="dots"><i></i><i></i><i></i></div>
+        </div>
       </div>
       <div class="rank-wrap">
         <div class="rank-head">
@@ -313,13 +321,6 @@
           <div class="hint">정답 개수 순 · 동점 시 마지막 정답이 빠른 순</div>
         </div>
         <div class="rank" id="rank"></div>
-      </div>
-      <div class="tup" id="tupPanel">
-        <div class="ic">⏱️</div>
-        <h2>시간 종료!</h2>
-        <p>결과 발표를 기다리는 중...</p>
-        <div class="hint">진행자가 <b>[🏆 결과보기]</b>를 누르면 순위가 공개됩니다</div>
-        <div class="dots"><i></i><i></i><i></i></div>
       </div>
     </section>
 
@@ -331,6 +332,7 @@
           <h2 id="resTitle">최종 순위</h2>
         </div>
         <div class="podium" id="podium"></div>
+        <div class="res-note" id="resNote">30초 · 12명 참가</div>
         <div class="res-totals">
           <div class="stat"><span>참가</span><b id="resPlayers">0</b></div>
           <div class="stat"><span>총 정답</span><b id="resHits">0</b></div>
@@ -863,6 +865,10 @@
         '<span class="sc">' + (Number(r.score) || 0) + '문제</span>';
       return d;
     }));
+
+    let tot = 0;
+    rows.forEach(r => { tot += Number(r.score) || 0; });
+    $("resNote").textContent = (H.dur / 1000) + "초 · " + rows.length + "명 참가 · 총 " + tot + "문제 정답";
 
     const pod = $("podium");
     pod.replaceChildren(...[0,1,2].map(i => {
