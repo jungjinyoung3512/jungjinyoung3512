@@ -81,6 +81,10 @@
     background:transparent;color:#C7D2E1;border:1px solid var(--line-strong);
   }
   .btn-reset:hover{background:rgba(255,255,255,.05)}
+  .btn-clear{
+    background:rgba(239,68,68,.13);color:#FCA5A5;border:1px solid rgba(239,68,68,.5);
+  }
+  .btn-clear:hover{background:rgba(239,68,68,.24);color:#FEE2E2;border-color:rgba(248,113,113,.75)}
 
   /* ================= track board ================= */
   .board{
@@ -287,6 +291,7 @@
       <button class="btn btn-qr" id="qrBtn" type="button">▣ QR 크게 보기</button>
       <button class="btn btn-start" id="startBtn" type="button">▶ 경기 시작</button>
       <button class="btn btn-reset" id="resetBtn" type="button">리셋</button>
+      <button class="btn btn-clear" id="clearBtn" type="button">🧹 참가자 비우기</button>
     </div>
   </div>
 
@@ -634,7 +639,7 @@
 
   /* ---------- 상태 문구 ---------- */
   const statusText = $("statusText"), liveTag = $("liveTag");
-  const startBtn = $("startBtn"), resetBtn = $("resetBtn");
+  const startBtn = $("startBtn"), resetBtn = $("resetBtn"), clearBtn = $("clearBtn");
 
   function updateStatus(){
     if (G.phase === "idle"){
@@ -838,9 +843,42 @@
     paintWaitList();
   }
 
+  /* ---------- 참가자 전체 비우기 (명단 초기화) ---------- */
+  function clearPlayers(){
+    if (!confirm("현재 입장한 참가자를 모두 비우고 대기 상태로 돌릴까요?")) return;
+    clearTimeout(G.cdTimer);
+    G.phase = "idle"; G.elapsed = 0; G.startAt = 0;
+    players = {};
+    order = [];
+    lastTotal = 0;
+    purged = true;
+    if (FB.live){
+      FB.room.child("players").remove();
+      FB.room.child("result").remove();
+      FB.room.update({
+        "meta/status": "waiting",
+        "meta/startAt": 0,
+        "meta/finishAt": 0,
+        "meta/total": 0,
+        "meta/raceId": 0
+      });
+    }
+    $("podium").classList.remove("on");
+    $("countdown").classList.remove("on");
+    $("idleNote").classList.add("on");
+    liveTag.classList.add("off");
+    startBtn.disabled = false;
+    startBtn.innerHTML = "▶ 경기 시작";
+    laneEls.forEach(l => { l.style.display = "none"; l.dataset.sig = ""; });
+    paintWaitList();
+    sortPlayers();
+    renderLanes();
+  }
+
   /* ---------- 버튼 ---------- */
   startBtn.addEventListener("click", startRace);
   resetBtn.addEventListener("click", resetRoom);
+  clearBtn.addEventListener("click", clearPlayers);
 
   const qrModal = $("qrModal");
   $("qrBtn").addEventListener("click", () => { paintWaitList(); qrModal.classList.add("on"); });
