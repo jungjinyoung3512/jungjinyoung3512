@@ -3016,15 +3016,24 @@ var qrcode = function() {
   }
 
   /* 넘칠 때 글자를 조금씩 줄여 한 화면에 담습니다 */
+  function cardOverflow(c){
+    const inner = c.firstElementChild;
+    if (!inner) return false;
+    const cs = getComputedStyle(c);
+    const avH = c.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+    const avW = c.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    const ir = inner.getBoundingClientRect();
+    return (ir.height > avH + 4) || (ir.width > avW + 4);
+  }
+
   function fitAll(startFs){
     let fs = startFs;
     for (let i = 0; i < 14; i++){
-      const cards = el.sky.querySelectorAll(".card");
       let over = el.sky.scrollHeight > el.sky.clientHeight + 2;
-      if (!over){
+      if (!over && S.grid){
+        const cards = el.sky.querySelectorAll(".card");
         for (let k = 0; k < cards.length; k++){
-          const c = cards[k];
-          if (c.scrollHeight > c.clientHeight + 2 || c.scrollWidth > c.clientWidth + 2){ over = true; break; }
+          if (cardOverflow(cards[k])){ over = true; break; }
         }
       }
       if (!over) break;
