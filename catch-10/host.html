@@ -169,11 +169,12 @@
   .pod.p2{border-color:rgba(203,213,225,.4)}
   .pod.p3{border-color:rgba(217,119,6,.4)}
   .res-list{
-    flex:1;min-height:0;overflow-y:auto;border:1px solid var(--line);border-radius:16px;background:rgba(12,21,37,.6);
+    flex:1;min-height:0;overflow-y:auto;border:0;border-radius:0;background:transparent;
+    border-top:1px solid var(--line);
   }
-  .rl-head{display:grid;grid-template-columns:repeat(2,1fr);gap:0 34px;position:sticky;top:0;background:#0E1A2E;padding:9px 24px;border-bottom:1px solid var(--line);z-index:2}
+  .rl-head{display:grid;grid-template-columns:repeat(2,1fr);gap:0 34px;position:sticky;top:0;background:transparent;padding:9px 4px;border-bottom:1px solid var(--line);z-index:2}
   .rl-head span{font-size:10px;font-weight:900;letter-spacing:.1em;color:#5F7290}
-  .rl-body{display:grid;grid-template-columns:repeat(2,1fr);gap:0 34px;padding:8px 24px 14px}
+  .rl-body{display:grid;grid-template-columns:repeat(2,1fr);gap:0 34px;padding:8px 4px 14px}
   .rrow{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:15px}
   .rrow .rk{width:34px;flex:none;font-family:var(--mono);font-weight:900;color:#8FA2BC;font-size:13px}
   .rrow.top .rk{color:var(--amber-lt)}
@@ -730,7 +731,7 @@
     const ids = Object.keys(H.players).sort((a, b) => (Number(H.players[a].joinedAt) || 0) - (Number(H.players[b].joinedAt) || 0));
     let html = ids.map(id => {
       const p = H.players[id] || {};
-      const done = p.hit != null;
+      const done = mode === "run" && p.hit != null;
       const isFresh = fresh && fresh.indexOf(id) >= 0;
       return '<div class="pcard' + (done ? " done" : "") + (isFresh ? " pop" : "") + '">'
         + '<span class="pdot" style="--c:' + esc(p.color || "#888") + '"></span>'
