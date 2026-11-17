@@ -3035,7 +3035,7 @@ var qrcode = function() {
     if (S.shown.has(m.id)) return;
     S.shown.add(m.id);
     const card = makeCard(m);
-    if (!animate) card.classList.remove("anim");
+    if (!animate){ card.classList.remove("anim"); card.classList.add("in"); }
     el.sky.appendChild(card);
     layout();
   }
