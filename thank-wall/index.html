@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#070B16">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>💌 마음편지 | 강연 크리에이터 · 정진영</title>
+<meta name="description" content="마음편지 — 이름 없이 마음만 보태는 익명 고마움 전광판, 따뜻한 한 줄을 남겨 주세요">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --bg:#070B16;
+    --bg-deep:#050811;
+    --panel:rgba(23,32,55,.72);
+    --line:rgba(255,255,255,.1);
+    --line-strong:rgba(255,255,255,.18);
+    --amber:#F59E0B;
+    --amber-lt:#FCD34D;
+    --amber-soft:rgba(245,158,11,.14);
+    --cream:#FFF4E0;
+    --text:#F1F5F9;
+    --muted:#9AA9BF;
+    --sans:"Pretendard Variable",Pretendard,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR","Noto Serif CJK KR",Georgia,serif;
+  }
+  html{-webkit-text-size-adjust:100%;background:var(--bg-deep)}
+  html,body{margin:0;padding:0;min-height:100%;overscroll-behavior:none}
+  body{
+    background:radial-gradient(120% 70% at 50% -10%, #17213C 0%, #0A1020 45%, #050811 100%);
+    color:var(--text);
+    font-family:var(--sans);
+    word-break:keep-all;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.45;
+    letter-spacing:-0.01em;
+    -webkit-user-select:none;user-select:none;
+    -webkit-touch-callout:none;
+  }
+  /* 밤하늘 별 */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:
+      radial-gradient(1.6px 1.6px at 12% 14%, rgba(255,255,255,.8) 50%, transparent 51%),
+      radial-gradient(1.4px 1.4px at 78% 8%, rgba(255,255,255,.65) 50%, transparent 51%),
+      radial-gradient(1.8px 1.8px at 62% 26%, rgba(255,240,214,.75) 50%, transparent 51%),
+      radial-gradient(1.2px 1.2px at 28% 33%, rgba(255,255,255,.55) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 88% 41%, rgba(255,255,255,.5) 50%, transparent 51%),
+      radial-gradient(1.3px 1.3px at 44% 9%, rgba(255,255,255,.6) 50%, transparent 51%),
+      radial-gradient(1.7px 1.7px at 8% 46%, rgba(255,240,214,.45) 50%, transparent 51%),
+      radial-gradient(1.2px 1.2px at 70% 52%, rgba(255,255,255,.4) 50%, transparent 51%);
+    opacity:.9;
+  }
+  body::after{
+    content:"";position:fixed;inset:auto 0 0 0;height:52%;pointer-events:none;z-index:0;
+    background:radial-gradient(90% 100% at 50% 118%, rgba(245,158,11,.20) 0%, rgba(245,158,11,0) 70%);
+  }
+  .app{
+    position:relative;z-index:1;
+    width:100%;max-width:430px;margin:0 auto;
+    min-height:100vh;min-height:100dvh;
+    display:flex;flex-direction:column;
+    padding:calc(12px + env(safe-area-inset-top)) 18px calc(16px + env(safe-area-inset-bottom));
+  }
+
+  /* ---------- 머리글 ---------- */
+  .hdr{flex:none;display:flex;align-items:center;gap:8px}
+  .brand{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:#B9C6D8;letter-spacing:-0.01em}
+  .brand .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px rgba(245,158,11,.9);flex:none}
+  .brand b{color:#fff;font-weight:800}
+  .hdr-r{margin-left:auto;display:flex;align-items:center;gap:6px}
+  .room{
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:11px;font-weight:700;color:#E9D7B6;
+    border:1px solid rgba(245,158,11,.34);background:rgba(245,158,11,.12);
+    padding:4px 9px;border-radius:9px;white-space:nowrap;
+  }
+  .room b{color:var(--amber-lt);font-weight:800;letter-spacing:.06em;font-size:11.5px}
+  .net{width:6px;height:6px;border-radius:50%;background:#6B7A90}
+  .net.on{background:#34D399;box-shadow:0 0 8px rgba(52,211,153,.8)}
+
+  /* ---------- 타이머 ---------- */
+  .timerbar{
+    flex:none;display:none;align-items:center;gap:7px;margin-top:9px;
+    font-size:12px;font-weight:700;color:#FDE68A;
+    border:1px solid rgba(245,158,11,.4);background:rgba(245,158,11,.13);
+    padding:6px 12px;border-radius:10px;align-self:flex-start;
+    font-variant-numeric:tabular-nums;
+  }
+  .timerbar.on{display:inline-flex}
+  .timerbar b{font-size:14px;font-weight:900;color:#FEF3C7;letter-spacing:.02em}
+  .timerbar.over{color:#FCA5A5;border-color:rgba(239,68,68,.45);background:rgba(239,68,68,.12)}
+
+  /* ---------- 본문 ---------- */
+  .main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:6px 0 0}
+  .view{display:none;flex-direction:column}
+  .view.on{display:flex;animation:fadeUp .45s ease both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  .hero{text-align:center;margin-bottom:18px}
+  .hero .emoji{
+    font-size:34px;line-height:1;
+    filter:drop-shadow(0 0 16px rgba(245,158,11,.75));
+    animation:sway 4.6s ease-in-out infinite;
+  }
+  @keyframes sway{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
+  .hero h1{
+    margin:10px 0 0;font-family:var(--serif);font-weight:900;
+    font-size:27px;letter-spacing:-0.03em;line-height:1.25;color:#FFF;
+  }
+  .hero .sub{margin:7px 0 0;font-size:13.5px;font-weight:600;color:#A9B8CD}
+
+  .card{
+    border:1px solid var(--line);border-radius:20px;
+    background:linear-gradient(180deg,rgba(28,38,64,.86),rgba(17,24,42,.9));
+    padding:16px 16px 15px;
+    box-shadow:0 24px 50px -34px rgba(0,0,0,.95), inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  .card-l{font-size:13px;font-weight:700;color:#CBD8E8;line-height:1.5;margin-bottom:11px}
+  .card-l b{color:var(--amber-lt);font-weight:800}
+
+  .field{position:relative}
+  textarea{
+    display:block;width:100%;height:104px;resize:none;
+    font-family:var(--serif);font-size:17px;font-weight:600;line-height:1.6;
+    color:#FFF8EC;background:rgba(6,10,20,.72);
+    border:1px solid rgba(255,255,255,.12);border-radius:14px;
+    padding:13px 14px 30px;
+    outline:none;transition:border-color .18s ease,box-shadow .18s ease;
+    -webkit-user-select:text;user-select:text;
+    letter-spacing:-0.01em;
+  }
+  textarea::placeholder{color:#5F6E86;font-weight:500;font-size:15px}
+  textarea:focus{border-color:rgba(245,158,11,.65);box-shadow:0 0 0 3px rgba(245,158,11,.14)}
+  .cnt{
+    position:absolute;right:13px;bottom:9px;
+    font-size:11.5px;font-weight:700;color:#66758C;font-variant-numeric:tabular-nums;
+  }
+  .cnt b{color:#9FB0C6;font-weight:800}
+  .cnt.full b{color:var(--amber-lt)}
+
+  .chips{display:flex;flex-direction:column;gap:7px;margin-top:12px}
+  .chip{
+    appearance:none;text-align:left;cursor:pointer;font-family:inherit;
+    font-size:13px;font-weight:600;color:#D6DFEB;
+    background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.11);
+    border-radius:11px;padding:10px 12px;
+    display:flex;align-items:center;gap:8px;
+    transition:background .15s ease,border-color .15s ease,transform .1s ease;
+  }
+  .chip:active{transform:scale(.985)}
+  .chip:hover{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.32)}
+  .chip .ico{font-size:13px;flex:none;opacity:.85}
+  .chip .tx{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  .send{
+    margin-top:16px;width:100%;appearance:none;border:0;cursor:pointer;
+    font-family:inherit;font-size:17.5px;font-weight:900;letter-spacing:-0.02em;
+    color:#2A1A02;padding:17px 20px;border-radius:16px;
+    background:linear-gradient(180deg,#FCD34D 0%,#F59E0B 100%);
+    box-shadow:0 16px 34px -16px rgba(245,158,11,.85), inset 0 1px 0 rgba(255,255,255,.45);
+    transition:transform .1s ease,filter .15s ease,opacity .15s ease;
+  }
+  .send:active{transform:scale(.985)}
+  .send:disabled{opacity:.55;filter:saturate(.7);box-shadow:none;cursor:default}
+  .note{margin:11px 0 0;text-align:center;font-size:11.5px;font-weight:600;color:#718096;line-height:1.5}
+
+  /* ---------- 전송 완료 ---------- */
+  #doneView{align-items:center;text-align:center;padding:8px 0 0}
+  .done-stage{
+    position:relative;width:100%;
+    display:flex;flex-direction:column;align-items:center;
+    padding:22px 8px 8px;
+  }
+  .halo{
+    position:absolute;top:6px;width:210px;height:210px;border-radius:50%;
+    background:radial-gradient(circle, rgba(245,158,11,.30) 0%, rgba(245,158,11,0) 68%);
+    filter:blur(2px);animation:breathe 3.8s ease-in-out infinite;
+  }
+  @keyframes breathe{0%,100%{transform:scale(.92);opacity:.75}50%{transform:scale(1.08);opacity:1}}
+  .lantern-anim{
+    position:relative;font-size:58px;line-height:1;
+    filter:drop-shadow(0 0 26px rgba(245,158,11,.85));
+    animation:rise 5.2s ease-in-out infinite;
+  }
+  @keyframes rise{
+    0%{transform:translateY(14px) scale(.95);opacity:.85}
+    35%{transform:translateY(-6px) scale(1.03);opacity:1}
+    70%{transform:translateY(-14px) scale(1);opacity:1}
+    100%{transform:translateY(14px) scale(.95);opacity:.85}
+  }
+  .sparks{position:absolute;inset:0;pointer-events:none}
+  .sparks i{
+    position:absolute;width:3px;height:3px;border-radius:50%;background:#FCD34D;
+    opacity:0;animation:spark 3.6s linear infinite;
+    box-shadow:0 0 8px rgba(252,211,77,.95);
+  }
+  @keyframes spark{
+    0%{opacity:0;transform:translateY(0) scale(.6)}
+    18%{opacity:.95}
+    100%{opacity:0;transform:translateY(-92px) scale(.2)}
+  }
+  #doneView h2{
+    margin:20px 0 0;font-family:var(--serif);font-weight:900;
+    font-size:27px;line-height:1.34;letter-spacing:-0.03em;color:#FFF;
+  }
+  #doneView h2 em{font-style:normal;color:var(--amber-lt)}
+  .done-sub{
+    margin:14px 0 0;font-size:16px;font-weight:800;color:#FDE68A;
+    border:1px solid rgba(245,158,11,.35);background:rgba(245,158,11,.11);
+    padding:9px 18px;border-radius:12px;
+  }
+  .done-note{margin:16px 0 0;font-size:12.5px;font-weight:600;color:#8FA0B6;line-height:1.6;max-width:300px}
+  .again{
+    margin-top:24px;appearance:none;cursor:pointer;font-family:inherit;
+    font-size:12.5px;font-weight:700;color:#A9B8CD;
+    background:transparent;border:1px solid var(--line-strong);
+    padding:10px 16px;border-radius:11px;
+    opacity:.9;
+  }
+  .again:active{transform:scale(.98)}
+  .again[hidden]{display:none}
+
+  .foot{flex:none;text-align:center;margin-top:16px;font-size:10.5px;font-weight:600;color:#4A5769;letter-spacing:.02em}
+
+  /* 짧은 화면(키보드 올라올 때) 대응 */
+  @media (max-height:700px){
+    .hero{margin-bottom:12px}
+    .hero .emoji{font-size:28px}
+    .hero h1{font-size:23px}
+    textarea{height:84px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hdr">
+    <div class="brand"><span class="dot"></span>강연 크리에이터 · <b>정진영</b></div>
+    <div class="hdr-r">
+      <span class="net" id="netDot" title="실시간 연결"></span>
+      <span class="room">방 코드 <b id="roomCode">JY77</b></span>
+    </div>
+  </div>
+
+  <div class="timerbar" id="timerBar">⏱ 남은 시간 <b id="timerTxt">00:30</b></div>
+
+  <div class="main">
+    <!-- 작성 -->
+    <section class="view on" id="writeView">
+      <div class="hero">
+        <div class="emoji">💌</div>
+        <h1>마음편지</h1>
+        <p class="sub">이름 없이, 마음만 보태 주세요</p>
+      </div>
+
+      <div class="card">
+        <div class="card-l">오늘 함께한 사람에게<br><b>따뜻한 한 줄</b>을 남겨 주세요</div>
+        <div class="field">
+          <textarea id="msg" maxlength="80" placeholder="여기에 따뜻한 한 줄을 적어 주세요" autocomplete="off" spellcheck="false"></textarea>
+          <div class="cnt" id="cnt"><b>0</b>/80</div>
+        </div>
+        <div class="chips" id="chips">
+          <button class="chip" type="button"><span class="ico">🕯</span><span class="tx">오늘 강의 덕분에 힘이 났어요</span></button>
+          <button class="chip" type="button"><span class="ico">🌱</span><span class="tx">당신의 오늘을 응원합니다</span></button>
+          <button class="chip" type="button"><span class="ico">💛</span><span class="tx">이 자리가 참 따뜻했어요</span></button>
+        </div>
+      </div>
+
+      <button class="send" id="sendBtn" type="button">💌 마음 보내기</button>
+      <p class="note">보낸 마음은 이름 없이 큰 화면에 풍등으로 떠오릅니다</p>
+    </section>
+
+    <!-- 전송 완료 -->
+    <section class="view" id="doneView">
+      <div class="done-stage">
+        <div class="halo"></div>
+        <div class="sparks" id="sparks"></div>
+        <div class="lantern-anim">🏮</div>
+      </div>
+      <h2>따뜻한 마음이<br><em>도착했어요!</em></h2>
+      <p class="done-sub">앞 화면을 주목해 주세요</p>
+      <p class="done-note" id="doneNote">당신의 한 줄이 곧 밤하늘에 풍등으로 떠오릅니다</p>
+      <button class="again" id="againBtn" type="button" hidden>한 줄 더 보내기</button>
+    </section>
+  </div>
+
+  <div class="foot">강연 크리에이터 · 정진영</div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ===== 설정 ===== */
+  const FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "977342156141",
+    appId: "1:977342156141:web:f9842fcc67a819ce621e64"
+  };
+  const MAX_LEN = 80;
+
+  const $ = s => document.querySelector(s);
+  const params = new URLSearchParams(location.search);
+  const ROOM = (String(params.get("room") || "JY77").toUpperCase().replace(/[^A-Z0-9_-]/g, "").slice(0, 12)) || "JY77";
+
+  const el = {
+    roomCode: $("#roomCode"),
+    netDot: $("#netDot"),
+    timerBar: $("#timerBar"),
+    timerTxt: $("#timerTxt"),
+    msg: $("#msg"),
+    cnt: $("#cnt"),
+    chips: $("#chips"),
+    sendBtn: $("#sendBtn"),
+    writeView: $("#writeView"),
+    doneView: $("#doneView"),
+    doneNote: $("#doneNote"),
+    againBtn: $("#againBtn"),
+    sparks: $("#sparks")
+  };
+
+  el.roomCode.textContent = ROOM;
+
+  /* ===== 상태 ===== */
+  const S = {
+    db: null, room: null, meta: null,
+    offset: 0,
+    myRef: null,
+    sent: false,
+    sending: false,
+    timerEnd: 0,
+    timerDur: 0,
+    revealed: false
+  };
+
+  /* ===== 유틸 ===== */
+  function toast(msg){
+    let t = document.getElementById("miniToast");
+    if (!t){
+      t = document.createElement("div");
+      t.id = "miniToast";
+      t.style.cssText = "position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:99;max-width:86%;text-align:center;font-size:12.5px;font-weight:700;color:#2A1A02;background:#FCD34D;padding:10px 16px;border-radius:11px;box-shadow:0 12px 28px -12px rgba(0,0,0,.8);opacity:0;transition:opacity .2s ease";
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.opacity = "1";
+    clearTimeout(t._h);
+    t._h = setTimeout(() => { t.style.opacity = "0"; }, 2200);
+  }
+
+  function nowMs(){ return Date.now() + S.offset; }
+  function pad2(n){ return (n < 10 ? "0" : "") + n; }
+
+  /* ===== 금칙어(가벼운 1차 필터) ===== */
+  const BAD = ["시발","씨발","ㅅㅂ","병신","ㅂㅅ","좆","지랄","개새","닥쳐","fuck","shit","ㅁㅊ","미친놈","미친년"];
+  function hasBad(t){
+    const low = t.toLowerCase().replace(/\s/g, "");
+    return BAD.some(w => low.includes(w.replace(/\s/g, "")));
+  }
+
+  /* ===== 입력 ===== */
+  function updateCount(){
+    const n = el.msg.value.length;
+    el.cnt.innerHTML = "<b>" + n + "</b>/" + MAX_LEN;
+    el.cnt.classList.toggle("full", n >= MAX_LEN);
+  }
+  el.msg.addEventListener("input", () => {
+    if (el.msg.value.length > MAX_LEN) el.msg.value = el.msg.value.slice(0, MAX_LEN);
+    updateCount();
+  });
+  el.chips.addEventListener("click", e => {
+    const b = e.target.closest(".chip");
+    if (!b) return;
+    const tx = b.querySelector(".tx").textContent.trim();
+    el.msg.value = tx;
+    updateCount();
+    el.msg.focus();
+    try { el.msg.setSelectionRange(tx.length, tx.length); } catch(_) {}
+  });
+
+  /* ===== 화면 전환 ===== */
+  function showWrite(){
+    el.writeView.classList.add("on");
+    el.doneView.classList.remove("on");
+    el.againBtn.hidden = true;
+  }
+  function showDone(allowAgain){
+    el.writeView.classList.remove("on");
+    el.doneView.classList.add("on");
+    el.againBtn.hidden = !allowAgain;
+    window.scrollTo(0, 0);
+  }
+
+  /* 불꽃(sparks) 생성 */
+  (function makeSparks(){
+    for (let i = 0; i < 7; i++){
+      const s = document.createElement("i");
+      s.style.left = (18 + Math.random() * 64) + "%";
+      s.style.top = (46 + Math.random() * 26) + "%";
+      s.style.animationDelay = (Math.random() * 3.6).toFixed(2) + "s";
+      s.style.animationDuration = (3.0 + Math.random() * 1.8).toFixed(2) + "s";
+      el.sparks.appendChild(s);
+    }
+  })();
+
+  /* ===== 전송 ===== */
+  function send(){
+    if (S.sending) return;
+    const txt = (el.msg.value || "").replace(/\s+/g, " ").trim();
+    if (!txt){ toast("따뜻한 한 줄을 먼저 적어 주세요"); el.msg.focus(); return; }
+    if (txt.length < 2){ toast("조금만 더 적어 주세요"); el.msg.focus(); return; }
+    if (hasBad(txt)){ toast("조금 더 다정한 말로 바꿔 주세요 :)"); return; }
+    if (!S.db){ toast("연결을 확인하고 잠시 후 다시 시도해 주세요"); return; }
+
+    S.sending = true;
+    el.sendBtn.disabled = true;
+    el.sendBtn.textContent = "보내는 중…";
+
+    const ref = S.room.child("messages").push();
+    ref.set({ t: txt.slice(0, MAX_LEN), ts: Date.now() }).then(() => {
+      S.sending = false;
+      S.sent = true;
+      S.myRef = ref;
+      el.sendBtn.disabled = false;
+      el.sendBtn.textContent = "💌 마음 보내기";
+      el.msg.value = "";
+      updateCount();
+      showDone(true);
+      watchMyMessage();
+    }).catch(err => {
+      S.sending = false;
+      el.sendBtn.disabled = false;
+      el.sendBtn.textContent = "💌 마음 보내기";
+      console.warn("send failed", err && err.code);
+      toast("전송에 실패했어요 — 잠시 후 다시 눌러 주세요");
+    });
+  }
+  el.sendBtn.addEventListener("click", send);
+
+  /* 진행자가 비우면 → 다시 작성 화면 */
+  function watchMyMessage(){
+    if (!S.myRef) return;
+    S.myRef.on("value", snap => {
+      if (!snap.exists() && S.sent){
+        S.sent = false;
+        S.myRef.off();
+        S.myRef = null;
+        showWrite();
+        toast("새 마음을 받을 준비가 됐어요");
+      }
+    });
+  }
+
+  el.againBtn.addEventListener("click", () => {
+    if (S.sent){ toast("이미 마음을 보내셨어요 — 앞 화면을 봐 주세요"); return; }
+    showWrite();
+  });
+
+  /* ===== 타이머 ===== */
+  let timerRaf = null;
+  function renderTimer(){
+    if (!S.timerEnd){ el.timerBar.classList.remove("on"); return; }
+    const left = Math.ceil((S.timerEnd - nowMs()) / 1000);
+    if (left > 0){
+      el.timerBar.classList.add("on");
+      el.timerBar.classList.remove("over");
+      el.timerTxt.textContent = "00:" + pad2(left > 59 ? 59 : left);
+    } else {
+      el.timerBar.classList.add("on", "over");
+      el.timerTxt.textContent = "작성 시간 종료";
+    }
+  }
+  function timerLoop(){
+    renderTimer();
+    timerRaf = requestAnimationFrame(timerLoop);
+  }
+
+  /* ===== Firebase ===== */
+  function setNet(ok){ el.netDot.classList.toggle("on", !!ok); }
+
+  function initFB(){
+    if (typeof firebase === "undefined" || !firebase.initializeApp){
+      setNet(false);
+      return;
+    }
+    try {
+      firebase.initializeApp(FB_CONFIG);
+      S.db = firebase.database();
+      S.room = S.db.ref("rooms/thankWall/" + ROOM);
+      S.meta = S.room.child("meta");
+
+      S.db.ref(".info/connected").on("value", s => setNet(!!s.val()));
+      S.db.ref(".info/serverTimeOffset").on("value", s => {
+        S.offset = s.val() || 0;
+        renderTimer();
+      });
+
+      /* 진행자 타이머 동기화 */
+      S.meta.child("timer").on("value", s => {
+        const v = s.val() || null;
+        if (v && v.endAt){
+          S.timerEnd = Number(v.endAt) || 0;
+          S.timerDur = Number(v.dur) || 0;
+        } else {
+          S.timerEnd = 0; S.timerDur = 0;
+        }
+        renderTimer();
+      });
+
+      /* 공개 상태 — 대기 화면 문구 */
+      S.meta.child("revealed").on("value", s => {
+        S.revealed = !!s.val();
+        el.doneNote.textContent = S.revealed
+          ? "지금 앞 화면에 당신의 마음이 풍등으로 떠오르고 있어요"
+          : "당신의 한 줄이 곧 밤하늘에 풍등으로 떠오릅니다";
+      });
+    } catch (err){
+      console.warn("firebase init failed", err && err.message);
+      setNet(false);
+    }
+  }
+
+  /* ===== 시작 ===== */
+  initFB();
+  updateCount();
+  timerLoop();
+
+  if (params.get("again") === "1") showWrite();
+})();
+</script>
+</body>
+</html>
