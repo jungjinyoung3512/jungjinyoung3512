@@ -222,15 +222,6 @@
     padding:9px 18px;border-radius:12px;
   }
   .done-note{margin:16px 0 0;font-size:12.5px;font-weight:600;color:#8FA0B6;line-height:1.6;max-width:300px}
-  .again{
-    margin-top:24px;appearance:none;cursor:pointer;font-family:inherit;
-    font-size:12.5px;font-weight:700;color:#A9B8CD;
-    background:transparent;border:1px solid var(--line-strong);
-    padding:10px 16px;border-radius:11px;
-    opacity:.9;
-  }
-  .again:active{transform:scale(.98)}
-  .again[hidden]{display:none}
 
   .foot{flex:none;text-align:center;margin-top:16px;font-size:10.5px;font-weight:600;color:#4A5769;letter-spacing:.02em}
 
@@ -466,11 +457,6 @@
     });
   }
 
-  el.againBtn && el.againBtn.addEventListener("click", () => {
-    if (S.sent){ toast("이미 마음을 보내셨어요 — 앞 화면을 봐 주세요"); return; }
-    showWrite();
-  });
-
   /* ===== 타이머 ===== */
   let timerRaf = null;
   function renderTimer(){
@@ -539,8 +525,6 @@
   initFB();
   updateCount();
   timerLoop();
-
-  if (params.get("again") === "1") showWrite();
 })();
 </script>
 </body>
