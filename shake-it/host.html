@@ -896,6 +896,7 @@
           $("cdBig").classList.remove("on");
           if (!$("bRun").classList.contains("on")) setBoard("run");
           renderRun();
+          FB.room.update({"meta/status": "running"});
         }
         const sec = Math.max(0, left / 1000);
         $("cdBig").classList.remove("on");
