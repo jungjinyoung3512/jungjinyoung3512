@@ -661,7 +661,7 @@ function makeCard(c, step){
   if (pickedNow) b.classList.add("selected");
   if (locked){ b.classList.add("locked"); b.disabled = true; }
   b.setAttribute("aria-pressed", pickedNow ? "true" : "false");
-  b.setAttribute("aria-label", `${c.name}, ${c.type}`);
+  b.setAttribute("aria-label", c.name);
 
   const sw = el("span", "swatch" + (c.light ? " is-light" : ""));
   sw.style.setProperty("--c", c.hex);
@@ -669,9 +669,8 @@ function makeCard(c, step){
   const nm = el("span","cname");
   const em = el("span","em"); em.textContent = c.emoji;
   nm.append(em, document.createTextNode(c.name));
-  const tp = el("span","ctype"); tp.textContent = c.type;
 
-  b.append(sw, nm, tp);
+  b.append(sw, nm);
 
   if (locked){
     const bd = el("span","badge lock"); bd.textContent = "1번째 ✓";
@@ -698,7 +697,7 @@ function renderPickedStrip(){
   const mini = el("span","mini"); mini.style.setProperty("--c", c.hex);
   const txt = el("span","txt");
   const small = el("small"); small.textContent = "1번째 색 · 소통 본색 선택 완료";
-  txt.append(small, document.createTextNode(`${c.emoji} ${c.name} — ${c.type}`));
+  txt.append(small, document.createTextNode(`${c.emoji} ${c.name}`));
   wrap.append(mini, txt);
 }
 
