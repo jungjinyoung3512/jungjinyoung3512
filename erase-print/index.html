@@ -671,11 +671,8 @@
       return;
     }
     if (G.phase === "finished"){
-      if (G.screen === "play" || G.screen === "result"){
-        showResult();
-      } else if (G.screen === "wait"){
-        show("wait");
-      }
+      /* 결과 공개 후 새로고침·늦은 입장한 폰도 결과 화면으로 */
+      showResult();
       return;
     }
     /* idle */
@@ -731,7 +728,7 @@
         return;
       }
       if (G.phase === "finished"){
-        show("wait");
+        showResult();
         return;
       }
       show("wait");
