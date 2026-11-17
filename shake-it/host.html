@@ -173,7 +173,7 @@
 
   /* result */
   #bRes{overflow:hidden}
-  .res-top{flex:none;display:flex;align-items:baseline;gap:14px;margin:2px 0 12px}
+  .res-top{flex:none;display:flex;align-items:baseline;gap:14px;padding-top:10px;margin:0 0 12px}
   .res-top h2{font-family:var(--serif);font-size:30px;font-weight:900;margin:0;letter-spacing:-.04em}
   .res-top .sub{font-size:12.5px;color:var(--muted);font-weight:700}
   .res-top .right{margin-left:auto;font-size:12px;color:var(--dim);font-weight:700;font-family:var(--mono)}
@@ -191,7 +191,7 @@
   .res-list{flex:1;min-height:0;overflow-y:auto;border-top:1px solid var(--line)}
   .rl-head{display:grid;grid-template-columns:repeat(2,1fr);gap:0 34px;position:sticky;top:0;background:var(--bg);padding:9px 4px;border-bottom:1px solid var(--line);z-index:2}
   .rl-head span{font-size:10px;font-weight:900;letter-spacing:.1em;color:#5F7290}
-  .rl-body{display:grid;grid-template-columns:repeat(2,1fr);gap:0 34px;padding:8px 4px 14px}
+  .rl-body{display:grid;grid-template-columns:repeat(2,1fr);gap:0 34px;padding:10px 6px 14px}
   .rrow2{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:14.5px}
   .rrow2 .rk{width:32px;flex:none;font-family:var(--mono);font-weight:900;color:#8FA2BC;font-size:12.5px}
   .rrow2.top .rk{color:var(--amber-lt)}
@@ -864,7 +864,7 @@
       + '<span class="nm"><span class="pdot" style="--c:' + esc(p.color) + '"></span>' + esc(p.name) + '</span>'
       + '<span class="ct">' + p.count + '회</span></div>'
     ).join("");
-    $("resList").innerHTML = '<div class="rl-head"><span>순위 · 참가자</span><span>기록</span></div><div class="rl-body">' + body + '</div>';
+    $("resList").innerHTML = '<div class="rl-body">' + body + '</div>';
   }
 
   /* ================= 게임 루프 ================= */

@@ -182,7 +182,7 @@
   @keyframes ripA{0%{opacity:.9;transform:scale(.55)}100%{opacity:0;transform:scale(2.35)}}
   .phone-wrap{position:relative;z-index:2;display:grid;place-items:center}
   .phone{
-    font-size:116px;line-height:1;filter:drop-shadow(0 18px 30px rgba(245,158,11,.35));
+    font-size:132px;line-height:1;filter:drop-shadow(0 18px 30px rgba(245,158,11,.35));
     transition:transform .06s;
   }
   .phone.hit{animation:shk .34s cubic-bezier(.36,.07,.19,.97)}
@@ -201,13 +201,15 @@
   .count-num{
     position:relative;z-index:2;margin-top:8px;
     font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:900;
-    font-size:74px;line-height:1;letter-spacing:-.05em;color:#fff;
+    font-size:86px;line-height:1;letter-spacing:-.05em;color:#fff;
     text-shadow:0 0 40px rgba(34,211,238,.35);
   }
   .count-num .u{font-size:19px;font-weight:800;color:var(--muted);margin-left:3px;letter-spacing:0}
   .count-num.pop{animation:cp .3s ease}
   @keyframes cp{0%{transform:scale(1)}35%{transform:scale(1.14);color:var(--amber-lt)}100%{transform:scale(1)}}
   .count-lab{position:relative;z-index:2;margin-top:6px;font-size:11px;font-weight:800;letter-spacing:.12em;color:#7C8BA3}
+  .live-rank{position:relative;z-index:2;margin-top:14px;font-size:13px;font-weight:900;color:#CBD5E1;padding:7px 14px;border-radius:99px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04)}
+  .live-rank b{color:var(--amber-lt);font-family:var(--mono);font-size:15px}
   .play-hint{flex:none;text-align:center;font-size:11.5px;font-weight:700;color:#93A3B9;padding:8px 0 2px}
   .play-foot{flex:none;display:flex;align-items:center;justify-content:space-between;padding:9px 2px 0;border-top:1px solid var(--line);margin-top:8px;font-size:10.5px;font-weight:700;color:#6E809B}
   .play-foot b{color:#CBD5E1;font-weight:900}
@@ -341,6 +343,7 @@
           <div class="phone-wrap"><div class="phone" id="phone">📱</div></div>
           <div class="count-num" id="countNum"><span id="countVal">0</span><span class="u">회</span></div>
           <div class="count-lab" id="countLab">폰을 흔들거나 화면을 두드리세요</div>
+          <div class="live-rank" id="liveRank">현재 순위 집계 중…</div>
         </div>
         <div class="play-hint" id="playHint">폰을 힘껏 흔들면 카운트! (센서가 없으면 화면 연타)</div>
       </div>
@@ -829,6 +832,7 @@
   function resetPlayUI(){
     G.prevAcc = null;
     G.lastCd = "";
+    G.lastRankAt = 0;
     paintCount(false);
     $("timerNum").textContent = "36.0";
     $("tbarFill").style.transform = "scaleX(1)";
@@ -868,6 +872,7 @@
           flushPush(true);
         }
       }
+      if (now - (G.lastRankAt || 0) > 480){ G.lastRankAt = now; paintLiveRank(); }
       G.raf = requestAnimationFrame(step);
     };
     G.raf = requestAnimationFrame(step);
@@ -878,6 +883,23 @@
   }
 
   /* ================= 결과 ================= */
+  function myLiveRank(){
+    const list = Object.keys(G.players).map(id => {
+      const p = G.players[id] || {};
+      return {id: id, count: (id === pid ? G.count : (Number(p.count) || 0)), countAt: Number(p.countAt) || 0};
+    }).sort((a, b) => (b.count - a.count) || (a.countAt - b.countAt));
+    const i = list.findIndex(x => x.id === pid);
+    return {rank: i + 1, n: list.length};
+  }
+
+  function paintLiveRank(){
+    const el = $("liveRank");
+    if (!el || G.screen !== "play") return;
+    const r = myLiveRank();
+    if (!r.n){ el.textContent = "현재 순위 집계 중…"; return; }
+    el.innerHTML = '현재 <b>' + r.rank + '위</b> / ' + r.n + '명';
+  }
+
   function ranked(){
     return Object.keys(G.players).map(id => {
       const p = G.players[id] || {};
