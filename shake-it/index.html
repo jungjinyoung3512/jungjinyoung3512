@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#0B1220">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>📳</text></svg>">
-<title>흔들어주세요! | 정진영 교육 아티스트</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>📱</text></svg>">
+<title>흔들어주세요! | 정진영 · 강연 크리에이터</title>
 <meta name="description" content="강연장 아이스브레이킹 — 36초 동안 가장 많이 흔든 사람이 이기는 흔들기 게임">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -92,20 +92,6 @@
   .countline{display:flex;align-items:center;justify-content:space-between;margin-top:11px;font-size:11.5px;font-weight:700;color:#93A3B9}
   .countline b{font-family:var(--mono);font-size:13px;font-weight:900;color:var(--amber-lt)}
 
-  .sensor{
-    display:flex;align-items:center;gap:10px;margin-top:12px;padding:11px 12px;border-radius:14px;
-    border:1px dashed rgba(255,255,255,.14);background:rgba(255,255,255,.025);
-  }
-  .sensor .ico{font-size:17px;flex:none}
-  .sensor .tx{flex:1;min-width:0}
-  .sensor .tx b{display:block;font-size:11.5px;font-weight:800;color:#D9E2F0}
-  .sensor .tx span{display:block;font-size:10px;color:#7C8BA3;margin-top:1px}
-  .sbtn{
-    appearance:none;flex:none;border:1px solid rgba(245,158,11,.45);background:rgba(245,158,11,.14);
-    color:#FCD34D;font-family:inherit;font-size:11px;font-weight:800;padding:8px 11px;border-radius:10px;cursor:pointer;
-  }
-  .sbtn:active{transform:scale(.97)}
-  .sbtn.ok{border-color:rgba(52,211,153,.5);background:rgba(52,211,153,.14);color:#6EE7B7}
 
   .howto{flex:none;margin-top:18px;display:grid;gap:8px}
   .ht{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;color:#9FB0C6}
@@ -149,7 +135,6 @@
   .badge.on{color:#6EE7B7;border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.13)}
   .badge.off{color:#FCD34D;border-color:rgba(245,158,11,.42);background:rgba(245,158,11,.12)}
   .badge.wait{color:#93A3B9;border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.04)}
-  .wait-sensor{width:100%;margin-top:12px}
 
   /* ---------- play ---------- */
   #view-play{gap:0}
@@ -197,6 +182,18 @@
   .hitflash{position:absolute;inset:0;border-radius:24px;background:radial-gradient(60% 45% at 50% 46%, rgba(252,211,77,.22), rgba(252,211,77,0) 70%);opacity:0;pointer-events:none}
   .hitflash.on{animation:hf .3s ease-out}
   @keyframes hf{0%{opacity:1}100%{opacity:0}}
+
+  /* 시간 종료 후 결과 공개 대기 */
+  .endwait{
+    position:absolute;inset:0;z-index:7;display:none;place-items:center;text-align:center;
+    border-radius:24px;background:rgba(8,14,25,.9);backdrop-filter:blur(3px);
+  }
+  .endwait.on{display:grid}
+  .endwait .ew-ico{font-size:46px;line-height:1;animation:breathe 2.2s ease-in-out infinite}
+  .endwait .ew-t{margin-top:12px;font-family:var(--serif);font-size:27px;font-weight:900;letter-spacing:-.03em;color:#fff}
+  .endwait .ew-s{margin-top:7px;font-size:12.5px;font-weight:700;color:#9AA9BF;line-height:1.65}
+  .endwait .ew-m{margin-top:11px;font-size:12px;font-weight:800;color:#CBD5E1}
+  .endwait .ew-m b{font-family:var(--mono);font-size:17px;font-weight:900;color:var(--amber-lt);margin:0 2px}
 
   .count-num{
     position:relative;z-index:2;margin-top:8px;
@@ -269,7 +266,7 @@
 <div class="connect" id="connectBar"></div>
 <div class="app">
   <div class="top">
-    <div class="brand"><span class="dot"></span><b>정진영</b> · 교육 아티스트</div>
+    <div class="brand"><span class="dot"></span><b>정진영</b> · 강연 크리에이터</div>
     <div class="roomtag">방 코드 <b id="roomTag">JY88</b></div>
   </div>
 
@@ -277,7 +274,7 @@
     <!-- ================= 입장 ================= -->
     <section class="view on" id="view-entry">
       <div class="kicker">아이스브레이킹 · SHAKE GAME</div>
-      <h1 class="title">📳 흔들어<span class="hl">주세요!</span></h1>
+      <h1 class="title">📱 흔들어<span class="hl">주세요!</span></h1>
       <p class="sub">36초 동안 가장 많이 흔든 사람이 우승!<br>폰을 쥐고 힘껏 흔들어 주세요.</p>
 
       <div class="card entry-card">
@@ -289,14 +286,6 @@
         <div class="countline">
           <span>현재 입장</span>
           <span><b id="entryCount">0</b> / 80명</span>
-        </div>
-        <div class="sensor">
-          <div class="ico">📱</div>
-          <div class="tx">
-            <b id="sensorTitle">흔들기 센서</b>
-            <span id="sensorDesc">아이폰은 아래 버튼으로 센서를 켜 주세요</span>
-          </div>
-          <button class="sbtn" id="sensorBtn" type="button">센서 켜기</button>
         </div>
       </div>
 
@@ -312,7 +301,7 @@
 
     <!-- ================= 대기 ================= -->
     <section class="view" id="view-wait">
-      <div class="wait-ico">📳</div>
+      <div class="wait-ico">📱</div>
       <div class="wait-kicker">READY</div>
       <h2 class="wait-title">곧 시작합니다</h2>
       <p class="wait-sub">진행자가 <b>게임시작</b>을 누르면 출발!</p>
@@ -321,10 +310,6 @@
       <div class="card wait-card">
         <div class="wr"><span>방 코드</span><b id="waitRoom">JY88</b></div>
         <div class="wr"><span>참가자</span><b><span id="waitCount">0</span> / 80명</b></div>
-        <div class="wr"><span>흔들기 센서</span><span id="waitBadge" class="badge wait">확인 중</span></div>
-      </div>
-      <div class="wait-sensor">
-        <button class="sbtn" id="sensorBtn2" type="button" style="width:100%;padding:12px">📱 흔들기 센서 켜기</button>
       </div>
     </section>
 
@@ -344,6 +329,14 @@
           <div class="count-num" id="countNum"><span id="countVal">0</span><span class="u">회</span></div>
           <div class="count-lab" id="countLab">폰을 흔들거나 화면을 두드리세요</div>
           <div class="live-rank" id="liveRank">현재 순위 집계 중…</div>
+          <div class="endwait" id="endWait">
+            <div>
+              <div class="ew-ico">⏱️</div>
+              <div class="ew-t">경기 종료!</div>
+              <div class="ew-s">결과 발표를 기다리는 중...<br>진행자가 결과를 공개합니다</div>
+              <div class="ew-m">내 기록 <b id="ewCount">0</b> 회</div>
+            </div>
+          </div>
         </div>
         <div class="play-hint" id="playHint">폰을 힘껏 흔들면 카운트! (센서가 없으면 화면 연타)</div>
       </div>
@@ -443,7 +436,8 @@
     raf: 0,
     lastCd: "",
     joining: false,
-    resultKey: ""
+    resultKey: "",
+    tapHintTimer: 0
   };
 
   const serverNow = () => Date.now() + G.offset;
@@ -533,24 +527,9 @@
     setRoom($("roomInput").value, true);
   });
 
-  /* ----- 센서 권한 ----- */
+  /* ----- 센서 (권한 요청·안내 박스 없이 입장 클릭 안에서 조용히 자동 처리) ----- */
   function motionSupported(){
     return typeof DeviceMotionEvent !== "undefined";
-  }
-
-  function paintSensor(){
-    const t = G.sensorState;
-    let title = "흔들기 센서", desc = "아이폰은 아래 버튼으로 센서를 켜 주세요";
-    if (t === "granted"){ title = "센서 켜짐"; desc = "폰을 흔들면 자동으로 카운트됩니다"; }
-    else if (t === "denied"){ title = "센서 권한이 꺼져 있어요"; desc = "화면을 두드려도 카운트할 수 있어요"; }
-    else if (t === "nosupport"){ title = "터치 모드"; desc = "이 기기는 센서 대신 화면 탭으로 카운트"; }
-    $("sensorTitle").textContent = title;
-    $("sensorDesc").textContent = desc;
-    const b = $("sensorBtn");
-    if (t === "granted"){ b.textContent = "센서 ON"; b.classList.add("ok"); }
-    else if (t === "denied" || t === "nosupport"){ b.textContent = "다시 시도"; b.classList.remove("ok"); }
-    else { b.textContent = "센서 켜기"; b.classList.remove("ok"); }
-    paintBadge();
   }
 
   function paintBadge(){
@@ -570,7 +549,7 @@
 
   function askMotion(){
     return new Promise(resolve => {
-      if (!motionSupported()){ G.sensorState = "nosupport"; paintSensor(); resolve("nosupport"); return; }
+      if (!motionSupported()){ G.sensorState = "nosupport"; paintBadge(); resolve("nosupport"); return; }
       const DM = window.DeviceMotionEvent;
       if (typeof DM.requestPermission === "function"){
         let settled = false;
@@ -578,25 +557,18 @@
         try{
           DM.requestPermission().then(r => {
             G.sensorState = (r === "granted") ? "granted" : "denied";
-            paintSensor();
+            paintBadge();
             done(G.sensorState);
-          }).catch(() => { G.sensorState = "denied"; paintSensor(); done("denied"); });
+          }).catch(() => { G.sensorState = "denied"; paintBadge(); done("denied"); });
           setTimeout(() => done(G.sensorState), 4000);
-        }catch(e){ G.sensorState = "denied"; paintSensor(); done("denied"); }
+        }catch(e){ G.sensorState = "denied"; paintBadge(); done("denied"); }
       } else {
         G.sensorState = "granted";
-        paintSensor();
+        paintBadge();
         resolve("granted");
       }
     });
   }
-
-  $("sensorBtn").addEventListener("click", () => { askMotion(); });
-  $("sensorBtn2").addEventListener("click", () => {
-    askMotion().then(() => {
-      if (G.sensorSeen) toast("센서가 켜졌습니다! 이제 흔들어 보세요.", 2200);
-    });
-  });
 
   /* ----- 센서 이벤트 ----- */
   let motionBound = false;
@@ -630,10 +602,10 @@
     $("joinBtn").disabled = true;
     $("joinBtn").textContent = "입장 중…";
 
-    /* 사용자 제스처 안에서 iOS 모션 권한 요청 */
+    /* 사용자 제스처(입장 클릭) 안에서 iOS 모션 권한 요청 + devicemotion 리스너 등록 — 별도 센서 버튼 없음 */
     if (!G.permAsked || G.sensorState === "unknown"){
       G.permAsked = true;
-      await askMotion();
+      try{ askMotion(); }catch(e){}
     }
     bindMotion();
 
@@ -665,7 +637,7 @@
       $("joinBtn").disabled = false;
       $("joinBtn").textContent = "입장하기";
       G.joining = false;
-      paintSensor();
+      paintBadge();
       show("wait");
       setTimeout(paintBadge, 1500);
       toast("입장 완료! 진행자가 시작하면 출발합니다", 2400);
@@ -714,6 +686,21 @@
         show("play");
         startLoop();
       }
+    } else if (st === "timeup" || st === "ended_wait"){
+      /* 시간 종료 — 진행자가 [결과보기]를 누를 때까지 결과 화면을 열지 않는다 */
+      if (!G.joined) return;
+      if (startAt && startAt !== G.startAt){
+        G.startAt = startAt;
+        G.endAt = endAt || (startAt + DUR_MS);
+        G.raceId = rid || startAt;
+      }
+      G.phase = "timeup";
+      if (G.screen !== "play"){
+        resetPlayUI();
+        show("play");
+      }
+      stopLoop();
+      paintEnded();
     } else if (st === "finished"){
       if (!G.joined) return;
       if (G.screen === "play" || G.phase === "running"){
@@ -792,8 +779,7 @@
     }
   }
 
-  function animateHit(){
-    const ph = $("phone");
+  function animateHit(){    const ph = $("phone");
     ph.classList.remove("hit");
     void ph.offsetWidth;
     ph.classList.add("hit");
@@ -838,7 +824,29 @@
     $("tbarFill").style.transform = "scaleX(1)";
     $("timer").classList.remove("hot");
     $("tbar").classList.remove("hot");
+    $("endWait").classList.remove("on");
+    $("playHint").textContent = "폰을 힘껏 흔들면 카운트! (센서가 없으면 화면 연타)";
+    $("countLab").textContent = "폰을 흔들거나 화면을 두드리세요";
     paintBadge();
+    /* 센서가 동작하지 않는 기기(PC·권한 거부)에서는 조용히 터치 안내로 전환 */
+    clearTimeout(G.tapHintTimer);
+    G.tapHintTimer = setTimeout(() => {
+      if (G.screen === "play" && G.phase === "running" && !G.sensorSeen){
+        $("playHint").textContent = "화면을 두드려도 카운트됩니다!";
+      }
+    }, 2800);
+  }
+
+  /* 시간 종료 후 — 결과는 진행자가 공개할 때만 나온다 */
+  function paintEnded(){
+    $("endWait").classList.add("on");
+    $("ewCount").textContent = String(G.count);
+    $("timerNum").textContent = "0.0";
+    $("tbarFill").style.transform = "scaleX(0)";
+    $("timer").classList.remove("hot");
+    $("tbar").classList.remove("hot");
+    $("countLab").textContent = "⏱️ 경기 종료! 결과 발표를 기다리는 중...";
+    clearTimeout(G.tapHintTimer);
   }
 
   function startLoop(){
@@ -868,12 +876,13 @@
         $("timer").classList.toggle("hot", sec <= 10);
         $("tbar").classList.toggle("hot", sec <= 10);
         if (left <= 0 && G.phase === "running"){
-          G.phase = "finished";
+          G.phase = "timeup";
           flushPush(true);
+          paintEnded();
         }
       }
       if (now - (G.lastRankAt || 0) > 480){ G.lastRankAt = now; paintLiveRank(); }
-      G.raf = requestAnimationFrame(step);
+      if (G.phase !== "timeup") G.raf = requestAnimationFrame(step);
     };
     G.raf = requestAnimationFrame(step);
   }
@@ -950,7 +959,6 @@
   }
 
   /* ================= 시작 ================= */
-  paintSensor();
   initFirebase();
 
   window.addEventListener("beforeunload", () => {

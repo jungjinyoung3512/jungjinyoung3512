@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0B1220">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>📳</text></svg>">
-<title>흔들어주세요! · 진행자 | 정진영 교육 아티스트</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>📱</text></svg>">
+<title>흔들어주세요! · 진행자 | 정진영 · 강연 크리에이터</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
@@ -71,6 +71,10 @@
   .btn.danger.armed{background:rgba(251,113,133,.22);border-color:#FB7185;color:#FFE4E6}
   .btn:disabled{opacity:.36;cursor:not-allowed}
   .btn:disabled:hover{border-color:var(--line2)}
+  .btn.result.glow{animation:glowPulse 1.5s ease-in-out infinite}
+  @keyframes glowPulse{0%,100%{box-shadow:0 10px 26px -14px rgba(14,165,233,.8)}50%{box-shadow:0 0 0 4px rgba(125,211,252,.28),0 12px 32px -12px rgba(14,165,233,.95)}}
+  .timeup-hint{display:none;margin-top:14px;font-size:13px;font-weight:900;color:#BAE6FD;background:rgba(14,165,233,.14);border:1px solid rgba(125,211,252,.45);border-radius:99px;padding:9px 18px;letter-spacing:-.01em}
+  .timeup-hint.on{display:inline-flex;align-items:center;gap:7px;animation:pulse 1.6s infinite}
   .spacer{flex:1}
 
   /* ---------- boards ---------- */
@@ -232,7 +236,7 @@
 <body>
 <div class="stage">
   <div class="bar">
-    <div class="brandline"><span class="dot"></span><b>흔들어주세요!</b> · 정진영 교육 아티스트</div>
+    <div class="brandline"><span class="dot"></span><b>흔들어주세요!</b> · 정진영 · 강연 크리에이터</div>
     <div class="right">
       <div class="pill">방 코드 <b id="roomTag">JY88</b></div>
       <div class="pill count">참가자 <b><span id="headCount">0</span> / 80</b>명</div>
@@ -256,7 +260,7 @@
     <section class="board on" id="bIdle">
       <div class="idle-left">
         <div class="idle-kicker">SHAKE GAME · 36초</div>
-        <h1>📳 흔들어주세요!</h1>
+        <h1>📱 흔들어주세요!</h1>
         <p>36초 동안 가장 많이 흔든 사람이 우승!</p>
         <div class="qr-frame"><img id="idleQr" alt="입장 QR"></div>
         <div class="idle-room">방 코드<b id="idleRoom">JY88</b></div>
@@ -283,6 +287,7 @@
         <div class="phase-tag ready" id="phaseTag"><i></i> <span id="phaseTxt">READY</span></div>
         <div class="big-timer" id="bigTimer"><span id="bigTimerNum">36</span><span class="u">초</span></div>
         <div class="big-note" id="bigNote">힘껏 흔들어 주세요!</div>
+        <div class="timeup-hint" id="timeupHint">[🏆 결과보기]를 눌러 순위를 공개하세요</div>
         <div class="meter" id="meter"><i id="meterFill"></i></div>
         <div class="stat2">
           <div class="stat"><div class="k">최고 기록</div><div class="v gold"><span id="statBest">0</span><em>회</em></div></div>
@@ -293,7 +298,7 @@
       <div class="rank-wrap">
         <div class="rank-head">
           <h2>실시간 순위 TOP 10</h2>
-          <div class="who">참가자 <b id="runCount">0</b>명 · 36초 뒤 결과 발표</div>
+          <div class="who">참가자 <b id="runCount">0</b>명 · 36초 뒤 자동 마감</div>
         </div>
         <div class="rank-list" id="rankList"></div>
       </div>
@@ -738,11 +743,24 @@
         H.syncing = false;
         if (!A.muted) loopStart("shake");
       }
+    } else if (st === "timeup" || st === "ended_wait"){
+      /* 시간 종료 — 결과는 진행자가 [결과보기]를 누를 때만 공개된다 */
+      if (H.phase !== "timeup"){
+        H.startAt = startAt || H.startAt;
+        H.endAt = endAt || H.endAt || serverNow();
+        H.raceId = rid || H.raceId;
+        H.phase = "timeup";
+        stopLoop();
+        setBoard("run");
+        paintTimeup();
+      }
     } else if (st === "finished"){
       if (H.phase !== "finished"){
         H.phase = "finished";
         H.endAt = endAt || H.endAt || serverNow();
         stopLoop();
+        loopStop();
+        clearTimeupUI();
         setBoard("res");
         paintResult();
         if (!A.muted) loopStart("ending");
@@ -752,6 +770,8 @@
         H.phase = "idle";
         H.startAt = 0; H.endAt = 0; H.raceId = 0;
         stopLoop();
+        loopStop();
+        clearTimeupUI();
         setBoard("idle");
         renderIdle();
       }
@@ -785,7 +805,7 @@
     if (H.render) return;
     H.render = setTimeout(() => {
       H.render = 0;
-      if (H.phase === "running" || H.phase === "countdown") renderRun();
+      if (H.phase === "running" || H.phase === "countdown" || H.phase === "timeup") renderRun();
       else if (H.phase === "finished") paintResult();
     }, 110);
   }
@@ -909,7 +929,7 @@
         $("meterFill").style.transform = "scaleX(" + Math.max(0, Math.min(1, left / DUR_MS)) + ")";
         $("bigNote").textContent = sec <= 10 ? "마지막 스퍼트!" : "힘껏 흔들어 주세요!";
 
-        if (left <= 0){ finishGame(); return; }
+        if (left <= 0){ endRound(); return; }
       }
       H.raf = requestAnimationFrame(step);
     };
@@ -918,6 +938,50 @@
 
   function stopLoop(){
     if (H.raf){ cancelAnimationFrame(H.raf); H.raf = 0; }
+  }
+
+  /* ================= 시간 종료 ================= */
+  function paintTimeup(){
+    $("cdBig").classList.remove("on");
+    $("phaseTag").classList.add("ready");
+    $("phaseTxt").textContent = "TIME UP";
+    $("bigTimerNum").textContent = "0";
+    $("headTimer").textContent = "0초";
+    $("bigTimer").classList.remove("hot");
+    $("meter").classList.remove("hot");
+    $("meterFill").style.transform = "scaleX(0)";
+    $("bigNote").textContent = "⏱️ 경기 종료! 결과 발표를 기다리는 중...";
+    $("timeupHint").classList.add("on");
+    $("btnResult").classList.add("glow");
+    renderRun();
+  }
+
+  function clearTimeupUI(){
+    $("timeupHint").classList.remove("on");
+    $("btnResult").classList.remove("glow");
+    $("bigNote").textContent = "힘껏 흔들어 주세요!";
+  }
+
+  function timeupSound(){
+    unlock();
+    if (!A.ctx || A.muted) return;
+    const t = A.ctx.currentTime + 0.03;
+    [0, 0.17, 0.34].forEach((d, i) => {
+      tone({f: 900 - i * 120, dur:0.17, type:"square", gain:0.13, t:t + d, flt:{type:"lowpass", f:2400}});
+      hit({f:2500, dur:0.05, ftype:"bandpass", q:1.4, gain:0.06, t:t + d});
+    });
+    setTimeout(() => speak("경기 종료! 결과 발표를 기다려 주세요.", {rate:1.02}), 300);
+  }
+
+  function endRound(){
+    if (H.phase === "timeup" || H.phase === "finished") return;
+    H.phase = "timeup";
+    H.endAt = H.endAt || serverNow();
+    stopLoop();
+    loopStop();
+    FB.room.update({"meta/status": "timeup", "meta/endAt": H.endAt});
+    paintTimeup();
+    timeupSound();
   }
 
   /* ================= 컨트롤 ================= */
@@ -929,6 +993,7 @@
 
   function startGame(){
     unlock();
+    clearTimeupUI();
     const startAt = serverNow() + LEAD_MS;
     const rid = startAt;
     H.startAt = startAt;
@@ -988,6 +1053,8 @@
     H.endAt = endAt;
     H.phase = "finished";
     stopLoop();
+    loopStop();
+    clearTimeupUI();
     FB.room.update({"meta/status": "finished", "meta/endAt": endAt, "meta/endedAt": endAt});
     setBoard("res");
     fanfare();
@@ -1022,6 +1089,8 @@
     H.players = {}; H.count = 0; H.best = 0; H.total = 0;
     H.startAt = 0; H.endAt = 0; H.raceId = 0;
     stopLoop();
+    loopStop();
+    clearTimeupUI();
     FB.room.child("players").remove();
     FB.room.update({
       "meta/status": "idle",
