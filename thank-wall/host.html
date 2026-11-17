@@ -2914,7 +2914,84 @@ var qrcode = function() {
     }
   }
 
+  /* ================= 배경음악 (bgm.mp3) ================= */
+  const BGM = { src: "./bgm.mp3", el: null, vol: 0.62, want: false, failed: false, fade: null, gesture: false };
+
+  function bgmEl(){
+    if (BGM.el) return BGM.el;
+    let a = null;
+    try { a = new Audio(BGM.src); } catch (e){ BGM.failed = true; return null; }
+    a.loop = true;
+    a.preload = "auto";
+    a.volume = 0;
+    a.muted = !S.sound;
+    a.addEventListener("error", () => {
+      BGM.failed = true;
+      if (BGM.want && S.revealed) ambienceStart();
+    });
+    BGM.el = a;
+    return a;
+  }
+
+  function bgmFade(target, ms){
+    const a = BGM.el;
+    if (!a) return;
+    clearInterval(BGM.fade); BGM.fade = null;
+    const from = a.volume || 0;
+    const steps = Math.max(1, Math.round(ms / 60));
+    let i = 0;
+    BGM.fade = setInterval(() => {
+      i++;
+      const v = from + (target - from) * (i / steps);
+      try { a.volume = Math.max(0, Math.min(1, v)); } catch (e) {}
+      if (i >= steps){ clearInterval(BGM.fade); BGM.fade = null; }
+    }, 60);
+  }
+
+  /* 자동재생이 막힌 경우(새로고침 후 공개 상태 복원 등) 다음 터치에서 시작 */
+  function bgmArmGesture(){
+    if (BGM.gesture) return;
+    BGM.gesture = true;
+    const kick = () => {
+      document.removeEventListener("pointerdown", kick, true);
+      document.removeEventListener("keydown", kick, true);
+      BGM.gesture = false;
+      if (BGM.want && S.revealed) bgmStart();
+    };
+    document.addEventListener("pointerdown", kick, true);
+    document.addEventListener("keydown", kick, true);
+  }
+
+  function bgmStart(){
+    BGM.want = true;
+    if (BGM.failed || !bgmEl()){ ambienceStart(); return; }
+    if (A.playing) ambienceStop();
+    const a = BGM.el;
+    a.muted = !S.sound;
+    let p = null;
+    try { p = a.play(); } catch (e){ p = null; }
+    if (!p || !p.then){ bgmFade(BGM.vol, 2200); return; }
+    p.then(() => {
+      bgmFade(BGM.vol, 2200);
+    }).catch(() => {
+      if (BGM.failed || a.error){ BGM.failed = true; ambienceStart(); return; }
+      bgmArmGesture();   /* 자동재생 차단 — 사용자 제스처를 기다림 */
+    });
+  }
+
+  function bgmStop(){
+    BGM.want = false;
+    const a = BGM.el;
+    if (a){
+      clearInterval(BGM.fade); BGM.fade = null;
+      try { a.pause(); a.currentTime = 0; a.volume = 0; } catch (e) {}
+    }
+    ambienceStop();
+  }
+
   function chime(){
+    /* 편지 음악이 주인공 — 카드 등장 효과음은 오르골 폴백일 때만 */
+    if (!BGM.failed) return;
     if (!A.playing || !S.sound || !A.ctx) return;
     tone(1318.51, 1.0, 0.028, "sine", 0);
     tone(1975.53, 0.7, 0.014, "sine", 0.05);
@@ -2925,6 +3002,8 @@ var qrcode = function() {
     el.soundBtn.classList.toggle("off", !on);
     el.soundBtn.setAttribute("aria-pressed", String(on));
     el.soundBtn.innerHTML = on ? "🔊 <span class=\"lbl2\">소리 ON</span>" : "🔇 <span class=\"lbl2\">소리 OFF</span>";
+    if (BGM.el) BGM.el.muted = !on;
+    if (on && BGM.want && BGM.el && BGM.el.paused && !BGM.failed) bgmStart();
     if (A.ctx && A.master){
       A.master.gain.cancelScheduledValues(A.ctx.currentTime);
       A.master.gain.setTargetAtTime(on && A.playing ? 0.6 : 0, A.ctx.currentTime, 0.4);
@@ -2932,7 +3011,6 @@ var qrcode = function() {
   }
   el.soundBtn.addEventListener("click", () => {
     setSound(!S.sound);
-    if (S.sound && S.revealed) ambienceStart();
   });
 
   /* ================= 카드 ================= */
@@ -3078,7 +3156,7 @@ var qrcode = function() {
     el.moon.classList.add("on");
     el.revealBtn.disabled = true;
     el.revealBtn.textContent = "🏮 공개 중";
-    ambienceStart();
+    bgmStart();
 
     const list = S.messages.slice().sort((a, b) => (a.ts || 0) - (b.ts || 0));
     if (all){
@@ -3237,7 +3315,7 @@ var qrcode = function() {
     S.timerEnd = 0;
     writeTimer(0, 0);
     renderTimer();
-    ambienceStop();
+    bgmStop();
     toggleGrid(false);
     updateCount();
     toast("모든 마음을 비웠습니다 — 처음부터 다시 받습니다");
