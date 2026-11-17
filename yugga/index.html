@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>육가 서면본점 | 지리산 흑돼지 & 프리미엄 가족·단체 외식</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Serif KR & Pretendard/Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans KR"', 'Inter', 'sans-serif'],
+                        serif: ['"Noto Serif KR"', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#141210',
+                            charcoal: '#1E1B18',
+                            card: '#26221E',
+                            gold: '#D4AF37',
+                            amber: '#E85D04',
+                            red: '#C1121F',
+                            light: '#F8F5F0'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 커스텀 스크롤바 및 미세 애니메이션 */
+        body {
+            background-color: #141210;
+            color: #F8F5F0;
+            overflow-x: hidden;
+        }
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(20, 18, 16, 0.55) 0%, rgba(20, 18, 16, 0.85) 75%, #141210 100%);
+        }
+        .glass-nav {
+            background: rgba(20, 18, 16, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        /* 탭 전환 애니메이션 */
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-600 selection:text-white">
+
+    <!-- 상단 네비게이션 바 -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-stone-800/80 transition-all">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+            <!-- 로고 -->
+            <a href="#" class="flex items-center gap-2.5 group">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-amber-600 to-red-700 flex items-center justify-center shadow-lg shadow-amber-900/30">
+                    <span class="font-serif font-black text-white text-lg sm:text-xl">肉</span>
+                </div>
+                <div>
+                    <span class="font-serif font-bold text-lg sm:text-xl tracking-tight text-white block leading-none">육가 <span class="text-amber-500 text-sm font-sans font-semibold">서면본점</span></span>
+                    <span class="text-[11px] text-stone-400 tracking-wider hidden sm:block">JIRISAN BLACK PORK PREMIUM</span>
+                </div>
+            </a>
+
+            <!-- 데스크톱 메뉴 -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-stone-300">
+                <a href="#about" class="hover:text-amber-400 transition-colors">매장소개</a>
+                <a href="#menu" class="hover:text-amber-400 transition-colors">시그니처 메뉴</a>
+                <a href="#space" class="hover:text-amber-400 transition-colors">공간 & 놀이방</a>
+                <a href="#reviews" class="hover:text-amber-400 transition-colors">방문자 리뷰 <span class="text-amber-500 font-bold">4.91</span></a>
+                <a href="#location" class="hover:text-amber-400 transition-colors">오시는 길</a>
+            </nav>
+
+            <!-- 우측 CTA 버튼 -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="openCouponModal()" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-amber-400 text-xs font-semibold border border-amber-500/30 transition-all">
+                    <i class="fa-solid fa-ticket"></i> 쿠폰받기
+                </button>
+                <button onclick="openReservationModal()" class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-500 hover:to-red-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-amber-900/40 transition-all transform active:scale-95">
+                    네이버 예약
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 히어로 섹션 (메인 배너) -->
+    <section class="relative min-h-[92vh] flex items-center pt-20 overflow-hidden">
+        <!-- 배경 이미지 (고품질 숯불 삼겹살/흑돼지 이미지 및 폴백) -->
+        <div class="absolute inset-0 z-0">
+            <img id="menu-img-5" src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1920&q=80" 
+                 onerror="this.src='https://placehold.co/1920x1080/1E1B18/D4AF37?text=Jirisan+Black+Pork'"
+                 alt="지리산 흑돼지 숯불구이" 
+                 class="w-full h-full object-cover object-center scale-105 animate-[pulse_20s_ease-in-out_infinite]">
+            <div class="absolute inset-0 hero-overlay"></div>
+        </div>
+
+        <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-12 w-full">
+            <div class="max-w-2xl">
+                <!-- 상단 뱃지 -->
+                <div class="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 rounded-full bg-stone-900/90 border border-amber-500/40 text-xs sm:text-sm text-amber-400 font-medium mb-6 backdrop-blur-md">
+                    <span class="flex items-center gap-1 font-bold text-white"><i class="fa-solid fa-star text-amber-400"></i> 4.91</span>
+                    <span class="text-stone-600">|</span>
+                    <span>방문자 리뷰 1,086건</span>
+                    <span class="text-stone-600">|</span>
+                    <span class="text-emerald-400"><i class="fa-solid fa-wheelchair mr-1"></i>휠체어 출입 가능</span>
+                </div>
+
+                <!-- 메인 타이틀 -->
+                <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl font-black text-white leading-[1.2] tracking-tight mb-5">
+                    가족과 함께 즐기는<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-red-500">지리산 흑돼지</span>의 정점
+                </h1>
+
+                <p class="text-stone-300 text-base sm:text-lg leading-relaxed mb-8 font-light">
+                    엄선된 프리미엄 지리산 흑돼지 오겹살부터 쫄깃한 특수부위 꼬들살, 직접 뽑는 자가제면 밀면까지. 
+                    넓은 단체룸과 대형 놀이방이 완비된 부산 서면 대표 외식 명소 <strong class="text-white font-semibold">육가 서면본점</strong>입니다.
+                </p>
+
+                <!-- 주요 액션 버튼 그룹 -->
+                <div class="flex flex-col sm:flex-row gap-3.5 mb-10">
+                    <button onclick="openReservationModal()" class="px-7 py-4 rounded-2xl bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-500 hover:to-red-500 text-white font-bold text-base shadow-xl shadow-red-950/50 flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5">
+                        <i class="fa-regular fa-calendar-check text-lg"></i>
+                        <span>실시간 단체·가족 예약하기 (2~60명)</span>
+                    </button>
+                    <button onclick="openCouponModal()" class="px-6 py-4 rounded-2xl bg-stone-800/90 hover:bg-stone-700 text-amber-300 font-semibold text-base border border-amber-500/30 flex items-center justify-center gap-2 transition-all">
+                        <i class="fa-solid fa-gift"></i>
+                        <span>구워먹는치즈 증정 쿠폰 외 2종</span>
+                    </button>
+                </div>
+
+                <!-- 핵심 포인트 요약 카드 -->
+                <div class="grid grid-cols-3 gap-3 sm:gap-4 pt-6 border-t border-stone-800/80">
+                    <div>
+                        <p class="text-xs text-stone-400 mb-1">영업시간</p>
+                        <p class="text-sm sm:text-base font-bold text-white">매일 11:00 오픈</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-stone-400 mb-1">수용 인원</p>
+                        <p class="text-sm sm:text-base font-bold text-white">최대 60명 단체룸</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-stone-400 mb-1">편의 시설</p>
+                        <p class="text-sm sm:text-base font-bold text-amber-400">대형 놀이방 · 주차지원</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 데이터로 보는 육가 (플레이스 플러스 인사이트 섹션) -->
+    <section id="about" class="py-16 sm:py-24 bg-brand-charcoal border-y border-stone-800/80">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="text-center max-w-2xl mx-auto mb-14">
+                <span class="text-amber-500 font-bold text-xs tracking-widest uppercase block mb-2">REAL DATA INSIGHT</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-white mb-4">1,086개의 리뷰가 증명하는 서면 1등 고깃집</h2>
+                <p class="text-stone-400 text-sm sm:text-base">실제 결제 데이터와 영수증 방문자 리뷰를 통해 확인된 육가 서면본점의 인기 비결입니다.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- 카드 1: 인기 메뉴 랭킹 -->
+                <div class="bg-brand-card p-6 sm:p-7 rounded-3xl border border-stone-800 shadow-xl">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-bold border border-amber-500/20">주간 결제 인기 순위</span>
+                        <i class="fa-solid fa-fire text-amber-500 text-xl"></i>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3.5 p-3 rounded-2xl bg-stone-900/70 border border-stone-800">
+                            <span class="w-7 h-7 rounded-lg bg-amber-500 text-stone-950 font-black flex items-center justify-center text-sm">1</span>
+                            <div class="flex-1">
+                                <p class="font-bold text-white text-sm">흑돼지오겹살 (100g)</p>
+                                <p class="text-xs text-stone-400">지리산 흑돼지 시그니처</p>
+                            </div>
+                            <span class="text-xs text-stone-500 font-medium">- 유지</span>
+                        </div>
+                        <div class="flex items-center gap-3.5 p-3 rounded-2xl bg-stone-900/70 border border-stone-800">
+                            <span class="w-7 h-7 rounded-lg bg-stone-700 text-white font-bold flex items-center justify-center text-sm">2</span>
+                            <div class="flex-1">
+                                <p class="font-bold text-white text-sm">흑돼지꼬들살 (100g)</p>
+                                <p class="text-xs text-stone-400">독보적 식감의 특수부위</p>
+                            </div>
+                            <span class="text-xs text-stone-500 font-medium">- 유지</span>
+                        </div>
+                        <div class="flex items-center gap-3.5 p-3 rounded-2xl bg-stone-900/70 border border-stone-800">
+                            <span class="w-7 h-7 rounded-lg bg-stone-800 text-stone-300 font-bold flex items-center justify-center text-sm">3</span>
+                            <div class="flex-1">
+                                <p class="font-bold text-white text-sm">간장돼지불백 + 된장</p>
+                                <p class="text-xs text-stone-400">점심 식사 베스트셀러</p>
+                            </div>
+                            <span class="text-xs text-stone-500 font-medium">- 유지</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 카드 2: 방문자 키워드 통계 -->
+                <div class="bg-brand-card p-6 sm:p-7 rounded-3xl border border-stone-800 shadow-xl">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-bold border border-red-500/20">방문자 핵심 키워드</span>
+                        <i class="fa-solid fa-heart text-red-500 text-xl"></i>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-xs sm:text-sm mb-1.5">
+                                <span class="font-medium text-stone-200">"음식이 맛있어요"</span>
+                                <span class="font-bold text-amber-400">896명</span>
+                            </div>
+                            <div class="w-full h-2.5 bg-stone-900 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-amber-500 to-red-500 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs sm:text-sm mb-1.5">
+                                <span class="font-medium text-stone-200">"고기 질이 좋아요"</span>
+                                <span class="font-bold text-amber-400">679명</span>
+                            </div>
+                            <div class="w-full h-2.5 bg-stone-900 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-amber-500 to-red-500 rounded-full" style="width: 78%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs sm:text-sm mb-1.5">
+                                <span class="font-medium text-stone-200">"양이 많아요"</span>
+                                <span class="font-bold text-amber-400">401명</span>
+                            </div>
+                            <div class="w-full h-2.5 bg-stone-900 rounded-full overflow-hidden">
+                                <div class="h-full bg-amber-500 rounded-full" style="width: 55%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs sm:text-sm mb-1.5">
+                                <span class="font-medium text-stone-200">"매장이 넓어요 & 친절해요"</span>
+                                <span class="font-bold text-amber-400">760명+</span>
+                            </div>
+                            <div class="w-full h-2.5 bg-stone-900 rounded-full overflow-hidden">
+                                <div class="h-full bg-amber-500 rounded-full" style="width: 82%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 카드 3: 방문 피크타임 & 평균 객단가 -->
+                <div class="bg-brand-card p-6 sm:p-7 rounded-3xl border border-stone-800 shadow-xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-bold border border-emerald-500/20">방문 통계 가이드</span>
+                            <i class="fa-solid fa-clock text-emerald-400 text-xl"></i>
+                        </div>
+                        <p class="text-sm text-stone-300 mb-4">
+                            <strong class="text-white">수요일 오후 6시</strong>가 가장 인기 있는 시간대입니다. 피크타임에는 사전 예약을 권장합니다.
+                        </p>
+                        <!-- 시간대별 바 차트 -->
+                        <div class="grid grid-cols-5 gap-2 items-end h-28 pt-4 px-2 bg-stone-900/60 rounded-2xl border border-stone-800/80 pb-3">
+                            <div class="flex flex-col items-center gap-1">
+                                <span class="text-[10px] text-stone-400">5%</span>
+                                <div class="w-full max-w-[24px] bg-stone-700 rounded-t-md h-3"></div>
+                                <span class="text-[11px] text-stone-400">16시</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-1">
+                                <span class="text-[10px] text-amber-400">36%</span>
+                                <div class="w-full max-w-[24px] bg-amber-600/80 rounded-t-md h-10"></div>
+                                <span class="text-[11px] text-stone-300">17시</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-1">
+                                <span class="text-[10px] font-bold text-red-400">62%</span>
+                                <div class="w-full max-w-[24px] bg-gradient-to-t from-amber-500 to-red-500 rounded-t-md h-16"></div>
+                                <span class="text-[11px] font-bold text-white">18시</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-1">
+                                <span class="text-[10px] text-stone-400">9%</span>
+                                <div class="w-full max-w-[24px] bg-stone-700 rounded-t-md h-4"></div>
+                                <span class="text-[11px] text-stone-400">19시</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-1">
+                                <span class="text-[10px] text-stone-400">3%</span>
+                                <div class="w-full max-w-[24px] bg-stone-700 rounded-t-md h-2"></div>
+                                <span class="text-[11px] text-stone-400">20시</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 p-3.5 rounded-2xl bg-stone-900 border border-stone-800 flex items-center justify-between">
+                        <span class="text-xs text-stone-400">1회 방문 평균 결제 금액</span>
+                        <span class="text-sm font-bold text-amber-400">6만원대 (가성비 우수)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 시그니처 메뉴 섹션 -->
+    <section id="menu" class="py-16 sm:py-24 bg-brand-dark">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+                <div>
+                    <span class="text-amber-500 font-bold text-xs tracking-widest uppercase block mb-2">SIGNATURE MENU</span>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-white">지리산 흑돼지 & 자가제면 별미</h2>
+                </div>
+                <div class="flex flex-col sm:items-end gap-3">
+                    <p class="text-stone-400 text-sm max-w-md md:text-right">
+                        신선한 지리산 흑돼지만을 엄선하여 육즙은 가두고 잡내는 완벽히 잡았습니다. 매장에서 직접 뽑는 자가제면 밀면도 놓치지 마세요.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 대표 세트 배너 카드 -->
+            <div class="mb-8 rounded-3xl overflow-hidden bg-gradient-to-r from-stone-900 via-brand-card to-stone-900 border border-amber-500/30 shadow-2xl grid grid-cols-1 lg:grid-cols-12">
+                <div class="lg:col-span-5 relative min-h-[280px] sm:min-h-[320px] bg-[#2C1E14] flex items-center justify-center overflow-hidden group">
+                    <!-- 업로드된 실제 사진 표시용 img (기본 숨김) -->
+                    <img id="menu-img-0" src="" alt="🎁흑돼지모듬600g" class="hidden w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+
+                    <!-- 기본 제공 사실적 원형 나무 도마 한상 SVG -->
+                    <div id="menu-svg-0" class="w-full h-full flex items-center justify-center p-4">
+                        <svg viewBox="0 0 400 340" class="w-full h-full max-w-[360px] drop-shadow-2xl transition-transform duration-500 group-hover:scale-105" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <radialGradient id="woodBoard" cx="50%" cy="45%" r="55%">
+                                    <stop offset="0%" stop-color="#D9A066"/>
+                                    <stop offset="70%" stop-color="#B87A3D"/>
+                                    <stop offset="92%" stop-color="#965D28"/>
+                                    <stop offset="100%" stop-color="#6E4017"/>
+                                </radialGradient>
+                                <linearGradient id="porkMeat" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#E56B6F"/>
+                                    <stop offset="50%" stop-color="#C84B50"/>
+                                    <stop offset="100%" stop-color="#A6343A"/>
+                                </linearGradient>
+                                <linearGradient id="porkFat" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#FFF5F5"/>
+                                    <stop offset="100%" stop-color="#F2D5D5"/>
+                                </linearGradient>
+                                <linearGradient id="cheeseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#FFF3B0"/>
+                                    <stop offset="100%" stop-color="#F4D35E"/>
+                                </linearGradient>
+                                <linearGradient id="mushroomStem" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#F5EFE6"/>
+                                    <stop offset="60%" stop-color="#EAE0D5"/>
+                                    <stop offset="100%" stop-color="#C6AC8F"/>
+                                </linearGradient>
+                                <radialGradient id="scallopGrad" cx="40%" cy="40%" r="60%">
+                                    <stop offset="0%" stop-color="#FDF8F5"/>
+                                    <stop offset="75%" stop-color="#E6D7C8"/>
+                                    <stop offset="100%" stop-color="#C9B5A0"/>
+                                </radialGradient>
+                                <filter id="foodShadow" x="-15%" y="-15%" width="130%" height="130%">
+                                    <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#1A0F07" flood-opacity="0.55"/>
+                                </filter>
+                            </defs>
+                            <circle cx="200" cy="172" r="154" fill="url(#woodBoard)" stroke="#5C3411" stroke-width="4"/>
+                            <circle cx="200" cy="172" r="142" fill="none" stroke="#854E1E" stroke-width="2.5" opacity="0.75"/>
+                            <g filter="url(#foodShadow)">
+                                <rect x="148" y="42" width="48" height="42" rx="4" transform="rotate(-6 172 63)" fill="url(#cheeseGrad)" stroke="#E0B938" stroke-width="1.5"/>
+                                <rect x="202" y="44" width="48" height="42" rx="4" transform="rotate(4 226 65)" fill="url(#cheeseGrad)" stroke="#E0B938" stroke-width="1.5"/>
+                            </g>
+                            <g filter="url(#foodShadow)" transform="translate(88, 130) rotate(22)">
+                                <path d="M -14 -68 C -6 -76, 12 -74, 16 -62 L 22 48 C 22 58, -18 58, -18 48 Z" fill="url(#mushroomStem)"/>
+                                <ellipse cx="2" cy="54" rx="25" ry="12" fill="#8C6D53"/>
+                                <ellipse cx="2" cy="51" rx="22" ry="8" fill="#A6866A"/>
+                            </g>
+                            <g filter="url(#foodShadow)" transform="translate(310, 132) rotate(-22)">
+                                <path d="M -16 -62 C -12 -74, 6 -76, 14 -68 L 18 48 C 18 58, -22 58, -22 48 Z" fill="url(#mushroomStem)"/>
+                                <ellipse cx="-2" cy="54" rx="25" ry="12" fill="#8C6D53"/>
+                                <ellipse cx="-2" cy="51" rx="22" ry="8" fill="#A6866A"/>
+                            </g>
+                            <g filter="url(#foodShadow)">
+                                <path d="M 96 196 C 92 178, 130 172, 198 175 C 266 178, 304 176, 302 198 C 300 225, 268 242, 200 242 C 132 242, 100 222, 96 196 Z" fill="url(#porkMeat)" stroke="#8F282D" stroke-width="2"/>
+                                <path d="M 102 198 Q 155 186, 205 198 T 296 195" fill="none" stroke="url(#porkFat)" stroke-width="7" stroke-linecap="round" opacity="0.9"/>
+                                <path d="M 122 218 Q 185 210, 272 222" fill="none" stroke="url(#porkFat)" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
+                                <path d="M 255 182 Q 285 188, 294 212" fill="none" stroke="#FFF0F0" stroke-width="8" stroke-linecap="round" opacity="0.85"/>
+                            </g>
+                            <g filter="url(#foodShadow)">
+                                <path d="M 98 154 C 96 135, 138 128, 202 132 C 268 136, 302 140, 298 162 C 294 185, 255 196, 198 194 C 136 192, 100 178, 98 154 Z" fill="url(#porkMeat)" stroke="#8F282D" stroke-width="2"/>
+                                <path d="M 110 154 C 145 144, 175 162, 215 148 C 245 138, 272 152, 288 158" fill="none" stroke="url(#porkFat)" stroke-width="6.5" stroke-linecap="round" opacity="0.92"/>
+                                <path d="M 135 174 C 170 165, 220 178, 265 168" fill="none" stroke="url(#porkFat)" stroke-width="4.5" stroke-linecap="round" opacity="0.75"/>
+                                <path d="M 268 142 C 288 146, 296 160, 290 176" fill="none" stroke="#FFF5F5" stroke-width="9" stroke-linecap="round"/>
+                            </g>
+                            <g filter="url(#foodShadow)">
+                                <path d="M 136 112 C 134 96, 162 90, 184 98 C 198 104, 196 126, 176 132 C 154 136, 138 126, 136 112 Z" fill="#D95358" stroke="#8F282D" stroke-width="1.5"/>
+                                <path d="M 145 112 Q 165 104, 182 115" fill="none" stroke="#FFE5E5" stroke-width="4.5" stroke-linecap="round"/>
+                                <path d="M 194 106 C 196 90, 226 86, 244 96 C 254 104, 248 126, 228 128 C 206 130, 192 120, 194 106 Z" fill="#D95358" stroke="#8F282D" stroke-width="1.5"/>
+                                <path d="M 202 116 Q 222 122, 240 112" fill="none" stroke="#FFF0F0" stroke-width="5.5" stroke-linecap="round"/>
+                            </g>
+                            <g filter="url(#foodShadow)">
+                                <path d="M 66 232 Q 125 246, 188 258" fill="none" stroke="#2D6A1E" stroke-width="11" stroke-linecap="round"/>
+                                <path d="M 68 230 Q 125 244, 184 256" fill="none" stroke="#4C9A2A" stroke-width="4" stroke-linecap="round"/>
+                                <path d="M 74 248 Q 132 262, 192 272" fill="none" stroke="#255918" stroke-width="11" stroke-linecap="round"/>
+                                <path d="M 76 246 Q 132 260, 188 270" fill="none" stroke="#58B032" stroke-width="4" stroke-linecap="round"/>
+                            </g>
+                            <g filter="url(#foodShadow)">
+                                <ellipse cx="212" cy="280" rx="22" ry="16" fill="url(#scallopGrad)" stroke="#B8A38E" stroke-width="1.5"/>
+                                <ellipse cx="212" cy="277" rx="18" ry="12" fill="#F7EFE8" opacity="0.7"/>
+                                <ellipse cx="256" cy="272" rx="22" ry="16" fill="url(#scallopGrad)" stroke="#B8A38E" stroke-width="1.5"/>
+                                <ellipse cx="256" cy="269" rx="18" ry="12" fill="#F7EFE8" opacity="0.7"/>
+                            </g>
+                        </svg>
+                    </div>
+
+                    <div class="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-red-600/95 text-white text-xs font-bold shadow-lg backdrop-blur-sm">
+                        <i class="fa-solid fa-crown mr-1"></i> 대표 인기 한상
+                    </div>
+                </div>
+                <div class="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-center">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span class="px-2.5 py-1 rounded-md bg-red-600/20 text-red-400 border border-red-500/30 text-xs font-bold">대표</span>
+                        <span class="px-2.5 py-1 rounded-md bg-amber-500/15 text-amber-400 border border-amber-500/30 text-xs font-bold">오겹살 · 특수부위</span>
+                    </div>
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <h3 class="font-serif text-2xl sm:text-3xl font-bold text-white">🎁흑돼지모듬600g</h3>
+                        <span class="text-2xl sm:text-3xl font-black text-amber-400">49,000원</span>
+                    </div>
+                    <p class="text-stone-200 text-base sm:text-lg font-medium leading-relaxed mb-5">
+                        오겹살특수부위🥩 구워지는 순간 퍼지는 풍미와 푸짐함🔥 넉넉한 양 + 합리적인 가격
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 rounded-xl bg-stone-800 text-amber-400 text-xs font-medium">#오겹살특수부위🥩</span>
+                        <span class="px-3 py-1.5 rounded-xl bg-stone-800 text-stone-200 text-xs font-medium">#구워지는순간_퍼지는풍미🔥</span>
+                        <span class="px-3 py-1.5 rounded-xl bg-stone-800 text-emerald-400 text-xs font-medium">#넉넉한양_합리적인가격</span>
+                        <span class="px-3 py-1.5 rounded-xl bg-stone-800 text-stone-200 text-xs font-medium">#치즈·관자·새송이·꽈리고추</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 단품 & 사이드 메뉴 그리드 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- 메뉴 1: 오겹살 100g -->
+                <div class="bg-brand-card rounded-3xl p-5 border border-stone-800 hover:border-amber-500/40 transition-all group">
+                    <div class="h-44 rounded-2xl overflow-hidden mb-4 relative bg-[#2A1D15]">
+                        <img id="menu-img-1" src="https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=800&q=85" 
+                             onerror="this.src='https://placehold.co/600x400/26221E/F8F5F0?text=Jirisan+Pork+Belly'"
+                             alt="오겹살 100g" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-stone-950/85 text-amber-400 text-xs font-bold">🎖️ 대표 1위</span>
+                    </div>
+                    <h4 class="font-bold text-lg text-white mb-1">오겹살 100g</h4>
+                    <p class="text-xs text-amber-500 font-medium mb-2">[지리산 흑돼지]</p>
+                    <p class="text-xs text-stone-400 leading-relaxed mb-4">껍질의 쫀득함과 살코기의 터지는 육즙이 완벽한 조화를 이루는 대표 부위</p>
+                    <div class="pt-3 border-t border-stone-800 flex items-center justify-between">
+                        <span class="text-xs text-stone-500">100g 기준</span>
+                        <span class="text-lg font-extrabold text-white">10,900원</span>
+                    </div>
+                </div>
+
+                <!-- 메뉴 2: 목살 100g -->
+                <div class="bg-brand-card rounded-3xl p-5 border border-stone-800 hover:border-amber-500/40 transition-all group">
+                    <div class="h-44 rounded-2xl overflow-hidden mb-4 relative bg-[#2A1D15]">
+                        <img id="menu-img-2" src="https://images.unsplash.com/photo-1603048297172-c92544798d5a?auto=format&fit=crop&w=800&q=85" 
+                             onerror="this.src='https://placehold.co/600x400/26221E/F8F5F0?text=Jirisan+Pork+Neck'"
+                             alt="목살 100g" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-stone-950/85 text-stone-200 text-xs font-bold">🥈 대표</span>
+                    </div>
+                    <h4 class="font-bold text-lg text-white mb-1">목살 100g</h4>
+                    <p class="text-xs text-amber-500 font-medium mb-2">[지리산 흑돼지]</p>
+                    <p class="text-xs text-stone-400 leading-relaxed mb-4">두툼한 스테이크 식감으로 담백하면서도 깊은 육향을 자랑하는 프리미엄 목살</p>
+                    <div class="pt-3 border-t border-stone-800 flex items-center justify-between">
+                        <span class="text-xs text-stone-500">100g 기준</span>
+                        <span class="text-lg font-extrabold text-white">10,900원</span>
+                    </div>
+                </div>
+
+                <!-- 메뉴 3: 꼬들살 100g -->
+                <div class="bg-brand-card rounded-3xl p-5 border border-stone-800 hover:border-amber-500/40 transition-all group">
+                    <div class="h-44 rounded-2xl overflow-hidden mb-4 relative bg-[#2A1D15]">
+                        <img id="menu-img-3" src="https://images.unsplash.com/photo-1588168333986-5078d3ae3976?auto=format&fit=crop&w=800&q=85" 
+                             onerror="this.src='https://placehold.co/600x400/26221E/F8F5F0?text=Special+Pork+Cut'"
+                             alt="꼬들살 100g" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-amber-600 text-white text-xs font-bold">🎁 별미 추천</span>
+                    </div>
+                    <h4 class="font-bold text-lg text-white mb-1">꼬들살 100g</h4>
+                    <p class="text-xs text-amber-500 font-medium mb-2">[지리산 흑돼지 특수부위]</p>
+                    <p class="text-xs text-stone-400 leading-relaxed mb-4">씹을수록 고소하고 탱글탱글한 식감이 매력적인 육가만의 시그니처 특수부위</p>
+                    <div class="pt-3 border-t border-stone-800 flex items-center justify-between">
+                        <span class="text-xs text-stone-500">100g 기준</span>
+                        <span class="text-lg font-extrabold text-amber-400">7,900원</span>
+                    </div>
+                </div>
+
+                <!-- 메뉴 4: 자가제면 밀면 -->
+                <div class="bg-brand-card rounded-3xl p-5 border border-stone-800 hover:border-amber-500/40 transition-all group">
+                    <div class="h-44 rounded-2xl overflow-hidden mb-4 relative bg-[#2A1D15]">
+                        <img id="menu-img-4" src="https://images.unsplash.com/photo-1617093727343-374698b1b08d?auto=format&fit=crop&w=800&q=85" 
+                             onerror="this.src='https://placehold.co/600x400/26221E/F8F5F0?text=Handmade+Milmyeon'"
+                             alt="자가제면 밀면" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-stone-950/85 text-emerald-400 text-xs font-bold">🍜 직접 제면</span>
+                    </div>
+                    <h4 class="font-bold text-lg text-white mb-1">자가제면 밀면</h4>
+                    <p class="text-xs text-emerald-400 font-medium mb-2">[매장 직접 반죽·제면]</p>
+                    <p class="text-xs text-stone-400 leading-relaxed mb-4">매장에서 직접 뽑은 쫄깃한 면발과 시원한 육수! 흑돼지와 환상의 궁합을 자랑합니다</p>
+                    <div class="pt-3 border-t border-stone-800 flex items-center justify-between">
+                        <span class="text-xs text-stone-500">후식/식사</span>
+                        <span class="text-lg font-extrabold text-white">6,900원</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 추가 프리미엄 구이 & 식사·곁들임 메뉴 섹션 -->
+            <div class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- 프리미엄 추가 구이류 (좌측 7컬럼) -->
+                <div class="lg:col-span-7 bg-brand-card rounded-3xl p-6 sm:p-7 border border-stone-800 shadow-xl">
+                    <div class="flex items-center justify-between mb-5 pb-3 border-b border-stone-800">
+                        <div class="flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-xl bg-red-500/15 text-red-400 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-fire-flame-curved"></i>
+                            </span>
+                            <h3 class="font-serif text-xl font-bold text-white">프리미엄 소 · 돼지 구이 메뉴</h3>
+                        </div>
+                        <span class="text-xs text-stone-400">신선 냉장육 원칙</span>
+                    </div>
+
+                    <div class="space-y-3.5">
+                        <!-- 한우차돌박이 투뿔 No.8,9 -->
+                        <div class="p-4 rounded-2xl bg-gradient-to-r from-stone-900 to-stone-900/60 border border-amber-500/35">
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 text-[11px] font-bold">1++ No.8,9</span>
+                                    <h4 class="font-bold text-base text-white">한우차돌박이 투뿔no.8,9 <span class="text-xs font-normal text-stone-400">100g</span></h4>
+                                </div>
+                                <span class="text-lg font-black text-amber-400">18,000원</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-stone-300 leading-relaxed">
+                                냉장⭕냉동❌구워지는 차돌박이🔥 씹을수록 고소함이 폭발🥩최고의 한우 구이
+                            </p>
+                        </div>
+
+                        <!-- 소갈비살 100g -->
+                        <div class="p-4 rounded-2xl bg-stone-900/80 border border-stone-800 flex items-center justify-between gap-3">
+                            <div>
+                                <h4 class="font-bold text-base text-white">소갈비살 <span class="text-xs font-normal text-stone-400">100g</span></h4>
+                                <p class="text-xs text-stone-400 mt-0.5">부드러운 육질과 진한 소고기 육즙이 살아있는 인기 구이</p>
+                            </div>
+                            <span class="text-base sm:text-lg font-extrabold text-white shrink-0">9,900원</span>
+                        </div>
+
+                        <!-- 돼지생갈비 200g -->
+                        <div class="p-4 rounded-2xl bg-stone-900/80 border border-stone-800 flex items-center justify-between gap-3">
+                            <div>
+                                <h4 class="font-bold text-base text-white">돼지생갈비 <span class="text-xs font-normal text-stone-400">200g</span></h4>
+                                <p class="text-xs text-stone-400 mt-0.5">양념하지 않은 신선한 갈빗대 원육 본연의 담백하고 쫄깃한 풍미</p>
+                            </div>
+                            <span class="text-base sm:text-lg font-extrabold text-white shrink-0">12,900원</span>
+                        </div>
+
+                        <!-- 꼬들살 100g [지리산 흑돼지] -->
+                        <div class="p-4 rounded-2xl bg-stone-900/80 border border-stone-800 flex items-center justify-between gap-3">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h4 class="font-bold text-base text-white">꼬들살 <span class="text-xs font-normal text-stone-400">100g</span></h4>
+                                    <span class="text-[11px] font-semibold text-amber-500">[지리산 흑돼지]</span>
+                                </div>
+                                <p class="text-xs text-stone-400 mt-0.5">오독오독 씹히는 식감이 일품인 지리산 흑돼지 특수부위</p>
+                            </div>
+                            <span class="text-base sm:text-lg font-extrabold text-amber-400 shrink-0">7,900원</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 식사 & 곁들임 사이드 메뉴 (우측 5컬럼) -->
+                <div class="lg:col-span-5 bg-brand-card rounded-3xl p-6 sm:p-7 border border-stone-800 shadow-xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-5 pb-3 border-b border-stone-800">
+                            <div class="flex items-center gap-2">
+                                <span class="w-8 h-8 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center text-sm">
+                                    <i class="fa-solid fa-bowl-hot"></i>
+                                </span>
+                                <h3 class="font-serif text-xl font-bold text-white">식사 & 곁들임 메뉴</h3>
+                            </div>
+                            <span class="text-xs text-stone-400">환상의 페어링</span>
+                        </div>
+
+                        <div class="divide-y divide-stone-800/80">
+                            <div class="py-3 flex items-center justify-between gap-2">
+                                <div>
+                                    <p class="font-bold text-sm sm:text-base text-white">된장술밥</p>
+                                    <p class="text-xs text-stone-400">구수한 된장국물에 밥을 말아 끓여낸 든든한 별미</p>
+                                </div>
+                                <span class="font-extrabold text-base text-white shrink-0">6,000원</span>
+                            </div>
+
+                            <div class="py-3 flex items-center justify-between gap-2">
+                                <div>
+                                    <p class="font-bold text-sm sm:text-base text-white">차돌된장찌개</p>
+                                    <p class="text-xs text-stone-400">고소한 차돌박이가 듬뿍 들어간 진한 국물</p>
+                                </div>
+                                <span class="font-extrabold text-base text-white shrink-0">5,000원</span>
+                            </div>
+
+                            <div class="py-3 flex items-center justify-between gap-2">
+                                <div>
+                                    <p class="font-bold text-sm sm:text-base text-white">폭탄치즈계란찜</p>
+                                    <p class="text-xs text-stone-400">부드러운 계란찜 위에 모짜렐라 치즈가 듬뿍</p>
+                                </div>
+                                <span class="font-extrabold text-base text-white shrink-0">5,000원</span>
+                            </div>
+
+                            <div class="py-3 flex items-center justify-between gap-2">
+                                <div>
+                                    <p class="font-bold text-sm sm:text-base text-white">구워먹는 치즈</p>
+                                    <p class="text-xs text-stone-400">노릇하게 구워 흑돼지와 함께 즐기는 임실 치즈</p>
+                                </div>
+                                <span class="font-extrabold text-base text-white shrink-0">5,000원</span>
+                            </div>
+
+                            <div class="pt-3 flex items-center justify-between gap-2">
+                                <div>
+                                    <p class="font-bold text-sm sm:text-base text-white">가리비 관자</p>
+                                    <p class="text-xs text-stone-400">고기 기름에 구워 삼합으로 즐기는 쫄깃한 관자</p>
+                                </div>
+                                <span class="font-extrabold text-base text-white shrink-0">5,000원</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 p-3 rounded-2xl bg-stone-900/90 border border-stone-800 text-xs text-stone-400 text-center">
+                        💡 <strong class="text-amber-400">추천 꿀조합:</strong> 흑돼지 + 구워먹는 치즈 + 가리비 관자 삼합!
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 가족 외식 & 단체 회식 특화 공간 안내 -->
+    <section id="space" class="py-16 sm:py-24 bg-brand-charcoal border-t border-stone-800/80">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="text-center max-w-2xl mx-auto mb-14">
+                <span class="text-amber-500 font-bold text-xs tracking-widest uppercase block mb-2">FAMILY & GROUP FRIENDLY</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-white mb-4">아이도 어른도 모두 행복한 완벽한 공간</h2>
+                <p class="text-stone-400 text-sm sm:text-base">
+                    서면 한복판에서 찾기 힘든 압도적 규모의 홀과 프라이빗 단체룸, 그리고 아이들을 위한 프리미엄 놀이방까지 완비되어 있습니다.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                <!-- 놀이방 특화 카드 -->
+                <div class="bg-brand-card rounded-3xl p-7 sm:p-8 border border-stone-800 relative overflow-hidden">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-400 flex items-center justify-center text-2xl mb-5">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">아이들이 더 좋아하는 대형 키즈 놀이방</h3>
+                    <p class="text-stone-300 text-sm leading-relaxed mb-6">
+                        부모님은 여유롭게 흑돼지를 즐기시고, 아이들은 지루할 틈 없이 신나게 놀 수 있습니다. 영유아부터 초등학생까지 모두 만족하는 알찬 놀거리가 준비되어 있습니다.
+                    </p>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+                        <div class="p-2.5 rounded-xl bg-stone-900 border border-stone-800">
+                            <i class="fa-solid fa-ghost text-amber-400 mb-1 block"></i>
+                            <span class="text-xs font-medium text-stone-200">추억의 오락기</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-stone-900 border border-stone-800">
+                            <i class="fa-solid fa-dice text-red-400 mb-1 block"></i>
+                            <span class="text-xs font-medium text-stone-200">닌텐도 게임</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-stone-900 border border-stone-800">
+                            <i class="fa-solid fa-tv text-emerald-400 mb-1 block"></i>
+                            <span class="text-xs font-medium text-stone-200">넷플릭스 시청</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-stone-900 border border-stone-800">
+                            <i class="fa-solid fa-book-open text-sky-400 mb-1 block"></i>
+                            <span class="text-xs font-medium text-stone-200">만화책 구비</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 프라이빗 룸 & 단체석 카드 -->
+                <div class="bg-brand-card rounded-3xl p-7 sm:p-8 border border-stone-800 relative overflow-hidden">
+                    <div class="w-12 h-12 rounded-2xl bg-red-500/15 text-red-400 flex items-center justify-center text-2xl mb-5">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">2명부터 최대 60명까지! 프라이빗 단체룸</h3>
+                    <p class="text-stone-300 text-sm leading-relaxed mb-6">
+                        가족 외식, 계모임, 직장 회식, 동창회까지 어떤 모임이든 쾌적하게 수용 가능합니다. 독립된 룸 공간과 넓은 테이블 간격으로 오붓하고 편안한 식사를 약속드립니다.
+                    </p>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+                        <div class="p-2.5 rounded-xl bg-stone-900 border border-stone-800">
+                            <i class="fa-solid fa-door-closed text-amber-400 mb-1 block"></i>
+                            <span class="text-xs font-medium text-stone-200">프라이빗 룸</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-stone-900 border border-stone-800">
+                            <i class="fa-solid fa-square-parking text-sky-400 mb-1 block"></i>
+                            <span class="text-xs font-medium text-stone-200">주차 지원 가능</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-stone-900 border border-stone-800">
+                            <i class="fa-solid fa-wheelchair text-emerald-400 mb-1 block"></i>
+                            <span class="text-xs font-medium text-stone-200">휠체어 출입</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-stone-900 border border-stone-800">
+                            <i class="fa-solid fa-baby-carriage text-pink-400 mb-1 block"></i>
+                            <span class="text-xs font-medium text-stone-200">유아의자 완비</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 전체 편의시설 뱃지 리스트 -->
+            <div class="bg-stone-900/80 rounded-2xl p-5 border border-stone-800 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs sm:text-sm text-stone-300">
+                <span class="font-bold text-amber-400"><i class="fa-solid fa-circle-check mr-1.5"></i>제공 편의서비스:</span>
+                <span>단체 이용 가능 (최대 60명)</span>
+                <span>·</span>
+                <span>유아시설 (놀이방) & 유아의자</span>
+                <span>·</span>
+                <span>주차 지원</span>
+                <span>·</span>
+                <span>포장 / 배달 가능</span>
+                <span>·</span>
+                <span>남/녀 화장실 구분</span>
+                <span>·</span>
+                <span>대기공간 & 무선 인터넷</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 실제 방문자 리뷰 섹션 -->
+    <section id="reviews" class="py-16 sm:py-24 bg-brand-dark">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
+                <div>
+                    <span class="text-amber-500 font-bold text-xs tracking-widest uppercase block mb-2">REAL VISITOR REVIEWS</span>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-white">영수증 인증 단골 고객님들의 생생 후기</h2>
+                </div>
+                <div class="flex items-center gap-3 bg-brand-card px-4 py-2.5 rounded-2xl border border-stone-800">
+                    <div class="text-amber-400 text-lg">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <span class="font-black text-white text-lg">4.91</span>
+                    <span class="text-xs text-stone-400">(총 1,086건)</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- 리뷰 1 -->
+                <div class="bg-brand-card p-6 rounded-3xl border border-stone-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-9 h-9 rounded-full bg-amber-600/20 text-amber-400 font-bold flex items-center justify-center text-sm">G</div>
+                                <div>
+                                    <p class="text-sm font-bold text-white">gomteang7480</p>
+                                    <p class="text-[11px] text-amber-400 font-medium">2번째 방문 · 영수증 인증</p>
+                                </div>
+                            </div>
+                            <span class="text-xs text-stone-500">11.9 방문</span>
+                        </div>
+                        <p class="text-stone-300 text-sm leading-relaxed mb-4">
+                            "오랜만에 또 왔네요. 고기가 맛있어서 저도 아이도 좋아하는 집인데 오늘은 꼬들살을 먹어봤어요. 이 집은 매번 그날그날 먹는 고기가 지금껏 먹어본 고기 중 가장 맛있는 것 같아요. 오늘도 가장 맛있는 고기를 먹었습니다~"
+                        </p>
+                    </div>
+                    <div class="p-3 rounded-2xl bg-stone-900/90 border border-stone-800/80 text-xs text-stone-400">
+                        <span class="text-amber-400 font-bold block mb-1">↳ 육가 서면본점 답글</span>
+                        고객님과 아이가 함께 좋아해주셔서 정말 기쁘답니다 😊 매번 최고의 맛을 선사하기 위해 신선한 재료와 정성으로 준비하고 있어요!
+                    </div>
+                </div>
+
+                <!-- 리뷰 2 -->
+                <div class="bg-brand-card p-6 rounded-3xl border border-stone-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-9 h-9 rounded-full bg-red-600/20 text-red-400 font-bold flex items-center justify-center text-sm">1</div>
+                                <div>
+                                    <p class="text-sm font-bold text-white">112222</p>
+                                    <p class="text-[11px] text-amber-400 font-medium">3번째 방문 · 결제내역 인증</p>
+                                </div>
+                            </div>
+                            <span class="text-xs text-stone-500">10.3 방문</span>
+                        </div>
+                        <p class="text-stone-300 text-sm leading-relaxed mb-4">
+                            "벌써 재방문인데 올 때마다 만족스러워요. 이번에는 커플 두 팀, 총 4명이서 방문했어요! 고기는 잡내 없이 신선하고 육즙도 제대로라 누구 데리고 와도 실패 없을 것 같은 곳이에요. 직원분들도 친절하시고 챙겨주시는 것도 빨라서 편했어요."
+                        </p>
+                    </div>
+                    <div class="p-3 rounded-2xl bg-stone-900/90 border border-stone-800/80 text-xs text-stone-400">
+                        <span class="text-amber-400 font-bold block mb-1">↳ 육가 서면본점 답글</span>
+                        재방문해주셨다니 정말 기쁘네요! 둘이서도 좋고 넷이서도 풍성한 즐거움을 드릴 수 있는 곳으로 늘 준비되어 있을게요 🎉
+                    </div>
+                </div>
+
+                <!-- 리뷰 3 -->
+                <div class="bg-brand-card p-6 rounded-3xl border border-stone-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-9 h-9 rounded-full bg-emerald-600/20 text-emerald-400 font-bold flex items-center justify-center text-sm">워</div>
+                                <div>
+                                    <p class="text-sm font-bold text-white">워터범</p>
+                                    <p class="text-[11px] text-amber-400 font-medium">영수증 인증 리뷰</p>
+                                </div>
+                            </div>
+                            <span class="text-xs text-stone-500">9.21 방문</span>
+                        </div>
+                        <p class="text-stone-300 text-sm leading-relaxed mb-4">
+                            "지리산 흑돼지의 풍미를 제대로 느낄 수 있는 흑돼지모듬을 즐기고 왔습니다. 특히 매장에서 직접 뽑는 6,900원 자가제면 밀면도 함께 맛보기 좋았습니다. 오락기·닌텐도·넷플릭스·만화책 등이 있는 놀이방까지 갖춰 아이와 함께 방문하기 편리해요."
+                        </p>
+                    </div>
+                    <div class="p-3 rounded-2xl bg-stone-900/90 border border-stone-800/80 text-xs text-stone-400">
+                        <span class="text-amber-400 font-bold block mb-1">↳ 육가 서면본점 답글</span>
+                        지리산 흑돼지의 깊은 풍미와 자가제면 밀면까지 잘 느껴주셨다니 기쁘네요 💖 다음에도 가족분들과 행복한 시간 보내세요!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 오시는 길 & 매장 상세 정보 섹션 -->
+    <section id="location" class="py-16 sm:py-24 bg-brand-charcoal border-t border-stone-800/80">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                <!-- 좌측 정보 -->
+                <div class="lg:col-span-6 flex flex-col justify-between bg-brand-card p-7 sm:p-9 rounded-3xl border border-stone-800">
+                    <div>
+                        <span class="text-amber-500 font-bold text-xs tracking-widest uppercase block mb-2">LOCATION & INFO</span>
+                        <h2 class="font-serif text-3xl font-bold text-white mb-6">오시는 길 및 영업 안내</h2>
+
+                        <div class="space-y-5 text-sm">
+                            <div class="flex items-start gap-3.5">
+                                <div class="w-9 h-9 rounded-xl bg-stone-900 text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-bold text-white mb-1">매장 주소</p>
+                                    <p class="text-stone-300 mb-2" id="store-address">부산 부산진구 서면문화로 35-1 2층 201호</p>
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-400 text-xs font-semibold">
+                                            <i class="fa-solid fa-train-subway mr-1"></i>서면역 9번 출구에서 564m
+                                        </span>
+                                        <button onclick="copyAddress()" class="px-2.5 py-1 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs transition-colors">
+                                            <i class="fa-regular fa-copy mr-1"></i>주소 복사
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3.5">
+                                <div class="w-9 h-9 rounded-xl bg-stone-900 text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+                                    <i class="fa-regular fa-clock"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-white mb-1">영업 시간</p>
+                                    <p class="text-stone-300">매일 <strong class="text-amber-400">11:00</strong> 영업 시작 (점심 특선 및 저녁 식사 가능)</p>
+                                    <p class="text-xs text-stone-400 mt-0.5">* 단체 예약 및 방문 전 네이버 예약을 이용하시면 대기 없이 입장 가능합니다.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3.5">
+                                <div class="w-9 h-9 rounded-xl bg-stone-900 text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+                                    <i class="fa-solid fa-square-parking"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-white mb-1">주차 및 접근성 안내</p>
+                                    <p class="text-stone-300">주차 지원 가능 / 건물 내 엘리베이터 및 <span class="text-emerald-400 font-medium">휠체어 출입 가능</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-stone-800 flex flex-wrap gap-3">
+                        <a href="https://blog.naver.com/human-82/223992266306" target="_blank" rel="noopener noreferrer" class="flex-1 py-3 px-4 rounded-xl bg-stone-800 hover:bg-stone-700 text-white text-xs sm:text-sm font-semibold text-center transition-colors">
+                            <i class="fa-solid fa-book-open mr-1.5 text-emerald-400"></i>공식 블로그 안내
+                        </a>
+                        <button onclick="openReservationModal()" class="flex-1 py-3 px-4 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs sm:text-sm font-bold text-center transition-colors">
+                            <i class="fa-regular fa-calendar-check mr-1.5"></i>빠른 자리 예약
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 우측 약도 그래픽 카드 -->
+                <div class="lg:col-span-6 bg-brand-card rounded-3xl border border-stone-800 p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm font-bold text-white"><i class="fa-solid fa-map-location-dot text-amber-500 mr-2"></i>서면역 9번 출구 오시는 길 요약</span>
+                        <span class="text-xs text-stone-400">도보 약 8분</span>
+                    </div>
+
+                    <!-- 스타일리시한 커스텀 SVG 약도 -->
+                    <div class="w-full h-64 sm:h-72 rounded-2xl bg-stone-900 border border-stone-800 relative flex items-center justify-center overflow-hidden">
+                        <svg viewBox="0 0 500 280" class="w-full h-full">
+                            <!-- 배경 그리드 -->
+                            <defs>
+                                <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+                                    <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#26221E" stroke-width="1"/>
+                                </pattern>
+                            </defs>
+                            <rect width="500" height="280" fill="url(#grid)" />
+                            
+                            <!-- 도로 라인 -->
+                            <path d="M 0 210 L 500 210" stroke="#36312C" stroke-width="18" />
+                            <path d="M 130 0 L 130 280" stroke="#36312C" stroke-width="14" />
+                            <path d="M 340 40 L 340 210" stroke="#36312C" stroke-width="14" />
+                            <path d="M 130 85 L 340 85" stroke="#36312C" stroke-width="14" />
+
+                            <!-- 이동 경로 점선 -->
+                            <path d="M 130 210 L 130 85 L 340 85" fill="none" stroke="#F59E0B" stroke-width="3" stroke-dasharray="6,6" />
+
+                            <!-- 서면역 9번 출구 마커 -->
+                            <g transform="translate(130, 210)">
+                                <circle r="14" fill="#1E1B18" stroke="#38BDF8" stroke-width="3"/>
+                                <text y="4" text-anchor="middle" fill="#38BDF8" font-size="11" font-weight="bold">9</text>
+                                <rect x="-52" y="20" width="104" height="22" rx="6" fill="#1E1B18" stroke="#38BDF8" stroke-width="1"/>
+                                <text y="34" text-anchor="middle" fill="#F8F5F0" font-size="11" font-weight="bold">서면역 9번 출구</text>
+                            </g>
+
+                            <!-- 거리 표시 -->
+                            <g transform="translate(235, 72)">
+                                <rect x="-32" y="-12" width="64" height="20" rx="10" fill="#26221E" stroke="#F59E0B" stroke-width="1"/>
+                                <text y="2" text-anchor="middle" fill="#FBBF24" font-size="10" font-weight="bold">564m 직진</text>
+                            </g>
+
+                            <!-- 육가 서면본점 마커 -->
+                            <g transform="translate(340, 85)">
+                                <circle r="22" fill="#DC2626" fill-opacity="0.25"/>
+                                <circle r="12" fill="#DC2626" stroke="#FFFFFF" stroke-width="2"/>
+                                <rect x="-65" y="-44" width="130" height="26" rx="8" fill="#D97706"/>
+                                <text y="-27" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="bold">육가 서면본점 (2F)</text>
+                            </g>
+                        </svg>
+                    </div>
+
+                    <p class="text-xs text-stone-400 mt-4 leading-relaxed">
+                        * 서면역 9번 출구로 나오신 후 서면문화로 방면으로 564m 이동하시면 건물 2층 201호에 <strong class="text-stone-200">육가 서면본점</strong>이 위치해 있습니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="bg-stone-950 border-t border-stone-900 py-10 pb-24 md:pb-12 text-stone-500 text-xs">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-center sm:text-left">
+                <p class="font-serif font-bold text-base text-stone-300 mb-1">육가 서면본점</p>
+                <p>부산 부산진구 서면문화로 35-1 2층 201호 | 지리산 흑돼지 전문점</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="openCouponModal()" class="hover:text-amber-400 transition-colors">혜택 쿠폰</button>
+                <span>|</span>
+                <button onclick="openReservationModal()" class="hover:text-amber-400 transition-colors">네이버 예약</button>
+                <span>|</span>
+                <a href="https://blog.naver.com/human-82/223992266306" target="_blank" rel="noopener noreferrer" class="hover:text-amber-400 transition-colors">블로그</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 모바일 하단 고정 액션 바 -->
+    <div class="fixed bottom-0 left-0 right-0 z-40 md:hidden glass-nav border-t border-stone-800 p-3 flex gap-2.5">
+        <button onclick="openCouponModal()" class="flex-1 py-3 rounded-xl bg-stone-800 text-amber-400 font-bold text-xs border border-amber-500/30 flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-ticket"></i> 쿠폰 3종
+        </button>
+        <button onclick="openReservationModal()" class="flex-[2] py-3 rounded-xl bg-gradient-to-r from-amber-600 to-red-600 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-2">
+            <i class="fa-regular fa-calendar-check"></i> 지금 바로 예약하기
+        </button>
+    </div>
+
+    <!-- 모달 1: 실시간 네이버 예약 시뮬레이션 모달 -->
+    <div id="reservation-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-brand-card border border-stone-700 rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl fade-in relative">
+            <button onclick="closeModal('reservation-modal')" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-stone-800 text-stone-400 hover:text-white flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="mb-5">
+                <span class="px-2.5 py-1 rounded-md bg-emerald-500/15 text-emerald-400 text-xs font-bold">NAVER 예약 연동</span>
+                <h3 class="font-serif text-2xl font-bold text-white mt-2">육가 서면본점 자리 예약</h3>
+                <p class="text-xs text-stone-400 mt-1">2명 커플석부터 최대 60명 단체룸까지 예약 가능합니다.</p>
+            </div>
+
+            <form onsubmit="submitReservation(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-stone-300 mb-1.5">방문 날짜 선택</label>
+                    <input type="date" id="res-date" required class="w-full px-3.5 py-2.5 rounded-xl bg-stone-900 border border-stone-700 text-white text-sm focus:outline-none focus:border-amber-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-stone-300 mb-1.5">방문 시간 (11:00~22:00)</label>
+                        <select id="res-time" class="w-full px-3.5 py-2.5 rounded-xl bg-stone-900 border border-stone-700 text-white text-sm focus:outline-none focus:border-amber-500">
+                            <option value="11:00">11:00 (오픈/점심)</option>
+                            <option value="11:30">11:30 (점심)</option>
+                            <option value="12:00">12:00 (점심)</option>
+                            <option value="12:30">12:30 (점심)</option>
+                            <option value="13:00">13:00 (점심)</option>
+                            <option value="13:30">13:30 (점심)</option>
+                            <option value="14:00">14:00 (오후)</option>
+                            <option value="14:30">14:30 (오후)</option>
+                            <option value="15:00">15:00 (오후)</option>
+                            <option value="15:30">15:30 (오후)</option>
+                            <option value="16:00">16:00 (이른 저녁)</option>
+                            <option value="16:30">16:30 (이른 저녁)</option>
+                            <option value="17:00">17:00 (저녁)</option>
+                            <option value="17:30">17:30 (저녁)</option>
+                            <option value="18:00" selected>18:00 (인기 피크)</option>
+                            <option value="18:30">18:30 (저녁)</option>
+                            <option value="19:00">19:00 (저녁)</option>
+                            <option value="19:30">19:30 (저녁)</option>
+                            <option value="20:00">20:00 (저녁)</option>
+                            <option value="20:30">20:30 (늦은 저녁)</option>
+                            <option value="21:00">21:00 (늦은 저녁)</option>
+                            <option value="21:30">21:30 (밤)</option>
+                            <option value="22:00">22:00 (밤)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-stone-300 mb-1.5">인원 수 (2~60명)</label>
+                        <input type="number" id="res-guests" min="2" max="60" value="4" required class="w-full px-3.5 py-2.5 rounded-xl bg-stone-900 border border-stone-700 text-white text-sm focus:outline-none focus:border-amber-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-stone-300 mb-1.5">좌석 및 요청사항</label>
+                    <select id="res-seat" class="w-full px-3.5 py-2.5 rounded-xl bg-stone-900 border border-stone-700 text-white text-sm focus:outline-none focus:border-amber-500">
+                        <option value="일반 홀 테이블">일반 홀 테이블</option>
+                        <option value="놀이방 근처 가족석">놀이방 근처 가족석 (유아의자 요청)</option>
+                        <option value="프라이빗 단체룸">프라이빗 단체룸 예약</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-stone-300 mb-1.5">예약자 성함 / 연락처</label>
+                    <input type="text" id="res-name" placeholder="예: 홍길동 / 010-1234-5678" required class="w-full px-3.5 py-2.5 rounded-xl bg-stone-900 border border-stone-700 text-white text-sm focus:outline-none focus:border-amber-500">
+                </div>
+
+                <div class="p-3 rounded-xl bg-stone-900/90 border border-stone-800 text-[11px] text-stone-400 flex items-center gap-2">
+                    <i class="fa-solid fa-comment-sms text-amber-400 text-sm"></i>
+                    <span>신청 완료 시 매장 예약 전용 번호(<strong class="text-stone-200">010-8300-1404</strong>)로 예약 문자 발송 화면이 연결됩니다.</span>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-500 hover:to-red-500 text-white font-bold text-sm shadow-lg transition-all mt-2">
+                    예약 신청 완료하기 (문자 발송)
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 모달 2: 매장 쿠폰 모달 -->
+    <div id="coupon-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-brand-card border border-stone-700 rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl fade-in relative">
+            <button onclick="closeModal('coupon-modal')" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-stone-800 text-stone-400 hover:text-white flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="mb-5">
+                <span class="px-2.5 py-1 rounded-md bg-amber-500/15 text-amber-400 text-xs font-bold">SPECIAL COUPON</span>
+                <h3 class="font-serif text-2xl font-bold text-white mt-2">육가 서면본점 전용 혜택 쿠폰</h3>
+                <p class="text-xs text-stone-400 mt-1">방문 시 직원에게 쿠폰 화면을 보여주시면 즉시 적용됩니다.</p>
+            </div>
+
+            <div class="space-y-3 mb-6">
+                <div class="p-4 rounded-2xl bg-stone-900 border border-amber-500/40 flex items-center justify-between">
+                    <div>
+                        <span class="text-[11px] font-bold text-amber-400 block mb-0.5">인기 혜택</span>
+                        <p class="font-bold text-white text-sm">[리뷰작성] 구워먹는치즈 증정</p>
+                        <p class="text-xs text-stone-400 mt-0.5">고소한 임실 구워먹는 치즈 1접시 무료</p>
+                    </div>
+                    <button onclick="claimCoupon(this, '구워먹는치즈 쿠폰')" class="px-3 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shrink-0">
+                        받기
+                    </button>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-stone-900 border border-stone-800 flex items-center justify-between">
+                    <div>
+                        <span class="text-[11px] font-bold text-emerald-400 block mb-0.5">가족·단체 환영</span>
+                        <p class="font-bold text-white text-sm">음료수 1병 무료 증정 쿠폰</p>
+                        <p class="text-xs text-stone-400 mt-0.5">네이버 예약 방문 고객 테이블당 1병</p>
+                    </div>
+                    <button onclick="claimCoupon(this, '음료수 증정 쿠폰')" class="px-3 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-bold shrink-0">
+                        받기
+                    </button>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-stone-900 border border-stone-800 flex items-center justify-between">
+                    <div>
+                        <span class="text-[11px] font-bold text-red-400 block mb-0.5">알림받기 혜택</span>
+                        <p class="font-bold text-white text-sm">된장술밥 / 후식 냉면 할인권</p>
+                        <p class="text-xs text-stone-400 mt-0.5">플레이스 알림받기 설정 시 즉시 사용</p>
+                    </div>
+                    <button onclick="claimCoupon(this, '식사 할인 쿠폰')" class="px-3 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-bold shrink-0">
+                        받기
+                    </button>
+                </div>
+            </div>
+
+            <button onclick="closeModal('coupon-modal')" class="w-full py-3 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs font-bold">
+                닫기
+            </button>
+        </div>
+    </div>
+
+    <!-- 커스텀 토스트 메시지 박스 (alert() 대체) -->
+    <div id="toast-box" class="fixed top-20 left-1/2 -translate-x-1/2 z-[60] hidden items-center gap-2.5 px-5 py-3.5 rounded-2xl bg-stone-900 border border-amber-500/50 text-white text-sm font-medium shadow-2xl">
+        <i class="fa-solid fa-circle-check text-amber-400"></i>
+        <span id="toast-message">처리가 완료되었습니다.</span>
+    </div>
+
+    <script>
+        let currentUploadIndex = 0;
+
+        // 기본 이미지 원본 목록 (초기화 복원용)
+        const defaultPhotoSources = {
+            0: '',
+            1: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=800&q=85',
+            2: 'https://images.unsplash.com/photo-1603048297172-c92544798d5a?auto=format&fit=crop&w=800&q=85',
+            3: 'https://images.unsplash.com/photo-1588168333986-5078d3ae3976?auto=format&fit=crop&w=800&q=85',
+            4: 'https://images.unsplash.com/photo-1617093727343-374698b1b08d?auto=format&fit=crop&w=800&q=85',
+            5: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1920&q=80'
+        };
+
+        const menuNames = ['흑돼지모듬 600g', '오겹살 100g', '목살 100g', '꼬들살 100g', '자가제면 밀면', '메인 배너 배경'];
+
+        // 사진 관리 모달 열기
+        function openPhotoManagerModal() {
+            const modal = document.getElementById('photo-manager-modal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // 특정 인덱스에 이미지 파일 적용 공통 헬퍼
+        function applyFileToSlot(index, file) {
+            if (!file || !file.type.startsWith('image/')) return;
+            const objectUrl = URL.createObjectURL(file);
+
+            const imgEl = document.getElementById(`menu-img-${index}`);
+            if (imgEl) {
+                imgEl.src = objectUrl;
+                imgEl.classList.remove('hidden');
+            }
+            if (index === 0) {
+                const svgEl = document.getElementById('menu-svg-0');
+                if (svgEl) svgEl.classList.add('hidden');
+                const badgeEl = document.getElementById('thumb-badge-0');
+                if (badgeEl) badgeEl.classList.add('hidden');
+            }
+
+            const thumbEl = document.getElementById(`thumb-${index}`);
+            if (thumbEl) {
+                thumbEl.src = objectUrl;
+                thumbEl.classList.remove('hidden');
+            }
+
+            const statusEl = document.getElementById(`status-${index}`);
+            if (statusEl) {
+                statusEl.textContent = `✓ ${file.name} 적용됨`;
+                statusEl.classList.remove('text-stone-400');
+                statusEl.classList.add('text-emerald-400', 'font-medium');
+            }
+        }
+
+        // 메뉴 사진 변경 트리거
+        function triggerPhotoUpload(index) {
+            currentUploadIndex = index;
+            const input = document.getElementById('menu-photo-input');
+            if (input) {
+                input.value = '';
+                input.click();
+            }
+        }
+
+        // 선택된 실제 이미지 파일 적용
+        function handlePhotoSelected(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            applyFileToSlot(currentUploadIndex, file);
+            showToast(`'${menuNames[currentUploadIndex]}' 사진이 업로드되어 적용되었습니다!`);
+        }
+
+        // 다중 파일 일괄 선택 처리
+        function handleBulkPhotoSelected(event) {
+            const files = Array.from(event.target.files || []).filter(f => f.type.startsWith('image/'));
+            if (files.length === 0) return;
+
+            const count = Math.min(files.length, 6);
+            for (let i = 0; i < count; i++) {
+                applyFileToSlot(i, files[i]);
+            }
+            showToast(`총 ${count}장의 실제 사진이 메뉴판에 일괄 적용되었습니다!`);
+        }
+
+        // 개별 사진 기본값으로 초기화
+        function resetSinglePhoto(index) {
+            const imgEl = document.getElementById(`menu-img-${index}`);
+            const thumbEl = document.getElementById(`thumb-${index}`);
+            const statusEl = document.getElementById(`status-${index}`);
+
+            if (index === 0) {
+                if (imgEl) {
+                    imgEl.src = '';
+                    imgEl.classList.add('hidden');
+                }
+                const svgEl = document.getElementById('menu-svg-0');
+                if (svgEl) svgEl.classList.remove('hidden');
+                if (thumbEl) {
+                    thumbEl.src = '';
+                    thumbEl.classList.add('hidden');
+                }
+                const badgeEl = document.getElementById('thumb-badge-0');
+                if (badgeEl) badgeEl.classList.remove('hidden');
+                if (statusEl) statusEl.textContent = '기본 그래픽 적용 중';
+            } else {
+                const defaultUrl = defaultPhotoSources[index];
+                if (imgEl) imgEl.src = defaultUrl;
+                if (thumbEl) thumbEl.src = defaultUrl;
+                if (statusEl) statusEl.textContent = index === 5 ? '기본 배경 적용 중' : '기본 이미지 적용 중';
+            }
+
+            if (statusEl) {
+                statusEl.classList.remove('text-emerald-400', 'font-medium');
+                statusEl.classList.add('text-stone-400');
+            }
+            showToast(`'${menuNames[index]}' 사진이 기본 상태로 복원되었습니다.`);
+        }
+
+        // 전체 사진 초기화
+        function resetAllPhotos() {
+            for (let i = 0; i <= 5; i++) {
+                resetSinglePhoto(i);
+            }
+            showToast('모든 메뉴 및 배너 사진이 기본 상태로 초기화되었습니다.');
+        }
+
+        // 기본 예약 날짜를 오늘(2026-11-18)로 설정 및 드래그 앤 드롭 바인딩
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateInput = document.getElementById('res-date');
+            if (dateInput) {
+                dateInput.value = '2026-11-18';
+            }
+
+            const dropZone = document.getElementById('drop-zone');
+            if (dropZone) {
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    dropZone.addEventListener(eventName, (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
+                });
+                dropZone.addEventListener('dragover', () => {
+                    dropZone.classList.add('border-amber-500', 'bg-stone-800/90');
+                });
+                dropZone.addEventListener('dragleave', () => {
+                    dropZone.classList.remove('border-amber-500', 'bg-stone-800/90');
+                });
+                dropZone.addEventListener('drop', (e) => {
+                    dropZone.classList.remove('border-amber-500', 'bg-stone-800/90');
+                    const files = Array.from(e.dataTransfer.files || []).filter(f => f.type.startsWith('image/'));
+                    if (files.length > 0) {
+                        const count = Math.min(files.length, 6);
+                        for (let i = 0; i < count; i++) {
+                            applyFileToSlot(i, files[i]);
+                        }
+                        showToast(`드래그한 ${count}장의 사진이 일괄 적용되었습니다!`);
+                    }
+                });
+            }
+        });
+
+        // 토스트 메시지 표시 함수
+        function showToast(msg) {
+            const toast = document.getElementById('toast-box');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.textContent = msg;
+            toast.classList.remove('hidden');
+            toast.classList.add('flex');
+
+            setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('flex');
+            }, 3200);
+        }
+
+        // 예약 모달 열기
+        function openReservationModal() {
+            const modal = document.getElementById('reservation-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // 쿠폰 모달 열기
+        function openCouponModal() {
+            const modal = document.getElementById('coupon-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // 모달 닫기 공통 함수
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        // 예약 폼 제출 처리 (010-8300-1404 문자 발송 연동)
+        function submitReservation(e) {
+            e.preventDefault();
+            const date = document.getElementById('res-date').value;
+            const time = document.getElementById('res-time').value;
+            const guests = document.getElementById('res-guests').value;
+            const seat = document.getElementById('res-seat').value;
+            const customerInfo = document.getElementById('res-name').value.trim();
+
+            const storePhone = '010-8300-1404';
+            const smsBody = `[육가 서면본점 예약신청]\n- 날짜: ${date}\n- 시간: ${time}\n- 인원: ${guests}명\n- 좌석: ${seat}\n- 예약자: ${customerInfo}`;
+
+            // PC 환경 등을 대비해 예약 문자 내용을 클립보드에도 함께 복사
+            const tempInput = document.createElement('textarea');
+            tempInput.value = smsBody;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand('copy');
+            } catch (err) {}
+            document.body.removeChild(tempInput);
+
+            closeModal('reservation-modal');
+            showToast(`010-8300-1404로 예약 문자 발송 화면을 연결합니다!`);
+
+            // 모바일/기기 기본 문자 앱(SMS) 실행 (iOS 및 Android 호환 구분자 처리)
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const separator = isIOS ? '&' : '?';
+            const smsUri = `sms:${storePhone}${separator}body=${encodeURIComponent(smsBody)}`;
+
+            setTimeout(() => {
+                window.location.href = smsUri;
+            }, 350);
+        }
+
+        // 쿠폰 발급 처리
+        function claimCoupon(btn, couponName) {
+            btn.textContent = '발급완료';
+            btn.classList.remove('bg-amber-600', 'hover:bg-amber-500', 'bg-stone-800');
+            btn.classList.add('bg-emerald-600', 'text-white');
+            btn.disabled = true;
+            showToast(`'${couponName}'이 발급되었습니다. 매장 방문 시 제시해주세요!`);
+        }
+
+        // 주소 클립보드 복사 (execCommand 사용)
+        function copyAddress() {
+            const addressText = document.getElementById('store-address').textContent;
+            const tempInput = document.createElement('textarea');
+            tempInput.value = addressText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand('copy');
+                showToast('매장 주소가 클립보드에 복사되었습니다!');
+            } catch (err) {
+                showToast('주소 복사: 부산 부산진구 서면문화로 35-1 2층 201호');
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        // 모달 바깥 영역 클릭 시 닫기
+        window.addEventListener('click', (e) => {
+            if (e.target.id === 'reservation-modal') closeModal('reservation-modal');
+            if (e.target.id === 'coupon-modal') closeModal('coupon-modal');
+            if (e.target.id === 'photo-manager-modal') closeModal('photo-manager-modal');
+        });
+    </script>
+</body>
+</html>
