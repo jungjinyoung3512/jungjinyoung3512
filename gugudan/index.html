@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🧮</text></svg>">
-<title>🧮 구구단왕! · 정진영 교육 아티스트</title>
+<title>🧮 구구단왕! · 강연 크리에이터 정진영</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
@@ -212,6 +212,22 @@
   .cd .go{font-family:var(--serif);font-size:60px;font-weight:900;color:#6EE7B7;text-shadow:0 0 50px rgba(52,211,153,.8)}
   .cd .cap2{margin-top:14px;font-size:14px;font-weight:900;letter-spacing:.1em;color:var(--muted)}
 
+  /* ---------- 시간 종료 (결과 발표 대기) ---------- */
+  .tup{
+    position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
+    background:rgba(7,11,24,.9);backdrop-filter:blur(5px);z-index:16;text-align:center;padding:26px;
+  }
+  .tup.on{display:flex;animation:tupIn .3s ease-out}
+  @keyframes tupIn{from{opacity:0}to{opacity:1}}
+  .tup .ic{font-size:58px;line-height:1;filter:drop-shadow(0 10px 26px rgba(251,191,36,.5));animation:breathe 2.4s ease-in-out infinite}
+  .tup h2{font-family:var(--serif);font-size:27px;font-weight:900;margin:16px 0 0;letter-spacing:-.03em;color:#fff}
+  .tup p{font-size:13.5px;font-weight:800;color:var(--muted);margin:11px 0 0;line-height:1.65}
+  .tup .dots{margin-top:18px;display:flex;gap:7px}
+  .tup .dots i{width:8px;height:8px;border-radius:50%;background:var(--amber);animation:dotb 1.2s infinite}
+  .tup .dots i:nth-child(2){animation-delay:.15s}
+  .tup .dots i:nth-child(3){animation-delay:.3s}
+  @keyframes dotb{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-5px)}}
+
   /* ---------- 결과 ---------- */
   #view-result{padding-top:max(14px,env(safe-area-inset-top));gap:0;overflow:hidden}
   .res-head{flex:none;text-align:center}
@@ -266,7 +282,7 @@
   <!-- ============ 입장 ============ -->
   <section class="view on" id="view-entry">
     <div class="brand">
-      <div class="name">정진영 · 교육 아티스트</div>
+      <div class="name">강연 크리에이터 · 정진영</div>
       <div class="chip"><span class="dot"></span>방 <b id="roomTag">JY29</b></div>
     </div>
 
@@ -349,6 +365,13 @@
     <div class="cd" id="cdOverlay">
       <div class="num" id="cdNum">3</div>
       <div class="cap2">곧 시작합니다</div>
+    </div>
+
+    <div class="tup" id="timeupOverlay">
+      <div class="ic">⏱️</div>
+      <h2>시간 종료!</h2>
+      <p>결과 발표를 기다리는 중...</p>
+      <div class="dots"><i></i><i></i><i></i></div>
     </div>
   </section>
 
@@ -525,6 +548,7 @@
       G.score = 0; G.input = ""; G.lastAt = 0; G.lock = false; G.endedShown = false; G.finishRace = 0;
       $("answerBox").classList.remove("ok","bad");
       $("plus").classList.remove("go");
+      $("timeupOverlay").classList.remove("on");
       paintScore();
     }
     if (G.phase === "finished" && prevPhase !== "finished"){
@@ -540,6 +564,7 @@
       if (G.endedShown && G.finishRace === G.raceId){ return; }   /* 이미 이번 판 종료 */
       setPlay();
     }
+    else if (G.phase === "timeup"){ setPlay(); }
     else if (G.phase === "finished") finish();
     else {
       if (G.screen === "play"){ show("wait"); toast("기록이 초기화되었어요. 곧 다음 판이 시작됩니다!", 2400); }
@@ -675,7 +700,20 @@
       if (!G.q) newQ();
       paintScore();
     }
+    if (G.phase === "timeup"){ timeUp(); return; }
+    $("timeupOverlay").classList.remove("on");
     startLoop();
+  }
+
+  /* ---------- 시간 종료: 결과는 진행자가 버튼을 눌러야 공개 ---------- */
+  function timeUp(){
+    if (G.raf){ cancelAnimationFrame(G.raf); G.raf = 0; }
+    G.lock = true;
+    $("cdOverlay").classList.remove("on");
+    $("timer").innerHTML = '0.0<span class="u">초</span>';
+    $("timerFill").style.width = "0%";
+    $("timeupOverlay").classList.add("on");
+    try{ if (navigator.vibrate) navigator.vibrate([40, 60, 40]); }catch(e){}
   }
 
   function remaining(){
@@ -731,7 +769,7 @@
         fl.classList.toggle("warn", t <= 10 && t > 5);
         fl.classList.toggle("crit", t <= 5);
       }
-      if (left <= 0){ finish(); return; }
+      if (left <= 0){ timeUp(); return; }
     }
     G.raf = requestAnimationFrame(tick);
   }
@@ -743,9 +781,10 @@
   /* ---------- 키 입력 ---------- */
   function press(k){
     if (G.screen !== "play" || G.lock) return;
+    if (G.phase === "timeup" || G.phase === "finished") return;
     if (!G.q) return;
     if (serverNow() < G.startAt) return;          /* 시작 전 */
-    if (serverNow() >= G.startAt + G.dur){ finish(); return; }
+    if (serverNow() >= G.startAt + G.dur){ timeUp(); return; }
 
     if (k === "back"){
       G.input = G.input.slice(0, -1);

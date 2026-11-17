@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0A0F1E">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🧮</text></svg>">
-<title>🧮 구구단왕! · 진행자 | 정진영 교육 아티스트</title>
+<title>🧮 구구단왕! · 진행자 | 강연 크리에이터 정진영</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
@@ -161,6 +161,29 @@
   @keyframes bump{0%{transform:scale(1)}35%{transform:scale(1.018);box-shadow:0 0 0 2px rgba(52,211,153,.45)}100%{transform:scale(1)}}
   .rank-empty{padding:26px;text-align:center;font-size:13px;font-weight:800;color:#4E607E}
 
+  /* ---------- 시간 종료 (결과 발표 대기) ---------- */
+  #bRun{position:absolute}
+  .tup{
+    position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
+    background:rgba(7,11,24,.72);backdrop-filter:blur(3px);z-index:8;text-align:center;padding:24px;
+    border-radius:20px;
+  }
+  .tup.on{display:flex;animation:tupIn .3s ease-out}
+  @keyframes tupIn{from{opacity:0}to{opacity:1}}
+  .tup h2{font-family:var(--serif);font-size:44px;font-weight:900;margin:0;letter-spacing:-.04em;color:#fff;text-shadow:0 0 60px rgba(251,191,36,.45)}
+  .tup .ic{font-size:56px;line-height:1;margin-bottom:10px;filter:drop-shadow(0 10px 26px rgba(251,191,36,.5));animation:breathe 2.4s ease-in-out infinite}
+  @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+  .tup p{font-size:17px;font-weight:900;color:#E8D9B0;margin:12px 0 0}
+  .tup .hint{margin-top:16px;font-size:12.5px;font-weight:800;color:#8FA2C0}
+  .tup .hint b{color:var(--amber-lt)}
+  .tup .dots{margin-top:18px;display:flex;gap:8px}
+  .tup .dots i{width:9px;height:9px;border-radius:50%;background:var(--amber);animation:dotb 1.2s infinite}
+  .tup .dots i:nth-child(2){animation-delay:.15s}
+  .tup .dots i:nth-child(3){animation-delay:.3s}
+  @keyframes dotb{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-5px)}}
+  #btnResult.pulse{animation:btnPulse 1.4s ease-in-out infinite}
+  @keyframes btnPulse{0%,100%{box-shadow:0 10px 26px -14px rgba(14,165,233,.8)}50%{box-shadow:0 0 0 3px rgba(125,211,252,.55),0 0 32px rgba(14,165,233,.9)}}
+
   /* ---------- result ---------- */
   #bRes{gap:22px}
   .res-left{flex:none;width:430px;display:flex;flex-direction:column;justify-content:center;gap:12px}
@@ -221,7 +244,7 @@
       <div class="logo">🧮</div>
       <div>
         <h1>구구단<em>왕!</em></h1>
-        <div class="sub">정진영 · 교육 아티스트 · 진행자 모드</div>
+        <div class="sub">강연 크리에이터 · 정진영 · 진행자 모드</div>
       </div>
     </div>
     <div class="mid">
@@ -290,6 +313,13 @@
           <div class="hint">정답 개수 순 · 동점 시 마지막 정답이 빠른 순</div>
         </div>
         <div class="rank" id="rank"></div>
+      </div>
+      <div class="tup" id="tupPanel">
+        <div class="ic">⏱️</div>
+        <h2>시간 종료!</h2>
+        <p>결과 발표를 기다리는 중...</p>
+        <div class="hint">진행자가 <b>[🏆 결과보기]</b>를 누르면 순위가 공개됩니다</div>
+        <div class="dots"><i></i><i></i><i></i></div>
       </div>
     </section>
 
@@ -608,6 +638,18 @@
     setTimeout(() => speak("결과 발표!", {rate:1.05, pitch:1.05}), 140);
   }
 
+  function timeUpSound(){
+    unlock();
+    if (!A.ctx) return;
+    const t = A.ctx.currentTime + 0.03;
+    [880, 698.5, 523.25].forEach((f, i) => {
+      tone({f:f, dur:0.24, type:"square", gain:0.17, t:t + i * 0.19, flt:{type:"lowpass", f:2600}});
+      tone({f:f * 1.5, dur:0.15, type:"sine", gain:0.05, t:t + i * 0.19});
+    });
+    noise({f:900, f2:180, dur:0.4, ftype:"lowpass", gain:0.09, t:t + 0.62});
+    setTimeout(() => speak("시간 종료! 결과 발표를 기다려 주세요.", {rate:1.06}), 640);
+  }
+
   function setSound(on){
     A.muted = !on;
     $("btnSound").innerHTML = on ? '🔊 소리 ON' : '🔇 음소거';
@@ -666,6 +708,21 @@
     if (st === "finished" && m.results && H.phase !== "finished"){
       H.results = m.results;
       enterResult(false);
+      return;
+    }
+    if (st === "timeup"){
+      if (H.phase !== "timeup" && H.phase !== "finished"){
+        H.phase = "timeup";
+        if (H.raf){ cancelAnimationFrame(H.raf); H.raf = 0; }
+        loopStop();
+        setBoard("run");
+        $("bigTimer").innerHTML = '0.0<span class="u">초</span>';
+        $("topLeft").textContent = "0.0초";
+        $("meterFill").style.width = "0%";
+        $("phaseTxt").textContent = "시간 종료";
+        $("tupPanel").classList.add("on");
+        $("btnResult").classList.add("pulse");
+      }
       return;
     }
     if ((st === "countdown" || st === "running") && !H.sync){
@@ -857,6 +914,9 @@
         H.startAt = startAt; H.raceId = raceId; H.shownResult = false; H.results = null;
         H.prevScore = {};
         $("runLead").textContent = "-";
+        $("tupPanel").classList.remove("on");
+        $("btnResult").classList.remove("pulse");
+        $("phaseTxt").textContent = "게임 진행 중";
         setBoard("run");
         renderRank();
         paintDur();
@@ -872,6 +932,9 @@
     H.phase = "finished";
     H.sync = false;
     loopStop();
+    if (H.raf){ cancelAnimationFrame(H.raf); H.raf = 0; }
+    $("tupPanel").classList.remove("on");
+    $("btnResult").classList.remove("pulse");
     const rows = sortedPlayers();
     const results = rows.map(r => ({
       name: r.name || "참가자", score: Number(r.score) || 0, lastAt: Number(r.lastAt) || 0, pid: r.pid
@@ -885,9 +948,25 @@
     }
   }
 
-  function finishRace(){
-    if (H.phase === "finished") return;
+  /* ---------- 시간 종료: 결과는 진행자가 직접 공개 ---------- */
+  function timeUpRace(){
+    if (H.phase === "finished" || H.phase === "timeup") return;
     if (H.raf){ cancelAnimationFrame(H.raf); H.raf = 0; }
+    H.phase = "timeup";
+    loopStop();
+    $("bigTimer").innerHTML = '0.0<span class="u">초</span>';
+    $("topLeft").textContent = "0.0초";
+    $("meterFill").style.width = "0%";
+    $("phaseTxt").textContent = "시간 종료";
+    $("tupPanel").classList.add("on");
+    $("btnResult").classList.add("pulse");
+    timeUpSound();
+    if (FB.ok) FB.room.child("meta").update({ status: "timeup", timeupAt: serverNow() }).catch(() => {});
+  }
+
+  /* 결과보기 = 마감 + 결과 공개 (팡파르·엔딩 BGM) */
+  function revealResult(){
+    if (H.phase === "finished"){ enterResult(true); return; }
     enterResult(true);
     if (FB.ok){
       const rows = sortedPlayers().map(r => ({
@@ -917,7 +996,7 @@
     bt.classList.toggle("crit", t <= 5);
     mf.classList.toggle("warn", t <= 10 && t > 5);
     mf.classList.toggle("crit", t <= 5);
-    if (left <= 0){ finishRace(); return; }
+    if (left <= 0){ timeUpRace(); return; }
     H.raf = requestAnimationFrame(loop);
   }
   function startLoop(){ if (!H.raf) H.raf = requestAnimationFrame(loop); }
@@ -944,6 +1023,9 @@
     if (H.raf){ cancelAnimationFrame(H.raf); H.raf = 0; }
     H.phase = "idle"; H.results = null; H.startAt = 0; H.raceId = 0;
     H.rows.clear(); H.prevScore = {};
+    $("tupPanel").classList.remove("on");
+    $("btnResult").classList.remove("pulse");
+    $("phaseTxt").textContent = "게임 진행 중";
     if (FB.ok){
       FB.room.child("players").remove();
       FB.room.child("meta").update({ status: "idle", startAt: 0, raceId: 0, total: 0, results: null, dur: H.dur });
@@ -981,13 +1063,12 @@
 
   $("btnResult").addEventListener("click", () => {
     if (H.phase === "running" || H.phase === "countdown"){
-      if (H.raf){ cancelAnimationFrame(H.raf); H.raf = 0; }
-      if (!H.startAt) H.startAt = serverNow() - H.dur;
-      finishRace();
-      toast("즉시 마감했습니다.", 1800);
+      revealResult();                 /* 진행 중 즉시 마감 + 결과 공개 */
+      toast("즉시 마감하고 결과를 공개했습니다.", 1800);
       return;
     }
-    if (H.phase === "finished"){ enterResult(true); return; }
+    if (H.phase === "timeup"){ revealResult(); return; }   /* 시간 종료 → 결과 발표 */
+    if (H.phase === "finished"){ enterResult(true); return; }  /* 팡파르 다시 */
     toast("아직 시작하지 않았습니다.", 1800);
   });
 
