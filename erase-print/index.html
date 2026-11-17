@@ -501,8 +501,8 @@
   function paintWear(){
     const wear = Math.min(1, G.strokes / WEAR_FULL);
     const fp = $("fp");
-    fp.style.opacity = String(Math.max(0.12, 1 - wear * 0.88));
-    fp.style.filter = "blur(" + (wear * 2.2).toFixed(2) + "px) saturate(" + Math.max(0.3, 1 - wear * 0.5).toFixed(2) + ")";
+    fp.style.opacity = String(Math.max(0.34, 1 - wear * 0.64));
+    fp.style.filter = "blur(" + (wear * 1.1).toFixed(2) + "px) saturate(" + Math.max(0.55, 1 - wear * 0.35).toFixed(2) + ")";
     const left = Math.max(0, Math.round((1 - wear) * 100));
     const badge = $("wearBadge");
     badge.textContent = left > 0 ? "지문 " + left + "% 남음" : "지문 완전히 지워짐!";
