@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0B1220">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>📳</text></svg>">
+<title>흔들어주세요! | 정진영 교육 아티스트</title>
+<meta name="description" content="강연장 아이스브레이킹 — 36초 동안 가장 많이 흔든 사람이 이기는 흔들기 게임">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --bg:#0B1220;--bg2:#0F172A;--panel:#141F36;--panel2:#1A2743;
+    --line:rgba(255,255,255,.09);--line2:rgba(255,255,255,.16);
+    --amber:#F59E0B;--amber-lt:#FBBF24;--amber-soft:rgba(245,158,11,.14);
+    --cyan:#22D3EE;--mint:#34D399;--rose:#FB7185;--violet:#A78BFA;
+    --text:#F1F5F9;--muted:#9AA9BF;--dim:#64748B;
+    --sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR",Georgia,serif;
+    --mono:ui-monospace,"SF Mono","Roboto Mono",Menlo,Consolas,monospace;
+  }
+  html{-webkit-text-size-adjust:100%;background:#080E19}
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;overscroll-behavior:none}
+  body{
+    background:var(--bg);color:var(--text);font-family:var(--sans);
+    word-break:keep-all;-webkit-font-smoothing:antialiased;
+    line-height:1.45;letter-spacing:-0.01em;
+    -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(120% 42% at 50% -8%, rgba(245,158,11,.18) 0%, rgba(245,158,11,0) 62%),
+      radial-gradient(80% 36% at 50% 104%, rgba(34,211,238,.10) 0%, rgba(34,211,238,0) 70%);
+    transition:background .5s ease;
+  }
+  body.live::before{
+    background:
+      radial-gradient(120% 56% at 50% -6%, rgba(245,158,11,.30) 0%, rgba(245,158,11,0) 60%),
+      radial-gradient(95% 50% at 50% 106%, rgba(34,211,238,.18) 0%, rgba(34,211,238,0) 70%);
+  }
+  .app{
+    position:relative;z-index:1;width:100%;max-width:430px;margin:0 auto;
+    height:100vh;height:100dvh;display:flex;flex-direction:column;
+    padding:calc(9px + env(safe-area-inset-top)) 18px calc(14px + env(safe-area-inset-bottom));
+    overflow:hidden;
+  }
+  .top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex:none;margin-bottom:6px}
+  .brand{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px rgba(245,158,11,.9);flex:none}
+  .brand b{color:#D8E1EF;font-weight:700}
+  .roomtag{flex:none;font-size:10px;font-weight:800;letter-spacing:.04em;color:var(--amber);background:var(--amber-soft);border:1px solid rgba(245,158,11,.28);padding:4px 9px;border-radius:99px;white-space:nowrap}
+  .roomtag b{font-weight:900;letter-spacing:.08em}
+
+  main{flex:1;min-height:0;display:flex;flex-direction:column;position:relative}
+  .view{display:none;flex:1;min-height:0;flex-direction:column}
+  .view.on{display:flex}
+
+  /* ---------- entry ---------- */
+  .kicker{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:800;letter-spacing:.1em;color:var(--amber);margin:10px 0 6px}
+  .kicker::before{content:"";width:16px;height:2px;border-radius:2px;background:var(--amber)}
+  h1.title{
+    font-family:var(--serif);font-weight:900;font-size:33px;line-height:1.12;
+    margin:0 0 9px;letter-spacing:-0.045em;
+    background:linear-gradient(180deg,#FFFFFF 0%,#C3D1E4 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  h1.title .hl{-webkit-text-fill-color:var(--amber);color:var(--amber)}
+  .sub{margin:0;font-size:12.5px;line-height:1.62;color:var(--muted)}
+  .card{border:1px solid var(--line);background:linear-gradient(180deg,var(--panel2),var(--panel));border-radius:20px;box-shadow:0 18px 40px -32px rgba(0,0,0,.95)}
+  .entry-card{padding:15px 15px 16px;margin-top:14px}
+  .flabel{display:flex;align-items:baseline;justify-content:space-between;font-size:11.5px;font-weight:800;color:#DCE4F0;margin:0 0 7px}
+  .flabel i{font-style:normal;font-size:10px;font-weight:600;color:#7C8BA3}
+  .input{
+    width:100%;appearance:none;border:1px solid var(--line2);background:#0D1729;color:var(--text);
+    font-family:inherit;font-size:16px;font-weight:700;padding:12px 13px;border-radius:13px;outline:none;
+    -webkit-user-select:text;user-select:text;transition:border-color .15s,box-shadow .15s;
+  }
+  .input::placeholder{color:#5C6C84;font-weight:500;font-size:14px}
+  .input:focus{border-color:rgba(245,158,11,.75);box-shadow:0 0 0 3px rgba(245,158,11,.14)}
+  .row2{display:flex;gap:8px}
+  .row2 .input.flex{flex:1;min-width:0}
+  .mini-room{width:104px;flex:none;text-align:center;letter-spacing:.09em;font-weight:900;color:var(--amber)}
+  .mini-room::placeholder{color:#7C6A45;letter-spacing:.09em;font-weight:800}
+  .gap{height:12px}
+  .countline{display:flex;align-items:center;justify-content:space-between;margin-top:11px;font-size:11.5px;font-weight:700;color:#93A3B9}
+  .countline b{font-family:var(--mono);font-size:13px;font-weight:900;color:var(--amber-lt)}
+
+  .sensor{
+    display:flex;align-items:center;gap:10px;margin-top:12px;padding:11px 12px;border-radius:14px;
+    border:1px dashed rgba(255,255,255,.14);background:rgba(255,255,255,.025);
+  }
+  .sensor .ico{font-size:17px;flex:none}
+  .sensor .tx{flex:1;min-width:0}
+  .sensor .tx b{display:block;font-size:11.5px;font-weight:800;color:#D9E2F0}
+  .sensor .tx span{display:block;font-size:10px;color:#7C8BA3;margin-top:1px}
+  .sbtn{
+    appearance:none;flex:none;border:1px solid rgba(245,158,11,.45);background:rgba(245,158,11,.14);
+    color:#FCD34D;font-family:inherit;font-size:11px;font-weight:800;padding:8px 11px;border-radius:10px;cursor:pointer;
+  }
+  .sbtn:active{transform:scale(.97)}
+  .sbtn.ok{border-color:rgba(52,211,153,.5);background:rgba(52,211,153,.14);color:#6EE7B7}
+
+  .howto{flex:none;margin-top:18px;display:grid;gap:8px}
+  .ht{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;color:#9FB0C6}
+  .ht b{
+    flex:none;width:22px;height:22px;border-radius:8px;display:grid;place-items:center;
+    font-family:var(--mono);font-size:11px;font-weight:900;color:var(--amber-lt);
+    background:rgba(245,158,11,.13);border:1px solid rgba(245,158,11,.3);
+  }
+  .ht em{font-style:normal;color:#DCE4F0;font-weight:800}
+  .cta{
+    appearance:none;border:0;width:100%;margin-top:auto;
+    font-family:inherit;font-size:16px;font-weight:900;letter-spacing:-0.02em;color:#241703;
+    background:linear-gradient(180deg,#FCD34D,#F59E0B);border-radius:15px;padding:16px;
+    box-shadow:0 12px 28px -14px rgba(245,158,11,.85),0 1px 0 rgba(255,255,255,.35) inset;
+    cursor:pointer;transition:transform .1s;display:flex;align-items:center;justify-content:center;gap:7px;
+  }
+  .cta:active{transform:scale(.985)}
+  .cta[disabled]{opacity:.55}
+  .foot{margin-top:11px;text-align:center;font-size:10px;color:#4E5F79;line-height:1.6}
+
+  /* ---------- wait ---------- */
+  #view-wait{align-items:center;justify-content:center;text-align:center}
+  .wait-ico{
+    width:112px;height:112px;border-radius:34px;display:grid;place-items:center;font-size:52px;
+    background:linear-gradient(180deg,rgba(245,158,11,.2),rgba(245,158,11,.04));
+    border:1px solid rgba(245,158,11,.32);box-shadow:0 0 0 8px rgba(245,158,11,.045),0 26px 60px -34px rgba(245,158,11,.9);
+    animation:breathe 2.6s ease-in-out infinite;
+  }
+  @keyframes breathe{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.03)}}
+  .wait-kicker{margin:20px 0 6px;font-size:10.5px;font-weight:900;letter-spacing:.16em;color:var(--amber)}
+  .wait-title{font-family:var(--serif);font-size:26px;font-weight:900;margin:0 0 5px;letter-spacing:-.04em}
+  .wait-sub{margin:0;font-size:12.5px;color:var(--muted)}
+  .me-row{display:flex;align-items:center;gap:8px;margin-top:16px;font-size:13px;font-weight:800;color:#E2E8F0}
+  .me-row .pdot{width:11px;height:11px;border-radius:50%;background:var(--c,#F59E0B);box-shadow:0 0 10px var(--c,#F59E0B)}
+  .wait-card{width:100%;margin-top:18px;padding:14px 15px;text-align:left}
+  .wr{display:flex;align-items:center;justify-content:space-between;font-size:12px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+  .wr:last-child{border-bottom:0}
+  .wr span{color:#8FA2BC;font-weight:700}
+  .wr b{color:#E8EEF7;font-weight:900;font-family:var(--mono);font-size:13px}
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;padding:4px 9px;border-radius:99px;border:1px solid}
+  .badge.on{color:#6EE7B7;border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.13)}
+  .badge.off{color:#FCD34D;border-color:rgba(245,158,11,.42);background:rgba(245,158,11,.12)}
+  .badge.wait{color:#93A3B9;border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.04)}
+  .wait-sensor{width:100%;margin-top:12px}
+
+  /* ---------- play ---------- */
+  #view-play{gap:0}
+  .timer-wrap{flex:none;text-align:center;padding-top:2px}
+  .timer-lab{font-size:10px;font-weight:900;letter-spacing:.2em;color:#8FA2BC;margin-bottom:2px}
+  .timer{
+    font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:800;
+    font-size:74px;line-height:1;letter-spacing:-.05em;color:#fff;
+    text-shadow:0 0 45px rgba(245,158,11,.35);
+    display:flex;align-items:baseline;justify-content:center;gap:3px;
+  }
+  .timer .u{font-size:20px;font-weight:700;color:var(--muted);letter-spacing:0}
+  .timer.hot{color:var(--rose);text-shadow:0 0 55px rgba(251,113,133,.6)}
+  .timer.pulse{animation:tp .45s ease}
+  @keyframes tp{0%{transform:scale(1)}40%{transform:scale(1.06)}100%{transform:scale(1)}}
+  .tbar{height:5px;border-radius:99px;background:#101B2E;border:1px solid var(--line);overflow:hidden;margin:11px 6px 0}
+  .tbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#F59E0B,#FCD34D);transform-origin:left center}
+  .tbar.hot i{background:linear-gradient(90deg,#FB7185,#FCD34D)}
+
+  .arena{flex:1;min-height:0;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+  .tapzone{
+    position:relative;width:100%;flex:1;min-height:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;overflow:hidden;border-radius:24px;
+  }
+  .ripple-stage{position:absolute;inset:0;pointer-events:none;display:grid;place-items:center}
+  .rip{
+    position:absolute;width:150px;height:150px;border-radius:50%;
+    border:2px solid rgba(252,211,77,.55);animation:ripA .62s ease-out forwards;
+  }
+  @keyframes ripA{0%{opacity:.9;transform:scale(.55)}100%{opacity:0;transform:scale(2.35)}}
+  .phone-wrap{position:relative;z-index:2;display:grid;place-items:center}
+  .phone{
+    font-size:116px;line-height:1;filter:drop-shadow(0 18px 30px rgba(245,158,11,.35));
+    transition:transform .06s;
+  }
+  .phone.hit{animation:shk .34s cubic-bezier(.36,.07,.19,.97)}
+  @keyframes shk{
+    0%{transform:rotate(0) scale(1)}
+    18%{transform:rotate(-17deg) scale(1.07) translateX(-5px)}
+    36%{transform:rotate(15deg) scale(1.09) translateX(5px)}
+    54%{transform:rotate(-10deg) scale(1.05)}
+    72%{transform:rotate(7deg) scale(1.02)}
+    100%{transform:rotate(0) scale(1)}
+  }
+  .hitflash{position:absolute;inset:0;border-radius:24px;background:radial-gradient(60% 45% at 50% 46%, rgba(252,211,77,.22), rgba(252,211,77,0) 70%);opacity:0;pointer-events:none}
+  .hitflash.on{animation:hf .3s ease-out}
+  @keyframes hf{0%{opacity:1}100%{opacity:0}}
+
+  .count-num{
+    position:relative;z-index:2;margin-top:8px;
+    font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:900;
+    font-size:74px;line-height:1;letter-spacing:-.05em;color:#fff;
+    text-shadow:0 0 40px rgba(34,211,238,.35);
+  }
+  .count-num .u{font-size:19px;font-weight:800;color:var(--muted);margin-left:3px;letter-spacing:0}
+  .count-num.pop{animation:cp .3s ease}
+  @keyframes cp{0%{transform:scale(1)}35%{transform:scale(1.14);color:var(--amber-lt)}100%{transform:scale(1)}}
+  .count-lab{position:relative;z-index:2;margin-top:6px;font-size:11px;font-weight:800;letter-spacing:.12em;color:#7C8BA3}
+  .play-hint{flex:none;text-align:center;font-size:11.5px;font-weight:700;color:#93A3B9;padding:8px 0 2px}
+  .play-foot{flex:none;display:flex;align-items:center;justify-content:space-between;padding:9px 2px 0;border-top:1px solid var(--line);margin-top:8px;font-size:10.5px;font-weight:700;color:#6E809B}
+  .play-foot b{color:#CBD5E1;font-weight:900}
+
+  .cd{position:absolute;inset:0;z-index:9;display:none;place-items:center;background:rgba(8,14,25,.9);border-radius:24px}
+  .cd.on{display:grid}
+  .cd .n{font-family:var(--serif);font-size:150px;font-weight:900;line-height:1;color:#fff;text-shadow:0 0 80px rgba(245,158,11,.8);animation:cdp .9s ease-out}
+  .cd .l{margin-top:8px;text-align:center;font-size:12.5px;color:var(--muted);font-weight:700}
+  @keyframes cdp{0%{transform:scale(.55);opacity:0}28%{transform:scale(1.06);opacity:1}100%{transform:scale(1);opacity:.9}}
+
+  /* ---------- result ---------- */
+  #view-result{gap:0}
+  .res-head{flex:none;text-align:center;padding-top:6px}
+  .res-kicker{font-size:10px;font-weight:900;letter-spacing:.2em;color:var(--amber);margin-bottom:4px}
+  .res-title{font-family:var(--serif);font-size:26px;font-weight:900;margin:0;letter-spacing:-.04em}
+  .my-card{
+    flex:none;margin-top:14px;border-radius:20px;padding:16px 18px;text-align:center;
+    border:1px solid rgba(252,211,77,.45);
+    background:linear-gradient(180deg,rgba(245,158,11,.22),rgba(19,30,52,.92));
+    box-shadow:0 20px 50px -34px rgba(245,158,11,.9);
+  }
+  .my-rank{font-family:var(--serif);font-size:44px;font-weight:900;line-height:1;letter-spacing:-.04em;color:#fff}
+  .my-rank em{font-style:normal;font-size:17px;color:var(--amber-lt);margin-left:4px;font-family:var(--sans)}
+  .my-of{font-size:11px;font-weight:700;color:#93A3B9;margin-top:5px}
+  .my-count{margin-top:10px;font-size:12px;font-weight:800;color:#D9E2F0}
+  .my-count b{font-family:var(--mono);font-size:24px;font-weight:900;color:var(--amber-lt);margin:0 2px}
+  .podium{flex:none;display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}
+  .pod{border:1px solid var(--line);border-radius:14px;padding:9px 8px;background:linear-gradient(180deg,#16233D,#111B30);text-align:center;min-width:0}
+  .pod .md{font-size:18px;line-height:1}
+  .pod .nm{font-size:11.5px;font-weight:900;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#E6EDF7}
+  .pod .ct{font-family:var(--mono);font-size:12px;font-weight:900;color:var(--amber-lt);margin-top:2px}
+  .pod.p1{border-color:rgba(252,211,77,.6);background:linear-gradient(180deg,rgba(245,158,11,.24),rgba(17,27,48,.95))}
+  .res-list{flex:1;min-height:0;overflow-y:auto;margin-top:12px;border-top:1px solid var(--line);padding-top:6px}
+  .rrow{display:flex;align-items:center;gap:9px;padding:8px 2px;border-bottom:1px solid rgba(255,255,255,.05);font-size:12.5px}
+  .rrow .rk{width:26px;flex:none;font-family:var(--mono);font-weight:900;font-size:11px;color:#8FA2BC}
+  .rrow.me{background:rgba(245,158,11,.10);border-radius:9px;padding-left:7px;padding-right:7px}
+  .rrow .nm{flex:1;min-width:0;display:flex;align-items:center;gap:6px;font-weight:800;color:#E2E8F0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rrow .nm .pdot{width:8px;height:8px;border-radius:50%;background:var(--c,#888);flex:none}
+  .rrow .ct{font-family:var(--mono);font-weight:900;font-size:12px;color:#fff}
+  .res-note{flex:none;text-align:center;font-size:10.5px;color:#5E7089;padding:9px 0 0;line-height:1.6}
+
+  /* ---------- misc ---------- */
+  .toast{
+    position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));transform:translate(-50%,16px);
+    background:rgba(15,23,42,.97);border:1px solid rgba(255,255,255,.16);color:#F8FAFC;
+    font-size:12px;font-weight:800;padding:11px 16px;border-radius:99px;z-index:60;
+    opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:86vw;text-align:center;
+    box-shadow:0 20px 44px -22px #000;
+  }
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+  .connect{position:fixed;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,#F59E0B,transparent);opacity:0;transition:opacity .3s;z-index:70}
+  .connect.on{opacity:1;animation:sc 1.4s linear infinite}
+  @keyframes sc{0%{transform:translateX(-30%)}100%{transform:translateX(30%)}}
+</style>
+</head>
+<body>
+<div class="connect" id="connectBar"></div>
+<div class="app">
+  <div class="top">
+    <div class="brand"><span class="dot"></span><b>정진영</b> · 교육 아티스트</div>
+    <div class="roomtag">방 코드 <b id="roomTag">JY88</b></div>
+  </div>
+
+  <main>
+    <!-- ================= 입장 ================= -->
+    <section class="view on" id="view-entry">
+      <div class="kicker">아이스브레이킹 · SHAKE GAME</div>
+      <h1 class="title">📳 흔들어<span class="hl">주세요!</span></h1>
+      <p class="sub">36초 동안 가장 많이 흔든 사람이 우승!<br>폰을 쥐고 힘껏 흔들어 주세요.</p>
+
+      <div class="card entry-card">
+        <div class="flabel">아이디(닉네임) <i>최대 10자</i></div>
+        <input class="input" id="nameInput" type="text" maxlength="10" placeholder="예: 김하늘" autocomplete="nickname" enterkeyhint="go">
+        <div class="gap"></div>
+        <div class="flabel">방 코드 <i>진행자가 알려준 코드</i></div>
+        <input class="input mini-room" id="roomInput" type="text" maxlength="8" inputmode="text" autocapitalize="characters" style="width:100%;text-align:center;letter-spacing:.18em" placeholder="JY88">
+        <div class="countline">
+          <span>현재 입장</span>
+          <span><b id="entryCount">0</b> / 80명</span>
+        </div>
+        <div class="sensor">
+          <div class="ico">📱</div>
+          <div class="tx">
+            <b id="sensorTitle">흔들기 센서</b>
+            <span id="sensorDesc">아이폰은 아래 버튼으로 센서를 켜 주세요</span>
+          </div>
+          <button class="sbtn" id="sensorBtn" type="button">센서 켜기</button>
+        </div>
+      </div>
+
+      <div class="howto">
+        <div class="ht"><b>1</b><span><em>폰을 쥐고</em> 힘껏 흔들면 자동 카운트</span></div>
+        <div class="ht"><b>2</b><span><em>36초</em> 동안 가장 많이 흔든 사람이 우승</span></div>
+        <div class="ht"><b>3</b><span>끝나면 <em>내 순위와 1~3위</em> 발표</span></div>
+      </div>
+
+      <button class="cta" id="joinBtn" type="button">입장하기</button>
+      <div class="foot">센서가 안 되면 화면을 두드려도 됩니다 · 정원 80명</div>
+    </section>
+
+    <!-- ================= 대기 ================= -->
+    <section class="view" id="view-wait">
+      <div class="wait-ico">📳</div>
+      <div class="wait-kicker">READY</div>
+      <h2 class="wait-title">곧 시작합니다</h2>
+      <p class="wait-sub">진행자가 <b>게임시작</b>을 누르면 출발!</p>
+      <div class="me-row"><span class="pdot" id="meDot"></span><span id="meName">참가자</span></div>
+
+      <div class="card wait-card">
+        <div class="wr"><span>방 코드</span><b id="waitRoom">JY88</b></div>
+        <div class="wr"><span>참가자</span><b><span id="waitCount">0</span> / 80명</b></div>
+        <div class="wr"><span>흔들기 센서</span><span id="waitBadge" class="badge wait">확인 중</span></div>
+      </div>
+      <div class="wait-sensor">
+        <button class="sbtn" id="sensorBtn2" type="button" style="width:100%;padding:12px">📱 흔들기 센서 켜기</button>
+      </div>
+    </section>
+
+    <!-- ================= 게임 ================= -->
+    <section class="view" id="view-play">
+      <div class="timer-wrap">
+        <div class="timer-lab">남은 시간</div>
+        <div class="timer" id="timer"><span id="timerNum">36.0</span><span class="u">초</span></div>
+        <div class="tbar" id="tbar"><i id="tbarFill"></i></div>
+      </div>
+
+      <div class="arena">
+        <div class="tapzone" id="tapzone">
+          <div class="hitflash" id="hitflash"></div>
+          <div class="ripple-stage" id="rips"></div>
+          <div class="phone-wrap"><div class="phone" id="phone">📱</div></div>
+          <div class="count-num" id="countNum"><span id="countVal">0</span><span class="u">회</span></div>
+          <div class="count-lab" id="countLab">폰을 흔들거나 화면을 두드리세요</div>
+        </div>
+        <div class="play-hint" id="playHint">폰을 힘껏 흔들면 카운트! (센서가 없으면 화면 연타)</div>
+      </div>
+
+      <div class="play-foot">
+        <span>내 기록 <b id="footCount">0</b>회</span>
+        <span id="footBadge" class="badge wait">확인 중</span>
+      </div>
+
+      <div class="cd" id="cdOverlay"><div><div class="n" id="cdNum">3</div><div class="l">출발하면 힘껏 흔드세요!</div></div></div>
+    </section>
+
+    <!-- ================= 결과 ================= -->
+    <section class="view" id="view-result">
+      <div class="res-head">
+        <div class="res-kicker">RESULT</div>
+        <h2 class="res-title">결과 발표</h2>
+      </div>
+      <div class="my-card">
+        <div class="my-rank"><span id="myRank">-</span><em id="myRankU">위</em></div>
+        <div class="my-of" id="myOf">참가자 집계 중…</div>
+        <div class="my-count">내 최종 기록 <b id="myCount">0</b> 회</div>
+      </div>
+      <div class="podium" id="podium"></div>
+      <div class="res-list" id="resList"></div>
+      <div class="res-note" id="resNote">진행자가 다음 판을 준비하면 자동으로 다시 시작됩니다</div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+
+  /* ================= 설정 ================= */
+  const QS = new URLSearchParams(location.search);
+  const DEFAULT_ROOM = "JY88";
+  const CAP = 80;
+  const DUR_MS = 36000;
+  const THRESH = 16;
+  const COOLDOWN = 85;
+  const PUSH_MS = 450;
+
+  function normRoom(v){
+    return String(v || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
+  }
+  let ROOM = normRoom(QS.get("room")) || DEFAULT_ROOM;
+
+  const FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "977342156141",
+    appId: "1:977342156141:web:f9842fcc67a819ce621e64"
+  };
+
+  const COLORS = ["#F59E0B","#22D3EE","#34D399","#FB7185","#A78BFA","#F472B6","#38BDF8","#FACC15"];
+
+  const store = {
+    get(k, d){ try{ const v = localStorage.getItem(k); return v == null ? d : v; }catch(e){ return d; } },
+    set(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
+  };
+
+  let pid = store.get("si_pid", "");
+  if (!pid || pid.length < 6){
+    pid = "s" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    store.set("si_pid", pid);
+  }
+
+  const G = {
+    screen: "entry",
+    joined: false,
+    name: "",
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    count: 0,
+    lastShakeAt: 0,
+    pushTimer: 0,
+    pushPending: false,
+    offset: 0,
+    phase: "idle",
+    startAt: 0,
+    endAt: 0,
+    raceId: 0,
+    players: {},
+    total: 0,
+    sensorState: "unknown",   /* unknown | granted | denied | nosupport */
+    sensorSeen: false,
+    permAsked: false,
+    prevAcc: null,
+    raf: 0,
+    lastCd: "",
+    joining: false,
+    resultKey: ""
+  };
+
+  const serverNow = () => Date.now() + G.offset;
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+  function toast(msg, ms){
+    const el = $("toast");
+    el.textContent = msg;
+    el.classList.add("on");
+    clearTimeout(el._t);
+    el._t = setTimeout(() => el.classList.remove("on"), ms || 2600);
+  }
+
+  function show(name){
+    G.screen = name;
+    ["entry", "wait", "play", "result"].forEach(v => {
+      $("view-" + v).classList.toggle("on", v === name);
+    });
+    document.body.classList.toggle("live", name === "play");
+    if (name !== "play") $("cdOverlay").classList.remove("on");
+  }
+
+  /* ================= Firebase ================= */
+  const FB = {db:null, ok:false};
+  let metaRef = null, playersRef = null, meRef = null;
+  let lastHasMe = false;
+
+  function initFirebase(){
+    if (typeof firebase === "undefined" || !firebase.initializeApp){
+      toast("연결에 실패했어요. 새로고침 해 주세요.", 4000);
+      $("connectBar").classList.add("on");
+      return;
+    }
+    try{
+      firebase.initializeApp(FB_CONFIG);
+      FB.db = firebase.database();
+      FB.ok = true;
+      FB.db.ref(".info/serverTimeOffset").on("value", s => { G.offset = s.val() || 0; });
+      FB.db.ref(".info/connected").on("value", s => {
+        $("connectBar").classList.toggle("on", !s.val());
+      });
+      bindRoom();
+    }catch(e){
+      toast("연결에 실패했어요. 새로고침 해 주세요.", 4000);
+    }
+  }
+
+  function bindRoom(){
+    if (metaRef) metaRef.off();
+    if (playersRef) playersRef.off();
+    if (meRef) meRef.off();
+    if (!FB.ok) return;
+
+    const base = "rooms/shakeIt/" + ROOM;
+    metaRef = FB.db.ref(base + "/meta");
+    playersRef = FB.db.ref(base + "/players");
+    meRef = FB.db.ref(base + "/players/" + pid);
+
+    metaRef.on("value", s => onMeta(s.val() || {}));
+    playersRef.on("value", s => onPlayers(s.val() || {}));
+    meRef.on("value", s => {
+      const v = s.val();
+      if (v) lastHasMe = true;
+      else if (lastHasMe && G.joined){
+        lastHasMe = false;
+        kickOut();
+      }
+    });
+  }
+
+  function setRoom(code, rebind){
+    ROOM = normRoom(code) || DEFAULT_ROOM;
+    $("roomTag").textContent = ROOM;
+    $("waitRoom").textContent = ROOM;
+    $("roomInput").value = ROOM;
+    if (rebind) bindRoom();
+  }
+
+  /* ================= 입장 화면 ================= */
+  $("nameInput").value = store.get("si_name", "");
+  setRoom(ROOM, false);
+
+  $("roomInput").addEventListener("change", () => {
+    setRoom($("roomInput").value, true);
+  });
+  $("roomInput").addEventListener("blur", () => {
+    setRoom($("roomInput").value, true);
+  });
+
+  /* ----- 센서 권한 ----- */
+  function motionSupported(){
+    return typeof DeviceMotionEvent !== "undefined";
+  }
+
+  function paintSensor(){
+    const t = G.sensorState;
+    let title = "흔들기 센서", desc = "아이폰은 아래 버튼으로 센서를 켜 주세요";
+    if (t === "granted"){ title = "센서 켜짐"; desc = "폰을 흔들면 자동으로 카운트됩니다"; }
+    else if (t === "denied"){ title = "센서 권한이 꺼져 있어요"; desc = "화면을 두드려도 카운트할 수 있어요"; }
+    else if (t === "nosupport"){ title = "터치 모드"; desc = "이 기기는 센서 대신 화면 탭으로 카운트"; }
+    $("sensorTitle").textContent = title;
+    $("sensorDesc").textContent = desc;
+    const b = $("sensorBtn");
+    if (t === "granted"){ b.textContent = "센서 ON"; b.classList.add("ok"); }
+    else if (t === "denied" || t === "nosupport"){ b.textContent = "다시 시도"; b.classList.remove("ok"); }
+    else { b.textContent = "센서 켜기"; b.classList.remove("ok"); }
+    paintBadge();
+  }
+
+  function paintBadge(){
+    const el = $("waitBadge"), el2 = $("footBadge");
+    let cls = "wait", txt = "확인 중";
+    if (G.sensorSeen){ cls = "on"; txt = "센서 활성"; }
+    else if (G.screen === "play" || G.screen === "wait"){
+      cls = "off"; txt = "터치 모드";
+    }
+    if (G.sensorState === "denied"){ cls = "off"; txt = "터치 모드"; }
+    [el, el2].forEach(e => {
+      if (!e) return;
+      e.className = "badge " + cls;
+      e.textContent = txt;
+    });
+  }
+
+  function askMotion(){
+    return new Promise(resolve => {
+      if (!motionSupported()){ G.sensorState = "nosupport"; paintSensor(); resolve("nosupport"); return; }
+      const DM = window.DeviceMotionEvent;
+      if (typeof DM.requestPermission === "function"){
+        let settled = false;
+        const done = r => { if (!settled){ settled = true; resolve(r); } };
+        try{
+          DM.requestPermission().then(r => {
+            G.sensorState = (r === "granted") ? "granted" : "denied";
+            paintSensor();
+            done(G.sensorState);
+          }).catch(() => { G.sensorState = "denied"; paintSensor(); done("denied"); });
+          setTimeout(() => done(G.sensorState), 4000);
+        }catch(e){ G.sensorState = "denied"; paintSensor(); done("denied"); }
+      } else {
+        G.sensorState = "granted";
+        paintSensor();
+        resolve("granted");
+      }
+    });
+  }
+
+  $("sensorBtn").addEventListener("click", () => { askMotion(); });
+  $("sensorBtn2").addEventListener("click", () => {
+    askMotion().then(() => {
+      if (G.sensorSeen) toast("센서가 켜졌습니다! 이제 흔들어 보세요.", 2200);
+    });
+  });
+
+  /* ----- 센서 이벤트 ----- */
+  let motionBound = false;
+  function bindMotion(){
+    if (motionBound) return;
+    motionBound = true;
+    window.addEventListener("devicemotion", onMotion, {passive:true});
+  }
+
+  function onMotion(e){
+    const a = e.accelerationIncludingGravity || e.acceleration;
+    if (!a || a.x == null) return;
+    if (!G.sensorSeen){ G.sensorSeen = true; paintBadge(); }
+    const ax = a.x || 0, ay = a.y || 0, az = a.z || 0;
+    if (!G.prevAcc){ G.prevAcc = {x:ax, y:ay, z:az}; return; }
+    const d = Math.abs(ax - G.prevAcc.x) + Math.abs(ay - G.prevAcc.y) + Math.abs(az - G.prevAcc.z);
+    G.prevAcc = {x:ax, y:ay, z:az};
+    if (d < THRESH) return;
+    const now = Date.now();
+    if (now - G.lastShakeAt < COOLDOWN) return;
+    G.lastShakeAt = now;
+    bump();
+  }
+
+  /* ----- 입장 ----- */
+  $("joinBtn").addEventListener("click", async () => {
+    if (G.joining) return;
+    const nm = $("nameInput").value.trim().replace(/\s+/g, " ").slice(0, 10);
+    if (!nm){ toast("아이디(닉네임)를 입력해 주세요"); $("nameInput").focus(); return; }
+    G.joining = true;
+    $("joinBtn").disabled = true;
+    $("joinBtn").textContent = "입장 중…";
+
+    /* 사용자 제스처 안에서 iOS 모션 권한 요청 */
+    if (!G.permAsked || G.sensorState === "unknown"){
+      G.permAsked = true;
+      await askMotion();
+    }
+    bindMotion();
+
+    const code = normRoom($("roomInput").value) || DEFAULT_ROOM;
+    if (code !== ROOM) setRoom(code, true);
+
+    try{
+      if (!FB.ok) throw new Error("offline");
+      const snap = await playersRef.once("value");
+      const cur = snap.val() || {};
+      const n = Object.keys(cur).length;
+      if (n >= CAP && !cur[pid]) throw new Error("full");
+      G.name = nm;
+      store.set("si_name", nm);
+      await meRef.set({
+        name: nm,
+        color: G.color,
+        joinedAt: serverNow(),
+        count: 0,
+        countAt: 0,
+        race: 0
+      });
+      lastHasMe = true;
+      G.joined = true;
+      G.count = 0;
+      G.resultKey = "";
+      $("meName").textContent = nm;
+      $("meDot").style.setProperty("--c", G.color);
+      $("joinBtn").disabled = false;
+      $("joinBtn").textContent = "입장하기";
+      G.joining = false;
+      paintSensor();
+      show("wait");
+      setTimeout(paintBadge, 1500);
+      toast("입장 완료! 진행자가 시작하면 출발합니다", 2400);
+      /* 이미 게임이 진행 중이면 즉시 합류 */
+      try{ metaRef.once("value").then(s => onMeta(s.val() || {})); }catch(e){}
+    }catch(err){
+      G.joining = false;
+      $("joinBtn").disabled = false;
+      $("joinBtn").textContent = "입장하기";
+      if (err && err.message === "full") toast("정원 80명이 가득 찼습니다. 잠시 후 다시 시도해 주세요.", 3200);
+      else toast("연결에 실패했어요. 잠시 후 다시 시도해 주세요.", 3200);
+    }
+  });
+
+  $("nameInput").addEventListener("keydown", e => { if (e.key === "Enter") $("joinBtn").click(); });
+
+  /* ================= 상태 수신 ================= */
+  function onPlayers(p){
+    G.players = p || {};
+    const ids = Object.keys(G.players);
+    G.total = ids.length;
+    $("entryCount").textContent = String(ids.length);
+    $("waitCount").textContent = String(ids.length);
+    if (G.screen === "result") paintResult();
+  }
+
+  function onMeta(m){
+    const st = m.status || "idle";
+    const startAt = Number(m.startAt) || 0;
+    const endAt = Number(m.endAt) || 0;
+    const rid = Number(m.raceId) || 0;
+
+    if (st === "countdown" || st === "running"){
+      if (!G.joined) return;
+      if (startAt !== G.startAt || (rid && rid !== G.raceId)){
+        const fresh = !G.raceId || rid !== G.raceId;
+        G.startAt = startAt;
+        G.endAt = endAt || (startAt + DUR_MS);
+        G.raceId = rid || startAt;
+        G.phase = "running";
+        if (fresh){
+          G.count = 0;
+          G.pushPending = false;
+        }
+        resetPlayUI();
+        show("play");
+        startLoop();
+      }
+    } else if (st === "finished"){
+      if (!G.joined) return;
+      if (G.screen === "play" || G.phase === "running"){
+        G.endAt = endAt || Math.min(G.endAt || (serverNow()), serverNow());
+        G.phase = "finished";
+        flushPush(true);
+        setTimeout(() => {
+          if (G.joined){ stopLoop(); paintResult(); show("result"); }
+        }, 420);
+      }
+    } else if (st === "idle"){
+      if (!G.joined) return;
+      if (G.screen === "play" || G.screen === "result"){
+        G.phase = "idle";
+        G.startAt = 0; G.endAt = 0; G.raceId = 0;
+        stopLoop();
+        show("wait");
+      }
+    }
+    if (!G.joined && st === "idle"){ /* 입장 화면 유지 */ }
+  }
+
+  function kickOut(){
+    G.joined = false;
+    G.phase = "idle";
+    G.count = 0;
+    G.startAt = 0; G.endAt = 0; G.raceId = 0;
+    stopLoop();
+    show("entry");
+    toast("진행자가 참가자를 정리했습니다. 다시 입장해 주세요.", 3200);
+  }
+
+  /* ================= 흔들기 카운트 ================= */
+  function bump(){
+    if (!G.joined || G.screen !== "play") return false;
+    const now = serverNow();
+    if (G.phase !== "running") return false;
+    if (G.startAt && now < G.startAt) return false;
+    if (G.endAt && now > G.endAt) return false;
+
+    G.count++;
+    G.lastShakeAt = Date.now();
+    paintCount(true);
+    animateHit();
+    schedulePush();
+    return true;
+  }
+
+  function schedulePush(){
+    G.pushPending = true;
+    if (G.pushTimer) return;
+    G.pushTimer = setTimeout(() => { G.pushTimer = 0; flushPush(false); }, PUSH_MS);
+  }
+
+  function flushPush(final){
+    if (!G.joined || !meRef) { G.pushPending = false; return; }
+    if (!G.pushPending && !final) return;
+    G.pushPending = false;
+    const t = serverNow();
+    try{
+      meRef.update({count: G.count, countAt: t, race: G.raceId});
+    }catch(e){}
+  }
+
+  function paintCount(animated){
+    $("countVal").textContent = String(G.count);
+    if (G.count > 0 && $("countLab").textContent !== "지금이다! 흔들어!" && $("cdOverlay").classList.contains("on") === false){
+      $("countLab").textContent = "지금이다! 흔들어!";
+    }
+    $("footCount").textContent = String(G.count);
+    if (animated){
+      const el = $("countNum");
+      el.classList.remove("pop");
+      void el.offsetWidth;
+      el.classList.add("pop");
+    }
+  }
+
+  function animateHit(){
+    const ph = $("phone");
+    ph.classList.remove("hit");
+    void ph.offsetWidth;
+    ph.classList.add("hit");
+
+    const fl = $("hitflash");
+    fl.classList.remove("on");
+    void fl.offsetWidth;
+    fl.classList.add("on");
+
+    const rip = document.createElement("span");
+    rip.className = "rip";
+    $("rips").appendChild(rip);
+    setTimeout(() => { try{ rip.remove(); }catch(e){} }, 660);
+
+    if (navigator.vibrate){ try{ navigator.vibrate(12); }catch(e){} }
+  }
+
+  /* 터치 폴백 — 센서가 없거나 거부된 기기에서도 플레이 가능 */
+  const tapzone = $("tapzone");
+  tapzone.addEventListener("touchstart", e => {
+    if (G.screen !== "play") return;
+    e.preventDefault();
+    bump();
+  }, {passive:false});
+  tapzone.addEventListener("mousedown", e => {
+    if (G.screen !== "play") return;
+    e.preventDefault();
+    bump();
+  });
+  tapzone.addEventListener("click", e => {
+    if (G.screen !== "play") return;
+    e.preventDefault();
+  });
+
+  /* ================= 게임 루프 ================= */
+  function resetPlayUI(){
+    G.prevAcc = null;
+    G.lastCd = "";
+    paintCount(false);
+    $("timerNum").textContent = "36.0";
+    $("tbarFill").style.transform = "scaleX(1)";
+    $("timer").classList.remove("hot");
+    $("tbar").classList.remove("hot");
+    paintBadge();
+  }
+
+  function startLoop(){
+    if (G.raf) return;
+    const step = () => {
+      G.raf = 0;
+      if (G.screen !== "play") return;
+      const now = serverNow();
+      const start = G.startAt || now;
+      const end = G.endAt || (start + DUR_MS);
+      const left = end - now;
+
+      if (now < start){
+        const rem = Math.ceil((start - now) / 1000);
+        const txt = rem > 3 ? "3" : String(rem);
+        $("cdOverlay").classList.add("on");
+        if (txt !== G.lastCd){ G.lastCd = txt; $("cdNum").textContent = txt === "0" ? "출발!" : txt; }
+        $("timerNum").textContent = "36.0";
+      } else {
+        if ($("cdOverlay").classList.contains("on")){
+          $("cdOverlay").classList.remove("on");
+          $("countLab").textContent = "지금이다! 흔들어!";
+        }
+        const sec = Math.max(0, left / 1000);
+        $("timerNum").textContent = sec.toFixed(1);
+        $("tbarFill").style.transform = "scaleX(" + Math.max(0, Math.min(1, left / DUR_MS)) + ")";
+        $("timer").classList.toggle("hot", sec <= 10);
+        $("tbar").classList.toggle("hot", sec <= 10);
+        if (left <= 0 && G.phase === "running"){
+          G.phase = "finished";
+          flushPush(true);
+        }
+      }
+      G.raf = requestAnimationFrame(step);
+    };
+    G.raf = requestAnimationFrame(step);
+  }
+
+  function stopLoop(){
+    if (G.raf){ cancelAnimationFrame(G.raf); G.raf = 0; }
+  }
+
+  /* ================= 결과 ================= */
+  function ranked(){
+    return Object.keys(G.players).map(id => {
+      const p = G.players[id] || {};
+      return {id: id, name: p.name || "참가자", color: p.color || "#888", count: Number(p.count) || 0, countAt: Number(p.countAt) || 0};
+    }).sort((a, b) => (b.count - a.count) || (a.countAt - b.countAt));
+  }
+
+  function paintResult(){
+    const list = ranked();
+    const n = list.length;
+    const myIdx = list.findIndex(x => x.id === pid);
+    const myP = myIdx >= 0 ? list[myIdx] : null;
+    const myCount = myP ? myP.count : G.count;
+
+    $("myCount").textContent = String(myCount);
+    if (myIdx >= 0){
+      $("myRank").textContent = String(myIdx + 1);
+      $("myRankU").textContent = "위";
+    } else {
+      $("myRank").textContent = "-";
+      $("myRankU").textContent = "";
+    }
+    $("myOf").textContent = n ? ("전체 " + n + "명 중") : "참가자 집계 중…";
+
+    const pods = [0, 1, 2].map(i => {
+      const p = list[i];
+      const md = ["🥇", "🥈", "🥉"][i];
+      if (!p) return '<div class="pod p' + (i + 1) + '"><div class="md">' + md + '</div><div class="nm">-</div><div class="ct">-</div></div>';
+      return '<div class="pod p' + (i + 1) + '"><div class="md">' + md + '</div>'
+        + '<div class="nm">' + esc(p.name) + '</div>'
+        + '<div class="ct">' + p.count + '회</div></div>';
+    }).join("");
+    $("podium").innerHTML = pods;
+
+    const rows = list.slice(0, 40).map((p, i) => {
+      const me = p.id === pid ? " me" : "";
+      return '<div class="rrow' + me + '"><span class="rk">' + (i + 1) + '</span>'
+        + '<span class="nm"><span class="pdot" style="--c:' + esc(p.color) + '"></span>' + esc(p.name) + '</span>'
+        + '<span class="ct">' + p.count + '회</span></div>';
+    }).join("");
+    $("resList").innerHTML = rows || '<div style="text-align:center;color:#4B5C75;font-size:12px;font-weight:700;padding:24px 0">기록을 집계하고 있습니다…</div>';
+
+    if (myIdx >= 0 && n){
+      $("resNote").textContent = myIdx === 0
+        ? "우승! 진행자가 다음 판을 준비하면 자동으로 다시 시작됩니다"
+        : "진행자가 다음 판을 준비하면 자동으로 다시 시작됩니다";
+    }
+  }
+
+  /* ================= 시작 ================= */
+  paintSensor();
+  initFirebase();
+
+  window.addEventListener("beforeunload", () => {
+    stopLoop();
+    if (G.pushTimer) clearTimeout(G.pushTimer);
+  });
+})();
+</script>
+</body>
+</html>
