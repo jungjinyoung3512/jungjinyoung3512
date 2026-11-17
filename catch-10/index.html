@@ -616,7 +616,7 @@
       return;
     }
     if (G.phase === "finished"){
-      if (G.screen === "play" || G.screen === "result") showResult();
+      if (G.joined) showResult();
       return;
     }
     /* idle */
@@ -697,6 +697,7 @@
         toast("경기가 진행 중이에요. 다음 판부터 참여할 수 있어요.", 2800);
         return;
       }
+      if (G.phase === "finished"){ showResult(); return; }
       show("wait");
     }).catch(() => {
       btn.disabled = false;
@@ -860,11 +861,11 @@
   }
 
   function showResult(){
-    if (G.screen !== "result" || G.resultShown === false){
-      show("result");
-    }
+    show("result");
     G.resultShown = true;
     paintResult();
+    $("flash").classList.remove("on");
+    $("locked").classList.remove("on");
     if (G.raf){ cancelAnimationFrame(G.raf); G.raf = 0; }
   }
 
