@@ -401,6 +401,7 @@
   let players = {};
   let order = [];
   let lastTotal = -1;
+  let purged = false;
   const laneEls = [];
 
   const serverNow = () => Date.now() + FB.offset;
@@ -481,6 +482,10 @@
       pref.on("child_changed", s => { players[s.key] = Object.assign({}, players[s.key], s.val() || {}); waitDirty = true; });
       pref.on("child_removed", s => { delete players[s.key]; waitDirty = true; });
       setInterval(() => {
+        if (!purged && G.phase === "idle" && Object.keys(players).length){
+          purged = true;
+          purgeStale();
+        }
         if (waitDirty && (G.phase === "idle" || G.phase === "finished")){
           waitDirty = false;
           paintWaitList();
@@ -495,6 +500,19 @@
       setNet("연결 실패 — 페이지를 새로 열어 주세요");
       seedDemo();
     }
+  }
+
+  /* 지난 강연에서 남은(4시간 이상 지난) 참가자 정리 */
+  function purgeStale(){
+    const cut = serverNow() - 4 * 3600 * 1000;
+    Object.keys(players).forEach(id => {
+      const ts = players[id].ts || 0;
+      if (!ts || ts < cut){
+        delete players[id];
+        FB.room.child("players/" + id).remove();
+      }
+    });
+    paintWaitList();
   }
 
   function seedDemo(){
