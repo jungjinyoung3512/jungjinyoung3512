@@ -867,6 +867,13 @@
     if (G.phase === "waiting" && !FB.live){ demoStart(); return; }
     onTap(e);
   });
+  /* 키보드(스페이스·엔터)로도 연타할 수 있게 (접근성 · 노트북 테스트용) */
+  tapBtn.addEventListener("keydown", e => {
+    if (e.key !== " " && e.key !== "Enter") return;
+    e.preventDefault();
+    if (G.phase === "waiting" && !FB.live){ demoStart(); return; }
+    onTap(e);
+  });
   tapBtn.addEventListener("contextmenu", e => e.preventDefault());
   document.addEventListener("gesturestart", e => e.preventDefault());
   document.addEventListener("dblclick", e => e.preventDefault(), {passive:false});
