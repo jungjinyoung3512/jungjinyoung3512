@@ -400,6 +400,7 @@
   const G = { phase:"idle", startAt:0, raceId:0, elapsed:0, raf:0, last:0, cdTimer:0 };
   let players = {};
   let order = [];
+  let lastTotal = -1;
   const laneEls = [];
 
   const serverNow = () => Date.now() + FB.offset;
@@ -480,7 +481,14 @@
       pref.on("child_changed", s => { players[s.key] = Object.assign({}, players[s.key], s.val() || {}); waitDirty = true; });
       pref.on("child_removed", s => { delete players[s.key]; waitDirty = true; });
       setInterval(() => {
-        if (waitDirty && (G.phase === "idle" || G.phase === "finished")){ waitDirty = false; paintWaitList(); }
+        if (waitDirty && (G.phase === "idle" || G.phase === "finished")){
+          waitDirty = false;
+          paintWaitList();
+          if (G.phase === "idle"){
+            const n = Object.keys(players).length;
+            if (n !== lastTotal){ lastTotal = n; FB.room.update({ "meta/total": n }); }
+          }
+        }
       }, 700);
       FB.live = true;
     }catch(e){

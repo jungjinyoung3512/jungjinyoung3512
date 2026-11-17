@@ -870,11 +870,13 @@
     onTap(e);
   });
   /* 키보드(스페이스·엔터)로도 연타할 수 있게 (접근성 · 노트북 테스트용) */
-  tapBtn.addEventListener("keydown", e => {
+  document.addEventListener("keydown", e => {
     if (e.key !== " " && e.key !== "Enter") return;
+    if (state.screen !== "race") return;
+    if (document.activeElement && document.activeElement.tagName === "INPUT") return;
     e.preventDefault();
-    if (G.phase === "waiting" && !FB.live){ demoStart(); return; }
-    onTap(e);
+    if (G.phase === "race"){ onTap(e); return; }
+    if (G.phase === "waiting" && !FB.live) demoStart();
   });
   tapBtn.addEventListener("contextmenu", e => e.preventDefault());
   document.addEventListener("gesturestart", e => e.preventDefault());
@@ -1035,6 +1037,10 @@
       } else {
         line.innerHTML = "1위 <b>" + escapeHtml(first.nick) + "</b> " + fmt(first.ft) + "초";
       }
+      return;
+    }
+    if (res && res.podium && !res.podium.length && !G.ft){
+      line.innerHTML = "결승선을 통과한 참가자가 없습니다 · 기록 " + G.dist.toFixed(0) + "m";
       return;
     }
     if (!FB.live && G.rivals.length){
