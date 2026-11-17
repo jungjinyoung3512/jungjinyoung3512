@@ -778,7 +778,7 @@
       if (G.phase !== "idle" && G.phase !== "entry"){
         resetRaceLocal();
         show("race");
-        lockTap("준비", "READY", "출발 신호를 기다리는 중", "새 경기가 곧 시작됩니다 — 손가락 준비!");
+        lockTap("준비", "READY", "출발 신호를 기다리는 중", "강연자가 시작하면 3초 뒤 출발합니다");
         G.phase = "waiting";
       }
       return;
@@ -1039,7 +1039,7 @@
       }
       return;
     }
-    if (res && res.podium && !res.podium.length && !G.ft){
+    if (res && !(res.podium && res.podium.length) && !G.ft){
       line.innerHTML = "결승선을 통과한 참가자가 없습니다 · 기록 " + G.dist.toFixed(0) + "m";
       return;
     }
