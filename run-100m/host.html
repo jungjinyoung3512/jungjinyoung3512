@@ -505,6 +505,16 @@
     paintWaitList();
   }
 
+  /* ---------- 진행 상황 초기화 경로 ---------- */
+  function resetFields(bag, base){
+    bag[base + "/dist"] = 0;
+    bag[base + "/taps"] = 0;
+    bag[base + "/done"] = false;
+    bag[base + "/ft"] = 0;
+    bag[base + "/tps"] = 0;
+    bag[base + "/rank"] = 0;
+  }
+
   /* ---------- 정렬 ---------- */
   function sortPlayers(){
     order = Object.keys(players).map(id => Object.assign({id}, players[id]));
@@ -525,11 +535,16 @@
     const list = order.slice(0, LANE_N);
     const trackW = lanesEl.clientWidth || 1000;
     const span = Math.max(120, trackW - RIGHT_PAD - START_X);
+    const n = Math.max(1, Math.min(LANE_N, list.length));
+    const h = 100 / n;
     for (let i = 0; i < LANE_N; i++){
       const lane = laneEls[i];
       const p = list[i];
       if (!p){ lane.style.display = "none"; continue; }
       lane.style.display = "flex";
+      lane.style.top = (i * h) + "%";
+      lane.style.height = h + "%";
+      lane.style.borderBottom = (i === n - 1) ? "0" : "";
       lane.classList.toggle("first", i === 0 && G.phase !== "idle" && G.phase !== "countdown");
       lane.classList.toggle("idle", G.phase === "idle" || G.phase === "countdown");
 
@@ -630,9 +645,9 @@
     const upd = {};
     let n = 0;
     order.forEach((p, i) => {
-      if ((p.rank || 0) !== i + 1){ upd[p.id] = {rank: i + 1}; p.rank = i + 1; n++; }
+      if ((p.rank || 0) !== i + 1){ upd["players/" + p.id + "/rank"] = i + 1; p.rank = i + 1; n++; }
     });
-    if (n) FB.room.child("players").update(upd);
+    if (n) FB.room.update(upd);
   }, 400);
 
   /* ---------- 경기 시작 ---------- */
@@ -641,8 +656,8 @@
     const ids = Object.keys(players);
     if (!ids.length){ statusText.textContent = "참가자가 없습니다 — QR로 입장을 먼저 안내하세요"; return; }
 
-    const resets = {};
-    ids.forEach(id => { resets[id] = {dist:0, taps:0, done:false, ft:0, tps:0, rank:0}; });
+    const resetPaths = {};
+    ids.forEach(id => { resetFields(resetPaths, "players/" + id); });
     const startAt = serverNow() + 3600;
 
     $("podium").classList.remove("on");
@@ -652,15 +667,13 @@
 
     if (FB.live){
       FB.room.child("result").remove();
-      FB.room.child("players").update(resets);
-      FB.room.update({
-        "meta/status": "countdown",
-        "meta/startAt": startAt,
-        "meta/total": ids.length,
-        "meta/raceId": startAt
-      });
+      resetPaths["meta/status"] = "countdown";
+      resetPaths["meta/startAt"] = startAt;
+      resetPaths["meta/total"] = ids.length;
+      resetPaths["meta/raceId"] = startAt;
+      FB.room.update(resetPaths);
     } else {
-      Object.keys(resets).forEach(id => Object.assign(players[id], resets[id]));
+      ids.forEach(id => Object.assign(players[id], {dist:0, taps:0, done:false, ft:0, tps:0, rank:0}));
     }
     beginCountdown(startAt);
   }
@@ -707,6 +720,7 @@
     if (G.phase === "race") return;
     G.phase = "race";
     G.elapsed = 0;
+    if (FB.live) FB.room.update({ "meta/status": "running" });
     liveTag.classList.remove("off");
     startBtn.disabled = true;
     startBtn.innerHTML = "▶ 경기 중…";
@@ -716,7 +730,7 @@
   /* ---------- 종료 판정 ---------- */
   function checkFinish(){
     const total = order.length;
-    if (!total) return;
+    if (!total || G.elapsed < 1) return;
     const done = order.filter(p => p.done).length;
     if (G.elapsed > 45) return endRace();
     if (done >= total) return endRace();
@@ -733,18 +747,16 @@
 
     const finishers = order.filter(p => p.done && p.ft);
     if (FB.live){
-      const ranks = {};
-      order.forEach((p, i) => { ranks[p.id] = {rank: i + 1}; });
-      FB.room.child("players").update(ranks);
-      FB.room.update({
-        "meta/status": "finished",
-        "meta/finishAt": serverNow(),
-        "result": {
-          podium: finishers.slice(0, 3).map(p => ({nick:p.nick || "참가자", ft:p.ft, color:p.color || "#F59E0B"})),
-          total: order.length,
-          ts: serverNow()
-        }
-      });
+      const upd = {};
+      order.forEach((p, i) => { upd["players/" + p.id + "/rank"] = i + 1; });
+      upd["meta/status"] = "finished";
+      upd["meta/finishAt"] = serverNow();
+      upd["result"] = {
+        podium: finishers.slice(0, 3).map(p => ({nick:p.nick || "참가자", ft:p.ft, color:p.color || "#F59E0B"})),
+        total: order.length,
+        ts: serverNow()
+      };
+      FB.room.update(upd);
     }
 
     ["p1","p2","p3"].forEach((k, i) => {
@@ -765,14 +777,17 @@
     clearTimeout(G.cdTimer);
     G.phase = "idle"; G.elapsed = 0; G.startAt = 0;
     const ids = Object.keys(players);
-    const resets = {};
-    ids.forEach(id => { resets[id] = {dist:0, taps:0, done:false, ft:0, tps:0, rank:0}; });
+    const paths = {};
+    ids.forEach(id => { resetFields(paths, "players/" + id); });
+    paths["meta/status"] = "waiting";
+    paths["meta/startAt"] = 0;
+    paths["meta/finishAt"] = 0;
+    paths["meta/total"] = ids.length;
     if (FB.live){
       FB.room.child("result").remove();
-      if (ids.length) FB.room.child("players").update(resets);
-      FB.room.update({ "meta/status": "waiting", "meta/startAt": 0, "meta/finishAt": 0, "meta/total": ids.length });
+      FB.room.update(paths);
     } else {
-      ids.forEach(id => Object.assign(players[id], resets[id]));
+      ids.forEach(id => Object.assign(players[id], {dist:0, taps:0, done:false, ft:0, tps:0, rank:0}));
     }
     $("podium").classList.remove("on");
     $("countdown").classList.remove("on");
