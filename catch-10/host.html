@@ -164,7 +164,7 @@
   @keyframes cdp{0%{transform:scale(.6);opacity:0}25%{transform:scale(1.05);opacity:1}100%{transform:scale(1)}}
 
   /* 경기 종료 → 결과 발표 대기 */
-  .closed-ov{position:absolute;inset:0;display:none;place-items:center;background:rgba(9,15,27,.93);border-radius:18px;z-index:6;text-align:center;padding:20px}
+  .closed-ov{position:absolute;inset:0;display:none;place-items:center;background:radial-gradient(120% 80% at 50% 0%,#12203A 0%,#0A1120 62%,#080E19 100%);border-radius:18px;z-index:6;text-align:center;padding:20px}
   .closed-ov.on{display:grid;animation:cdp .35s ease-out}
   .closed-ov .tag{font-size:15px;font-weight:900;letter-spacing:.14em;color:#FCD34D}
   .closed-ov .ttl{font-family:var(--serif);font-size:clamp(30px,3.6vw,52px);font-weight:900;margin:12px 0 8px;letter-spacing:-.035em}
@@ -964,7 +964,6 @@
     $("closedWait").classList.add("on");
     $("btnResult").classList.add("pulse");
     FB.room.update({ "meta/status": "closed", "meta/closedAt": serverNow() });
-    toast("경기 종료! [🏆 결과보기]를 누르면 순위가 공개됩니다", 3600);
   }
 
   /* 진행자가 직접 결과 공개 — 팡파르·엔딩 BGM */

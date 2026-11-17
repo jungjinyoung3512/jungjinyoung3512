@@ -97,7 +97,7 @@
   .input:focus{border-color:rgba(245,158,11,.75);box-shadow:0 0 0 3px rgba(245,158,11,.14)}
   .row2{display:flex;gap:8px}
   .row2 .input.flex{flex:1;min-width:0}
-  .mini-room{width:88px;flex:none;text-align:center;letter-spacing:.09em;font-weight:900;color:var(--amber)}
+  .mini-room{width:104px;flex:none;text-align:center;letter-spacing:.09em;font-weight:900;color:var(--amber)}
   .mini-room::placeholder{color:#7C6A45;letter-spacing:.09em;font-weight:800}
   .teams{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
   .tm{
@@ -297,9 +297,13 @@
         <div class="flabel"><span>조 선택</span><i id="teamHint">1조 ~ 20조 · 먼저 고른 사람이 그 조</i></div>
         <div class="teams" id="teams"></div>
         <div class="flabel" style="margin-top:12px"><span>이름 <span style="font-weight:600;color:#7C8BA3">(선택)</span></span><i>비워두면 조 이름으로 입장</i></div>
+        <input class="input" id="nameInput" maxlength="10" placeholder="예) 김하늘" autocomplete="off" enterkeyhint="done">
+        <div class="flabel" style="margin-top:12px"><span>방 코드</span><i>진행자 화면과 같아야 해요</i></div>
         <div class="row2">
-          <input class="input flex" id="nameInput" maxlength="10" placeholder="예) 김하늘" autocomplete="off" enterkeyhint="done">
           <input class="input mini-room" id="roomInput" maxlength="8" placeholder="JY10" autocomplete="off" enterkeyhint="done">
+          <div style="flex:1;display:flex;align-items:center;font-size:10.5px;color:#64748B;line-height:1.45">
+            화면에 뜬 방 코드를<br>확인하세요
+          </div>
         </div>
       </div>
 
