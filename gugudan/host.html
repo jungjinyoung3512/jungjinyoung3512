@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0A0F1E">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🧮</text></svg>">
+<title>🧮 구구단왕! · 진행자 | 정진영 교육 아티스트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  :root{
+    --bg:#0A0F1E;--bg2:#0E1730;--panel:#131F3C;--panel2:#182747;
+    --line:rgba(255,255,255,.09);--line2:rgba(255,255,255,.16);
+    --violet:#8B5CF6;--violet-lt:#C4B5FD;
+    --cyan:#22D3EE;--mint:#34D399;--amber:#FBBF24;--amber-lt:#FCD34D;--rose:#FB7185;
+    --text:#F3F6FC;--muted:#9BABCA;--dim:#63748F;
+    --sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR",Georgia,serif;
+    --mono:ui-monospace,"SF Mono","Roboto Mono",Menlo,Consolas,monospace;
+  }
+  html,body{margin:0;padding:0;height:100%;overflow:hidden}
+  body{
+    background:var(--bg);color:var(--text);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;line-height:1.35;letter-spacing:-0.01em;
+    word-break:keep-all;user-select:none;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(80% 50% at 50% -12%, rgba(139,92,246,.26) 0%, rgba(139,92,246,0) 62%),
+      radial-gradient(60% 45% at 102% 106%, rgba(34,211,238,.14) 0%, rgba(34,211,238,0) 70%),
+      radial-gradient(45% 35% at -6% 96%, rgba(251,191,36,.09) 0%, rgba(251,191,36,0) 70%);
+  }
+  .stage{position:relative;z-index:1;height:100vh;height:100dvh;display:flex;flex-direction:column;padding:0 22px 16px;max-width:1920px;margin:0 auto}
+
+  /* ---------- top bar ---------- */
+  .bar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:11px 2px 10px;border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:11px;min-width:0}
+  .brand .logo{font-size:26px;line-height:1;filter:drop-shadow(0 6px 16px rgba(139,92,246,.6))}
+  .brand h1{font-family:var(--serif);font-size:23px;font-weight:900;margin:0;letter-spacing:-.045em;line-height:1.1;white-space:nowrap}
+  .brand h1 em{font-style:normal;color:var(--violet-lt)}
+  .brand .sub{font-size:10.5px;font-weight:900;letter-spacing:.14em;color:rgba(196,181,253,.72);margin-top:2px;white-space:nowrap}
+  .mid{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:center}
+  .pill{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#CBD5E1;background:#111C30;border:1px solid var(--line);border-radius:99px;padding:7px 13px;white-space:nowrap}
+  .pill b{color:var(--violet-lt);font-weight:900;letter-spacing:.1em;font-family:var(--mono)}
+  .pill.count b{font-size:14px;color:var(--amber-lt)}
+  .pill .live{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px var(--mint)}
+  .pill.off .live{background:#64748B;box-shadow:none}
+  .pill.time b{font-family:var(--mono);color:#fff;letter-spacing:0;font-size:14px}
+
+  /* ---------- controls ---------- */
+  .controls{flex:none;display:flex;align-items:center;gap:8px;padding:11px 0 12px;flex-wrap:wrap}
+  .seg{display:inline-flex;background:#0D1729;border:1px solid var(--line2);border-radius:12px;padding:3px;gap:3px}
+  .seg button{
+    appearance:none;border:0;background:transparent;color:#93A3BE;font-family:inherit;font-size:13.5px;font-weight:900;
+    padding:8px 15px;border-radius:9px;cursor:pointer;transition:background .15s,color .15s,box-shadow .15s;white-space:nowrap;
+  }
+  .seg button:hover{color:#DCE6F5}
+  .seg button.on{background:linear-gradient(180deg,#A78BFA,#7C3AED);color:#fff;box-shadow:0 8px 20px -12px rgba(124,58,237,.95)}
+  .seg button:disabled{opacity:.4;cursor:not-allowed}
+  .btn{
+    appearance:none;border:1px solid var(--line2);background:linear-gradient(180deg,#1B2947,#15203A);
+    color:#E6EDF7;font-family:inherit;font-size:13.5px;font-weight:800;letter-spacing:-.02em;
+    padding:10px 15px;border-radius:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+    transition:transform .1s,border-color .15s,background .15s,box-shadow .15s;white-space:nowrap;
+  }
+  .btn:hover{border-color:rgba(255,255,255,.3)}
+  .btn:active{transform:scale(.98)}
+  .btn.primary{background:linear-gradient(180deg,#A78BFA,#7C3AED);border-color:#C4B5FD;color:#fff;box-shadow:0 10px 26px -14px rgba(124,58,237,.95)}
+  .btn.gold{background:linear-gradient(180deg,#FDE68A,#F59E0B);border:1px solid #FDE68A;color:#2A1A00;font-weight:900;box-shadow:0 10px 26px -14px rgba(245,158,11,.9)}
+  .btn.result{background:linear-gradient(180deg,#7DD3FC,#0EA5E9);border-color:#7DD3FC;color:#04222F;font-weight:900;box-shadow:0 10px 26px -14px rgba(14,165,233,.8)}
+  .btn.ghost{background:transparent}
+  .btn.danger{border-color:rgba(251,113,133,.4);color:#FDA4AF}
+  .btn.danger.armed{background:rgba(251,113,133,.22);border-color:#FB7185;color:#FFE4E6}
+  .btn:disabled{opacity:.38;cursor:not-allowed}
+  .spacer{flex:1}
+
+  /* ---------- boards ---------- */
+  main{flex:1;min-height:0;position:relative}
+  .board{position:absolute;inset:0;display:none;min-height:0}
+  .board.on{display:flex}
+
+  /* ---------- idle ---------- */
+  #bIdle{gap:20px}
+  .idle-left{
+    flex:none;width:340px;border:1px solid var(--line);border-radius:22px;
+    background:linear-gradient(170deg,rgba(139,92,246,.16),rgba(19,31,60,.9) 46%,rgba(12,20,40,.96));
+    padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    box-shadow:0 26px 60px -40px #000, inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  .idle-kicker{font-size:10.5px;font-weight:900;letter-spacing:.18em;color:var(--violet-lt);margin-bottom:7px}
+  .idle-left h2{font-family:var(--serif);font-size:24px;font-weight:900;margin:0 0 5px;letter-spacing:-.04em}
+  .idle-left p{margin:0 0 13px;font-size:12px;color:var(--muted);line-height:1.6}
+  .qr-frame{width:196px;height:196px;background:#fff;border-radius:18px;padding:10px;box-shadow:0 18px 42px -20px rgba(0,0,0,.9);flex:none}
+  .qr-frame img{width:100%;height:100%;display:block;border-radius:8px}
+  .idle-room{margin-top:13px;font-size:12px;color:var(--muted)}
+  .idle-room b{font-family:var(--mono);font-size:20px;font-weight:900;color:var(--amber-lt);letter-spacing:.14em;display:block;margin-top:2px}
+  .idle-url{margin-top:8px;font-size:9.5px;color:#526480;letter-spacing:0}
+  .idle-cap{margin-top:11px;font-size:11.5px;font-weight:800;color:#8FA2C0}
+  .idle-cap b{color:var(--amber-lt);font-family:var(--mono);font-size:14px}
+
+  .roster-wrap{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0}
+  .roster-head{flex:none;display:flex;align-items:baseline;justify-content:space-between;padding:0 4px 10px;font-size:13px;font-weight:800;color:#CBD5E1}
+  .roster-head .n{color:var(--amber-lt);font-size:18px;font-weight:900;font-family:var(--mono)}
+  .roster-head .hint{font-size:11px;font-weight:600;color:var(--dim)}
+  .roster{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:min-content;gap:9px;overflow-y:auto;align-content:start;padding-right:4px}
+  .pcard{display:flex;align-items:center;gap:9px;padding:12px 13px;border-radius:13px;border:1px solid var(--line);background:linear-gradient(180deg,#16233D,#121C31);font-size:14px;font-weight:800;color:#E2E8F0;min-width:0}
+  .pcard .num{flex:none;width:20px;font-family:var(--mono);font-size:11px;color:#4E607E;font-weight:900}
+  .pcard .pname{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pcard .pdot{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 9px var(--mint);flex:none}
+  .pcard.off .pdot{background:#475569;box-shadow:none}
+  .pcard.empty{background:transparent;border-style:dashed;border-color:rgba(255,255,255,.07);color:#3E4E67;font-weight:700;font-size:12px}
+  .pcard.pop{animation:popcard .7s ease}
+  @keyframes popcard{0%{transform:scale(1)}18%{transform:scale(1.06);box-shadow:0 0 0 2px rgba(139,92,246,.7),0 0 30px rgba(139,92,246,.45)}100%{transform:scale(1)}}
+
+  /* ---------- running ---------- */
+  #bRun{gap:22px}
+  .run-main{flex:none;width:430px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;position:relative}
+  .phase-tag{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:900;letter-spacing:.16em;color:#C4B5FD;border:1px solid rgba(139,92,246,.5);background:rgba(139,92,246,.16);padding:5px 13px;border-radius:99px;margin-bottom:8px}
+  .phase-tag i{width:7px;height:7px;border-radius:50%;background:var(--violet-lt);box-shadow:0 0 10px var(--violet-lt);animation:pulse 1s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .big-timer{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:900;font-size:clamp(120px,14vw,186px);line-height:.95;color:#fff;text-shadow:0 0 80px rgba(139,92,246,.4);letter-spacing:-.06em;display:flex;align-items:baseline}
+  .big-timer .u{font-size:.2em;color:var(--muted);font-weight:800;letter-spacing:0;margin-left:6px}
+  .big-timer.warn{color:var(--amber)}
+  .big-timer.crit{color:#FF8095;animation:beat .5s ease-in-out infinite}
+  @keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+  .meter{width:100%;height:9px;border-radius:99px;background:#101B2E;border:1px solid var(--line);margin:16px 0 0;position:relative;overflow:hidden}
+  .meter-fill{position:absolute;left:0;top:0;bottom:0;width:100%;background:linear-gradient(90deg,#34D399,#22D3EE);border-radius:99px;transition:width .08s linear,background .3s}
+  .meter-fill.warn{background:linear-gradient(90deg,#FBBF24,#F97316)}
+  .meter-fill.crit{background:linear-gradient(90deg,#FB7185,#EF4444)}
+  .run-stats{display:flex;gap:10px;margin-top:18px;width:100%}
+  .stat{flex:1;border:1px solid var(--line);border-radius:14px;background:rgba(19,31,60,.7);padding:10px 12px;text-align:center;min-width:0}
+  .stat span{display:block;font-size:10px;font-weight:900;letter-spacing:.1em;color:var(--dim)}
+  .stat b{display:block;margin-top:3px;font-family:var(--mono);font-size:22px;font-weight:900;color:#E8F0FB}
+  .stat b.small{font-family:var(--sans);font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .run-note{margin-top:12px;font-size:11.5px;font-weight:800;color:#5C6E8C;text-align:center}
+
+  .rank-wrap{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0;border:1px solid var(--line);border-radius:20px;background:rgba(14,23,44,.62);padding:14px 14px 10px}
+  .rank-head{flex:none;display:flex;align-items:baseline;justify-content:space-between;padding:0 2px 10px}
+  .rank-head h2{font-family:var(--serif);font-size:19px;font-weight:900;margin:0;letter-spacing:-.03em}
+  .rank-head .hint{font-size:11px;font-weight:800;color:var(--dim)}
+  .rank{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:5px;padding-right:3px}
+  .rrow{display:flex;align-items:center;gap:11px;padding:7px 11px;border-radius:12px;background:rgba(24,39,71,.55);border:1px solid rgba(255,255,255,.05);transition:background .2s,border-color .2s}
+  .rrow .rk{flex:none;width:30px;font-family:var(--mono);font-size:15px;font-weight:900;color:#7387A6;text-align:center}
+  .rrow .rname{flex:none;width:130px;font-size:14.5px;font-weight:900;color:#E4ECF8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rrow .rbar{flex:1;min-width:30px;height:12px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden;position:relative}
+  .rrow .rbar i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,#7C3AED,#C4B5FD);transition:width .28s cubic-bezier(.2,.9,.3,1),background .3s;min-width:2px}
+  .rrow .rsc{flex:none;width:54px;text-align:right;font-family:var(--mono);font-size:21px;font-weight:900;color:#8FE9C8}
+  .rrow .rsp{flex:none;width:64px;text-align:right;font-size:11px;font-weight:800;color:#5D6F8D}
+  .rrow.top1{background:linear-gradient(90deg,rgba(251,191,36,.20),rgba(24,39,71,.6));border-color:rgba(251,191,36,.4)}
+  .rrow.top1 .rk{color:var(--amber-lt)}
+  .rrow.top1 .rbar i{background:linear-gradient(90deg,#F59E0B,#FDE68A)}
+  .rrow.top1 .rsc{color:#FDE68A}
+  .rrow.top2 .rk{color:#CBD5E1}
+  .rrow.top3 .rk{color:#D9A06E}
+  .rrow.bump{animation:bump .45s ease}
+  @keyframes bump{0%{transform:scale(1)}35%{transform:scale(1.018);box-shadow:0 0 0 2px rgba(52,211,153,.45)}100%{transform:scale(1)}}
+  .rank-empty{padding:26px;text-align:center;font-size:13px;font-weight:800;color:#4E607E}
+
+  /* ---------- result ---------- */
+  #bRes{gap:22px}
+  .res-left{flex:none;width:430px;display:flex;flex-direction:column;justify-content:center;gap:12px}
+  .res-title{text-align:center;margin-bottom:2px}
+  .res-title .k{font-size:10.5px;font-weight:900;letter-spacing:.2em;color:var(--amber)}
+  .res-title h2{font-family:var(--serif);font-size:30px;font-weight:900;margin:5px 0 0;letter-spacing:-.045em}
+  .podium{display:flex;align-items:flex-end;justify-content:center;gap:9px}
+  .pod{flex:1;max-width:128px;border-radius:16px 16px 12px 12px;padding:12px 7px 10px;text-align:center;background:linear-gradient(180deg,rgba(30,44,74,.95),rgba(16,25,45,.95));border:1px solid var(--line);display:flex;flex-direction:column;justify-content:flex-end}
+  .pod .medal{font-size:26px;line-height:1}
+  .pod .pn{margin-top:6px;font-size:13px;font-weight:900;color:#E2EAF7;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pod .ps{margin-top:3px;font-family:var(--mono);font-size:21px;font-weight:900;color:#8FE9C8}
+  .pod .pl{font-size:9.5px;font-weight:900;letter-spacing:.1em;color:#5D6F8D;margin-top:1px}
+  .pod.p1{background:linear-gradient(180deg,rgba(251,191,36,.32),rgba(36,28,12,.94));border-color:rgba(251,191,36,.6);min-height:158px}
+  .pod.p2{min-height:136px}
+  .pod.p3{min-height:122px}
+  .pod.p1 .ps{color:#FDE68A}
+  .res-totals{display:flex;gap:9px}
+  .res-list{flex:1;min-height:0;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:20px;background:rgba(14,23,44,.62);padding:14px 14px 10px}
+  .rl-wrap{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:4px;padding-right:3px}
+  .rr{display:flex;align-items:center;gap:11px;padding:8px 12px;border-radius:11px;background:rgba(24,39,71,.5);font-size:14px;font-weight:800;color:#C9D6EA}
+  .rr .rk{flex:none;width:30px;font-family:var(--mono);font-size:14px;font-weight:900;color:#7387A6;text-align:center}
+  .rr .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rr .tm{flex:none;font-family:var(--mono);font-size:11px;color:#5D6F8D}
+  .rr .sc{flex:none;width:72px;text-align:right;font-family:var(--mono);font-size:17px;font-weight:900;color:#8FE9C8}
+  .rr.top1{background:linear-gradient(90deg,rgba(251,191,36,.22),rgba(24,39,71,.55));color:#FFF7E0}
+  .rr.top1 .rk{color:var(--amber-lt)}
+  .rr.top1 .sc{color:#FDE68A}
+
+  /* ---------- modal ---------- */
+  .modal{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:rgba(5,9,20,.86);backdrop-filter:blur(7px)}
+  .modal.on{display:flex}
+  .modal-card{background:linear-gradient(180deg,#152242,#0D172C);border:1px solid var(--line2);border-radius:26px;padding:26px 30px 22px;text-align:center;box-shadow:0 40px 90px -40px #000;max-width:520px}
+  .modal-card h3{font-family:var(--serif);font-size:23px;font-weight:900;margin:0 0 4px;letter-spacing:-.04em}
+  .modal-card p{margin:0 0 16px;font-size:12.5px;color:var(--muted);font-weight:700}
+  .modal-qr{width:300px;height:300px;background:#fff;border-radius:18px;padding:12px;margin:0 auto}
+  .modal-qr img{width:100%;height:100%;display:block}
+  .modal-room{margin-top:14px;font-size:12px;color:var(--muted)}
+  .modal-room b{font-family:var(--mono);font-size:22px;color:var(--amber-lt);letter-spacing:.14em;display:block;margin-top:2px}
+  .modal-url{margin-top:8px;font-size:10.5px;color:#526480}
+  .modal-close{margin-top:16px;width:100%}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,16px);background:rgba(15,23,42,.97);border:1px solid var(--line2);color:#E8EEF9;padding:12px 20px;border-radius:13px;font-size:13.5px;font-weight:800;opacity:0;pointer-events:none;transition:opacity .22s,transform .22s;z-index:90;box-shadow:0 18px 40px -18px #000}
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+
+  @media (max-width:1180px){
+    .brand .sub{display:none}
+    .run-main,.res-left{width:340px}
+    .big-timer{font-size:clamp(96px,12vw,140px)}
+    .rrow .rname{width:96px}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <div class="bar">
+    <div class="brand">
+      <div class="logo">🧮</div>
+      <div>
+        <h1>구구단<em>왕!</em></h1>
+        <div class="sub">정진영 · 교육 아티스트 · 진행자 모드</div>
+      </div>
+    </div>
+    <div class="mid">
+      <span class="pill">방 <b id="roomTag">JY29</b></span>
+      <span class="pill count">참가 <b id="headCount">0</b> / 20명</span>
+      <span class="pill time">남은 시간 <b id="topLeft">30.0초</b></span>
+      <span class="pill" id="netPill"><i class="live"></i><span id="netTxt">실시간 연결</span></span>
+    </div>
+    <div class="mid">
+      <span class="pill">정답 <b id="topHits">0</b></span>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="seg" id="segDur">
+      <button type="button" data-d="30000" class="on">30초</button>
+      <button type="button" data-d="20000">20초</button>
+      <button type="button" data-d="10000">10초</button>
+    </div>
+    <button class="btn primary" id="btnStart">▶ 게임시작</button>
+    <button class="btn" id="btnAgain">🔄 재시작</button>
+    <button class="btn result" id="btnResult">🏆 결과보기</button>
+    <button class="btn danger" id="btnClear">🧹 참가자 비우기</button>
+    <div class="spacer"></div>
+    <button class="btn" id="btnSound">🔊 소리 ON</button>
+    <button class="btn gold" id="btnQR">📱 QR 입장</button>
+  </div>
+
+  <main>
+    <!-- ===== 대기 ===== -->
+    <section class="board on" id="bIdle">
+      <div class="idle-left">
+        <div class="idle-kicker">참가자 입장</div>
+        <h2>QR을 찍어 주세요</h2>
+        <p>휴대폰 카메라로 스캔 → 이름 입력 → 입장</p>
+        <div class="qr-frame"><img id="qrIdle" src="data:image/png;base64,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" alt="참가자 입장 QR"></div>
+        <div class="idle-room">방 코드<b id="idleRoom">JY29</b></div>
+        <div class="idle-cap">현재 <b id="idleCount">0</b> / 20명 입장</div>
+        <div class="idle-url" id="idleUrl">jungjinyoung3512.github.io/jungjinyoung3512/gugudan/</div>
+      </div>
+      <div class="roster-wrap">
+        <div class="roster-head">
+          <div>입장한 참가자 <span class="n" id="idleCount2">0</span>명</div>
+          <div class="hint">최대 20명 · 정답 개수 우선, 동점이면 마지막 정답이 빠른 사람 승리</div>
+        </div>
+        <div class="roster" id="idleRoster"></div>
+      </div>
+    </section>
+
+    <!-- ===== 경기 ===== -->
+    <section class="board" id="bRun">
+      <div class="run-main">
+        <div class="phase-tag" id="phaseTag"><i></i><span id="phaseTxt">게임 진행 중</span></div>
+        <div class="big-timer" id="bigTimer">30.0<span class="u">초</span></div>
+        <div class="meter"><div class="meter-fill" id="meterFill"></div></div>
+        <div class="run-stats">
+          <div class="stat"><span>참가</span><b id="runPlayers">0</b></div>
+          <div class="stat"><span>총 정답</span><b id="runHits">0</b></div>
+          <div class="stat"><span>1위</span><b class="small" id="runLead">-</b></div>
+        </div>
+        <div class="run-note" id="runNote">구구단 문제가 무작위로 나옵니다</div>
+      </div>
+      <div class="rank-wrap">
+        <div class="rank-head">
+          <h2>실시간 순위</h2>
+          <div class="hint">정답 개수 순 · 동점 시 마지막 정답이 빠른 순</div>
+        </div>
+        <div class="rank" id="rank"></div>
+      </div>
+    </section>
+
+    <!-- ===== 결과 ===== -->
+    <section class="board" id="bRes">
+      <div class="res-left">
+        <div class="res-title">
+          <div class="k">🏁 FINAL RESULT</div>
+          <h2 id="resTitle">최종 순위</h2>
+        </div>
+        <div class="podium" id="podium"></div>
+        <div class="res-totals">
+          <div class="stat"><span>참가</span><b id="resPlayers">0</b></div>
+          <div class="stat"><span>총 정답</span><b id="resHits">0</b></div>
+          <div class="stat"><span>최고 기록</span><b id="resBest">0</b></div>
+        </div>
+      </div>
+      <div class="res-list">
+        <div class="rank-head">
+          <h2>전체 순위</h2>
+          <div class="hint">🔄 재시작하면 같은 인원으로 다음 판이 바로 시작됩니다</div>
+        </div>
+        <div class="rl-wrap" id="resList"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="modal" id="qrModal">
+  <div class="modal-card">
+    <h3>🧮 구구단왕! 참가 QR</h3>
+    <p>휴대폰 카메라로 스캔하면 바로 입장 화면이 열립니다</p>
+    <div class="modal-qr"><img id="qrModalImg" src="data:image/png;base64,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" alt="참가자 입장 QR"></div>
+    <div class="modal-room">방 코드<b id="modalRoom">JY29</b></div>
+    <div class="modal-url" id="modalUrl">jungjinyoung3512.github.io/jungjinyoung3512/gugudan/</div>
+    <button class="btn ghost modal-close" id="btnCloseQR">닫기 (ESC)</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+
+  /* ================= 설정 ================= */
+  const QS = new URLSearchParams(location.search);
+  const normRoom = v => String(v || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
+  const ROOM = normRoom(QS.get("room")) || "JY29";
+  const PUBLIC_BASE = "https://jungjinyoung3512.github.io/jungjinyoung3512/gugudan/";
+  const JOIN_URL = PUBLIC_BASE + (ROOM === "JY29" ? "" : "?room=" + ROOM);
+  const CAP = 20;
+  const COUNTDOWN_MS = 3000;
+
+  const FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "977342156141",
+    appId: "1:977342156141:web:f9842fcc67a819ce621e64"
+  };
+
+  const H = {
+    phase: "idle", startAt: 0, dur: 30000, raceId: 0,
+    players: {}, total: 0, offset: 0, raf: 0,
+    results: null, clearArmed: 0, shownResult: false, sync: false,
+    rows: new Map(), prevScore: {}, tabs: 0, startWritten: false
+  };
+
+  const store = {
+    get(k, d){ try{ const v = localStorage.getItem(k); return v == null ? d : v; }catch(e){ return d; } },
+    set(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
+  };
+
+  const serverNow = () => Date.now() + H.offset;
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+  function toast(msg, ms){
+    const el = $("toast");
+    el.textContent = msg;
+    el.classList.add("on");
+    clearTimeout(el._t);
+    el._t = setTimeout(() => el.classList.remove("on"), ms || 2400);
+  }
+
+  /* =========================================================
+     사운드 — 진행자 노트북에서만 재생 (Web Audio + 음성합성)
+     ========================================================= */
+  const NOTE = {C:0, D:2, E:4, F:5, G:7, A:9, B:11};
+  function hz(name){
+    const m = /^([A-G])([#b]?)(-?\d)$/.exec(name || "");
+    if (!m) return 440;
+    const acc = m[2] === "#" ? 1 : (m[2] === "b" ? -1 : 0);
+    const midi = (+m[3] + 1) * 12 + NOTE[m[1]] + acc;
+    return 440 * Math.pow(2, (midi - 69) / 12);
+  }
+
+  const A = {ctx:null, master:null, music:null, sfx:null, muted:false, mode:null, next:0, timer:0, ko:null};
+  let NOISE_BUF = null;
+
+  function unlock(){
+    if (!A.ctx){
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return null;
+      try{
+        const ctx = new Ctx();
+        A.ctx = ctx;
+        A.master = ctx.createGain();
+        A.master.gain.value = A.muted ? 0.0001 : 0.95;
+        const comp = ctx.createDynamicsCompressor();
+        comp.threshold.value = -14; comp.knee.value = 22; comp.ratio.value = 6;
+        comp.attack.value = 0.004; comp.release.value = 0.24;
+        A.master.connect(comp); comp.connect(ctx.destination);
+        A.music = ctx.createGain(); A.music.gain.value = 0.30; A.music.connect(A.master);
+        A.sfx = ctx.createGain(); A.sfx.gain.value = 0.85; A.sfx.connect(A.master);
+        voicePrep();
+      }catch(e){ A.ctx = null; }
+    }
+    if (A.ctx && A.ctx.state === "suspended"){ try{ A.ctx.resume(); }catch(e){} }
+    return A.ctx;
+  }
+
+  function voicePrep(){
+    if (!("speechSynthesis" in window)) return;
+    const ss = window.speechSynthesis;
+    const pick = () => {
+      let vs = [];
+      try{ vs = ss.getVoices() || []; }catch(e){}
+      A.ko = vs.find(v => /^ko[-_]KR$/i.test(v.lang)) || vs.find(v => /^ko/i.test(v.lang)) || null;
+    };
+    pick();
+    try{ if (ss.addEventListener) ss.addEventListener("voiceschanged", pick); else ss.onvoiceschanged = pick; }catch(e){}
+  }
+
+  function speak(text, opt){
+    if (A.muted || !("speechSynthesis" in window)) return;
+    try{
+      const ss = window.speechSynthesis;
+      if (ss.speaking || ss.pending) ss.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "ko-KR";
+      if (A.ko) u.voice = A.ko;
+      u.rate = (opt && opt.rate) || 1.0;
+      u.pitch = (opt && opt.pitch) || 1.0;
+      u.volume = 1;
+      ss.speak(u);
+    }catch(e){}
+  }
+
+  function tone(o){
+    if (!A.ctx || A.muted) return;
+    const ctx = A.ctx;
+    const t0 = (o.t == null) ? ctx.currentTime : o.t;
+    const dur = Math.max(0.03, o.dur || 0.15);
+    const osc = ctx.createOscillator(), g = ctx.createGain();
+    osc.type = o.type || "sine";
+    osc.frequency.setValueAtTime(Math.max(20, o.f), t0);
+    if (o.f2) osc.frequency.exponentialRampToValueAtTime(Math.max(20, o.f2), t0 + (o.span || dur));
+    let node = osc;
+    if (o.flt){
+      const bq = ctx.createBiquadFilter();
+      bq.type = o.flt.type || "lowpass";
+      bq.frequency.value = o.flt.f || 1200;
+      bq.Q.value = o.flt.q == null ? 1 : o.flt.q;
+      node.connect(bq); node = bq;
+    }
+    const peak = o.gain == null ? 0.16 : o.gain;
+    const atk = o.attack == null ? 0.005 : o.attack;
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(Math.max(0.0002, peak), t0 + Math.min(atk, dur * 0.5));
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    node.connect(g);
+    g.connect(o.bus || A.sfx);
+    osc.start(t0); osc.stop(t0 + dur + 0.03);
+  }
+
+  function noise(o){
+    if (!A.ctx || A.muted) return;
+    const ctx = A.ctx;
+    const t0 = (o.t == null) ? ctx.currentTime : o.t;
+    const dur = Math.max(0.02, o.dur || 0.1);
+    if (!NOISE_BUF){
+      const len = Math.floor(ctx.sampleRate * 1.2);
+      NOISE_BUF = ctx.createBuffer(1, len, ctx.sampleRate);
+      const d = NOISE_BUF.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    }
+    const src = ctx.createBufferSource(); src.buffer = NOISE_BUF;
+    const bq = ctx.createBiquadFilter();
+    bq.type = o.ftype || "bandpass";
+    bq.frequency.setValueAtTime(o.f || 2000, t0);
+    if (o.f2) bq.frequency.exponentialRampToValueAtTime(Math.max(60, o.f2), t0 + dur);
+    bq.Q.value = o.q == null ? 1 : o.q;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(Math.max(0.0002, o.gain == null ? 0.22 : o.gain), t0 + Math.min(0.006, dur * 0.4));
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    src.connect(bq); bq.connect(g);
+    g.connect(o.bus || A.sfx);
+    src.start(t0); src.stop(t0 + dur + 0.03);
+  }
+
+  /* ---------- 카운트다운 "삼, 이, 일, 출발!" ---------- */
+  function countdownSound(){
+    unlock();
+    if (!A.ctx) return;
+    const t = A.ctx.currentTime + 0.05;
+    const seq = [
+      {txt:"삼", f:523.25},
+      {txt:"이", f:659.25},
+      {txt:"일", f:783.99},
+      {txt:"출발", f:1046.5}
+    ];
+    seq.forEach((s, i) => {
+      const at = t + i * 0.95;
+      tone({f:s.f, dur:0.17, type:"triangle", gain:0.24, t:at});
+      tone({f:s.f * 2, dur:0.1, type:"sine", gain:0.09, t:at});
+    });
+    setTimeout(() => speak("삼", {rate:1.05}), 60);
+    setTimeout(() => speak("이", {rate:1.05}), 1010);
+    setTimeout(() => speak("일", {rate:1.05}), 1960);
+    setTimeout(() => speak("출발!", {rate:1.15, pitch:1.12}), 2910);
+  }
+
+  /* ---------- 경기 BGM (신나는 퀴즈 아케이드) ---------- */
+  const QUIZ = {
+    step: 0,
+    prog: [
+      {root:"C2", ch:["C4","E4","G4"], lead:["C5","E5","G5","E5"]},
+      {root:"G1", ch:["G3","B3","D4"], lead:["B4","D5","G5","D5"]},
+      {root:"A1", ch:["A3","C4","E4"], lead:["A4","C5","E5","C5"]},
+      {root:"F1", ch:["F3","A3","C4"], lead:["F4","A4","C5","A4"]}
+    ],
+    tick(){
+      const t = A.ctx.currentTime + 0.03;
+      const s = this.step, e = s % 8, bar = Math.floor(s / 8) % 4;
+      const p = this.prog[bar];
+      /* 킥 */
+      if (e === 0 || e === 4) tone({f:120, f2:46, dur:0.14, type:"sine", gain:0.26, t:t});
+      /* 베이스 */
+      if (e % 2 === 0) tone({f:hz(p.root), dur:0.11, type:"square", gain:0.11, t:t, flt:{type:"lowpass", f:760}});
+      else tone({f:hz(p.root) * 2, dur:0.06, type:"square", gain:0.05, t:t, flt:{type:"lowpass", f:900}});
+      /* 코드 스탭 */
+      if (e === 3 || e === 7){
+        p.ch.forEach(n => tone({f:hz(n), dur:0.09, type:"square", gain:0.03, t:t, flt:{type:"lowpass", f:2000}}));
+      }
+      /* 아르페지오 리드 */
+      const ln = p.lead[(e + (Math.floor(s / 32) % 2) * 2) % 4];
+      tone({f:hz(ln), dur:0.075, type:"square", gain:0.055, t:t, flt:{type:"lowpass", f:4600}});
+      /* 하이햇 / 스네어 */
+      if (e % 2 === 1) noise({f:8200, dur:0.018, ftype:"highpass", gain:0.02, t:t});
+      if (e === 2 || e === 6) noise({f:1900, f2:900, dur:0.08, ftype:"bandpass", gain:0.055, q:1.2, t:t});
+      this.step++;
+    }
+  };
+
+  /* ---------- 엔딩 BGM ---------- */
+  const ENDING = {
+    step: 0,
+    tick(){
+      const t = A.ctx.currentTime + 0.03;
+      const s = this.step, e = s % 8, bar = Math.floor(s / 8) % 4;
+      const chords = [
+        {bass:"C2", lead:["C5","E5","G5","C6"]},
+        {bass:"G1", lead:["G4","B4","D5","G5"]},
+        {bass:"A1", lead:["A4","C5","E5","A5"]},
+        {bass:"F1", lead:["F4","A4","C5","F5"]}
+      ][bar];
+      if (e % 2 === 0) tone({f:hz(chords.bass), dur:0.26, type:"triangle", gain:0.12, t:t});
+      tone({f:hz(chords.lead[e % 4]), dur:0.2, type:"sine", gain:0.09, t:t});
+      if (e === 0 || e === 4) tone({f:hz(chords.lead[0]) * 0.5, dur:0.32, type:"triangle", gain:0.05, t:t});
+      if (e % 2 === 1) noise({f:6200, dur:0.02, ftype:"highpass", gain:0.02, t:t});
+      this.step++;
+    }
+  };
+
+  function loopStart(mode){
+    if (!A.ctx) return;
+    loopStop();
+    A.mode = mode;
+    A.next = A.ctx.currentTime + 0.08;
+    if (mode === "quiz") QUIZ.step = 0;
+    if (mode === "ending") ENDING.step = 0;
+    const speed = mode === "quiz" ? 0.107 : 0.155;
+    A.timer = setInterval(() => {
+      if (!A.ctx || A.muted || !A.mode) return;
+      const ahead = A.ctx.currentTime + 0.24;
+      let guard = 0;
+      while (A.next < ahead && guard++ < 14){
+        if (A.mode === "quiz") QUIZ.tick(); else ENDING.tick();
+        A.next += speed;
+      }
+    }, 25);
+  }
+  function loopStop(){
+    if (A.timer){ clearInterval(A.timer); A.timer = 0; }
+    A.mode = null;
+  }
+
+  function fanfare(){
+    if (!A.ctx) return;
+    const t = A.ctx.currentTime + 0.03;
+    const notes = [523.25, 659.25, 783.99, 1046.5, 1318.5];
+    notes.forEach((f, i) => {
+      tone({f:f, dur:0.36, type:"triangle", gain:0.21, t:t + i * 0.085});
+      tone({f:f * 2, dur:0.22, type:"sine", gain:0.07, t:t + i * 0.085});
+    });
+    tone({f:1046.5, dur:0.95, type:"sawtooth", gain:0.09, t:t + 0.44, flt:{type:"lowpass", f:3200}});
+    noise({f:9000, dur:0.7, ftype:"highpass", gain:0.1, t:t + 0.44});
+    noise({f:220, f2:60, dur:0.5, ftype:"lowpass", gain:0.16, t:t + 0.02});
+    setTimeout(() => speak("결과 발표!", {rate:1.05, pitch:1.05}), 140);
+  }
+
+  function setSound(on){
+    A.muted = !on;
+    $("btnSound").innerHTML = on ? '🔊 소리 ON' : '🔇 음소거';
+    $("btnSound").style.opacity = on ? "1" : ".65";
+    if (A.master){ try{ A.master.gain.value = on ? 0.95 : 0.0001; }catch(e){} }
+    if (!on && ("speechSynthesis" in window)){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+    if (!on) loopStop();
+    if (on && A.ctx){
+      if (H.phase === "running" || H.phase === "countdown") loopStart("quiz");
+      if (H.phase === "finished") loopStart("ending");
+    }
+  }
+
+  /* ================= Firebase ================= */
+  const FB = {db:null, room:null, ok:false};
+
+  function initFirebase(){
+    const shown = JOIN_URL.replace(/^https?:\/\//, "");
+    $("roomTag").textContent = ROOM;
+    $("idleRoom").textContent = ROOM;
+    $("modalRoom").textContent = ROOM;
+    $("idleUrl").textContent = shown;
+    $("modalUrl").textContent = shown;
+
+    if (typeof firebase === "undefined" || !firebase.initializeApp){
+      toast("Firebase를 불러오지 못했습니다. 새로고침 해 주세요.", 4200);
+      $("netTxt").textContent = "연결 실패";
+      return;
+    }
+    try{
+      firebase.initializeApp(FB_CONFIG);
+      FB.db = firebase.database();
+      FB.room = FB.db.ref("rooms/gugudan/" + ROOM);
+      FB.ok = true;
+
+      FB.db.ref(".info/serverTimeOffset").on("value", s => { H.offset = s.val() || 0; });
+      FB.db.ref(".info/connected").on("value", s => {
+        const on = !!s.val();
+        $("netPill").classList.toggle("off", !on);
+        $("netTxt").textContent = on ? "실시간 연결" : "연결 중";
+      });
+
+      FB.room.child("meta").on("value", s => onMeta(s.val() || {}));
+      FB.room.child("players").on("value", s => onPlayers(s.val() || {}));
+    }catch(e){
+      toast("연결에 실패했습니다.", 4000);
+    }
+  }
+
+  function onMeta(m){
+    const st = m.status || "idle";
+    const startAt = Number(m.startAt) || 0;
+    const dur = Number(m.dur) || 30000;
+    const raceId = Number(m.raceId) || 0;
+
+    if (st === "finished" && m.results && H.phase !== "finished"){
+      H.results = m.results;
+      enterResult(false);
+      return;
+    }
+    if ((st === "countdown" || st === "running") && !H.sync){
+      const changed = startAt !== H.startAt || raceId !== H.raceId;
+      if (changed){
+        H.startAt = startAt; H.raceId = raceId; H.dur = dur;
+        H.phase = st; H.results = null; H.shownResult = false;
+        setBoard("run");
+        renderRank();
+        startLoop();
+      }
+    } else if (st === "idle" && H.phase !== "idle"){
+      H.phase = "idle"; H.startAt = 0; H.dur = dur; H.results = null;
+      loopStop();
+      setBoard("idle");
+      renderIdle();
+      paintDur();
+    } else if (st !== "finished" && H.phase === "idle"){
+      if (dur !== H.dur){ H.dur = dur; paintDur(); }
+    }
+  }
+
+  function onPlayers(p){
+    const prev = H.players;
+    H.players = p || {};
+    const ids = Object.keys(H.players);
+    H.total = ids.length;
+
+    /* 새 참가자 팝 애니메이션용 */
+    const added = ids.filter(k => !prev[k]);
+
+    $("headCount").textContent = String(Math.min(H.total, CAP));
+    $("idleCount").textContent = String(Math.min(H.total, CAP));
+    $("idleCount2").textContent = String(Math.min(H.total, CAP));
+    $("runPlayers").textContent = String(H.total);
+    $("resPlayers").textContent = String(H.total);
+
+    let hits = 0;
+    ids.forEach(k => { hits += Number(H.players[k].score) || 0; });
+    $("topHits").textContent = String(hits);
+    $("runHits").textContent = String(hits);
+    $("resHits").textContent = String(hits);
+
+    if (H.phase === "idle") renderIdle(added);
+    if (H.phase === "running" || H.phase === "countdown") renderRank();
+    if (H.phase === "finished") renderResList();
+  }
+
+  /* ================= 화면 ================= */
+  function setBoard(name){
+    ["idle","run","res"].forEach(v => $("b" + v[0].toUpperCase() + v.slice(1)).classList.toggle("on", v === name));
+  }
+
+  function sortedPlayers(){
+    const rows = Object.keys(H.players).map(k => Object.assign({ pid: k }, H.players[k]));
+    rows.sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0) || (Number(a.lastAt) || 9e15) - (Number(b.lastAt) || 9e15));
+    return rows;
+  }
+
+  function renderIdle(added){
+    const rows = sortedPlayers();
+    const wrap = $("idleRoster");
+    wrap.replaceChildren();
+    const n = Math.max(CAP, rows.length);
+    for (let i = 0; i < n; i++){
+      const r = rows[i];
+      const d = document.createElement("div");
+      if (r){
+        d.className = "pcard" + (r.online === false ? " off" : "") + (added && added.indexOf(r.pid) >= 0 ? " pop" : "");
+        d.innerHTML = '<span class="num">' + (i + 1) + '</span><span class="pdot"></span>' +
+          '<span class="pname">' + esc(r.name || "참가자") + '</span>';
+      } else {
+        d.className = "pcard empty";
+        d.innerHTML = '<span class="num">' + (i + 1) + '</span><span class="pname">빈자리</span>';
+      }
+      wrap.appendChild(d);
+    }
+  }
+
+  function renderRank(){
+    const rows = sortedPlayers();
+    const wrap = $("rank");
+    const max = Math.max(1, ...rows.map(r => Number(r.score) || 0));
+    const elapsed = H.startAt ? Math.max(0.001, Math.min(H.dur, serverNow() - H.startAt) / 1000) : 1;
+
+    if (!rows.length){
+      wrap.innerHTML = '<div class="rank-empty">참가자를 기다리는 중…</div>';
+      $("runLead").textContent = "-";
+      return;
+    }
+    const alive = new Set();
+    rows.forEach((r, i) => {
+      alive.add(r.pid);
+      let el = H.rows.get(r.pid);
+      if (!el){
+        el = document.createElement("div");
+        el.className = "rrow";
+        el.innerHTML = '<span class="rk"></span><span class="rname"></span><span class="rbar"><i></i></span><span class="rsc"></span><span class="rsp"></span>';
+        H.rows.set(r.pid, el);
+      }
+      el.className = "rrow" + (i === 0 ? " top1" : (i === 1 ? " top2" : (i === 2 ? " top3" : ""))) +
+        (H.prevScore[r.pid] != null && (Number(r.score) || 0) > H.prevScore[r.pid] ? " bump" : "");
+      el.children[0].textContent = String(i + 1);
+      el.children[1].textContent = r.name || "참가자";
+      el.children[2].firstElementChild.style.width = Math.max(2, ((Number(r.score) || 0) / max) * 100) + "%";
+      el.children[3].textContent = String(Number(r.score) || 0);
+      el.children[4].textContent = elapsed > 0.6 ? ((Number(r.score) || 0) / elapsed).toFixed(1) + "/초" : "";
+      if (wrap.children[i] !== el) wrap.insertBefore(el, wrap.children[i] || null);
+      H.prevScore[r.pid] = Number(r.score) || 0;
+    });
+    H.rows.forEach((el, pid) => {
+      if (!alive.has(pid)){ if (el.parentNode) el.parentNode.removeChild(el); H.rows.delete(pid); delete H.prevScore[pid]; }
+    });
+    const top = rows[0];
+    $("runLead").textContent = (top.name || "참가자") + " · " + (Number(top.score) || 0);
+    $("resBest").textContent = String(Number(top.score) || 0);
+  }
+
+  function renderResList(){
+    const rows = sortedPlayers();
+    const wrap = $("resList");
+    if (!rows.length){
+      wrap.innerHTML = '<div class="rank-empty">참가자가 없습니다</div>';
+      $("podium").replaceChildren();
+      return;
+    }
+    const fmtAt = t => {
+      if (!t || !H.startAt) return "";
+      const s = (t - H.startAt) / 1000;
+      return s >= 0 ? s.toFixed(1) + "초" : "";
+    };
+    wrap.replaceChildren(...rows.map((r, i) => {
+      const d = document.createElement("div");
+      d.className = "rr" + (i === 0 ? " top1" : "");
+      d.innerHTML = '<span class="rk">' + (i + 1) + '</span>' +
+        '<span class="nm">' + esc(r.name || "참가자") + '</span>' +
+        '<span class="tm">' + (r.lastAt ? "마지막 " + fmtAt(Number(r.lastAt)) : "") + '</span>' +
+        '<span class="sc">' + (Number(r.score) || 0) + '문제</span>';
+      return d;
+    }));
+
+    const pod = $("podium");
+    pod.replaceChildren(...[0,1,2].map(i => {
+      const r = rows[i];
+      const d = document.createElement("div");
+      d.className = "pod p" + (i + 1);
+      d.innerHTML = '<div class="medal">' + ["🥇","🥈","🥉"][i] + '</div>' +
+        '<div class="pn">' + esc(r ? (r.name || "참가자") : "-") + '</div>' +
+        '<div class="ps">' + (r ? (Number(r.score) || 0) : 0) + '</div>' +
+        '<div class="pl">문제</div>';
+      return d;
+    }));
+  }
+
+  /* ================= 진행 ================= */
+  function paintDur(){
+    Array.from($("segDur").children).forEach(b => {
+      b.classList.toggle("on", Number(b.dataset.d) === H.dur);
+    });
+    $("topLeft").textContent = (H.dur / 1000).toFixed(1) + "초";
+    $("bigTimer").innerHTML = (H.dur / 1000).toFixed(1) + '<span class="u">초</span>';
+  }
+
+  function resetScores(){
+    if (!FB.ok) return Promise.resolve();
+    const updates = {};
+    Object.keys(H.players).forEach(k => {
+      updates["players/" + k + "/score"] = 0;
+      updates["players/" + k + "/lastAt"] = 0;
+    });
+    if (!Object.keys(updates).length) return Promise.resolve();
+    return FB.db.ref("rooms/gugudan/" + ROOM).update(updates).catch(() => {});
+  }
+
+  function startGame(opts){
+    if (!FB.ok){ toast("연결 중입니다. 잠시 후 다시 시도해 주세요.", 2200); return; }
+    unlock();
+    const dur = H.dur;
+    H.sync = true;
+    resetScores().then(() => {
+      const raceId = serverNow();
+      const startAt = raceId + COUNTDOWN_MS;
+      FB.room.child("meta").update({
+        status: "countdown", dur: dur, startAt: startAt, raceId: raceId,
+        total: H.total, results: null, updatedAt: raceId
+      }).then(() => {
+        H.sync = false;
+        H.phase = "countdown";
+        H.startAt = startAt; H.raceId = raceId; H.shownResult = false; H.results = null;
+        H.prevScore = {};
+        $("runLead").textContent = "-";
+        setBoard("run");
+        renderRank();
+        paintDur();
+        startLoop();
+        countdownSound();
+        setTimeout(() => { if (H.phase === "countdown") FB.room.child("meta/status").set("running"); }, COUNTDOWN_MS + 40);
+        setTimeout(() => { if (A.ctx && !A.muted && (H.phase === "running" || H.phase === "countdown")) loopStart("quiz"); }, COUNTDOWN_MS + 60);
+      }).catch(() => { H.sync = false; toast("시작 신호 전송에 실패했습니다.", 2600); });
+    });
+  }
+
+  function enterResult(announce){
+    H.phase = "finished";
+    H.sync = false;
+    loopStop();
+    const rows = sortedPlayers();
+    const results = rows.map(r => ({
+      name: r.name || "참가자", score: Number(r.score) || 0, lastAt: Number(r.lastAt) || 0, pid: r.pid
+    }));
+    H.results = results;
+    setBoard("res");
+    renderResList();
+    if (announce){
+      fanfare();
+      setTimeout(() => { if (H.phase === "finished" && A.ctx && !A.muted) loopStart("ending"); }, 1250);
+    }
+  }
+
+  function finishRace(){
+    if (H.phase === "finished") return;
+    if (H.raf){ cancelAnimationFrame(H.raf); H.raf = 0; }
+    enterResult(true);
+    if (FB.ok){
+      const rows = sortedPlayers().map(r => ({
+        name: r.name || "참가자", score: Number(r.score) || 0, lastAt: Number(r.lastAt) || 0, pid: r.pid
+      }));
+      FB.room.child("meta").update({ status: "finished", results: rows, finishedAt: serverNow() }).catch(() => {});
+    }
+  }
+
+  function loop(){
+    H.raf = 0;
+    if (H.phase !== "running" && H.phase !== "countdown") return;
+    const now = serverNow();
+    const left = H.startAt + H.dur - now;
+    if (H.phase === "countdown" && left <= H.dur){
+      H.phase = "running";
+      $("phaseTxt").textContent = "게임 진행 중";
+    }
+    const t = Math.min(H.dur, Math.max(0, left)) / 1000;
+    $("bigTimer").innerHTML = t.toFixed(1) + '<span class="u">초</span>';
+    $("topLeft").textContent = t.toFixed(1) + "초";
+    const pct = Math.max(0, Math.min(1, left / H.dur)) * 100;
+    const mf = $("meterFill");
+    mf.style.width = pct.toFixed(1) + "%";
+    const bt = $("bigTimer");
+    bt.classList.toggle("warn", t <= 10 && t > 5);
+    bt.classList.toggle("crit", t <= 5);
+    mf.classList.toggle("warn", t <= 10 && t > 5);
+    mf.classList.toggle("crit", t <= 5);
+    if (left <= 0){ finishRace(); return; }
+    H.raf = requestAnimationFrame(loop);
+  }
+  function startLoop(){ if (!H.raf) H.raf = requestAnimationFrame(loop); }
+
+  function clearPlayers(){
+    const now = Date.now();
+    if (now - H.clearArmed > 4000){
+      H.clearArmed = now;
+      $("btnClear").classList.add("armed");
+      $("btnClear").textContent = "⚠️ 한 번 더 누르면 비웁니다";
+      setTimeout(() => {
+        if (Date.now() - H.clearArmed >= 3900){
+          $("btnClear").classList.remove("armed");
+          $("btnClear").textContent = "🧹 참가자 비우기";
+          H.clearArmed = 0;
+        }
+      }, 4000);
+      return;
+    }
+    H.clearArmed = 0;
+    $("btnClear").classList.remove("armed");
+    $("btnClear").textContent = "🧹 참가자 비우기";
+    loopStop();
+    if (H.raf){ cancelAnimationFrame(H.raf); H.raf = 0; }
+    H.phase = "idle"; H.results = null; H.startAt = 0; H.raceId = 0;
+    H.rows.clear(); H.prevScore = {};
+    if (FB.ok){
+      FB.room.child("players").remove();
+      FB.room.child("meta").update({ status: "idle", startAt: 0, raceId: 0, total: 0, results: null, dur: H.dur });
+    }
+    setBoard("idle");
+    renderIdle();
+    toast("참가자를 모두 비웠습니다. 다시 입장받으세요.", 2600);
+  }
+
+  /* ================= 이벤트 ================= */
+  $("segDur").addEventListener("click", e => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    if (H.phase === "running" || H.phase === "countdown"){
+      toast("경기 중에는 시간을 바꿀 수 없습니다.", 2000);
+      return;
+    }
+    H.dur = Number(b.dataset.d);
+    paintDur();
+    if (FB.ok) FB.room.child("meta/dur").set(H.dur);
+    toast((H.dur / 1000) + "초로 설정했습니다.", 1600);
+  });
+
+  $("btnStart").addEventListener("click", () => {
+    if (H.phase === "running" || H.phase === "countdown"){ toast("이미 경기가 진행 중입니다.", 1800); return; }
+    if (H.total === 0){ toast("참가자가 없습니다. QR로 입장을 받아 주세요.", 2600); return; }
+    startGame();
+  });
+
+  $("btnAgain").addEventListener("click", () => {
+    if (H.total === 0){ toast("참가자가 없습니다.", 2200); return; }
+    startGame();
+    toast("기록을 초기화하고 다음 판을 시작합니다!", 2200);
+  });
+
+  $("btnResult").addEventListener("click", () => {
+    if (H.phase === "running" || H.phase === "countdown"){
+      if (H.raf){ cancelAnimationFrame(H.raf); H.raf = 0; }
+      if (!H.startAt) H.startAt = serverNow() - H.dur;
+      finishRace();
+      toast("즉시 마감했습니다.", 1800);
+      return;
+    }
+    if (H.phase === "finished"){ enterResult(true); return; }
+    toast("아직 시작하지 않았습니다.", 1800);
+  });
+
+  $("btnClear").addEventListener("click", clearPlayers);
+  $("btnSound").addEventListener("click", () => {
+    unlock();
+    setSound(A.muted);
+    if (!A.muted) toast("소리 켜짐 · 진행자 노트북에서만 재생됩니다", 2000);
+  });
+
+  function openQR(on){ $("qrModal").classList.toggle("on", !!on); }
+  $("btnQR").addEventListener("click", () => { unlock(); openQR(true); });
+  $("btnCloseQR").addEventListener("click", () => openQR(false));
+  $("qrModal").addEventListener("click", e => { if (e.target === $("qrModal")) openQR(false); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") openQR(false);
+    if (e.key === " " && !/input|textarea/i.test(document.activeElement.tagName)){ e.preventDefault(); $("btnStart").click(); }
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && (H.phase === "running" || H.phase === "countdown")) startLoop();
+  });
+
+  /* ================= 시작 ================= */
+  initFirebase();
+  paintDur();
+  renderIdle();
+  $("btnSound").innerHTML = '🔊 소리 ON';
+})();
+</script>
+</body>
+</html>
