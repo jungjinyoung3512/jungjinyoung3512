@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0F172A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>나의 소통 컬러 찾기 | 정진영 교육 아티스트</title>
+<meta name="description" content="색깔을 거울 삼아 보는 나의 소통 본색과 사회생활 무기 — 12가지 색 소통 스타일 체험">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --bg:#0F172A;
+    --bg-deep:#0A1120;
+    --panel:#15203A;
+    --panel-2:#1A2743;
+    --line:rgba(255,255,255,.09);
+    --line-strong:rgba(255,255,255,.16);
+    --amber:#F59E0B;
+    --amber-soft:rgba(245,158,11,.14);
+    --text:#F1F5F9;
+    --muted:#9AA9BF;
+    --sans:"Pretendard Variable",Pretendard,"Noto Sans KR","Noto Sans CJK KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR","Noto Serif CJK KR",Georgia,serif;
+  }
+  html{ -webkit-text-size-adjust:100% }
+  html,body{margin:0;padding:0}
+  button{touch-action:manipulation}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    word-break:keep-all;
+    overflow-wrap:break-word;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.55;
+    letter-spacing:-0.01em;
+    min-height:100vh;
+    min-height:100dvh;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(120% 55% at 50% -8%, rgba(245,158,11,.16) 0%, rgba(245,158,11,0) 62%),
+      radial-gradient(90% 40% at 100% 100%, rgba(37,99,235,.14) 0%, rgba(37,99,235,0) 70%);
+  }
+  .shell{
+    position:relative;z-index:1;
+    width:100%;max-width:430px;margin:0 auto;
+    padding:22px 18px calc(34px + env(safe-area-inset-bottom));
+  }
+
+  /* ---------- header ---------- */
+  .brand{display:flex;align-items:center;gap:8px;font-size:11.5px;letter-spacing:.02em;color:var(--muted)}
+  .brand .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px rgba(245,158,11,.9)}
+  .brand b{color:#D8E1EF;font-weight:600}
+  .title{
+    font-family:var(--serif);
+    font-weight:900;
+    font-size:29px;
+    line-height:1.25;
+    margin:14px 0 8px;
+    letter-spacing:-0.035em;
+    background:linear-gradient(180deg,#FFFFFF 0%,#CBD7E8 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .title .hl{color:var(--amber);-webkit-text-fill-color:var(--amber)}
+  .subtitle{font-size:13px;color:var(--muted);margin:0 0 18px;line-height:1.6}
+
+  /* ---------- progress ---------- */
+  .progress{display:flex;align-items:center;gap:8px;margin:0 0 22px}
+  .progress .bar{flex:1;height:3px;border-radius:99px;background:rgba(255,255,255,.10);overflow:hidden}
+  .progress .bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#F59E0B,#FBBF24);transition:width .35s ease}
+  .progress .bar.on i{width:100%}
+  .progress .stepnum{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;min-width:34px;text-align:right}
+  .progress .stepnum em{color:var(--amber);font-style:normal}
+
+  /* ---------- step heading ---------- */
+  .step-kicker{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--amber);
+    background:var(--amber-soft);border:1px solid rgba(245,158,11,.28);
+    padding:5px 11px;border-radius:99px;margin-bottom:12px;
+  }
+  h2.q{font-size:19.5px;font-weight:800;margin:0 0 7px;letter-spacing:-0.03em;line-height:1.4}
+  p.help{font-size:12.5px;color:var(--muted);margin:0 0 18px;line-height:1.65}
+  p.help b{color:#E2E8F0;font-weight:600}
+
+  /* ---------- color grid ---------- */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .color-card{
+    position:relative;
+    appearance:none;border:1px solid var(--line);
+    background:var(--panel);
+    border-radius:17px;
+    padding:7px 7px 11px;
+    display:flex;flex-direction:column;gap:7px;align-items:stretch;
+    font-family:inherit;text-align:left;color:var(--text);
+    cursor:pointer;
+    transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease,opacity .16s ease;
+    min-height:118px;
+    overflow:hidden;
+  }
+  .color-card:active{transform:scale(.965)}
+  .color-card:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+  .swatch{
+    position:relative;
+    height:54px;border-radius:11px;
+    background:var(--c);
+    background-image:linear-gradient(160deg,rgba(255,255,255,.22),rgba(255,255,255,0) 46%);
+    box-shadow:inset 0 -14px 22px -14px rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,255,255,.10);
+  }
+  .swatch.is-light{box-shadow:inset 0 0 0 1px rgba(15,23,42,.10)}
+  .cname{font-size:12px;font-weight:800;letter-spacing:-0.03em;padding:0 1px;white-space:nowrap;display:flex;align-items:center;gap:4px}
+  .cname .em{font-size:11.5px;line-height:1;flex:none;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;filter:drop-shadow(0 0 2px rgba(255,255,255,.45))}
+  .ctype{font-size:10.5px;color:var(--muted);letter-spacing:-0.02em;padding:0 2px;margin-top:-3px;white-space:nowrap;display:block}
+
+  .color-card.selected{
+    border-color:rgba(245,158,11,.9);
+    box-shadow:0 0 0 2px rgba(245,158,11,.55),0 10px 26px -14px rgba(245,158,11,.8);
+    background:#1C2949;
+  }
+  .badge{
+    position:absolute;top:6px;right:6px;
+    display:inline-flex;align-items:center;gap:3px;
+    font-size:9.5px;font-weight:800;letter-spacing:-0.01em;
+    padding:3px 7px;border-radius:99px;z-index:2;
+  }
+  .badge.done{background:var(--amber);color:#221502}
+  .badge.lock{background:rgba(255,255,255,.14);color:#CBD5E1}
+  .color-card.locked{background:#111B2E;border-style:dashed;cursor:default}
+  .color-card.locked .swatch{opacity:.34;filter:grayscale(.6)}
+  .color-card.locked .cname,.color-card.locked .ctype{color:#6B7A91;opacity:.7}
+  .color-card.locked:active{transform:none}
+
+  .grid-note{margin:14px 2px 0;font-size:11.5px;color:#7C8BA3;line-height:1.6}
+
+  .back-row{display:flex;justify-content:flex-start;margin-top:20px}
+  .btn-ghost{
+    appearance:none;border:1px solid var(--line-strong);background:transparent;color:#C7D2E1;
+    font-family:inherit;font-size:12.5px;font-weight:600;
+    padding:11px 16px;border-radius:12px;cursor:pointer;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .btn-ghost:active{transform:scale(.97)}
+
+  /* ---------- picked strip (step2) ---------- */
+  .picked-strip{
+    display:flex;align-items:center;gap:11px;
+    border:1px solid rgba(245,158,11,.30);
+    background:linear-gradient(90deg,rgba(245,158,11,.14),rgba(245,158,11,.04));
+    border-radius:15px;padding:11px 13px;margin:0 0 18px;
+  }
+  .picked-strip .mini{width:30px;height:30px;border-radius:10px;flex:none;background:var(--c);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+  .picked-strip .txt{font-size:12px;color:#DCE4F0;line-height:1.4}
+  .picked-strip .txt small{display:block;font-size:10.5px;color:var(--amber);font-weight:700;letter-spacing:.02em}
+
+  /* ---------- result ---------- */
+  .panel{
+    border:1px solid var(--line);
+    background:linear-gradient(180deg,var(--panel-2),var(--panel));
+    border-radius:22px;
+    padding:18px 17px 19px;
+    margin:0 0 13px;
+    box-shadow:0 18px 40px -30px rgba(0,0,0,.9);
+    animation:rise .45s cubic-bezier(.22,.9,.3,1) both;
+  }
+  .panel:nth-of-type(2){animation-delay:.06s}
+  .panel:nth-of-type(3){animation-delay:.12s}
+  .panel:nth-of-type(4){animation-delay:.18s}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .panel-label{
+    display:flex;align-items:center;gap:7px;
+    font-size:11px;font-weight:800;letter-spacing:.03em;color:var(--muted);margin-bottom:12px;
+    text-transform:none;
+  }
+  .panel-label .num{
+    display:grid;place-items:center;width:19px;height:19px;border-radius:50%;
+    background:var(--amber);color:#1A1204;font-size:10.5px;font-weight:900;
+  }
+  .idcard{display:flex;align-items:center;gap:13px}
+  .big-swatch{
+    width:52px;height:52px;border-radius:16px;flex:none;background:var(--c);
+    background-image:linear-gradient(160deg,rgba(255,255,255,.22),rgba(255,255,255,0) 46%);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),0 8px 22px -12px rgba(0,0,0,.9);
+  }
+  .idcard .who{min-width:0}
+  .idcard .who .nm{font-size:17px;font-weight:800;letter-spacing:-0.03em;line-height:1.3;display:flex;align-items:center;gap:5px}
+  .idcard .who .nm .em{font-size:15px;line-height:1;flex:none;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;filter:drop-shadow(0 0 2px rgba(255,255,255,.4))}
+  .idcard .who .tp{font-size:12px;color:var(--amber);font-weight:700;margin-top:2px;letter-spacing:-0.02em}
+  .core{
+    font-family:var(--serif);font-weight:600;
+    font-size:14px;line-height:1.7;color:#E8EEF7;
+    margin:14px 0 0;padding:13px 14px;
+    border-radius:13px;background:rgba(255,255,255,.045);
+    border-left:2px solid var(--amber);
+    letter-spacing:-0.02em;
+  }
+  .ex-list{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:9px}
+  .ex-list li{
+    position:relative;padding-left:19px;font-size:12.8px;line-height:1.62;color:#CFD9E6;letter-spacing:-0.02em;
+  }
+  .ex-list li::before{
+    content:"›";position:absolute;left:4px;top:-1px;color:var(--amber);font-size:15px;font-weight:700;
+  }
+  .panel-intro{font-size:12px;color:var(--muted);margin:-4px 0 0;line-height:1.6}
+
+  /* matching list */
+  .match-list{display:flex;flex-direction:column;gap:11px;margin-top:2px}
+  .match-row{
+    display:flex;gap:11px;align-items:flex-start;
+    padding:12px 13px;border-radius:14px;background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.06);
+  }
+  .match-row.hi{background:rgba(245,158,11,.09);border-color:rgba(245,158,11,.26)}
+  .match-dot{width:30px;height:30px;border-radius:10px;flex:none;background:var(--c);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+  .match-body .v .em{font-size:12px;margin-right:4px;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+  .match-body .k{font-size:10.5px;font-weight:800;letter-spacing:.02em;color:var(--muted)}
+  .match-body .v{font-size:13px;font-weight:700;letter-spacing:-0.02em;margin:1px 0 3px}
+  .match-body .why{font-size:12px;color:#B9C6D8;line-height:1.6;letter-spacing:-0.02em}
+  .match-body .tip{
+    font-size:11.8px;color:#F3D9A4;line-height:1.6;letter-spacing:-0.02em;
+    margin-top:6px;padding-left:9px;border-left:2px solid rgba(245,158,11,.55);
+  }
+  .match-body .tip b{color:var(--amber);font-weight:800}
+
+  .btn-line{
+    width:100%;appearance:none;cursor:pointer;
+    border:1px solid var(--line-strong);background:rgba(255,255,255,.03);
+    color:#D5DEEB;font-family:inherit;font-size:13.5px;font-weight:700;
+    padding:14px;border-radius:15px;letter-spacing:-0.02em;
+  }
+  .btn-line:active{transform:scale(.985)}
+  .disclaimer{font-size:10.8px;color:#74839A;line-height:1.65;margin:16px 2px 0}
+
+  footer{
+    margin-top:26px;padding-top:17px;border-top:1px solid var(--line);
+    font-size:11.5px;color:#8494AB;line-height:1.7;
+  }
+  footer b{color:#C4D0E0;font-weight:700}
+  footer a{color:var(--amber);text-decoration:none;word-break:break-all}
+
+  /* ---------- fullscreen board ---------- */
+  #board{
+    position:fixed;inset:0;z-index:100;
+    display:none;
+    flex-direction:column;align-items:center;justify-content:flex-start;
+    padding:calc(22px + env(safe-area-inset-top)) 20px calc(18px + env(safe-area-inset-bottom));
+    background:var(--b);
+    color:var(--bt);
+    text-align:center;
+    overflow:hidden;
+  }
+  #board.open{display:flex;animation:pop .22s ease-out both}
+  @keyframes pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+  #board .board-top{
+    flex:none;font-size:11px;font-weight:800;letter-spacing:.16em;opacity:.58;
+  }
+  #board .board-main{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    width:100%;margin:auto 0;
+  }
+  #board .board-emoji{
+    font-size:38px;line-height:1;margin-bottom:6px;
+    font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+    filter:drop-shadow(0 0 4px var(--halo)) drop-shadow(0 0 10px var(--halo));
+  }
+  #board .board-name{
+    font-family:var(--serif);font-weight:900;
+    font-size:clamp(40px,13.5vw,58px);
+    line-height:1.16;letter-spacing:-0.045em;
+    margin:0;
+  }
+  #board .board-type{
+    font-size:clamp(15px,4.6vw,19px);font-weight:800;letter-spacing:-0.02em;
+    margin-top:9px;opacity:.86;
+  }
+  #board .board-why{
+    margin:14px 0 0;font-size:12.5px;opacity:.62;letter-spacing:-0.01em;
+    max-width:290px;line-height:1.65;
+  }
+  #board .board-footer{flex:none;width:100%;max-width:340px}
+  #board .board-match{
+    font-size:12.5px;font-weight:700;letter-spacing:-0.01em;line-height:1.7;opacity:.82;
+    padding-bottom:13px;
+    border-bottom:1px solid currentColor;
+    border-bottom-color:color-mix(in srgb, currentColor 26%, transparent);
+  }
+  #board .board-close{
+    margin-top:13px;width:100%;appearance:none;cursor:pointer;
+    background:transparent;color:inherit;
+    border:1px solid currentColor;
+    border-color:color-mix(in srgb, currentColor 45%, transparent);
+    font-family:inherit;font-size:13.5px;font-weight:800;
+    padding:13px;border-radius:14px;letter-spacing:-0.01em;
+  }
+  #board .board-close:active{transform:scale(.98)}
+  #board .board-hint{
+    margin:10px 0 0;font-size:11px;opacity:.5;letter-spacing:-0.01em;
+  }
+
+  @media (max-width:359px){
+    .grid{gap:8px}
+    .color-card{padding:6px 6px 10px;border-radius:15px;min-height:112px}
+    .swatch{height:46px}
+    .cname{font-size:10.5px;gap:3px}
+    .cname .em{font-size:10px}
+    .ctype{font-size:9.5px}
+    .title{font-size:26px}
+  }
+  /* result mode: compact header so the report starts high on the screen */
+  body.result-mode .subtitle{display:none}
+  body.result-mode .title{font-size:21px;margin:10px 0 4px}
+  body.result-mode .shell{padding-bottom:calc(104px + env(safe-area-inset-bottom))}
+  body.result-mode .progress{margin-bottom:16px}
+
+  /* sticky fullscreen CTA (result step only) */
+  #stickyCta{
+    position:fixed;left:0;right:0;bottom:0;z-index:60;
+    display:none;
+    padding:16px 18px calc(12px + env(safe-area-inset-bottom));
+    background:rgba(15,23,42,.86);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-top:1px solid rgba(255,255,255,.06);
+    box-shadow:0 -16px 30px -22px rgba(0,0,0,1);
+  }
+  #stickyCta.show{display:block;animation:rise .4s cubic-bezier(.22,.9,.3,1) both}
+  #stickyCta .inner{max-width:394px;margin:0 auto}
+  #stickyCta button{
+    width:100%;appearance:none;border:0;cursor:pointer;
+    background:linear-gradient(180deg,#FBBF24,#F59E0B);
+    color:#241503;font-family:inherit;font-size:15.5px;font-weight:900;letter-spacing:-0.02em;
+    padding:16px 18px;border-radius:17px;
+    box-shadow:0 -2px 30px -10px rgba(245,158,11,.55),0 10px 24px -12px rgba(0,0,0,.9);
+    display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+  #stickyCta button:active{transform:scale(.985)}
+
+  .hidden{display:none !important}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="brand"><span class="dot"></span><b>정진영 · 교육 아티스트</b> <span>| 소통 컬러 체험</span></div>
+
+  <h1 class="title">나의 <span class="hl">소통 컬러</span> 찾기</h1>
+  <p class="subtitle">색깔을 거울 삼아 보는<br>나의 소통 본색 &amp; 사회생활 무기</p>
+
+  <div class="progress" aria-hidden="true">
+    <div class="bar" id="bar1"><i></i></div>
+    <div class="bar" id="bar2"><i></i></div>
+    <div class="bar" id="bar3"><i></i></div>
+    <div class="stepnum"><em id="stepNow">1</em> / 3</div>
+  </div>
+
+  <!-- STEP 1 -->
+  <section id="step1">
+    <span class="step-kicker">STEP 1 · 소통 본색</span>
+    <h2 class="q">지금 가장 끌리는 색 1가지를 골라주세요</h2>
+    <p class="help"><b>1번째 색</b>은 편할 때 나오는 나의 기본 소통 스타일(소통 본색)입니다.<br>생각하지 말고, 눈이 먼저 가는 색을 눌러 주세요.</p>
+    <div class="grid" id="grid" role="group" aria-label="12가지 색 중 하나를 선택"></div>
+    <p class="grid-note">※ 정답은 없습니다. 오늘 나에게 끌리는 색이면 충분합니다.</p>
+  </section>
+
+  <!-- STEP 2 -->
+  <section id="step2" class="hidden">
+    <span class="step-kicker">STEP 2 · 사회생활 무기</span>
+    <h2 class="q">두 번째로 끌리는 색 1가지를 골라주세요</h2>
+    <p class="help"><b>2번째 색</b>은 일할 때·밖에서 꺼내 쓰는 대외적 소통 스타일(사회생활 무기)입니다.<br>1번째 색은 이미 선택 완료되어 다시 고를 수 없습니다.</p>
+    <div class="picked-strip" id="pickedStrip"></div>
+    <div class="grid" id="grid2" role="group" aria-label="두 번째 색 선택"></div>
+    <div class="back-row">
+      <button class="btn-ghost" type="button" id="backTo1">← 1번째 색 다시 고르기</button>
+    </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section id="step3" class="hidden">
+    <span class="step-kicker">STEP 3 · 나의 소통 리포트</span>
+    <h2 class="q">당신의 소통 컬러가 나왔습니다</h2>
+    <p class="help">이제 주변을 둘러보세요. 같은 색, 찰떡궁합 색을 찾으면 대화가 훨씬 빨라집니다.</p>
+    <div id="result"></div>
+  </section>
+
+  <footer>
+    <b>강사 정진영 · 교육 아티스트 (스마일브라더)</b><br>
+    <a href="https://jungjinyoung3512.github.io/jungjinyoung3512/" target="_blank" rel="noopener">https://jungjinyoung3512.github.io/jungjinyoung3512/</a>
+  </footer>
+</div>
+
+<div id="stickyCta"><div class="inner"><button type="button" id="stickyBtn">화면 가득 내 색깔 띄우기 →</button></div></div>
+
+<!-- fullscreen board -->
+<div id="board" role="dialog" aria-modal="true" aria-label="내 색깔 전광판">
+  <div class="board-top" id="boardTop">1번 색 · 나의 소통 본색</div>
+  <div class="board-main">
+    <div class="board-emoji" id="boardEmoji">🔴</div>
+    <h2 class="board-name" id="boardName">열정 레드</h2>
+    <div class="board-type" id="boardType">직진 승부사</div>
+    <p class="board-why" id="boardWhy"></p>
+  </div>
+  <div class="board-footer">
+    <div class="board-match" id="boardMatch"></div>
+    <button class="board-close" type="button" id="boardClose">닫기 (결과로 돌아가기)</button>
+    <p class="board-hint">폰을 머리 위로 들어 보세요</p>
+  </div>
+</div>
+
+<script>
+/* ===================== 12색 데이터 ===================== */
+const COLORS = [
+  {
+    id:"red", name:"열정 레드", emoji:"🔴", hex:"#E11D48", type:"직진 승부사", light:false,
+    core:"결론부터 말하고, 한 번 정한 건 끝까지 밀고 나가는 추진형 소통.",
+    basic:[
+      "회의에서 “그럼 이렇게 합시다”로 방향을 먼저 정한다.",
+      "고민을 늘어놓는 친구에게 “그래서 제일 문제가 뭐야?”라고 먼저 묻는다.",
+      "서운한 게 있으면 “아까 그 말은 좀 아니었어” 하고 그 자리에서 말한다."
+    ],
+    work:[
+      "메일 제목에 결론부터 쓴다. “승인 요청 — 금요일까지 회신 필요”.",
+      "회의가 길어지면 “결정할 것만 정하고 나머지는 따로 봅시다”로 끊는다.",
+      "지시가 애매하면 눈치 보지 않고 바로 “언제까지인가요?” 하고 되묻는다."
+    ],
+    match:"green",
+    matchWhy:"레드가 밀고 나갈 때 그린이 옆에서 속도를 조절해 줍니다. 결론은 빠르게, 상처는 남지 않게.",
+    clash:"purple",
+    clashWhy:"레드는 결론을, 퍼플은 의미를 먼저 말합니다. 급할 때 퍼플이 “말이 너무 세다”고 느낍니다.",
+    clashTip:"레드는 “왜 그렇게 생각해?”를 한 문장만 더 묻고, 퍼플은 결론을 먼저 꺼내 보세요."
+  },
+  {
+    id:"orange", name:"에너지 오렌지", emoji:"🟠", hex:"#F97316", type:"분위기 메이커", light:false,
+    core:"먼저 말을 걸고 분위기를 띄워, 관계의 문을 열어젖히는 소통.",
+    basic:[
+      "엘리베이터에서 마주친 사람에게 “오늘 날씨 좋네요” 하고 먼저 말을 건다.",
+      "모임에 어색한 침묵이 흐르면 일부러 웃긴 얘기를 꺼낸다.",
+      "대답이 짧은 사람에게도 리액션을 크게 해서 말문을 열어 준다."
+    ],
+    work:[
+      "새로 온 동료에게 먼저 다가가 “점심 같이 먹어요” 하고 말한다.",
+      "회의 시작 전 30초 잡담으로 긴장을 풀어 놓는다.",
+      "단체 채팅방에서 축하·감사 이모티콘을 가장 먼저 보낸다."
+    ],
+    match:"white",
+    matchWhy:"오렌지가 말을 걸고 화이트가 들어줍니다. 시끌벅적함과 차분함이 정확히 반씩 섞입니다.",
+    clash:"navy",
+    clashWhy:"오렌지는 지금 이 분위기를, 네이비는 6개월 뒤를 봅니다. 네이비에겐 가볍게, 오렌지에겐 답답하게 들립니다.",
+    clashTip:"오렌지는 숫자 한 줄을, 네이비는 리액션 한 번을 더해 보세요."
+  },
+  {
+    id:"yellow", name:"햇살 옐로우", emoji:"🟡", hex:"#FACC15", type:"아이디어 뱅크", light:true,
+    core:"가능성을 여러 개 던지며 대화의 판을 넓히는 발상형 소통.",
+    basic:[
+      "친구 고민에 “이런 방법은 어때?” 하고 대안을 서너 개 꺼낸다.",
+      "대화 중에 떠오른 생각을 정리하기 전에 바로 말로 던진다.",
+      "남들이 당연하게 넘긴 것도 “근데 왜 그렇지?” 하고 되짚는다."
+    ],
+    work:[
+      "“안 되면 이렇게 하죠” 하는 플랜 B를 늘 준비해 둔다.",
+      "브레인스토밍에서 판을 깔아 주는 첫 발언을 맡는다.",
+      "지시를 받아도 “이런 방향은 어떨까요?” 하고 대안을 하나 얹는다."
+    ],
+    match:"blue",
+    matchWhy:"옐로우가 가능성을 던지면 블루가 실행 구조를 잡아 줍니다. 아이디어가 회의록이 되어 나옵니다.",
+    clash:"brown",
+    clashWhy:"옐로우는 “해볼 수 있는 것”을, 브라운은 “이미 해야 하는 것”을 말합니다. 아이디어만 쌓이면 브라운이 지칩니다.",
+    clashTip:"옐로우는 하나만 골라 마감을 정하고, 브라운은 첫 제안에 “좋다”를 한 번만 말해 주세요."
+  },
+  {
+    id:"green", name:"힐링 그린", emoji:"🟢", hex:"#16A34A", type:"평화 중재자", light:false,
+    core:"상대의 말을 끝까지 듣고, 사이가 틀어지지 않게 잇는 소통.",
+    basic:[
+      "말이 엇갈리면 “두 분 말이 다 맞는 것 같아요” 하고 다리를 놓는다.",
+      "상대가 화가 났을 때 결론보다 “많이 속상하셨겠다”를 먼저 말한다.",
+      "싫은 부탁도 “이번엔 어려운데, 대신 이건 해줄 수 있어요”로 말한다."
+    ],
+    work:[
+      "갈등이 생기면 양쪽 이야기를 따로 듣고 공통점을 찾아 정리한다.",
+      "감정적인 메일에는 바로 답하지 않고 하루 뒤 부드럽게 정리해 보낸다.",
+      "팀에서 조용히 빠져 있는 사람에게 “괜찮아요?” 하고 먼저 물어본다."
+    ],
+    match:"red",
+    matchWhy:"그린이 완충해 주면 레드의 추진력이 상처 없이 통합니다. 결론은 빠르게, 뒷정리는 따뜻하게.",
+    clash:"black",
+    clashWhy:"그린은 맞춰 주며 관계를 지키고, 블랙은 기준을 세워 일을 지킵니다. 그린이 “나만 참는 것 같다”고 느낍니다.",
+    clashTip:"블랙은 지적 뒤에 온기 한마디를, 그린은 “이번엔 이렇게 하자”를 한 번만 분명히 말해 보세요."
+  },
+  {
+    id:"mint", name:"청량 민트", emoji:"💧", hex:"#14B8A6", type:"감각 티키타카", light:true,
+    core:"타이밍과 센스로 대화의 리듬을 살리는 순발력형 소통.",
+    basic:[
+      "상대 말끝에 정확히 받아치는 한마디로 웃음을 만든다.",
+      "분위기가 무거워지면 적절한 농담으로 한 번 눅여 준다.",
+      "눈치가 빨라, 상대가 말하기 전에 필요한 걸 먼저 알아챈다."
+    ],
+    work:[
+      "보고할 때 숫자 나열보다 “그래서 재밌는 포인트”부터 짚어 집중시킨다.",
+      "회의 중 어색한 순간을 유머 한 줄로 넘긴다.",
+      "상대의 기분을 읽고 말의 강도를 실시간으로 조절한다."
+    ],
+    match:"navy",
+    matchWhy:"민트의 즉흥 센스에 네이비의 원칙이 중심을 잡아 줍니다. 가볍지도, 딱딱하지도 않게.",
+    clash:"blue",
+    clashWhy:"민트는 리듬과 센스로, 블루는 근거와 순서로 말합니다. 블루에겐 가볍게, 민트에겐 답답하게 들립니다.",
+    clashTip:"민트는 근거를 한 줄 덧붙이고, 블루는 말끝에 웃음 한 번을 더해 보세요."
+  },
+  {
+    id:"blue", name:"신뢰 블루", emoji:"🔵", hex:"#2563EB", type:"논리 설계자", light:false,
+    core:"근거와 순서를 세워 상대를 납득시키는 정리형 소통.",
+    basic:[
+      "기억이 애매하면 “확인해서 다시 말할게” 하고 정확히 짚는다.",
+      "약속을 정할 때 시간·장소·할 일을 한 번 더 확인한다.",
+      "감정보다 사실을 먼저 놓고 이야기를 시작한다."
+    ],
+    work:[
+      "보고서를 결론 → 근거 → 조치 순서로 구조화해 쓴다.",
+      "논의가 겉돌면 “쟁점을 세 가지로 정리하겠습니다” 하고 기준을 세운다.",
+      "회의가 끝나면 결정 사항과 담당·기한을 회의록으로 남긴다."
+    ],
+    match:"yellow",
+    matchWhy:"블루의 설계도에 옐로우의 아이디어가 얹히면, 계획이 뻔해지지 않고 실행까지 갑니다.",
+    clash:"mint",
+    clashWhy:"블루는 근거를, 민트는 리듬을 원합니다. 블루가 “농담인지 진담인지 모르겠다”고 느낍니다.",
+    clashTip:"블루는 말끝에 리액션을, 민트는 결론과 근거를 한 줄씩 더해 보세요."
+  },
+  {
+    id:"navy", name:"깊은 네이비", emoji:"🌌", hex:"#1E3A8A", type:"원칙 전략가", light:false,
+    core:"한 걸음 물러나 큰 그림과 원칙을 지키는 절제형 소통.",
+    basic:[
+      "쉽게 약속하지 않고, 지킬 수 있는 것만 말한다.",
+      "즉흥적인 제안에는 “조금만 생각해 볼게” 하고 시간을 둔다.",
+      "옳고 그름이 걸리면 조용하지만 분명하게 선을 긋는다."
+    ],
+    work:[
+      "당장의 성과보다 6개월 뒤 리스크를 먼저 짚는다.",
+      "원칙과 어긋나는 지시에는 근거를 갖춰 정중히 재검토를 요청한다.",
+      "말수는 적지만 결정적인 순간에 무게 있는 한마디를 한다."
+    ],
+    match:"mint",
+    matchWhy:"네이비의 중심에 민트의 가벼움이 닿으면, 원칙이 고집이 아니라 신뢰가 됩니다.",
+    clash:"orange",
+    clashWhy:"네이비는 지속 가능성을, 오렌지는 지금의 온도를 봅니다. 서로 “저쪽은 왜 저러지” 싶어집니다.",
+    clashTip:"네이비는 먼저 웃어 주고, 오렌지는 결론을 한 문장으로 정리해 보세요."
+  },
+  {
+    id:"purple", name:"영감 퍼플", emoji:"🟣", hex:"#7C3AED", type:"스토리텔러", light:false,
+    core:"이야기와 감정으로 의미를 전하는 표현형 소통.",
+    basic:[
+      "일상의 사건을 이야기처럼 들려줘 듣는 사람을 붙잡는다.",
+      "상대 말 속의 감정 결을 읽고 “그 마음이 이해돼”라고 말한다.",
+      "비유를 써서 어려운 이야기를 쉽고 따뜻하게 바꾼다."
+    ],
+    work:[
+      "발표를 숫자 나열이 아니라 사례·장면으로 시작한다.",
+      "피드백을 “이 장면에서 감동했다”처럼 구체적인 장면으로 전한다.",
+      "팀의 일을 “우리 이야기”로 다시 써서 동기를 만든다."
+    ],
+    match:"brown",
+    matchWhy:"퍼플이 “왜 하는지”를 이야기하고 브라운이 “어떻게 할지”를 해냅니다. 이야기가 결과물이 됩니다.",
+    clash:"red",
+    clashWhy:"퍼플은 맥락과 의미를 풀어 놓고, 레드는 그 사이를 못 기다립니다. 레드가 “핵심만 말해”로 끊습니다.",
+    clashTip:"퍼플은 결론을 맨 앞에, 레드는 “이야기 마저 해 봐”를 한 번 더 말해 보세요."
+  },
+  {
+    id:"pink", name:"따뜻 핑크", emoji:"💗", hex:"#EC4899", type:"마음 케어러", light:false,
+    core:"상대의 기분을 먼저 살피고 조용히 챙기는 다정한 소통.",
+    basic:[
+      "대화가 끝나고 “오늘 좀 힘들어 보였어, 괜찮아?” 하고 다시 묻는다.",
+      "상대가 말하는 동안 표정과 고갯짓으로 계속 반응한다.",
+      "칭찬할 때 “역시”보다 “그 부분 특히 좋았어”처럼 구체적으로 말한다."
+    ],
+    work:[
+      "업무 지시 전에 “지금 좀 바빠?” 하고 상대의 상태를 먼저 묻는다.",
+      "실수를 지적할 때 사람이 아니라 결과를 두고 이야기한다.",
+      "동료의 힘든 날을 기억했다가 조용히 다가가 말을 건다."
+    ],
+    match:"black",
+    matchWhy:"핑크의 온기가 블랙의 날을 눅여 주고, 블랙의 분명함이 핑크의 무한 배려에 경계를 만들어 줍니다.",
+    clash:"white",
+    clashWhy:"핑크는 가까이 다가가려 하고 화이트는 한 걸음 떨어져 봅니다. 핑크가 “차갑다”고 느낍니다.",
+    clashTip:"화이트는 마음을 먼저 한 번 인정하고, 핑크는 “혼자 있고 싶을 땐 말해 줘”를 존중해 주세요."
+  },
+  {
+    id:"brown", name:"단단 브라운", emoji:"🤎", hex:"#92400E", type:"현실 해결사", light:false,
+    core:"말보다 실행으로 신뢰를 쌓는 실무형 소통.",
+    basic:[
+      "“말은 충분히 했으니 이제 언제 할지 정하자” 하고 마무리한다.",
+      "도와주겠다고 하면 말보다 손이 먼저 움직인다.",
+      "과장된 표현보다 확인된 사실만 말한다."
+    ],
+    work:[
+      "회의 끝에 “누가, 언제까지”를 반드시 정하고 남긴다.",
+      "문제가 생기면 원인 추적보다 수습 순서를 먼저 밟는다.",
+      "보고는 진행률과 막힌 지점을 숫자로 간단히 전한다."
+    ],
+    match:"purple",
+    matchWhy:"브라운의 실행력에 퍼플의 이야기가 붙으면, 일이 ‘의미 있는 일’이 되어 사람이 따라옵니다.",
+    clash:"yellow",
+    clashWhy:"브라운은 확정된 일을, 옐로우는 새 가능성을 말합니다. 브라운이 “또 시작이네” 하고 지칩니다.",
+    clashTip:"브라운은 새 제안에 “좋다”를 한 번만, 옐로우는 하나만 골라 마감을 정해 보세요."
+  },
+  {
+    id:"white", name:"순수 화이트", emoji:"⚪", hex:"#F8FAFC", type:"투명 관찰자", light:true,
+    core:"많이 말하지 않고 정확히 듣는, 여백의 소통.",
+    basic:[
+      "상대가 말을 마칠 때까지 끊지 않고 기다린다.",
+      "의견을 물으면 쉽게 편들지 않고 “나는 이렇게 봤어”라고 담백히 말한다.",
+      "말보다 질문으로 상대의 생각을 더 꺼내게 한다."
+    ],
+    work:[
+      "감정이 섞인 자리에서 판단을 미루고 사실만 정리한다.",
+      "누구 편도 들지 않는 중립적인 기록자 역할을 맡는다.",
+      "석연치 않은 부분은 “이 부분만 다시 확인할 수 있을까요?”라고 조용히 짚는다."
+    ],
+    match:"orange",
+    matchWhy:"화이트의 차분한 경청이 오렌지의 에너지를 신뢰로 바꿔 줍니다. 둘이 있으면 대화가 오래갑니다.",
+    clash:"pink",
+    clashWhy:"화이트는 거리를 두고 보려 하고 핑크는 가까이 오려 합니다. 화이트가 “부담스럽다”고 느낍니다.",
+    clashTip:"화이트는 먼저 마음을 한 번 인정하고, 핑크는 “혼자 있고 싶을 땐 말해 줘”를 존중해 주세요."
+  },
+  {
+    id:"black", name:"시크 블랙", emoji:"🖤", hex:"#111827", type:"카리스마 프로", light:false,
+    core:"기준이 분명하고 군더더기 없이 전달하는 소통.",
+    basic:[
+      "부탁을 들어줄 수 없으면 이유를 짧게 말하고 분명히 거절한다.",
+      "약속 시간에 늦는 사람에게 감정 없이 사실만 말한다.",
+      "과한 친절보다 필요한 말을 정확히 한다."
+    ],
+    work:[
+      "회의에서 “이 안은 안 됩니다, 이유는 세 가지입니다”로 말한다.",
+      "품질 기준을 말로만 두지 않고 체크리스트로 만든다.",
+      "문제를 덮지 않고 책임 소재와 재발 방지까지 확인한다."
+    ],
+    match:"pink",
+    matchWhy:"블랙의 분명한 기준이 핑크의 다정함과 만나면, 사람을 다치게 하지 않으면서 일이 바로 섭니다.",
+    clash:"green",
+    clashWhy:"블랙은 선을 긋고, 그린은 선을 흐립니다. 블랙이 “답답하다”, 그린이 “상처받았다”고 느낍니다.",
+    clashTip:"블랙은 지적 뒤에 온기 한마디를, 그린은 “이번엔 이렇게 하자”를 분명히 말해 보세요."
+  }
+];
+
+const byId = Object.fromEntries(COLORS.map(c => [c.id, c]));
+const state = { step:1, picks:[null, null] };
+const $ = s => document.querySelector(s);
+const el = (tag, cls) => { const n = document.createElement(tag); if (cls) n.className = cls; return n; };
+
+/* ===================== 렌더 ===================== */
+function makeCard(c, step){
+  const b = el("button","color-card");
+  b.type = "button";
+  const pickedNow = state.picks[step-1] === c.id;
+  const locked = step === 2 && state.picks[0] === c.id;
+  if (pickedNow) b.classList.add("selected");
+  if (locked){ b.classList.add("locked"); b.disabled = true; }
+  b.setAttribute("aria-pressed", pickedNow ? "true" : "false");
+  b.setAttribute("aria-label", `${c.name}, ${c.type}`);
+
+  const sw = el("span", "swatch" + (c.light ? " is-light" : ""));
+  sw.style.setProperty("--c", c.hex);
+
+  const nm = el("span","cname");
+  const em = el("span","em"); em.textContent = c.emoji;
+  nm.append(em, document.createTextNode(c.name));
+  const tp = el("span","ctype"); tp.textContent = c.type;
+
+  b.append(sw, nm, tp);
+
+  if (locked){
+    const bd = el("span","badge lock"); bd.textContent = "1번째 ✓";
+    b.appendChild(bd);
+  } else if (pickedNow && step === 2){
+    const bd = el("span","badge done"); bd.textContent = "선택 ✓";
+    b.appendChild(bd);
+  }
+  b.addEventListener("click", () => choose(step, c.id));
+  return b;
+}
+
+function renderGrid(){
+  const g1 = $("#grid"), g2 = $("#grid2");
+  g1.replaceChildren(...COLORS.map(c => makeCard(c, 1)));
+  g2.replaceChildren(...COLORS.map(c => makeCard(c, 2)));
+}
+
+function renderPickedStrip(){
+  const c = byId[state.picks[0]];
+  const wrap = $("#pickedStrip");
+  wrap.replaceChildren();
+  if (!c) return;
+  const mini = el("span","mini"); mini.style.setProperty("--c", c.hex);
+  const txt = el("span","txt");
+  const small = el("small"); small.textContent = "1번째 색 · 소통 본색 선택 완료";
+  txt.append(small, document.createTextNode(`${c.emoji} ${c.name} — ${c.type}`));
+  wrap.append(mini, txt);
+}
+
+function goStep(n){
+  state.step = n;
+  $("#step1").classList.toggle("hidden", n !== 1);
+  $("#step2").classList.toggle("hidden", n !== 2);
+  $("#step3").classList.toggle("hidden", n !== 3);
+  ["#bar1","#bar2","#bar3"].forEach((sel,i)=>{
+    $(sel).classList.toggle("on", i < n);
+  });
+  $("#stepNow").textContent = n;
+  document.body.classList.toggle("result-mode", n === 3);
+  $("#stickyCta").classList.toggle("show", n === 3);
+  renderGrid();
+  if (n === 2) renderPickedStrip();
+  if (n === 3) renderResult();
+  window.scrollTo({ top:0, behavior:"instant" in window ? "instant" : "auto" });
+}
+
+function choose(step, id){
+  if (step === 2 && id === state.picks[0]) return;
+  state.picks[step-1] = id;
+  if (step === 1) state.picks[1] = null;
+  goStep(step + 1);
+}
+
+/* ===================== 결과 ===================== */
+function contrastText(hex){
+  const h = hex.replace("#","");
+  const ch = [0,2,4].map(i => parseInt(h.substring(i,i+2),16)/255)
+    .map(v => v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4));
+  const L = 0.2126*ch[0] + 0.7152*ch[1] + 0.0722*ch[2];
+  const white = 1.05 / (L + 0.05);
+  const dark = (L + 0.05) / 0.0588;      // #0F172A 대비
+  return white >= dark
+    ? { text:"#FFFFFF", halo:"rgba(255,255,255,.52)" }
+    : { text:"#0F172A", halo:"rgba(15,23,42,.45)" };
+}
+
+function idCard(c, label, num, kind){
+  const p = el("div","panel");
+  const lab = el("div","panel-label");
+  const n = el("span","num"); n.textContent = num;
+  lab.append(n, document.createTextNode(label));
+
+  const idc = el("div","idcard");
+  const sw = el("div","big-swatch"); sw.style.setProperty("--c", c.hex);
+  const who = el("div","who");
+  const nm = el("div","nm");
+  const em = el("span","em"); em.textContent = c.emoji;
+  nm.append(em, document.createTextNode(c.name));
+  const tp = el("div","tp"); tp.textContent = `${c.type} · ${kind === "basic" ? "소통 본색" : "사회생활 무기"}`;
+  who.append(nm, tp);
+  idc.append(sw, who);
+
+  const core = el("p","core"); core.textContent = c.core;
+
+  const ul = el("ul","ex-list");
+  (kind === "basic" ? c.basic : c.work).forEach(t => {
+    const li = el("li"); li.textContent = t; ul.appendChild(li);
+  });
+
+  p.append(lab, idc, core, ul);
+  return p;
+}
+
+function matchRow(kind, c, why, hi, tip){
+  const row = el("div","match-row" + (hi ? " hi" : ""));
+  const dot = el("div","match-dot"); dot.style.setProperty("--c", c.hex);
+  const body = el("div","match-body");
+  const k = el("div","k"); k.textContent = kind;
+  const v = el("div","v");
+  const vem = el("span","em"); vem.textContent = c.emoji;
+  v.append(vem, document.createTextNode(`${c.name} · ${c.type}`));
+  body.append(k, v);
+  if (why){ const w = el("div","why"); w.textContent = why; body.appendChild(w); }
+  if (tip){
+    const t = el("div","tip");
+    const b = document.createElement("b"); b.textContent = "소통 팁 ";
+    t.append(b, document.createTextNode(tip));
+    body.appendChild(t);
+  }
+  row.append(dot, body);
+  return row;
+}
+
+function renderResult(){
+  const [a, b] = state.picks.map(id => byId[id]);
+  const host = $("#result");
+  host.replaceChildren();
+
+  host.append(idCard(a, "나의 기본 소통 스타일 · 1번 색", "1", "basic"));
+  host.append(idCard(b, "나의 대외적 소통 스타일 · 2번 색", "2", "work"));
+
+  /* 3. 매칭 카드 */
+  const p = el("div","panel");
+  const lab = el("div","panel-label");
+  const n = el("span","num"); n.textContent = "3";
+  lab.append(n, document.createTextNode("강연장 매칭 카드"));
+  const intro = el("p","panel-intro");
+  intro.textContent = "지금 이 자리에서 바로 써먹는 관계 지도입니다.";
+  p.append(lab, intro);
+
+  const list = el("div","match-list");
+  list.appendChild(matchRow("나와 같은 소통 본색", a, "같은 색끼리 모여 손을 들어 보세요. 설명 없이도 통합니다.", true));
+  list.appendChild(matchRow("찰떡궁합 짝꿍 색", byId[a.match], a.matchWhy, false));
+  list.appendChild(matchRow("조심할 상극 색", byId[a.clash], a.clashWhy, false, a.clashTip));
+  p.append(list);
+  host.append(p);
+
+  /* 다시 테스트 + 안내 */
+  const retest = el("button","btn-line");
+  retest.type = "button";
+  retest.textContent = "다시 테스트하기";
+  retest.addEventListener("click", () => {
+    state.picks = [null, null];
+    $("#result").replaceChildren();
+    goStep(1);
+  });
+
+  const disc = el("p","disclaimer");
+  disc.textContent = "※ 이 체험은 심리검사가 아닙니다. 색을 거울 삼아 내 소통 습관을 들여다보는 놀이이며, 정답도 등수도 없습니다.";
+
+  host.append(retest, disc);
+}
+
+/* ===================== 전광판 ===================== */
+let lastFocus = null;
+
+function openBoard(a){
+  const t = contrastText(a.hex);
+  const board = $("#board");
+  board.style.setProperty("--b", a.hex);
+  board.style.setProperty("--bt", t.text);
+  board.style.setProperty("--halo", t.halo);
+
+  $("#boardTop").textContent = "1번 색 · 나의 소통 본색";
+  $("#boardEmoji").textContent = a.emoji;
+  $("#boardName").textContent = a.name;
+  $("#boardType").textContent = a.type;
+  $("#boardWhy").textContent = a.core;
+
+  $("#boardMatch").replaceChildren(
+    Object.assign(document.createElement("span"), { textContent:`찰떡궁합: ${byId[a.match].emoji} ${byId[a.match].name} · 상극: ${byId[a.clash].emoji} ${byId[a.clash].name}` })
+  );
+
+  lastFocus = document.activeElement;
+  board.classList.add("open");
+  document.body.style.overflow = "hidden";
+  $("#boardClose").focus({ preventScroll:true });
+
+  if (board.requestFullscreen) {
+    board.requestFullscreen().catch(() => {});
+  }
+}
+
+function closeBoard(){
+  const board = $("#board");
+  board.classList.remove("open");
+  document.body.style.overflow = "";
+  if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
+  if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll:true });
+}
+
+$("#boardClose").addEventListener("click", closeBoard);
+$("#stickyBtn").addEventListener("click", () => {
+  if (!state.picks[0] || !state.picks[1]) return;
+  openBoard(byId[state.picks[0]]);
+});
+$("#backTo1").addEventListener("click", () => {
+  state.picks[1] = null;
+  goStep(1);
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && $("#board").classList.contains("open")) closeBoard();
+});
+
+/* boot */
+goStep(1);
+</script>
+</body>
+</html>
