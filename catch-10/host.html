@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0B1220">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>⏱</text></svg>">
 <title>10초를 잡아라 · 진행자 | 정진영 교육 아티스트</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1001,14 +1002,20 @@
       return;
     }
 
-    $("podiums").innerHTML = rows.slice(0, 3).map((r, i) => {
-      return '<div class="pod p' + (i + 1) + '">'
-        + '<span class="medal">' + medals[i] + '</span>'
-        + '<span class="who">'
-        +   '<span class="nm"><span class="pdot" style="--c:' + esc(r.color) + '"></span>' + esc(r.name) + '</span>'
-        +   '<span class="tm">' + (r.hit == null ? "기록 없음" : fmt(r.hit) + "초 <em>· " + dlText(r.delta) + "초</em>") + '</span>'
-        + '</span></div>';
-    }).join("");
+    $("podiums").innerHTML = (function(){
+      const top = rows.filter(r => r.hit != null).slice(0, 3);
+      if (!top.length){
+        return '<div style="grid-column:1/-1;border:1px dashed rgba(255,255,255,.14);border-radius:16px;padding:18px;text-align:center;color:#7C8BA3;font-size:14px;font-weight:700">아직 기록이 없습니다 — 한 판 더 진행해 주세요</div>';
+      }
+      return top.map((r, i) => {
+        return '<div class="pod p' + (i + 1) + '">'
+          + '<span class="medal">' + medals[i] + '</span>'
+          + '<span class="who">'
+          +   '<span class="nm"><span class="pdot" style="--c:' + esc(r.color) + '"></span>' + esc(r.name) + '</span>'
+          +   '<span class="tm">' + fmt(r.hit) + '초 <em>· ' + dlText(r.delta) + '초</em></span>'
+          + '</span></div>';
+      }).join('');
+    })();
 
     $("resList").innerHTML = rows.map(r => {
       const medal = (r.hit != null && r.rank <= 3) ? medals[r.rank - 1] + " " : "";
