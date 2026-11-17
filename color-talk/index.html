@@ -102,7 +102,7 @@
     font-family:inherit;text-align:left;color:var(--text);
     cursor:pointer;
     transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease,opacity .16s ease;
-    min-height:118px;
+    min-height:102px;
     overflow:hidden;
   }
   .color-card:active{transform:scale(.965)}
@@ -115,8 +115,8 @@
     box-shadow:inset 0 -14px 22px -14px rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,255,255,.10);
   }
   .swatch.is-light{box-shadow:inset 0 0 0 1px rgba(15,23,42,.10)}
-  .cname{font-size:12px;font-weight:800;letter-spacing:-0.03em;padding:0 1px;white-space:nowrap;display:flex;align-items:center;gap:4px}
-  .cname .em{font-size:11.5px;line-height:1;flex:none;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;filter:drop-shadow(0 0 2px rgba(255,255,255,.45))}
+  .cname{font-size:16px;font-weight:800;letter-spacing:-0.02em;padding:2px 0;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:5px}
+  .cname .em{font-size:14px;line-height:1;flex:none;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;filter:drop-shadow(0 0 2px rgba(255,255,255,.45))}
   .ctype{font-size:10.5px;color:var(--muted);letter-spacing:-0.02em;padding:0 2px;margin-top:-3px;white-space:nowrap;display:block}
 
   .color-card.selected{
@@ -305,10 +305,10 @@
 
   @media (max-width:359px){
     .grid{gap:8px}
-    .color-card{padding:6px 6px 10px;border-radius:15px;min-height:112px}
+    .color-card{padding:6px 6px 10px;border-radius:15px;min-height:94px}
     .swatch{height:46px}
-    .cname{font-size:10.5px;gap:3px}
-    .cname .em{font-size:10px}
+    .cname{font-size:14px;gap:4px}
+    .cname .em{font-size:13px}
     .ctype{font-size:9.5px}
     .title{font-size:26px}
   }
@@ -418,7 +418,7 @@
 /* ===================== 12색 데이터 ===================== */
 const COLORS = [
   {
-    id:"red", name:"열정 레드", emoji:"🔴", hex:"#E11D48", type:"직진 승부사", light:false,
+    id:"red", name:"레드", emoji:"🔴", hex:"#E11D48", type:"직진 승부사", light:false,
     core:"결론부터 말하고, 한 번 정한 건 끝까지 밀고 나가는 추진형 소통.",
     basic:[
       "회의에서 “그럼 이렇게 합시다”로 방향을 먼저 정한다.",
@@ -437,7 +437,7 @@ const COLORS = [
     clashTip:"레드는 “왜 그렇게 생각해?”를 한 문장만 더 묻고, 퍼플은 결론을 먼저 꺼내 보세요."
   },
   {
-    id:"orange", name:"에너지 오렌지", emoji:"🟠", hex:"#F97316", type:"분위기 메이커", light:false,
+    id:"orange", name:"오렌지", emoji:"🟠", hex:"#F97316", type:"분위기 메이커", light:false,
     core:"먼저 말을 걸고 분위기를 띄워, 관계의 문을 열어젖히는 소통.",
     basic:[
       "엘리베이터에서 마주친 사람에게 “오늘 날씨 좋네요” 하고 먼저 말을 건다.",
@@ -456,7 +456,7 @@ const COLORS = [
     clashTip:"오렌지는 숫자 한 줄을, 네이비는 리액션 한 번을 더해 보세요."
   },
   {
-    id:"yellow", name:"햇살 옐로우", emoji:"🟡", hex:"#FACC15", type:"아이디어 뱅크", light:true,
+    id:"yellow", name:"옐로우", emoji:"🟡", hex:"#FACC15", type:"아이디어 뱅크", light:true,
     core:"가능성을 여러 개 던지며 대화의 판을 넓히는 발상형 소통.",
     basic:[
       "친구 고민에 “이런 방법은 어때?” 하고 대안을 서너 개 꺼낸다.",
@@ -475,7 +475,7 @@ const COLORS = [
     clashTip:"옐로우는 하나만 골라 마감을 정하고, 브라운은 첫 제안에 “좋다”를 한 번만 말해 주세요."
   },
   {
-    id:"green", name:"힐링 그린", emoji:"🟢", hex:"#16A34A", type:"평화 중재자", light:false,
+    id:"green", name:"그린", emoji:"🟢", hex:"#16A34A", type:"평화 중재자", light:false,
     core:"상대의 말을 끝까지 듣고, 사이가 틀어지지 않게 잇는 소통.",
     basic:[
       "말이 엇갈리면 “두 분 말이 다 맞는 것 같아요” 하고 다리를 놓는다.",
@@ -494,7 +494,7 @@ const COLORS = [
     clashTip:"블랙은 지적 뒤에 온기 한마디를, 그린은 “이번엔 이렇게 하자”를 한 번만 분명히 말해 보세요."
   },
   {
-    id:"mint", name:"청량 민트", emoji:"💧", hex:"#14B8A6", type:"감각 티키타카", light:true,
+    id:"mint", name:"민트", emoji:"💧", hex:"#14B8A6", type:"감각 티키타카", light:true,
     core:"타이밍과 센스로 대화의 리듬을 살리는 순발력형 소통.",
     basic:[
       "상대 말끝에 정확히 받아치는 한마디로 웃음을 만든다.",
@@ -513,7 +513,7 @@ const COLORS = [
     clashTip:"민트는 근거를 한 줄 덧붙이고, 블루는 말끝에 웃음 한 번을 더해 보세요."
   },
   {
-    id:"blue", name:"신뢰 블루", emoji:"🔵", hex:"#2563EB", type:"논리 설계자", light:false,
+    id:"blue", name:"블루", emoji:"🔵", hex:"#2563EB", type:"논리 설계자", light:false,
     core:"근거와 순서를 세워 상대를 납득시키는 정리형 소통.",
     basic:[
       "기억이 애매하면 “확인해서 다시 말할게” 하고 정확히 짚는다.",
@@ -532,7 +532,7 @@ const COLORS = [
     clashTip:"블루는 말끝에 리액션을, 민트는 결론과 근거를 한 줄씩 더해 보세요."
   },
   {
-    id:"navy", name:"깊은 네이비", emoji:"🌌", hex:"#1E3A8A", type:"원칙 전략가", light:false,
+    id:"navy", name:"네이비", emoji:"🌌", hex:"#1E3A8A", type:"원칙 전략가", light:false,
     core:"한 걸음 물러나 큰 그림과 원칙을 지키는 절제형 소통.",
     basic:[
       "쉽게 약속하지 않고, 지킬 수 있는 것만 말한다.",
@@ -551,7 +551,7 @@ const COLORS = [
     clashTip:"네이비는 먼저 웃어 주고, 오렌지는 결론을 한 문장으로 정리해 보세요."
   },
   {
-    id:"purple", name:"영감 퍼플", emoji:"🟣", hex:"#7C3AED", type:"스토리텔러", light:false,
+    id:"purple", name:"퍼플", emoji:"🟣", hex:"#7C3AED", type:"스토리텔러", light:false,
     core:"이야기와 감정으로 의미를 전하는 표현형 소통.",
     basic:[
       "일상의 사건을 이야기처럼 들려줘 듣는 사람을 붙잡는다.",
@@ -570,7 +570,7 @@ const COLORS = [
     clashTip:"퍼플은 결론을 맨 앞에, 레드는 “이야기 마저 해 봐”를 한 번 더 말해 보세요."
   },
   {
-    id:"pink", name:"따뜻 핑크", emoji:"💗", hex:"#EC4899", type:"마음 케어러", light:false,
+    id:"pink", name:"핑크", emoji:"💗", hex:"#EC4899", type:"마음 케어러", light:false,
     core:"상대의 기분을 먼저 살피고 조용히 챙기는 다정한 소통.",
     basic:[
       "대화가 끝나고 “오늘 좀 힘들어 보였어, 괜찮아?” 하고 다시 묻는다.",
@@ -589,7 +589,7 @@ const COLORS = [
     clashTip:"화이트는 마음을 먼저 한 번 인정하고, 핑크는 “혼자 있고 싶을 땐 말해 줘”를 존중해 주세요."
   },
   {
-    id:"brown", name:"단단 브라운", emoji:"🤎", hex:"#92400E", type:"현실 해결사", light:false,
+    id:"brown", name:"브라운", emoji:"🤎", hex:"#92400E", type:"현실 해결사", light:false,
     core:"말보다 실행으로 신뢰를 쌓는 실무형 소통.",
     basic:[
       "“말은 충분히 했으니 이제 언제 할지 정하자” 하고 마무리한다.",
@@ -608,7 +608,7 @@ const COLORS = [
     clashTip:"브라운은 새 제안에 “좋다”를 한 번만, 옐로우는 하나만 골라 마감을 정해 보세요."
   },
   {
-    id:"white", name:"순수 화이트", emoji:"⚪", hex:"#F8FAFC", type:"투명 관찰자", light:true,
+    id:"white", name:"화이트", emoji:"⚪", hex:"#F8FAFC", type:"투명 관찰자", light:true,
     core:"많이 말하지 않고 정확히 듣는, 여백의 소통.",
     basic:[
       "상대가 말을 마칠 때까지 끊지 않고 기다린다.",
@@ -627,7 +627,7 @@ const COLORS = [
     clashTip:"화이트는 먼저 마음을 한 번 인정하고, 핑크는 “혼자 있고 싶을 땐 말해 줘”를 존중해 주세요."
   },
   {
-    id:"black", name:"시크 블랙", emoji:"🖤", hex:"#111827", type:"카리스마 프로", light:false,
+    id:"black", name:"블랙", emoji:"🖤", hex:"#111827", type:"카리스마 프로", light:false,
     core:"기준이 분명하고 군더더기 없이 전달하는 소통.",
     basic:[
       "부탁을 들어줄 수 없으면 이유를 짧게 말하고 분명히 거절한다.",
