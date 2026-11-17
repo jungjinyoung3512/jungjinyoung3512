@@ -1,1 +1,936 @@
-placeholder
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#080F1E">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>🌙 퇴근 후 내 멘탈 배터리 테스트 | 교육 아티스트 정진영</title>
+<meta name="description" content="1분 만에 확인하는 오늘 밤 내 영혼 잔량 — 6문항으로 보는 나의 멘탈 배터리">
+<meta property="og:title" content="🌙 퇴근 후 내 멘탈 배터리 테스트">
+<meta property="og:description" content="1분 만에 확인하는 오늘 밤 내 영혼 잔량">
+<meta property="og:type" content="website">
+<style>
+  *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --bg:#080F1E;
+    --bg-2:#0C1730;
+    --card:rgba(255,255,255,.045);
+    --card-line:rgba(255,255,255,.10);
+    --gold:#F5B955;
+    --gold-soft:rgba(245,185,85,.14);
+    --coral:#FF7A6B;
+    --text:#F2F5FA;
+    --muted:#9AA9C2;
+    --muted-2:#7C8AA5;
+    --accent:#F5B955;
+    --accent2:#FFD08A;
+    --sans:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic","맑은 고딕",sans-serif;
+  }
+  html{-webkit-text-size-adjust:100%}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.5;
+    letter-spacing:-0.015em;
+    word-break:keep-all;
+    overflow-wrap:break-word;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    min-height:100dvh;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(120% 48% at 50% -6%, rgba(245,185,85,.16) 0%, rgba(245,185,85,0) 62%),
+      radial-gradient(90% 42% at 100% 104%, rgba(96,86,240,.20) 0%, rgba(96,86,240,0) 70%),
+      radial-gradient(80% 40% at -10% 40%, rgba(255,122,107,.10) 0%, rgba(255,122,107,0) 70%);
+  }
+  button{font-family:inherit;touch-action:manipulation;border:0;background:none;color:inherit;cursor:pointer}
+  a{color:inherit}
+  .app{
+    position:relative;z-index:1;
+    width:100%;max-width:430px;margin:0 auto;
+    min-height:100vh;min-height:100dvh;
+    display:flex;flex-direction:column;
+    padding:22px 18px calc(20px + env(safe-area-inset-bottom));
+  }
+  .screen{display:none;flex:1 0 auto;flex-direction:column}
+  .screen.is-active{display:flex}
+
+  /* ---------- intro ---------- */
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:7px;align-self:flex-start;
+    font-size:11.5px;font-weight:600;letter-spacing:.04em;color:var(--muted);
+    padding:7px 12px;border-radius:999px;
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px rgba(245,185,85,.9)}
+  h1.title{
+    margin:20px 0 0;
+    font-size:clamp(30px,8.7vw,37px);
+    line-height:1.22;
+    font-weight:800;
+    letter-spacing:-0.035em;
+  }
+  h1.title em{
+    font-style:normal;color:var(--gold);
+    background:linear-gradient(180deg,#FFD68B 0%,#F0A93C 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .sub{
+    margin:12px 0 0;font-size:15px;color:var(--muted);font-weight:500;letter-spacing:-0.01em;
+  }
+  .hero{
+    margin:24px 0 0;
+    padding:20px 18px 18px;
+    border-radius:22px;
+    background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+    border:1px solid var(--card-line);
+  }
+  .hero-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .hero-top b{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--muted-2)}
+  .hero-batt{position:relative;height:34px;margin-top:12px;padding:4px;border-radius:10px;border:2px solid rgba(255,255,255,.16)}
+  .hero-batt::after{
+    content:"";position:absolute;right:-7px;top:50%;transform:translateY(-50%);
+    width:5px;height:13px;border-radius:0 3px 3px 0;background:rgba(255,255,255,.2);
+  }
+  .hero-batt i{
+    display:block;height:100%;width:100%;border-radius:6px;
+    background:linear-gradient(90deg,rgba(245,185,85,0) 0%,rgba(245,185,85,0) 41%,rgba(255,213,140,.75) 50%,rgba(245,185,85,0) 59%,rgba(245,185,85,0) 100%);
+    background-size:280% 100%;background-position:120% 0;
+    animation:sweep 2.8s ease-in-out infinite;
+  }
+  @keyframes sweep{0%{background-position:120% 0}60%,100%{background-position:-140% 0}}
+  .hero-label{margin-top:11px;font-size:13px;color:var(--muted);font-weight:500}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
+  .meta span{
+    font-size:12px;font-weight:600;color:#C9D4E6;
+    padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.05);
+  }
+  .nights{
+    margin-top:16px;padding:16px 16px 15px;border-radius:18px;
+    background:rgba(255,255,255,.028);border:1px solid rgba(255,255,255,.07);
+  }
+  .nights-title{font-size:11px;font-weight:800;letter-spacing:.05em;color:var(--muted-2)}
+  .nights-list{display:flex;flex-direction:column;gap:9px;margin-top:11px}
+  .nights-list span{position:relative;padding-left:14px;font-size:13.5px;font-weight:500;color:#CFDAEA;line-height:1.45}
+  .nights-list span::before{content:"";position:absolute;left:1px;top:8px;width:5px;height:5px;border-radius:50%;background:rgba(245,185,85,.72)}
+  .spacer{flex:1 1 auto;min-height:10px}
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;min-height:58px;padding:0 20px;
+    border-radius:16px;
+    font-size:16px;font-weight:700;letter-spacing:-0.01em;
+    transition:transform .16s ease, filter .16s ease, background .16s ease;
+  }
+  .btn:active{transform:scale(.985);filter:brightness(.96)}
+  .btn--primary{
+    background:linear-gradient(180deg,#FFCE7C 0%,#F2AE45 100%);
+    color:#221502;
+    box-shadow:0 12px 28px -12px rgba(245,185,85,.85), inset 0 1px 0 rgba(255,255,255,.45);
+  }
+  .btn--ghost{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.16);
+    color:#EDF2FA;
+  }
+  .btn--text{
+    min-height:46px;font-size:13.5px;font-weight:600;color:var(--muted);
+  }
+  .note{margin:14px 0 0;font-size:11.5px;line-height:1.6;color:var(--muted-2);text-align:center}
+
+  /* ---------- footer ---------- */
+  .foot{
+    margin-top:26px;padding-top:16px;
+    border-top:1px solid rgba(255,255,255,.07);
+    text-align:center;flex:0 0 auto;
+  }
+  .foot-brand{font-size:11.5px;font-weight:700;color:#BCC9DE;letter-spacing:.01em}
+  .foot-links{margin-top:7px;font-size:11.5px;color:var(--muted-2)}
+  .foot-links a{color:#A9B8D0;text-decoration:none;border-bottom:1px solid rgba(169,184,208,.3);padding-bottom:1px}
+  .foot-links .sep{margin:0 6px;opacity:.5}
+
+  /* ---------- quiz ---------- */
+  .qhead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .qcount{font-size:12.5px;font-weight:700;letter-spacing:.04em;color:var(--gold)}
+  .qcount b{color:#FFF;font-size:14px}
+  .qtag{font-size:11px;font-weight:600;color:var(--muted-2);letter-spacing:.02em}
+  .track{margin-top:9px;height:5px;border-radius:999px;background:rgba(255,255,255,.09);overflow:hidden}
+  .track i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#F2AE45,#FFD68B);transition:width .45s cubic-bezier(.22,.8,.2,1)}
+  .qbody{margin-top:26px;transition:opacity .17s ease, transform .17s ease}
+  .qbody.is-out{opacity:0;transform:translateY(-8px)}
+  .qbody.is-in{animation:qin .24s ease both}
+  @keyframes qin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .qnum{font-size:12px;font-weight:800;letter-spacing:.12em;color:var(--muted-2)}
+  .q{
+    margin:8px 0 0;
+    font-size:clamp(20px,5.5vw,23px);
+    line-height:1.42;font-weight:800;letter-spacing:-0.03em;
+  }
+  .opts{display:flex;flex-direction:column;gap:10px;margin-top:22px}
+  .opt{
+    display:flex;align-items:center;gap:12px;
+    width:100%;min-height:62px;padding:14px 16px;
+    text-align:left;
+    border-radius:15px;
+    background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.035));
+    border:1px solid rgba(255,255,255,.11);
+    transition:transform .14s ease, background .16s ease, border-color .16s ease;
+  }
+  .opt:active{transform:scale(.98);background:rgba(245,185,85,.14);border-color:rgba(245,185,85,.5)}
+  .opt-num{
+    flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+    width:23px;height:23px;border-radius:50%;
+    font-size:11.5px;font-weight:800;color:#E8B45A;
+    background:rgba(245,185,85,.13);border:1px solid rgba(245,185,85,.28);
+  }
+  .opt-text{font-size:15px;font-weight:600;line-height:1.42;letter-spacing:-0.015em;color:#EAF0F9}
+  .qhint{margin:0 0 6px;font-size:11.5px;font-weight:500;color:var(--muted-2);text-align:center}
+  .back{
+    align-self:flex-start;margin-top:14px;padding:10px 4px;
+    font-size:13px;font-weight:600;color:var(--muted-2);
+  }
+  .back[hidden]{display:none}
+
+  /* ---------- result ---------- */
+  .res-eyebrow{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;letter-spacing:.05em;color:var(--muted)}
+  .res-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+  .badge{
+    margin-top:14px;padding:22px 20px 20px;border-radius:24px;
+    background:
+      radial-gradient(120% 100% at 50% -20%, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 60%),
+      linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 24px 60px -34px var(--accent), inset 0 1px 0 rgba(255,255,255,.08);
+    text-align:center;
+  }
+  .badge-emoji{font-size:40px;line-height:1;filter:drop-shadow(0 6px 18px rgba(0,0,0,.5))}
+  .badge-pct{
+    margin-top:6px;display:flex;align-items:flex-end;justify-content:center;gap:2px;
+    font-size:64px;font-weight:900;letter-spacing:-0.05em;line-height:1;
+    color:var(--accent);
+  }
+  .badge-pct b{font-size:64px;font-weight:900;letter-spacing:-0.05em;line-height:1}
+  .badge-pct .unit{font-size:26px;font-weight:800;padding-bottom:7px;letter-spacing:-0.02em;color:var(--accent)}
+  .batt{position:relative;height:30px;margin:16px 2px 0;padding:4px;border-radius:10px;border:2px solid rgba(255,255,255,.16)}
+  .batt::after{
+    content:"";position:absolute;right:-7px;top:50%;transform:translateY(-50%);
+    width:5px;height:12px;border-radius:0 3px 3px 0;background:rgba(255,255,255,.22);
+  }
+  .batt i{
+    display:block;height:100%;width:0;border-radius:6px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    box-shadow:0 0 20px -3px var(--accent);
+    transition:width 1.15s cubic-bezier(.22,.8,.2,1);
+  }
+  .badge-name{margin-top:16px;font-size:21px;font-weight:800;letter-spacing:-0.03em;line-height:1.35}
+  .punch{
+    margin:16px 0 0;font-size:14.5px;line-height:1.6;color:#DCE5F3;font-weight:600;
+    text-align:center;padding:0 4px;
+  }
+  .rx{
+    margin-top:12px;padding:18px 18px 6px;border-radius:20px;
+    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);
+  }
+  .rx-title{font-size:12.5px;font-weight:800;letter-spacing:.03em;color:var(--accent)}
+  .rx ul{margin:10px 0 0;padding:0;list-style:none}
+  .rx li{
+    position:relative;padding:0 0 0 16px;margin-bottom:12px;
+    font-size:14px;line-height:1.68;color:#D8E1EF;font-weight:500;
+  }
+  .rx li::before{
+    content:"";position:absolute;left:2px;top:9px;
+    width:5px;height:5px;border-radius:50%;background:var(--accent);opacity:.85;
+  }
+  .quote{
+    margin-top:12px;padding:18px;border-radius:20px;
+    background:linear-gradient(160deg,rgba(245,185,85,.14),rgba(245,185,85,.04));
+    border:1px solid rgba(245,185,85,.24);
+  }
+  .quote-label{font-size:11px;font-weight:800;letter-spacing:.06em;color:#E9C07B}
+  .quote p{
+    margin:8px 0 0;font-size:16px;line-height:1.62;font-weight:700;letter-spacing:-0.02em;color:#FFF6E6;
+  }
+  .actions{margin-top:18px;display:flex;flex-direction:column;gap:9px}
+  .reveal{animation:up .42s cubic-bezier(.2,.7,.25,1) both}
+  @keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  /* ---------- toast & sheet ---------- */
+  .toast{
+    position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));
+    transform:translate(-50%,14px);
+    max-width:min(90vw,420px);
+    padding:13px 20px;border-radius:999px;
+    background:#FFE7B8;color:#231604;
+    font-size:13.5px;font-weight:700;text-align:center;line-height:1.4;
+    opacity:0;pointer-events:none;z-index:80;
+    transition:opacity .25s ease, transform .25s ease;
+    box-shadow:0 16px 40px -16px rgba(0,0,0,.9);
+  }
+  .toast.is-on{opacity:1;transform:translate(-50%,0)}
+  .sheet{
+    position:fixed;inset:0;z-index:90;display:none;
+    background:rgba(4,8,16,.9);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    padding:18px;overflow-y:auto;
+  }
+  .sheet.is-open{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+  .sheet img{width:100%;max-width:330px;height:auto;border-radius:18px;box-shadow:0 24px 60px -18px #000;display:block}
+  .sheet-tip{font-size:12.5px;color:#D5DEEC;text-align:center;line-height:1.6;max-width:330px}
+  .sheet-close{
+    margin-top:2px;padding:12px 26px;border-radius:999px;
+    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+    font-size:14px;font-weight:700;color:#F2F5FA;
+  }
+  @media (max-height:700px){
+    h1.title{font-size:28px}
+    .hero{margin-top:18px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ================= INTRO ================= -->
+  <section class="screen is-active" id="sIntro">
+    <div class="eyebrow"><span class="dot"></span>밤 11시 자가 체크</div>
+    <h1 class="title">퇴근 후<br><em>내 멘탈 배터리</em> 테스트</h1>
+    <p class="sub">1분 만에 확인하는 오늘 밤 내 영혼 잔량</p>
+
+    <div class="hero">
+      <div class="hero-top"><b>TODAY&nbsp;·&nbsp;영혼 잔량</b><b style="color:#F5B955">측정 전</b></div>
+      <div class="hero-batt" aria-hidden="true"><i></i></div>
+      <div class="hero-label">오늘 하루, 당신의 배터리는 몇 % 남았을까요?</div>
+    </div>
+
+    <div class="meta">
+      <span>6문항</span><span>약 1분</span><span>결과 카드 저장</span>
+    </div>
+
+    <div class="nights">
+      <div class="nights-title">이런 밤에 잘 어울립니다</div>
+      <div class="nights-list">
+        <span>퇴근하고 아무 말도 하기 싫은 밤</span>
+        <span>이불 속에서 이직을 고민하는 밤</span>
+        <span>나를 한 번쯤 위로해주고 싶은 밤</span>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <button class="btn btn--primary" id="startBtn" type="button" style="margin-top:22px">테스트 시작하기<span aria-hidden="true">→</span></button>
+    <p class="note">진단이 아니라, 오늘의 나를 가볍게 들여다보는 체크입니다.<br>정답은 없으니 지금 끌리는 쪽으로 눌러주세요.</p>
+  </section>
+
+  <!-- ================= QUIZ ================= -->
+  <section class="screen" id="sQuiz">
+    <div class="qhead">
+      <div class="qcount"><b id="qCount">1</b> / 6</div>
+      <div class="qtag">오늘 밤의 나</div>
+    </div>
+    <div class="track" aria-hidden="true"><i id="barFill"></i></div>
+
+    <div class="qbody" id="qBody">
+      <div class="qnum" id="qNum">Q1</div>
+      <h2 class="q" id="qText"></h2>
+      <div class="opts" id="opts" role="group" aria-label="선택지"></div>
+    </div>
+
+    <div class="spacer"></div>
+    <p class="qhint">정답은 없습니다. 지금 끌리는 쪽으로 눌러주세요.</p>
+    <button class="back" id="backBtn" type="button" hidden>← 이전 문항</button>
+  </section>
+
+  <!-- ================= RESULT ================= -->
+  <section class="screen" id="sResult">
+    <div class="res-eyebrow"><span class="dot"></span>오늘 밤의 영혼 잔량</div>
+
+    <div class="badge">
+      <div class="badge-emoji" id="resEmoji">🌙</div>
+      <div class="badge-pct"><b id="resPct">0</b><span class="unit">%</span></div>
+      <div class="batt" aria-hidden="true"><i id="battFill"></i></div>
+      <div class="badge-name" id="resName"></div>
+    </div>
+
+    <p class="punch" id="resPunch"></p>
+
+    <div class="rx">
+      <div class="rx-title">🩹 오늘 밤의 처방전</div>
+      <ul id="resRx"></ul>
+    </div>
+
+    <div class="quote">
+      <div class="quote-label">오늘 밤 나에게 어울리는 한 마디</div>
+      <p id="resQuote"></p>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn--primary" id="saveBtn" type="button">📸 결과 카드 이미지 저장</button>
+      <button class="btn btn--ghost" id="copyBtn" type="button">🔗 테스트 링크 복사</button>
+      <button class="btn btn--text" id="retryBtn" type="button">🔄 다시 테스트하기</button>
+    </div>
+    <p class="note">결과 카드를 저장해 스레드에 올리면, 오늘 밤 같은 배터리로 버티는 사람들이 댓글에 모입니다.</p>
+  </section>
+
+  <footer class="foot">
+    <div class="foot-brand">교육 아티스트 정진영 · 소통/힐링 강연</div>
+    <div class="foot-links">
+      <a href="https://jungjinyoung3512.github.io/jungjinyoung3512/" target="_blank" rel="noopener">공식 홈페이지 보기</a>
+      <span class="sep">·</span>
+      <a href="https://www.threads.com/@_j_jin0" target="_blank" rel="noopener">스레드 @_j_jin0</a>
+    </div>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="결과 카드 미리보기">
+  <img id="sheetImg" alt="내 멘탈 배터리 결과 카드">
+  <div class="sheet-tip">이미지가 자동으로 저장되지 않으면,<br>위 사진을 길게 눌러 <b>‘사진에 추가’</b>를 선택해 주세요.</div>
+  <button class="sheet-close" id="sheetClose" type="button">닫기</button>
+</div>
+
+<noscript>
+  <p style="padding:20px;text-align:center;color:#ddd">이 테스트는 자바스크립트가 필요합니다.</p>
+</noscript>
+
+<script>
+(function(){
+  'use strict';
+
+  var SHARE_URL = 'https://jungjinyoung3512.github.io/jungjinyoung3512/mental-test/';
+
+  /* ---------------- 결과 유형 ---------------- */
+  var TYPES = {
+    A: {
+      key:'A', emoji:'🔋', pct:3,
+      name:'겉바속촉 웃음가면형',
+      punch:'남들 앞에선 프로 사회인, 집 오자마자 전원 OFF',
+      color:'#FF6F61', color2:'#FFA48C',
+      rx:[
+        '오늘은 “괜찮아요”를 한 번만 덜 말해도 됩니다. 웃는 얼굴이 직업인 사람일수록 집에서는 무표정할 권리가 있어요.',
+        '가면을 벗는다고 당신이 사라지지는 않습니다. 오늘 웃음이 진짜였던 순간 하나만 떠올려 보세요.',
+        '씻고 눕기 전 3분, 오늘 나를 웃게 한 일 하나를 적어두면 배터리가 조금 돌아옵니다.'
+      ],
+      quote:'웃는 얼굴도 근육입니다. 오늘 밤만큼은 아무에게도 웃어주지 않아도 됩니다.'
+    },
+    B: {
+      key:'B', emoji:'🪫', pct:12,
+      name:'밤 11시 사직서 장인형',
+      punch:'이불 속에서만 이직 3번 한 영혼',
+      color:'#8B7CF6', color2:'#B0A5FF',
+      rx:[
+        '새벽에 쓰는 사직서는 결론이 아니라 피로가 쓴 글입니다. 오늘 밤의 결정은 내일 아침의 나에게 넘겨도 늦지 않아요.',
+        '그래도 그 마음은 진짜 신호입니다. “버티게 해주는 것 하나”와 “더는 못 견디겠는 것 하나”를 메모해 두세요.',
+        '이번 주 안에 30분만 조용히 이력서를 열어보세요. 결정이 아니라 준비만 해도 숨이 조금 트입니다.'
+      ],
+      quote:'사직서는 새벽이 아니라 아침에 씁니다. 오늘은 그냥 주무세요.'
+    },
+    C: {
+      key:'C', emoji:'⚡', pct:47,
+      name:'눈치 9단 감정스펀지형',
+      punch:'남 기분 다 챙기다 정작 내 마음은 뒷전',
+      color:'#F5B955', color2:'#FFD89A',
+      rx:[
+        '당신의 안테나는 남의 감정을 잘 읽는 대신, 남의 감정을 내 것으로 저장합니다. 오늘 밤만큼은 그 안테나를 잠깐 꺼두세요.',
+        '“저 사람 기분이 안 좋다”는 사실과 “내가 뭔가 잘못했다”는 추측은 다릅니다. 둘을 구분하는 것만으로 절반은 회복됩니다.',
+        '누군가에게 “오늘 나 좀 힘들었어”를 한 번 꺼내보세요. 받는 것에만 익숙한 사람은 주는 법을 잊기 쉬우니까요.'
+      ],
+      quote:'모두의 기분을 챙기다 지친 밤, 내 기분도 챙겨줄 사람은 나뿐입니다.'
+    },
+    D: {
+      key:'D', emoji:'🌙', pct:19,
+      name:'아무것도 안 하기 마스터형',
+      punch:'오늘만큼은 생산성 0점을 허락합니다',
+      color:'#7FA6FF', color2:'#A9C4FF',
+      rx:[
+        '아무것도 안 했는데 하루가 갔다는 죄책감은, 제대로 쉬는 법을 배우지 못한 사람의 습관입니다. 오늘의 0점은 벌점이 아니라 회복입니다.',
+        '다만 “아무것도 안 하기”와 “아무것도 못 하기”는 다릅니다. 내일 아주 작은 하나(설거지 하나, 산책 10분)를 정해두면 마음이 가벼워집니다.',
+        '불 끄고 10분만 화면 없이 누워보세요. 오늘의 가장 생산적인 일이 됩니다.'
+      ],
+      quote:'쉬는 것도 실력입니다. 아무 성과 없이 끝나는 밤도 잘 보낸 밤입니다.'
+    },
+    E: {
+      key:'E', emoji:'🔥', pct:78,
+      name:'딴짓으로 버티는 야행성 치타형',
+      punch:'피곤한데 억울해서 잠은 못 자겠는 타입',
+      color:'#FF8A3D', color2:'#FFB877',
+      rx:[
+        '당신의 밤은 잠이 아니라 “빼앗긴 내 시간을 되찾는 시간”입니다. 그 마음은 정상이고, 사실 꽤 건강한 저항입니다.',
+        '다만 보상이 새벽 2시까지 이어지면 내일의 나에게 빚을 지게 됩니다. 딴짓은 “딱 하나만” 정해두고 시작하세요.',
+        '잠들기 30분 전, 화면 대신 좋아하는 노래 세 곡. 그것만으로도 내일 배터리는 10% 이상 달라집니다.'
+      ],
+      quote:'내 시간을 되찾는 가장 확실한 방법은, 오늘 밤 일찍 자서 내일을 조금 더 길게 갖는 것입니다.'
+    },
+    F: {
+      key:'F', emoji:'🍀', pct:64,
+      name:'소소한 행복 수집가형',
+      punch:'작은 간식 하나에도 금방 회복되는 단단한 멘탈',
+      color:'#6FCF97', color2:'#A4E7C1',
+      rx:[
+        '당신은 큰 사건보다 작은 온기로 회복하는 타입입니다. 그건 약함이 아니라 아주 효율 좋은 회복력입니다.',
+        '다만 “이 정도면 괜찮다”는 익숙함이, 가끔 진짜 원하는 것을 미루게 만들기도 합니다. 오늘 하나는 욕심내도 좋습니다.',
+        '오늘 수집한 행복 하나를 적어두세요. 힘든 날 그 목록이 당신을 다시 일으켜 줍니다.'
+      ],
+      quote:'작은 행복을 하나 더 모으는 일, 그게 어른의 가장 조용한 승리입니다.'
+    }
+  };
+  var TYPE_ORDER = ['A','B','C','D','E','F'];
+
+  /* ---------------- 6문항 ---------------- */
+  var QUESTIONS = [
+    {
+      q:'퇴근하고 현관문 닫자마자 제일 먼저 하는 행동은?',
+      opts:[
+        {t:'A', text:'가족에게도 강아지에게도 제일 밝은 목소리로 “나 왔어~!”'},
+        {t:'B', text:'“오늘도 버텼다” 하고 폰 켜서 채용 공고 알림부터 확인'},
+        {t:'D', text:'신발 반쯤 벗다 말고 그 자리에서 30초 정지. 아무 생각 안 남'},
+        {t:'F', text:'냉장고 문 열어서 오늘의 간식부터 확인 (이게 행복)'}
+      ]
+    },
+    {
+      q:'밤 10시, 업무 톡 알림이 울렸을 때 내 머릿속 첫 마디는?',
+      opts:[
+        {t:'B', text:'“사직서 3번째 문단…” 이라는 문장이 자동으로 완성된다'},
+        {t:'A', text:'일단 웃는 이모지 붙여서 답장. 속은 이미 다 지쳐 있는데 손이 먼저 움직인다'},
+        {t:'C', text:'혹시 내가 뭘 잘못했나. 답장 문장을 세 번 고쳐 쓴다'},
+        {t:'E', text:'알림은 끄고 다른 영상부터 튼다. 그런데 자꾸 신경 쓰인다'}
+      ]
+    },
+    {
+      q:'오늘 하루 중 제일 기 빨렸던 순간은?',
+      opts:[
+        {t:'C', text:'옆자리 동료 표정이 안 좋아서, 내 일도 아닌데 하루 종일 마음이 무거웠다'},
+        {t:'A', text:'회의가 싸해질 때 내가 웃으면서 분위기 살렸던 그 3초'},
+        {t:'D', text:'할 일은 산더미인데 오후 2시에 멍하니 창밖만 봤다'},
+        {t:'E', text:'업무 자료 검색하다가 40분 뒤에 전혀 다른 걸 보고 있었다'}
+      ]
+    },
+    {
+      q:'아무것도 안 하고 멍때릴 때 머릿속에 떠오르는 생각은?',
+      opts:[
+        {t:'B', text:'이 회사에 5년 뒤에도 내가 있을까'},
+        {t:'D', text:'아무 생각 없음. 그리고 그게 제일 편함'},
+        {t:'E', text:'오늘 밤엔 뭐 하면서 놀지 (피곤한데 잠은 아까움)'},
+        {t:'F', text:'저 커피 한 잔, 저 노래 한 곡. 그거면 되는 거 아닌가'}
+      ]
+    },
+    {
+      q:'내일 아침 출근길, 나를 버티게 해주는 유일한 힘은?',
+      opts:[
+        {t:'A', text:'“오늘도 좋은 하루 되세요”를 제일 밝게 건네는 나의 프로 의식'},
+        {t:'C', text:'나를 반겨줄 사람의 얼굴 (그 한 명이면 충분)'},
+        {t:'E', text:'퇴근 후의 내 시간 — 그거 하나 보고 산다'},
+        {t:'F', text:'출근길 편의점 신상, 그리고 창가 자리'}
+      ]
+    },
+    {
+      q:'지금 당장 내 영혼에 필요한 긴급 처방전은?',
+      opts:[
+        {t:'B', text:'메모장에 사직서를 한 번 더 쓰고, 저장하지 않고 지운다'},
+        {t:'C', text:'나를 못 챙긴 나에게 “고생했다”고 말해주는 5분'},
+        {t:'D', text:'아무것도 안 하기 30분 — 알람 끄고 그냥 누워만 있기'},
+        {t:'F', text:'따뜻한 물 한 잔, 좋아하는 과자 하나, 좋아하는 노래 한 곡'}
+      ]
+    }
+  ];
+
+  /* ---------------- 상태 ---------------- */
+  var state = { idx:0, answers:[], result:null, animating:false, toastTimer:null };
+
+  var $ = function(id){ return document.getElementById(id); };
+  var sIntro = $('sIntro'), sQuiz = $('sQuiz'), sResult = $('sResult');
+  var qBody = $('qBody'), optsEl = $('opts'), qText = $('qText'), qNum = $('qNum');
+  var qCount = $('qCount'), barFill = $('barFill'), backBtn = $('backBtn');
+  var resEmoji = $('resEmoji'), resPct = $('resPct'), resName = $('resName');
+  var resPunch = $('resPunch'), resRx = $('resRx'), resQuote = $('resQuote'), battFill = $('battFill');
+  var toastEl = $('toast'), sheet = $('sheet'), sheetImg = $('sheetImg');
+
+  /* ---------------- 화면 전환 ---------------- */
+  function showScreen(el){
+    [sIntro, sQuiz, sResult].forEach(function(s){ s.classList.toggle('is-active', s === el); });
+    window.scrollTo(0, 0);
+  }
+
+  /* ---------------- 퀴즈 ---------------- */
+  function renderQuestion(i){
+    var item = QUESTIONS[i];
+    state.idx = i;
+    qCount.textContent = String(i + 1);
+    qNum.textContent = 'Q' + (i + 1);
+    qText.textContent = item.q;
+    barFill.style.width = ((i + 1) / QUESTIONS.length * 100).toFixed(2) + '%';
+
+    optsEl.textContent = '';
+    item.opts.forEach(function(o, n){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'opt';
+      b.setAttribute('aria-label', (n + 1) + '번 선택지. ' + o.text);
+
+      var num = document.createElement('span');
+      num.className = 'opt-num';
+      num.textContent = String(n + 1);
+
+      var txt = document.createElement('span');
+      txt.className = 'opt-text';
+      txt.textContent = o.text;
+
+      b.appendChild(num);
+      b.appendChild(txt);
+      b.addEventListener('click', function(){ choose(i, o.t); });
+      optsEl.appendChild(b);
+    });
+
+    backBtn.hidden = (i === 0);
+  }
+
+  function goTo(i){
+    if (state.animating) return;
+    state.animating = true;
+    qBody.classList.add('is-out');
+    window.setTimeout(function(){
+      renderQuestion(i);
+      qBody.classList.remove('is-out');
+      qBody.classList.add('is-in');
+      state.animating = false;
+      window.setTimeout(function(){
+        qBody.classList.remove('is-in');
+      }, 250);
+    }, 170);
+  }
+
+  function choose(i, type){
+    if (state.animating) return;
+    state.answers[i] = type;
+    if (i < QUESTIONS.length - 1) {
+      goTo(i + 1);
+    } else {
+      showResult();
+    }
+  }
+
+  /* ---------------- 결과 계산 ---------------- */
+  function computeResult(){
+    var score = { A:0, B:0, C:0, D:0, E:0, F:0 };
+    state.answers.forEach(function(t){ if (t && score[t] !== undefined) score[t] += 1; });
+
+    var best = null, bestScore = -1;
+    // 동점일 때는 마지막에 고른 유형을 우선 (지금의 나에 가깝게)
+    var lastType = state.answers[state.answers.length - 1];
+    TYPE_ORDER.forEach(function(k){
+      if (score[k] > bestScore) { bestScore = score[k]; best = k; }
+    });
+    if (lastType && score[lastType] === bestScore) best = lastType;
+    return TYPES[best] || TYPES.C;
+  }
+
+  function showResult(){
+    var t = computeResult();
+    state.result = t;
+
+    sResult.style.setProperty('--accent', t.color);
+    sResult.style.setProperty('--accent2', t.color2);
+
+    resEmoji.textContent = t.emoji;
+    resPct.textContent = String(t.pct);
+    resName.textContent = t.name;
+    resPunch.textContent = t.punch;
+    resQuote.textContent = t.quote;
+
+    resRx.textContent = '';
+    t.rx.forEach(function(line){
+      var li = document.createElement('li');
+      li.textContent = line;
+      resRx.appendChild(li);
+    });
+
+    battFill.style.width = '0%';
+    showScreen(sResult);
+
+    [sResult.querySelector('.badge'), sResult.querySelector('.rx'), sResult.querySelector('.quote')].forEach(function(el, n){
+      if (!el) return;
+      el.classList.remove('reveal');
+      void el.offsetWidth;
+      el.style.animationDelay = (n * 0.08) + 's';
+      el.classList.add('reveal');
+    });
+
+    window.setTimeout(function(){
+      battFill.style.width = Math.max(t.pct, 2) + '%';
+    }, 220);
+  }
+
+  /* ---------------- 토스트 ---------------- */
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('is-on');
+    if (state.toastTimer) window.clearTimeout(state.toastTimer);
+    state.toastTimer = window.setTimeout(function(){
+      toastEl.classList.remove('is-on');
+    }, 2600);
+  }
+
+  /* ---------------- 결과 카드 (Canvas) ---------------- */
+  var CARD_W = 1080, CARD_H = 1350;
+  var FONT = '"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif';
+  var EMOJI_FONT = '"Apple Color Emoji","Noto Color Emoji","Segoe UI Emoji",sans-serif';
+
+  function hexA(hex, a){
+    var h = hex.replace('#', '');
+    if (h.length === 3) h = h.charAt(0) + h.charAt(0) + h.charAt(1) + h.charAt(1) + h.charAt(2) + h.charAt(2);
+    var n = parseInt(h, 16);
+    var r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+  }
+
+  function roundRect(ctx, x, y, w, h, r){
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function wrapLines(ctx, text, maxW){
+    var words = String(text).split(' ');
+    var lines = [], cur = '';
+    for (var i = 0; i < words.length; i++) {
+      var test = cur ? cur + ' ' + words[i] : words[i];
+      if (ctx.measureText(test).width > maxW && cur) {
+        lines.push(cur);
+        cur = words[i];
+      } else {
+        cur = test;
+      }
+    }
+    if (cur) lines.push(cur);
+    return lines;
+  }
+
+  function drawCard(t){
+    var canvas = document.createElement('canvas');
+    canvas.width = CARD_W;
+    canvas.height = CARD_H;
+    var ctx = canvas.getContext('2d');
+    var cx = CARD_W / 2;
+
+    // 배경
+    var g = ctx.createLinearGradient(0, 0, 0, CARD_H);
+    g.addColorStop(0, '#0B1526');
+    g.addColorStop(0.5, '#0C1830');
+    g.addColorStop(1, '#070E1C');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, CARD_W, CARD_H);
+
+    var rg = ctx.createRadialGradient(cx, 40, 20, cx, 40, 780);
+    rg.addColorStop(0, hexA(t.color, 0.30));
+    rg.addColorStop(0.55, hexA(t.color, 0.07));
+    rg.addColorStop(1, hexA(t.color, 0));
+    ctx.fillStyle = rg;
+    ctx.fillRect(0, 0, CARD_W, CARD_H);
+
+    // 프레임
+    roundRect(ctx, 44, 44, CARD_W - 88, CARD_H - 88, 46);
+    ctx.strokeStyle = 'rgba(255,255,255,0.10)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.textAlign = 'center';
+
+    // 상단 라벨
+    ctx.textBaseline = 'alphabetic';
+    ctx.font = '600 29px ' + FONT;
+    ctx.fillStyle = 'rgba(203,216,238,0.66)';
+    ctx.fillText('🌙  퇴근 후 내 멘탈 배터리 테스트', cx, 150);
+
+    // 이모지
+    ctx.font = '124px ' + EMOJI_FONT;
+    ctx.textBaseline = 'middle';
+    ctx.fillText(t.emoji, cx, 262);
+    ctx.textBaseline = 'alphabetic';
+
+    // 퍼센트
+    ctx.font = '900 168px ' + FONT;
+    ctx.fillStyle = '#FBF6EA';
+    ctx.fillText(String(t.pct), cx - 30, 470);
+    ctx.font = '800 74px ' + FONT;
+    ctx.fillStyle = hexA(t.color, 0.95);
+    ctx.fillText('%', cx + 104, 464);
+
+    // 배터리 게이지
+    var bx = 190, by = 516, bw = 700, bh = 44;
+    roundRect(ctx, bx, by, bw, bh, 14);
+    ctx.fillStyle = 'rgba(255,255,255,0.06)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.20)';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+    var fillW = Math.max((bw - 12) * (t.pct / 100), 16);
+    roundRect(ctx, bx + 6, by + 6, fillW, bh - 12, 9);
+    var fg = ctx.createLinearGradient(bx, 0, bx + bw, 0);
+    fg.addColorStop(0, t.color);
+    fg.addColorStop(1, t.color2);
+    ctx.fillStyle = fg;
+    ctx.fill();
+    // 배터리 머리
+    roundRect(ctx, bx + bw + 6, by + bh / 2 - 11, 7, 22, 3);
+    ctx.fillStyle = 'rgba(255,255,255,0.24)';
+    ctx.fill();
+
+    // 유형명
+    ctx.font = '800 56px ' + FONT;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillText(t.name, cx, 640);
+
+    // 구분선
+    ctx.strokeStyle = 'rgba(255,255,255,0.10)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(300, 690);
+    ctx.lineTo(780, 690);
+    ctx.stroke();
+
+    // 팩폭
+    ctx.font = '600 34px ' + FONT;
+    ctx.fillStyle = 'rgba(214,225,242,0.92)';
+    var punchLines = wrapLines(ctx, t.punch, 800);
+    var py = 752;
+    punchLines.forEach(function(line){
+      ctx.fillText(line, cx, py);
+      py += 48;
+    });
+
+    // 한 마디 박스
+    ctx.font = '700 38px ' + FONT;
+    var quoteLines = wrapLines(ctx, '“' + t.quote + '”', 780).slice(0, 3);
+    var qx = 96, qy = py + 34, qw = 888;
+    var qh = 118 + (quoteLines.length * 56);
+    var qBottomLimit = 1150;
+    if (qy + qh > qBottomLimit) { qh = qBottomLimit - qy; }
+    else { qy = Math.round(qy + (qBottomLimit - (qy + qh)) / 2); }
+    roundRect(ctx, qx, qy, qw, qh, 30);
+    ctx.fillStyle = 'rgba(245,185,85,0.10)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(245,185,85,0.28)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.font = '700 24px ' + FONT;
+    ctx.fillStyle = 'rgba(245,196,120,0.95)';
+    ctx.fillText('오늘 밤 나에게 어울리는 한 마디', cx, qy + 62);
+
+    ctx.font = '700 38px ' + FONT;
+    ctx.fillStyle = '#FFF4E2';
+    var qly = qy + 150;
+    quoteLines.forEach(function(line){
+      ctx.fillText(line, cx, qly);
+      qly += 56;
+    });
+
+    // 푸터
+    ctx.font = '700 28px ' + FONT;
+    ctx.fillStyle = 'rgba(226,235,248,0.92)';
+    ctx.fillText('교육 아티스트 정진영 · 소통/힐링 강연', cx, 1214);
+
+    ctx.font = '500 23px ' + FONT;
+    ctx.fillStyle = 'rgba(154,169,194,0.9)';
+    ctx.fillText('jungjinyoung3512.github.io/jungjinyoung3512/mental-test/', cx, 1258);
+    ctx.fillStyle = 'rgba(245,185,85,0.9)';
+    ctx.fillText('스레드  @_j_jin0', cx, 1296);
+
+    return canvas.toDataURL('image/png');
+  }
+
+  /* ---------------- 버튼 동작 ---------------- */
+  function saveCard(){
+    if (!state.result) return;
+    var url;
+    try {
+      url = drawCard(state.result);
+    } catch (e) {
+      toast('이미지를 만들지 못했어요. 잠시 후 다시 눌러주세요.');
+      return;
+    }
+    sheetImg.src = url;
+    try {
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = '멘탈배터리_' + state.result.pct + '퍼센트.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (e2) { /* 저장 실패 시 아래 미리보기에서 길게 눌러 저장 */ }
+    sheet.classList.add('is-open');
+  }
+
+  function copyLink(){
+    var done = function(){ toast('링크 복사 완료! 스레드에 공유해보세요'); };
+    var fallback = function(){
+      var ta = document.createElement('textarea');
+      ta.value = SHARE_URL;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '-1000px';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, SHARE_URL.length);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      if (ok) { done(); } else { toast('복사가 안 되면 이 주소를 붙여넣어 주세요: ' + SHARE_URL); }
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(SHARE_URL).then(done, fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  function restart(){
+    state.idx = 0;
+    state.answers = [];
+    state.result = null;
+    battFill.style.width = '0%';
+    showScreen(sQuiz);
+    renderQuestion(0);
+    qBody.classList.remove('is-out', 'is-in');
+  }
+
+  /* ---------------- 이벤트 ---------------- */
+  $('startBtn').addEventListener('click', function(){
+    state.idx = 0;
+    state.answers = [];
+    showScreen(sQuiz);
+    renderQuestion(0);
+  });
+
+  backBtn.addEventListener('click', function(){
+    var i = state.idx;
+    if (i > 0) {
+      state.answers[i - 1] = undefined;
+      goTo(i - 1);
+    }
+  });
+
+  $('saveBtn').addEventListener('click', saveCard);
+  $('copyBtn').addEventListener('click', copyLink);
+  $('retryBtn').addEventListener('click', restart);
+  $('sheetClose').addEventListener('click', function(){ sheet.classList.remove('is-open'); });
+  sheet.addEventListener('click', function(e){ if (e.target === sheet) sheet.classList.remove('is-open'); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') sheet.classList.remove('is-open'); });
+})();
+</script>
+</body>
+</html>
