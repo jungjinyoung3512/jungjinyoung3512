@@ -57,8 +57,52 @@
             color: #F8F5F0;
             overflow-x: hidden;
         }
+        /* 히어로: 사장님 세로 인물 사진 구도 */
+        .hero-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: 50% 6%;
+            background-color: #141210;
+        }
         .hero-overlay {
-            background: linear-gradient(to bottom, rgba(20, 18, 16, 0.55) 0%, rgba(20, 18, 16, 0.85) 75%, #141210 100%);
+            background:
+                linear-gradient(to bottom,
+                    rgba(20, 18, 16, 0.58) 0%,
+                    rgba(20, 18, 16, 0.42) 26%,
+                    rgba(20, 18, 16, 0.80) 52%,
+                    rgba(20, 18, 16, 0.94) 78%,
+                    #141210 100%);
+        }
+        /* PC(가로 화면): 세로 사진이 잘리지 않도록 우측에 원본 비율로 세우고 왼쪽은 어둡게 */
+        @media (min-width: 1280px) {
+            .hero-photo {
+                position: absolute;
+                top: 0;
+                right: 0;
+                left: auto;
+                width: auto;
+                max-width: none;
+                height: 100%;
+                object-fit: cover;
+                object-position: 50% 0%;
+                -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.55) 14%, #000 34%);
+                mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.55) 14%, #000 34%);
+            }
+            .hero-overlay {
+                background:
+                    linear-gradient(to right,
+                        rgba(20, 18, 16, 0.96) 0%,
+                        rgba(20, 18, 16, 0.90) 36%,
+                        rgba(20, 18, 16, 0.55) 54%,
+                        rgba(20, 18, 16, 0.10) 68%,
+                        rgba(20, 18, 16, 0) 80%),
+                    linear-gradient(to bottom,
+                        rgba(20, 18, 16, 0.35) 0%,
+                        rgba(20, 18, 16, 0) 20%,
+                        rgba(20, 18, 16, 0) 78%,
+                        rgba(20, 18, 16, 0.55) 100%);
+            }
         }
         .glass-nav {
             background: rgba(20, 18, 16, 0.85);
@@ -114,12 +158,12 @@
 
     <!-- 히어로 섹션 (메인 배너) -->
     <section class="relative min-h-[92vh] flex items-center pt-20 overflow-hidden">
-        <!-- 배경 이미지 (고품질 숯불 삼겹살/흑돼지 이미지 및 폴백) -->
+        <!-- 대문 배경 사진: 육가 서면본점 대표 -->
         <div class="absolute inset-0 z-0">
-            <img id="menu-img-5" src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1920&q=80" 
-                 onerror="this.src='https://placehold.co/1920x1080/1E1B18/D4AF37?text=Jirisan+Black+Pork'"
-                 alt="지리산 흑돼지 숯불구이" 
-                 class="w-full h-full object-cover object-center scale-105 animate-[pulse_20s_ease-in-out_infinite]">
+            <img id="menu-img-5" src="./hero.jpg"
+                 onerror="this.src='https://placehold.co/1920x1080/1E1B18/D4AF37?text=Yugga+Seomyeon'"
+                 alt="육가 서면본점 대표가 직접 고른 고기를 들고 있는 모습"
+                 class="hero-photo">
             <div class="absolute inset-0 hero-overlay"></div>
         </div>
 
@@ -333,94 +377,12 @@
             <!-- 대표 세트 배너 카드 -->
             <div class="mb-8 rounded-3xl overflow-hidden bg-gradient-to-r from-stone-900 via-brand-card to-stone-900 border border-amber-500/30 shadow-2xl grid grid-cols-1 lg:grid-cols-12">
                 <div class="lg:col-span-5 relative min-h-[280px] sm:min-h-[320px] bg-[#2C1E14] flex items-center justify-center overflow-hidden group">
-                    <!-- 업로드된 실제 사진 표시용 img (기본 숨김) -->
-                    <img id="menu-img-0" src="" alt="🎁흑돼지모듬600g" class="hidden w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-
-                    <!-- 기본 제공 사실적 원형 나무 도마 한상 SVG -->
-                    <div id="menu-svg-0" class="w-full h-full flex items-center justify-center p-4">
-                        <svg viewBox="0 0 400 340" class="w-full h-full max-w-[360px] drop-shadow-2xl transition-transform duration-500 group-hover:scale-105" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <radialGradient id="woodBoard" cx="50%" cy="45%" r="55%">
-                                    <stop offset="0%" stop-color="#D9A066"/>
-                                    <stop offset="70%" stop-color="#B87A3D"/>
-                                    <stop offset="92%" stop-color="#965D28"/>
-                                    <stop offset="100%" stop-color="#6E4017"/>
-                                </radialGradient>
-                                <linearGradient id="porkMeat" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#E56B6F"/>
-                                    <stop offset="50%" stop-color="#C84B50"/>
-                                    <stop offset="100%" stop-color="#A6343A"/>
-                                </linearGradient>
-                                <linearGradient id="porkFat" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" stop-color="#FFF5F5"/>
-                                    <stop offset="100%" stop-color="#F2D5D5"/>
-                                </linearGradient>
-                                <linearGradient id="cheeseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#FFF3B0"/>
-                                    <stop offset="100%" stop-color="#F4D35E"/>
-                                </linearGradient>
-                                <linearGradient id="mushroomStem" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stop-color="#F5EFE6"/>
-                                    <stop offset="60%" stop-color="#EAE0D5"/>
-                                    <stop offset="100%" stop-color="#C6AC8F"/>
-                                </linearGradient>
-                                <radialGradient id="scallopGrad" cx="40%" cy="40%" r="60%">
-                                    <stop offset="0%" stop-color="#FDF8F5"/>
-                                    <stop offset="75%" stop-color="#E6D7C8"/>
-                                    <stop offset="100%" stop-color="#C9B5A0"/>
-                                </radialGradient>
-                                <filter id="foodShadow" x="-15%" y="-15%" width="130%" height="130%">
-                                    <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#1A0F07" flood-opacity="0.55"/>
-                                </filter>
-                            </defs>
-                            <circle cx="200" cy="172" r="154" fill="url(#woodBoard)" stroke="#5C3411" stroke-width="4"/>
-                            <circle cx="200" cy="172" r="142" fill="none" stroke="#854E1E" stroke-width="2.5" opacity="0.75"/>
-                            <g filter="url(#foodShadow)">
-                                <rect x="148" y="42" width="48" height="42" rx="4" transform="rotate(-6 172 63)" fill="url(#cheeseGrad)" stroke="#E0B938" stroke-width="1.5"/>
-                                <rect x="202" y="44" width="48" height="42" rx="4" transform="rotate(4 226 65)" fill="url(#cheeseGrad)" stroke="#E0B938" stroke-width="1.5"/>
-                            </g>
-                            <g filter="url(#foodShadow)" transform="translate(88, 130) rotate(22)">
-                                <path d="M -14 -68 C -6 -76, 12 -74, 16 -62 L 22 48 C 22 58, -18 58, -18 48 Z" fill="url(#mushroomStem)"/>
-                                <ellipse cx="2" cy="54" rx="25" ry="12" fill="#8C6D53"/>
-                                <ellipse cx="2" cy="51" rx="22" ry="8" fill="#A6866A"/>
-                            </g>
-                            <g filter="url(#foodShadow)" transform="translate(310, 132) rotate(-22)">
-                                <path d="M -16 -62 C -12 -74, 6 -76, 14 -68 L 18 48 C 18 58, -22 58, -22 48 Z" fill="url(#mushroomStem)"/>
-                                <ellipse cx="-2" cy="54" rx="25" ry="12" fill="#8C6D53"/>
-                                <ellipse cx="-2" cy="51" rx="22" ry="8" fill="#A6866A"/>
-                            </g>
-                            <g filter="url(#foodShadow)">
-                                <path d="M 96 196 C 92 178, 130 172, 198 175 C 266 178, 304 176, 302 198 C 300 225, 268 242, 200 242 C 132 242, 100 222, 96 196 Z" fill="url(#porkMeat)" stroke="#8F282D" stroke-width="2"/>
-                                <path d="M 102 198 Q 155 186, 205 198 T 296 195" fill="none" stroke="url(#porkFat)" stroke-width="7" stroke-linecap="round" opacity="0.9"/>
-                                <path d="M 122 218 Q 185 210, 272 222" fill="none" stroke="url(#porkFat)" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
-                                <path d="M 255 182 Q 285 188, 294 212" fill="none" stroke="#FFF0F0" stroke-width="8" stroke-linecap="round" opacity="0.85"/>
-                            </g>
-                            <g filter="url(#foodShadow)">
-                                <path d="M 98 154 C 96 135, 138 128, 202 132 C 268 136, 302 140, 298 162 C 294 185, 255 196, 198 194 C 136 192, 100 178, 98 154 Z" fill="url(#porkMeat)" stroke="#8F282D" stroke-width="2"/>
-                                <path d="M 110 154 C 145 144, 175 162, 215 148 C 245 138, 272 152, 288 158" fill="none" stroke="url(#porkFat)" stroke-width="6.5" stroke-linecap="round" opacity="0.92"/>
-                                <path d="M 135 174 C 170 165, 220 178, 265 168" fill="none" stroke="url(#porkFat)" stroke-width="4.5" stroke-linecap="round" opacity="0.75"/>
-                                <path d="M 268 142 C 288 146, 296 160, 290 176" fill="none" stroke="#FFF5F5" stroke-width="9" stroke-linecap="round"/>
-                            </g>
-                            <g filter="url(#foodShadow)">
-                                <path d="M 136 112 C 134 96, 162 90, 184 98 C 198 104, 196 126, 176 132 C 154 136, 138 126, 136 112 Z" fill="#D95358" stroke="#8F282D" stroke-width="1.5"/>
-                                <path d="M 145 112 Q 165 104, 182 115" fill="none" stroke="#FFE5E5" stroke-width="4.5" stroke-linecap="round"/>
-                                <path d="M 194 106 C 196 90, 226 86, 244 96 C 254 104, 248 126, 228 128 C 206 130, 192 120, 194 106 Z" fill="#D95358" stroke="#8F282D" stroke-width="1.5"/>
-                                <path d="M 202 116 Q 222 122, 240 112" fill="none" stroke="#FFF0F0" stroke-width="5.5" stroke-linecap="round"/>
-                            </g>
-                            <g filter="url(#foodShadow)">
-                                <path d="M 66 232 Q 125 246, 188 258" fill="none" stroke="#2D6A1E" stroke-width="11" stroke-linecap="round"/>
-                                <path d="M 68 230 Q 125 244, 184 256" fill="none" stroke="#4C9A2A" stroke-width="4" stroke-linecap="round"/>
-                                <path d="M 74 248 Q 132 262, 192 272" fill="none" stroke="#255918" stroke-width="11" stroke-linecap="round"/>
-                                <path d="M 76 246 Q 132 260, 188 270" fill="none" stroke="#58B032" stroke-width="4" stroke-linecap="round"/>
-                            </g>
-                            <g filter="url(#foodShadow)">
-                                <ellipse cx="212" cy="280" rx="22" ry="16" fill="url(#scallopGrad)" stroke="#B8A38E" stroke-width="1.5"/>
-                                <ellipse cx="212" cy="277" rx="18" ry="12" fill="#F7EFE8" opacity="0.7"/>
-                                <ellipse cx="256" cy="272" rx="22" ry="16" fill="url(#scallopGrad)" stroke="#B8A38E" stroke-width="1.5"/>
-                                <ellipse cx="256" cy="269" rx="18" ry="12" fill="#F7EFE8" opacity="0.7"/>
-                            </g>
-                        </svg>
-                    </div>
+                    <!-- 실제 매장 사진: 흑돼지모듬 600g -->
+                    <img id="menu-img-0" src="./modeum.jpg"
+                         onerror="this.src='https://placehold.co/800x500/2C1E14/D4AF37?text=Heukdwaeji+Modeum+600g'"
+                         alt="육가 서면본점 흑돼지모듬 600g 한상 — 오겹살·목살·꼬들살·소시지·새송이·꽈리고추"
+                         class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-stone-950/50 via-transparent to-transparent pointer-events-none"></div>
 
                     <div class="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-red-600/95 text-white text-xs font-bold shadow-lg backdrop-blur-sm">
                         <i class="fa-solid fa-crown mr-1"></i> 대표 인기 한상
@@ -452,9 +414,11 @@
                 <!-- 메뉴 1: 오겹살 100g -->
                 <div class="bg-brand-card rounded-3xl p-5 border border-stone-800 hover:border-amber-500/40 transition-all group">
                     <div class="h-44 rounded-2xl overflow-hidden mb-4 relative bg-[#2A1D15]">
-                        <img id="menu-img-1" src="https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=800&q=85" 
+                        <img id="menu-img-1" src="./ogyeopsal.jpg" 
                              onerror="this.src='https://placehold.co/600x400/26221E/F8F5F0?text=Jirisan+Pork+Belly'"
-                             alt="오겹살 100g" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                             alt="육가 서면본점 지리산 흑돼지 오겹살 구이" 
+                             style="object-position: 50% 62%;"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-stone-950/85 text-amber-400 text-xs font-bold">🎖️ 대표 1위</span>
                     </div>
                     <h4 class="font-bold text-lg text-white mb-1">오겹살 100g</h4>
@@ -469,9 +433,11 @@
                 <!-- 메뉴 2: 목살 100g -->
                 <div class="bg-brand-card rounded-3xl p-5 border border-stone-800 hover:border-amber-500/40 transition-all group">
                     <div class="h-44 rounded-2xl overflow-hidden mb-4 relative bg-[#2A1D15]">
-                        <img id="menu-img-2" src="https://images.unsplash.com/photo-1603048297172-c92544798d5a?auto=format&fit=crop&w=800&q=85" 
+                        <img id="menu-img-2" src="./moksal.jpg" 
                              onerror="this.src='https://placehold.co/600x400/26221E/F8F5F0?text=Jirisan+Pork+Neck'"
-                             alt="목살 100g" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                             alt="육가 서면본점 지리산 흑돼지 목살" 
+                             style="object-position: 50% 42%;"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-stone-950/85 text-stone-200 text-xs font-bold">🥈 대표</span>
                     </div>
                     <h4 class="font-bold text-lg text-white mb-1">목살 100g</h4>
@@ -486,9 +452,11 @@
                 <!-- 메뉴 3: 꼬들살 100g -->
                 <div class="bg-brand-card rounded-3xl p-5 border border-stone-800 hover:border-amber-500/40 transition-all group">
                     <div class="h-44 rounded-2xl overflow-hidden mb-4 relative bg-[#2A1D15]">
-                        <img id="menu-img-3" src="https://images.unsplash.com/photo-1588168333986-5078d3ae3976?auto=format&fit=crop&w=800&q=85" 
+                        <img id="menu-img-3" src="./kkodeulsal.jpg" 
                              onerror="this.src='https://placehold.co/600x400/26221E/F8F5F0?text=Special+Pork+Cut'"
-                             alt="꼬들살 100g" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                             alt="육가 서면본점 지리산 흑돼지 꼬들살" 
+                             style="object-position: 50% 52%;"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-amber-600 text-white text-xs font-bold">🎁 별미 추천</span>
                     </div>
                     <h4 class="font-bold text-lg text-white mb-1">꼬들살 100g</h4>
@@ -503,9 +471,10 @@
                 <!-- 메뉴 4: 자가제면 밀면 -->
                 <div class="bg-brand-card rounded-3xl p-5 border border-stone-800 hover:border-amber-500/40 transition-all group">
                     <div class="h-44 rounded-2xl overflow-hidden mb-4 relative bg-[#2A1D15]">
-                        <img id="menu-img-4" src="https://images.unsplash.com/photo-1617093727343-374698b1b08d?auto=format&fit=crop&w=800&q=85" 
+                        <img id="menu-img-4" src="./milmyeon.jpg" 
                              onerror="this.src='https://placehold.co/600x400/26221E/F8F5F0?text=Handmade+Milmyeon'"
-                             alt="자가제면 밀면" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                             alt="육가 서면본점 자가제면 밀면" 
+                             class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
                         <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-stone-950/85 text-emerald-400 text-xs font-bold">🍜 직접 제면</span>
                     </div>
                     <h4 class="font-bold text-lg text-white mb-1">자가제면 밀면</h4>
@@ -1120,12 +1089,12 @@
 
         // 기본 이미지 원본 목록 (초기화 복원용)
         const defaultPhotoSources = {
-            0: '',
-            1: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=800&q=85',
-            2: 'https://images.unsplash.com/photo-1603048297172-c92544798d5a?auto=format&fit=crop&w=800&q=85',
-            3: 'https://images.unsplash.com/photo-1588168333986-5078d3ae3976?auto=format&fit=crop&w=800&q=85',
-            4: 'https://images.unsplash.com/photo-1617093727343-374698b1b08d?auto=format&fit=crop&w=800&q=85',
-            5: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1920&q=80'
+            0: './modeum.jpg',
+            1: './ogyeopsal.jpg',
+            2: './moksal.jpg',
+            3: './kkodeulsal.jpg',
+            4: './milmyeon.jpg',
+            5: './hero.jpg'
         };
 
         const menuNames = ['흑돼지모듬 600g', '오겹살 100g', '목살 100g', '꼬들살 100g', '자가제면 밀면', '메인 배너 배경'];
