@@ -846,7 +846,7 @@
     const now = performance.now();
     G.taps++;
     G.tapTimes.push(now);
-    G.v = Math.min(13.2, G.v + 0.95);
+    G.v = Math.min(220, G.v + 55);
     tapBtn.classList.add("hit");
     setTimeout(() => tapBtn.classList.remove("hit"), 70);
 
