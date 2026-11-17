@@ -69,6 +69,9 @@
   .btn-qr:hover{background:rgba(245,158,11,.14);color:#FFF7E6}
   .btn-reset{background:transparent;color:#C7D2E1;border:1px solid var(--line-strong)}
   .btn-reset:hover{background:rgba(255,255,255,.05)}
+  .btn-snd{background:rgba(255,255,255,.045);color:#C7D2E1;border:1px solid var(--line-strong)}
+  .btn-snd:hover{background:rgba(255,255,255,.1)}
+  .btn-snd.off{background:transparent;color:#6E7F97;border-color:rgba(255,255,255,.12)}
 
   /* ---------- board ---------- */
   .board{
@@ -203,6 +206,21 @@
   .lk.locked .c{color:#FCA5A5}
   .lk.zero{opacity:.55}
   .lk.off{cursor:default;opacity:.4}
+  .lk.sel{border-color:var(--amber);background:rgba(245,158,11,.22);color:#FFF7E6;box-shadow:0 0 0 2px rgba(245,158,11,.4),0 0 22px -8px rgba(245,158,11,.9)}
+  .lk.sel .c{color:#FFE7B8}
+  .lk.sel.locked{border-color:var(--amber);background:rgba(239,68,68,.26)}
+  .lock-acts{display:flex;align-items:center;gap:6px;margin-top:7px;flex-wrap:wrap}
+  .lock-acts .btn{font-size:clamp(10px,1.35vh,12.5px);padding:6px 11px;border-radius:9px}
+  .btn-lock{background:rgba(239,68,68,.14);color:#FCA5A5;border:1px solid rgba(239,68,68,.45)}
+  .btn-lock:hover{background:rgba(239,68,68,.24)}
+  .btn-lock:disabled{opacity:.4;cursor:default;background:rgba(239,68,68,.08)}
+  .btn-wipe{background:linear-gradient(180deg,#FBBF24,#F59E0B);color:#221502;box-shadow:0 10px 22px -16px rgba(245,158,11,.95)}
+  .btn-wipe:hover{filter:brightness(1.05)}
+  .btn-wipe:disabled{opacity:.38;cursor:default;box-shadow:none;filter:none}
+  .btn-wipe-all{background:transparent;color:#C7D2E1;border:1px solid var(--line-strong)}
+  .btn-wipe-all:hover{background:rgba(255,255,255,.06)}
+  .sel-tag{font-size:clamp(9px,1.25vh,11px);font-weight:800;color:#5E7089}
+  .sel-tag.on{color:var(--amber-lt)}
 
   .podium{position:absolute;inset:0;z-index:40;display:none;place-items:center;background:radial-gradient(70% 70% at 50% 40%,rgba(15,23,42,.9),rgba(10,17,32,.97))}
   .podium.on{display:grid}
@@ -270,6 +288,7 @@
       <div class="pill"><span class="k">등록</span> <b id="teamCount">0</b>팀 <span style="opacity:.5">/</span> <b id="playerCount">0</b>명</div>
       <div class="pill clock" id="clockPill"><b id="clockVal">00.0</b><span style="opacity:.55">초</span></div>
       <div class="pill room">방 코드 <b id="roomCode">JY400</b></div>
+      <button class="btn btn-snd" id="sndBtn" type="button" aria-pressed="true">🔊 소리 ON</button>
       <button class="btn btn-qr" id="qrBtn" type="button">QR 입장</button>
       <button class="btn btn-start" id="startBtn" type="button">▶ 경기 시작</button>
       <button class="btn btn-end" id="endBtn" type="button" disabled>■ 종료</button>
@@ -296,12 +315,14 @@
           <div class="wait-chips" id="waitList"></div>
           <div class="wait-empty" id="waitEmpty">아직 입장한 참가자가 없습니다 — QR을 띄워 안내하세요</div>
           <div class="lock-box" id="lockBox" style="display:none">
-            <div class="lock-head">팀 마감(솔드아웃) 관리 <b id="lockCount">0</b>팀 마감 <span class="tip">팀 버튼을 누르면 마감 · 다시 누르면 열립니다</span></div>
+            <div class="lock-head">팀 관리 <b id="lockCount">0</b>팀 마감 <span class="tip">팀 버튼을 눌러 <b>선택</b> → 마감 · 비우기</span></div>
             <div class="lock-admin" id="lockAdmin"></div>
-          </div>
-          <div style="margin-top:12px;display:flex;align-items:center;gap:10px;pointer-events:auto">
-            <button class="btn btn-reset" id="clearBtn" type="button" style="font-size:11.5px;padding:7px 12px">입장 명단 비우기</button>
-            <span style="font-size:10.5px;font-weight:700;color:#5E7089">다른 차수·다른 강연에서 다시 시작할 때만</span>
+            <div class="lock-acts">
+              <button class="btn btn-lock" id="lockToggleBtn" type="button" disabled>🔒 팀 마감</button>
+              <button class="btn btn-wipe" id="clearTeamBtn" type="button" disabled>🧹 선택한 팀 비우기</button>
+              <button class="btn btn-wipe-all" id="clearAllBtn" type="button">🧹 전체 비우기</button>
+              <span class="sel-tag" id="selTag">팀을 먼저 선택하세요</span>
+            </div>
           </div>
         </div>
         <div class="qr-mini">
@@ -428,7 +449,7 @@
     phase: "idle",          /* idle | countdown | race | finished */
     startAt: 0, endAt: 0, elapsed: 0,
     meta: {}, slots: {}, teams: {}, result: null, locks: {},
-    last: 0, raf: 0, cdTimer: 0, purged: false, emptySince: {}, paintKey: ""
+    last: 0, raf: 0, cdTimer: 0, purged: false, emptySince: {}, paintKey: "", selTeam: 0
   };
   var laneEls = [];
 
@@ -445,6 +466,232 @@
     el.classList.add("on");
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function(){ el.classList.remove("on"); }, 2600);
+  }
+
+  /* ---------------- 진행자 노트북 전용 사운드 (참가자 index.html 은 무음) ---------------- */
+  var SND = { ac: null, master: null, on: true, bgmTimer: 0, bgmMode: "", step: 0, nextAt: 0, noise: null, voice: null, lastFan: 0 };
+
+  function sndCtx(){
+    if (SND.ac) return SND.ac;
+    try {
+      var C = window.AudioContext || window.webkitAudioContext;
+      if (!C) return null;
+      SND.ac = new C();
+      SND.master = SND.ac.createGain();
+      SND.master.gain.value = SND.on ? 1 : 0;
+      SND.master.connect(SND.ac.destination);
+    } catch(e){ SND.ac = null; }
+    return SND.ac;
+  }
+  function sndResume(){
+    var ac = sndCtx();
+    if (ac && ac.state === "suspended"){ try { ac.resume(); } catch(e){} }
+  }
+  function sndNote(freq, t, dur, vol, type){
+    var ac = SND.ac; if (!ac || !SND.on) return;
+    var o = ac.createOscillator(), g = ac.createGain();
+    o.type = type || "sine";
+    o.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(Math.max(0.0002, vol || 0.1), t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + Math.max(0.03, dur));
+    o.connect(g); g.connect(SND.master);
+    o.start(t); o.stop(t + Math.max(0.03, dur) + 0.03);
+  }
+  function sndBeep(freq, dur, vol, type){
+    sndResume();
+    if (!SND.ac) return;
+    sndNote(freq, SND.ac.currentTime + 0.01, dur || 0.16, vol || 0.18, type || "sine");
+  }
+  function sndNoiseBuf(){
+    var ac = SND.ac; if (!ac) return null;
+    if (SND.noise) return SND.noise;
+    var len = Math.floor(ac.sampleRate * 0.4), b = ac.createBuffer(1, len, ac.sampleRate), d = b.getChannelData(0);
+    for (var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    SND.noise = b;
+    return b;
+  }
+  function sndNoiseHit(t, dur, vol, hz, type, q){
+    var ac = SND.ac; if (!ac || !SND.on) return;
+    var buf = sndNoiseBuf(); if (!buf) return;
+    var s = ac.createBufferSource(); s.buffer = buf; s.loop = true;
+    var f = ac.createBiquadFilter();
+    f.type = type || "highpass"; f.frequency.value = hz || 6000; if (q) f.Q.value = q;
+    var g = ac.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(Math.max(0.0002, vol || 0.1), t + 0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + Math.max(0.02, dur));
+    s.connect(f); f.connect(g); g.connect(SND.master);
+    s.start(t); s.stop(t + Math.max(0.02, dur) + 0.03);
+  }
+  function sndKick(t, vol){
+    var ac = SND.ac; if (!ac || !SND.on) return;
+    var o = ac.createOscillator(), g = ac.createGain();
+    o.type = "sine";
+    o.frequency.setValueAtTime(152, t);
+    o.frequency.exponentialRampToValueAtTime(46, t + 0.14);
+    g.gain.setValueAtTime(Math.max(0.0002, vol || 0.45), t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+    o.connect(g); g.connect(SND.master);
+    o.start(t); o.stop(t + 0.22);
+  }
+
+  /* 한국어 음성(삼·이·일·출발!) */
+  function sndPickVoice(){
+    if (!("speechSynthesis" in window)) return null;
+    var vs = [];
+    try { vs = window.speechSynthesis.getVoices() || []; } catch(e){ return null; }
+    var best = null;
+    for (var i = 0; i < vs.length; i++){
+      var v = vs[i];
+      if (!/^ko/i.test(v.lang || "")) continue;
+      if (!best) best = v;
+      if (/(Yuna|Google|Korean|한국)/i.test(v.name || "")){ best = v; break; }
+    }
+    SND.voice = best || null;
+    return best;
+  }
+  function sndSay(text, rate){
+    if (!SND.on || !text || !("speechSynthesis" in window)) return;
+    try {
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = "ko-KR"; u.rate = rate || 1.02; u.pitch = 1.05; u.volume = 1;
+      var v = SND.voice || sndPickVoice();
+      if (v) u.voice = v;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    } catch(e){}
+  }
+  if ("speechSynthesis" in window){
+    try {
+      sndPickVoice();
+      window.speechSynthesis.addEventListener("voiceschanged", function(){ sndPickVoice(); });
+    } catch(e){}
+  }
+
+  function sndCountCue(n){
+    if (!SND.on) return;
+    sndResume();
+    sndBeep(n === 3 ? 740 : n === 2 ? 880 : 1040, 0.13, 0.2, "triangle");
+    sndSay(n === 3 ? "삼" : n === 2 ? "이" : "일");
+  }
+  function sndGo(){
+    if (!SND.on) return;
+    sndResume();
+    var ac = SND.ac; if (!ac) return;
+    var t = ac.currentTime + 0.01;
+    sndNoiseHit(t, 0.22, 0.4, 1100, "lowpass");      /* 출발 총성 */
+    sndKick(t, 0.55);
+    sndNote(587.33, t + 0.02, 0.5, 0.12, "triangle");
+    sndSay("출발!", 1.05);
+  }
+  function sndFanfare(){
+    if (!SND.on) return;
+    var now = Date.now();
+    if (now - SND.lastFan < 4000) return;
+    SND.lastFan = now;
+    sndResume();
+    var ac = SND.ac; if (!ac) return;
+    var t0 = ac.currentTime + 0.05;
+    var seq = [523.25, 659.25, 783.99, 1046.50];      /* 도·미·솔·도 */
+    for (var i = 0; i < seq.length; i++){
+      sndNote(seq[i], t0 + i * 0.13, 0.3, 0.16, "triangle");
+      sndNote(seq[i] / 2, t0 + i * 0.13, 0.26, 0.09, "sine");
+    }
+    var tEnd = t0 + seq.length * 0.13;
+    for (var k = 0; k < seq.length; k++) sndNote(seq[k], tEnd, 0.95, 0.11, "triangle");
+    for (var s = 0; s < 10; s++) sndNoiseHit(tEnd - 0.34 + s * 0.035, 0.07, 0.05 + s * 0.012, 2400, "bandpass", 1.2);
+    sndNoiseHit(tEnd + 0.02, 0.35, 0.15, 3200, "bandpass", 0.9);
+  }
+
+  /* BGM: 달리기(업템포) · 엔딩(밝은 다운템포) — Web Audio 로 즉석 연주 */
+  var BGM_PROG = [
+    { bass: 110.00, chord: [220.00, 261.63, 329.63] },   /* Am */
+    { bass: 87.31,  chord: [174.61, 220.00, 261.63] },   /* F  */
+    { bass: 130.81, chord: [261.63, 329.63, 392.00] },   /* C  */
+    { bass: 98.00,  chord: [196.00, 246.94, 293.66] }    /* G  */
+  ];
+  var BGM_BASS_STEPS = [0, 3, 6, 8, 11, 14];
+  var BGM_LEAD_STEPS = [0, 2, 4, 6, 8, 10, 12, 14];
+
+  function bgmStep(mode, step, t){
+    var bar = Math.floor(step / 16) % 4;
+    var s = step % 16;
+    var pr = BGM_PROG[bar];
+    if (mode === "race"){
+      if (s % 4 === 0) sndKick(t, 0.4);
+      if (s === 4 || s === 12) sndNoiseHit(t, 0.1, 0.13, 1900, "bandpass", 1.1);
+      if (s % 2 === 1) sndNoiseHit(t, 0.035, 0.05, 8200, "highpass");
+      if (s === 14) sndNoiseHit(t, 0.09, 0.06, 7600, "highpass");
+      if (BGM_BASS_STEPS.indexOf(s) >= 0){
+        sndNote(pr.bass, t, 0.19, 0.13, "triangle");
+        sndNote(pr.bass * 2, t, 0.13, 0.04, "square");
+      }
+      if (BGM_LEAD_STEPS.indexOf(s) >= 0){
+        var ci = Math.floor(s / 2) % pr.chord.length;
+        sndNote(pr.chord[ci] * 2, t, 0.12, 0.05, "triangle");
+      }
+    } else if (mode === "end"){
+      if (s === 0 || s === 8) sndKick(t, 0.24);
+      if (s === 4 || s === 12) sndNoiseHit(t, 0.09, 0.065, 2600, "bandpass", 1.1);
+      if (s % 4 === 2) sndNoiseHit(t, 0.04, 0.032, 8400, "highpass");
+      if (s === 0) sndNote(pr.bass, t, 0.9, 0.1, "triangle");
+      if (s === 8) sndNote(pr.bass * 1.5, t, 0.8, 0.07, "triangle");
+      if (s % 4 === 0){
+        sndNote(pr.chord[0] * 2, t, 0.55, 0.045, "sine");
+        sndNote(pr.chord[2] * 2, t + 0.16, 0.5, 0.04, "sine");
+      }
+    }
+  }
+  function bgmPump(){
+    var ac = SND.ac;
+    if (!ac || !SND.bgmMode || !SND.on) return;
+    var spb = 60 / (SND.bgmMode === "race" ? 138 : 92) / 4;
+    if (!SND.nextAt || SND.nextAt < ac.currentTime - 0.05) SND.nextAt = ac.currentTime + 0.08;
+    var guard = 0;
+    while (SND.nextAt < ac.currentTime + 0.3 && guard++ < 32){
+      bgmStep(SND.bgmMode, SND.step, SND.nextAt);
+      SND.step = (SND.step + 1) % 64;
+      SND.nextAt += spb;
+    }
+  }
+  function bgmSet(mode){
+    mode = mode || "";
+    if (mode && mode === SND.bgmMode && SND.bgmTimer && SND.on) return;   /* 같은 곡이 이미 재생 중 */
+    SND.bgmMode = mode;
+    if (SND.bgmTimer){ clearInterval(SND.bgmTimer); SND.bgmTimer = 0; }
+    SND.step = 0; SND.nextAt = 0;
+    if (!SND.bgmMode || !SND.on) return;
+    sndResume();
+    if (!SND.ac) return;
+    SND.bgmTimer = setInterval(bgmPump, 40);
+  }
+  function sndStopAll(){
+    bgmSet("");
+    try { if ("speechSynthesis" in window) window.speechSynthesis.cancel(); } catch(e){}
+  }
+  function setSound(on, silent){
+    SND.on = !!on;
+    if (SND.ac && SND.master){
+      try { SND.master.gain.setTargetAtTime(SND.on ? 1 : 0, SND.ac.currentTime, 0.02); }
+      catch(e){ SND.master.gain.value = SND.on ? 1 : 0; }
+    }
+    var b = $("sndBtn");
+    if (b){
+      b.textContent = SND.on ? "🔊 소리 ON" : "🔇 음소거";
+      b.classList.toggle("off", !SND.on);
+      b.setAttribute("aria-pressed", SND.on ? "true" : "false");
+    }
+    if (!SND.on){
+      try { if ("speechSynthesis" in window) window.speechSynthesis.cancel(); } catch(e){}
+      bgmSet(SND.bgmMode);            /* 타이머만 정리하고 모드는 기억 */
+    } else {
+      sndResume();
+      if (SND.bgmMode) bgmSet(SND.bgmMode);
+      sndBeep(880, 0.1, 0.12, "sine");
+    }
+    try { localStorage.setItem("relay.snd", SND.on ? "1" : "0"); } catch(e){}
+    if (!silent) toast(SND.on ? "진행자 사운드 켜짐 — 카운트다운 음성 · BGM 재생" : "진행자 사운드 음소거");
   }
 
   /* ---------------- audience URL / QR ---------------- */
@@ -607,6 +854,7 @@
       $("startBtn").innerHTML = "▶ 경기 중…";
       $("endBtn").disabled = false;
       $("laneLabel").textContent = "TOP " + LANE_N + " 실시간 중계";
+      bgmSet("race");
     }
     if (st === "finished" && prev.status !== "finished"){
       S.phase = "finished";
@@ -615,6 +863,8 @@
       $("startBtn").innerHTML = "↻ 새 경기";
       $("endBtn").disabled = true;
       showPodium();
+      bgmSet("end");
+      if (prev.status === "running" || prev.status === "countdown") sndFanfare();
     }
     if (st === "waiting" && (prev.status === "running" || prev.status === "countdown" || prev.status === "finished")){
       clearInterval(S.cdTimer);
@@ -623,6 +873,7 @@
       $("idleNote").classList.add("on");
       $("liveTag").classList.add("off");
       S.teams = {};
+      sndStopAll();
     }
     paintLockAdmin();
   }
@@ -640,6 +891,8 @@
         num.textContent = "출발!";
         sub.innerHTML = "첫 주자 <b>지금</b> 출발 — 바통을 이어 800m";
         clearInterval(S.cdTimer); S.cdTimer = 0;
+        sndGo();
+        bgmSet("race");
         setTimeout(function(){ cd.classList.remove("on"); }, 620);
         return;
       }
@@ -650,6 +903,7 @@
         num.classList.remove("go");
         num.textContent = String(last);
         sub.innerHTML = n === 3 ? "8명이 1팀 — <b>800m</b> 릴레이" : "준비…";
+        sndCountCue(n);
       }
     }, 60);
   }
@@ -777,7 +1031,7 @@
     $("waitEmpty").style.display = teams.length ? "none" : "block";
   }
 
-  /* ---------------- 팀 마감(슬드아웃) 관리 ---------------- */
+  /* ---------------- 팀 마감(솔드아웃) 관리 ---------------- */
   function paintLockAdmin(){
     var box = $("lockAdmin");
     if (!box) return;
@@ -790,14 +1044,75 @@
       if (lk) nLock++;
       var b = document.createElement("button");
       b.type = "button";
-      b.className = "lk" + (lk ? " locked" : "") + (c ? "" : " zero") + (S.phase === "idle" ? "" : " off");
+      b.className = "lk" + (lk ? " locked" : "") + (c ? "" : " zero") + (S.phase === "idle" ? "" : " off") + (S.selTeam === t ? " sel" : "");
       b.setAttribute("data-team", t);
-      b.title = t + "팀 " + (lk ? "마감 — 누르면 다시 열기" : "열림 — 누르면 마감");
+      b.setAttribute("aria-pressed", S.selTeam === t ? "true" : "false");
+      b.title = t + "팀 " + (lk ? "마감" : "열림") + " · " + c + "/" + N_SLOTS + "명 — 눌러서 선택";
       b.innerHTML = '<span class="n">' + t + '</span><span class="c">' + (lk ? "마감" : c + "/" + N_SLOTS) + "</span>";
       frag.appendChild(b);
     }
     box.replaceChildren(frag);
     $("lockCount").textContent = String(nLock);
+    paintSelActs();
+  }
+
+  /* 선택한 팀에 대한 동작 버튼(마감/비우기) 상태 */
+  function paintSelActs(){
+    var n = S.selTeam, b = $("clearTeamBtn"), l = $("lockToggleBtn"), tag = $("selTag");
+    if (!b || !l || !tag) return;
+    var idle = (S.phase === "idle");
+    if (!n){
+      b.disabled = true; b.textContent = "🧹 선택한 팀 비우기";
+      l.disabled = true; l.textContent = "🔒 팀 마감";
+      tag.textContent = "팀을 먼저 선택하세요";
+      tag.className = "sel-tag";
+      return;
+    }
+    var c = teamCount(n), lk = !!S.locks["t" + n];
+    b.disabled = !idle;
+    b.textContent = "🧹 " + n + "팀 비우기" + (c ? " (" + c + "명)" : "");
+    l.disabled = !idle;
+    l.textContent = lk ? "🔓 " + n + "팀 마감 해제" : "🔒 " + n + "팀 마감";
+    tag.textContent = n + "팀 선택됨 · " + c + "/" + N_SLOTS + "명" + (lk ? " · 마감" : "") + (idle ? "" : " · 경기 중에는 비울 수 없음");
+    tag.className = "sel-tag on";
+  }
+
+  function selectTeam(team){
+    if (S.phase !== "idle"){ toast("경기 중에는 팀을 정리할 수 없습니다 — 리셋 후 조정하세요"); return; }
+    if (!(team >= 1 && team <= N_TEAMS)) return;
+    S.selTeam = team;
+    paintLockAdmin();
+    toast(team + "팀 선택 — [" + team + "팀 비우기] 또는 [팀 마감]을 누르세요");
+  }
+
+  /* 선택한 팀만 비우기 — slots/teams/locks 의 그 팀 노드만 제거 */
+  function clearTeam(team){
+    if (!FB.live){ toast("서버에 연결되지 않았습니다"); return; }
+    if (S.phase !== "idle"){ toast("경기 중에는 팀을 비울 수 없습니다 — 리셋 후 조정하세요"); return; }
+    if (!(team >= 1 && team <= N_TEAMS)){ toast("먼저 팀을 선택하세요"); return; }
+    var c = teamCount(team), lk = !!S.locks["t" + team];
+    if (!c && !lk){ toast(team + "팀은 이미 비어 있습니다"); return; }
+    var msg = "🧹 " + team + "팀 명단을 비웁니다.\n\n"
+      + "참가자 " + c + "명의 자리가 지워지고, 그 팀 참가자 화면은 입장 화면으로 돌아갑니다.\n"
+      + (lk ? "이 팀의 마감(솔드아웃)도 함께 풉니다.\n" : "")
+      + "다른 팀은 그대로 둡니다. 계속할까요?";
+    if (!window.confirm(msg)) return;
+
+    var upd = {};
+    upd["slots/t" + team] = null;
+    upd["teams/t" + team] = null;
+    if (lk) upd["locks/t" + team] = null;
+    if (S.slots["t" + team]) delete S.slots["t" + team];
+    if (S.teams["t" + team]) delete S.teams["t" + team];
+    if (S.locks["t" + team]) delete S.locks["t" + team];
+    paintWaitList();
+    paintLockAdmin();
+    FB.root.update(upd).then(function(){
+      paintWaitList();
+      paintLockAdmin();
+      renderLanes();
+      toast("🧹 " + team + "팀 명단을 비웠습니다" + (c ? " — " + c + "명 다시 입장 가능" : ""));
+    }).catch(function(){ toast("비우기를 저장하지 못했습니다 — 다시 시도하세요"); });
   }
 
   function toggleLock(team){
@@ -855,6 +1170,7 @@
     if (S.phase === "countdown" && serverNow() >= S.startAt){
       S.phase = "race";
       if (FB.live) FB.root.update({ "meta/status": "running" });
+      bgmSet("race");
     }
     renderLanes();
     updateStatus();
@@ -1021,6 +1337,8 @@
     if (FB.live) FB.root.update(upd);
     S.result = upd.result;
     showPodium();
+    bgmSet("end");
+    sndFanfare();
   }
 
   function showPodium(){
@@ -1055,6 +1373,7 @@
   /* ---------------- 리셋 ---------------- */
   function resetRoom(){
     if (!FB.live){ toast("서버에 연결되지 않았습니다"); return; }
+    sndStopAll();
     clearInterval(S.cdTimer);
     S.phase = "idle";
     S.startAt = 0; S.endAt = 0; S.elapsed = 0;
@@ -1086,6 +1405,7 @@
 
   /* ---------------- 전체 비우기 ---------------- */
   function clearAll(){
+    sndStopAll();
     clearInterval(S.cdTimer);
     S.phase = "idle"; S.startAt = 0; S.endAt = 0; S.elapsed = 0;
     S.teams = {}; S.result = null; S.slots = {}; S.locks = {}; S.emptySince = {}; S.paintKey = "";
@@ -1118,20 +1438,24 @@
   $("endBtn").addEventListener("click", function(){ endRace("host"); });
   $("resetBtn").addEventListener("click", resetRoom);
   $("podReset").addEventListener("click", resetRoom);
-  $("clearBtn").addEventListener("click", function(){
+  $("sndBtn").addEventListener("click", function(){ sndResume(); setSound(!SND.on); });
+  document.addEventListener("pointerdown", function(){ sndResume(); }, { once: true });
+  $("clearTeamBtn").addEventListener("click", function(){ clearTeam(S.selTeam); });
+  $("lockToggleBtn").addEventListener("click", function(){ if (S.selTeam) toggleLock(S.selTeam); });
+  $("clearAllBtn").addEventListener("click", function(){
     if (!FB.live) return;
-    if (!window.confirm("입장 명단(팀·주자 자리)을 모두 비웁니다.\n참가자 전원이 다시 QR로 입장해야 합니다. 계속할까요?")) return;
+    if (!window.confirm("🧹 전체 비우기\n\n모든 팀의 참가자 명단과 마감(솔드아웃)을 지웁니다.\n참가자 전원이 다시 QR로 입장해야 합니다. 계속할까요?")) return;
     clearAll();
   });
 
   var qrModal = $("qrModal");
   $("qrBtn").addEventListener("click", function(){ paintWaitList(); paintQR(); qrModal.classList.add("on"); });
 
-  /* 팀 마감 버튼 (이벤트 위임) */
+  /* 팀 관리 버튼 (이벤트 위임) — 팀을 누르면 선택 */
   $("lockAdmin").addEventListener("click", function(e){
     var b = e.target.closest && e.target.closest(".lk");
     if (!b) return;
-    toggleLock(parseInt(b.getAttribute("data-team"), 10));
+    selectTeam(parseInt(b.getAttribute("data-team"), 10));
   });
   /* QR 모달 — 팀 지정 QR */
   (function(){
@@ -1159,6 +1483,7 @@
   window.addEventListener("resize", function(){ renderLanes(); });
 
   /* ---------------- go ---------------- */
+  (function(){ var v = null; try { v = localStorage.getItem("relay.snd"); } catch(e){} setSound(v === "0" ? false : true, true); })();
   initFirebase();
   paintWaitList();
   S.last = performance.now();

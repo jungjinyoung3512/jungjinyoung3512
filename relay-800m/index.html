@@ -168,6 +168,13 @@
   .cta:disabled{filter:grayscale(.6) brightness(.7);box-shadow:none;cursor:default}
   .fine{flex:none;margin:0;text-align:center;font-size:10px;color:#6E7F97;line-height:1.5}
   .fine b{color:#9AA9BF}
+  .toast{
+    position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(12px);z-index:80;
+    max-width:86vw;background:rgba(15,23,42,.97);border:1px solid rgba(245,158,11,.6);color:#FFF7E6;
+    font-size:12px;font-weight:800;line-height:1.45;text-align:center;padding:11px 15px;border-radius:13px;
+    box-shadow:0 18px 40px -18px #000;opacity:0;pointer-events:none;transition:opacity .22s ease,transform .22s ease;
+  }
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
   /* ---------- runner svg ---------- */
   .runner{display:block;overflow:visible}
@@ -545,6 +552,9 @@
   </section>
 </div>
 
+<!-- 안내 토스트 -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <!-- countdown -->
 <div class="countdown" id="countdown">
   <div class="cd-box">
@@ -878,6 +888,16 @@
     }, 3200);
   }
 
+  var toastTimer = 0;
+  function toast(msg){
+    var el = $("toast");
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add("on");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ el.classList.remove("on"); }, 4200);
+  }
+
   nickEl.addEventListener("input", function(){
     if (S.screen === "entry" && S.team && S.slot) renderEntry();
     else $("pvName").textContent = nickEl.value.trim() || "김하늘";
@@ -957,7 +977,42 @@
     if (!FB.live || teamSub) return;
     teamSub = true;
     FB.root.child("teams/t" + S.team).on("value", function(s){ S.myTeam = s.val(); syncLeg(); });
-    FB.root.child("slots/t" + S.team).on("value", function(s){ S.teamSlots = s.val() || {}; syncLeg(); if (S.screen === "race") renderMates(); });
+    FB.root.child("slots/t" + S.team).on("value", function(s){
+      S.teamSlots = s.val() || {};
+      /* 진행자가 이 팀 명단을 비웠으면 → 입장 화면으로 돌려보냅니다 */
+      if (S.slot && S.screen !== "entry"){
+        var mine = S.teamSlots[S.slot];
+        if (!mine || mine.pid !== PID){ ejectedByHost(); return; }
+      }
+      syncLeg();
+      if (S.screen === "race") renderMates();
+    });
+  }
+
+  /* 진행자 [팀 비우기] — 내 자리가 사라지면 에러 없이 입장 화면으로 복귀 */
+  var ejecting = false;
+  function ejectedByHost(){
+    if (ejecting) return;
+    ejecting = true;
+    var team = S.team;
+    try { localStorage.removeItem("relay.claim"); } catch(e){}
+    clearInterval(S.cdTimer); S.cdTimer = 0;
+    try { if ("speechSynthesis" in window) window.speechSynthesis.cancel(); } catch(e){}
+    if (FB.live && team){
+      FB.root.child("teams/t" + team).off();
+      FB.root.child("slots/t" + team).off();
+    }
+    teamSub = false;
+    S.myTeam = null; S.teamSlots = {};
+    S.phase = "idle"; S.leg = 0; S.v = 0; S.taps = 0; S.tapTimes = []; S.legDone = false;
+    $("countdown").classList.remove("on");
+    $("batonFlash").classList.remove("on");
+    if ($("leaveBtn")) $("leaveBtn").style.display = "none";
+    show("entry");
+    subscribeEntry();
+    renderEntry();
+    toast("진행자가 팀 명단을 정리했습니다. 다시 입장해 주세요.");
+    setTimeout(function(){ ejecting = false; }, 1500);
   }
 
   /* 경기 시작 시 진행자가 확정한 주자 순서·1인당 거리를 반영합니다.
