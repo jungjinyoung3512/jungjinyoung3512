@@ -85,6 +85,21 @@
     background:rgba(239,68,68,.13);color:#FCA5A5;border:1px solid rgba(239,68,68,.5);
   }
   .btn-clear:hover{background:rgba(239,68,68,.24);color:#FEE2E2;border-color:rgba(248,113,113,.75)}
+  .btn-sound{
+    background:rgba(245,158,11,.12);color:#FCD34D;border:1px solid rgba(245,158,11,.5);
+  }
+  .btn-sound:hover{background:rgba(245,158,11,.22);color:#FEF3C7}
+  .btn-sound.off{background:rgba(255,255,255,.04);color:#8496AE;border-color:var(--line-strong)}
+
+  /* 넓지 않은 노트북 화면에서도 상단 컨트롤 바가 잘리지 않게 */
+  @media (max-width:1560px){
+    .top{gap:12px}
+    .brand{gap:8px}
+    .brand .t{font-size:23px}
+    .top-right{gap:8px}
+    .btn{font-size:13px;padding:9px 14px;border-radius:11px}
+    .pill{font-size:12.5px;padding:7px 11px}
+  }
 
   /* ================= track board ================= */
   .board{
@@ -288,6 +303,7 @@
       <span id="netTag">연결 중…</span>
       <div class="pill">참여 인원 <b id="pCount">0</b>명</div>
       <div class="pill room">방 코드 <b id="roomCode">JY100</b></div>
+      <button class="btn btn-sound" id="soundBtn" type="button" aria-pressed="true" title="누르면 모든 소리가 즉시 꺼집니다">🔊 소리 ON</button>
       <button class="btn btn-qr" id="qrBtn" type="button">▣ QR 크게 보기</button>
       <button class="btn btn-start" id="startBtn" type="button">▶ 경기 시작</button>
       <button class="btn btn-reset" id="resetBtn" type="button">리셋</button>
@@ -701,6 +717,10 @@
     const ids = Object.keys(players);
     if (!ids.length){ statusText.textContent = "참가자가 없습니다 — QR로 입장을 먼저 안내하세요"; return; }
 
+    /* 이 클릭이 오디오 잠금 해제 지점 — 이전 엔딩 BGM 정리 후 카운트다운 준비 */
+    audioUnlock();
+    soundStopAll();
+
     const resetPaths = {};
     ids.forEach(id => { resetFields(resetPaths, "players/" + id); });
     const startAt = serverNow() + 3600;
@@ -743,6 +763,7 @@
           num.classList.add("go");
           num.textContent = "출발!";
           sub.innerHTML = "<b>100미터</b> — 12초의 승부";
+          if (!A.muted) sfxStart();   /* 총성 + "출발!" */
           startRunning();
           setTimeout(() => cd.classList.remove("on"), 520);
         }
@@ -755,6 +776,10 @@
         num.classList.remove("go");
         num.textContent = last;
         sub.innerHTML = n === 3 ? "각개전 준비 — 총성 없이 <b>시작</b>합니다" : "준비…";
+        if (!A.muted){
+          sfxCount(n);            /* 경쾌한 카운트다운 비프 */
+          speak(KO_NUM[n] || String(n), {rate:0.98, pitch:1.02});   /* "삼" "이" "일" */
+        }
       }
       G.cdTimer = setTimeout(step, 60);
     };
@@ -770,6 +795,7 @@
     startBtn.disabled = true;
     startBtn.innerHTML = "▶ 경기 중…";
     $("laneLabel").textContent = "TOP " + LANE_N + " 실시간 중계";
+    musicStart("run");   /* 신나는 달리기 BGM 시작 */
   }
 
   /* ---------- 종료 판정 ---------- */
@@ -789,6 +815,7 @@
     liveTag.classList.add("off");
     startBtn.disabled = false;
     startBtn.innerHTML = "↻ 새 경기";
+    endSequence();   /* 팡파르 → 엔딩·시상식 BGM */
 
     const finishers = order.filter(p => p.done && p.ft);
     if (FB.live){
@@ -820,6 +847,7 @@
   /* ---------- 리셋 ---------- */
   function resetRoom(){
     clearTimeout(G.cdTimer);
+    soundStopAll();
     G.phase = "idle"; G.elapsed = 0; G.startAt = 0;
     const ids = Object.keys(players);
     const paths = {};
@@ -847,6 +875,7 @@
   function clearPlayers(){
     if (!confirm("현재 입장한 참가자를 모두 비우고 대기 상태로 돌릴까요?")) return;
     clearTimeout(G.cdTimer);
+    soundStopAll();
     G.phase = "idle"; G.elapsed = 0; G.startAt = 0;
     players = {};
     order = [];
@@ -873,6 +902,450 @@
     paintWaitList();
     sortPlayers();
     renderLanes();
+  }
+
+  /* =========================================================
+     사운드 — 진행자 노트북에서만 나는 소리
+     (Web Audio API + 음성 합성, 외부 MP3·CDN 없이 즉시 재생)
+     ========================================================= */
+  const NOTE_BASE = {C:0, D:2, E:4, F:5, G:7, A:9, B:11};
+  function hz(name){
+    const m = /^([A-G])([#b]?)(-?\d)$/.exec(name || "");
+    if (!m) return 440;
+    const acc = m[2] === "#" ? 1 : (m[2] === "b" ? -1 : 0);
+    const midi = (+m[3] + 1) * 12 + NOTE_BASE[m[1]] + acc;
+    return 440 * Math.pow(2, (midi - 69) / 12);
+  }
+
+  const A = {
+    ctx:null, master:null, comp:null, music:null, sfx:null,
+    muted:false, phase:"", want:"", timer:0, step:0, next:0,
+    ko:null, voices:0, nodes:new Set(), sched:0
+  };
+  let NOISE_BUF = null;
+
+  /* 오디오 컨텍스트 준비 (반드시 사용자 클릭 안에서 호출) */
+  function audioUnlock(){
+    if (!A.ctx){
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return null;
+      try{
+        const ctx = new Ctx();
+        A.ctx = ctx;
+        A.master = ctx.createGain();
+        A.master.gain.value = A.muted ? 0.0001 : 0.92;
+        A.comp = ctx.createDynamicsCompressor();
+        A.comp.threshold.value = -14; A.comp.knee.value = 22; A.comp.ratio.value = 6;
+        A.comp.attack.value = 0.004; A.comp.release.value = 0.22;
+        A.master.connect(A.comp);
+        A.comp.connect(ctx.destination);
+        A.music = ctx.createGain(); A.music.gain.value = 0.34; A.music.connect(A.master);
+        A.sfx = ctx.createGain(); A.sfx.gain.value = 0.9; A.sfx.connect(A.master);
+        voicePrep();
+      }catch(e){ A.ctx = null; }
+    }
+    if (A.ctx && A.ctx.state === "suspended"){
+      try{ A.ctx.resume(); }catch(e){}
+    }
+    return A.ctx;
+  }
+
+  /* 한국어 음성 준비 */
+  function voicePrep(){
+    if (!("speechSynthesis" in window)) return;
+    const ss = window.speechSynthesis;
+    const pick = () => {
+      let vs = [];
+      try{ vs = ss.getVoices() || []; }catch(e){}
+      A.voices = vs.length;
+      A.ko = vs.find(v => /^ko[-_]KR$/i.test(v.lang)) || vs.find(v => /^ko/i.test(v.lang)) || null;
+    };
+    pick();
+    try{ if (ss.addEventListener) ss.addEventListener("voiceschanged", pick); else ss.onvoiceschanged = pick; }catch(e){}
+    /* 첫 숫자가 늦게 나오지 않도록 무음으로 한 번 깨워 둡니다 */
+    try{
+      const u = new SpeechSynthesisUtterance(" ");
+      u.lang = "ko-KR"; u.volume = 0; u.rate = 2;
+      if (A.ko) u.voice = A.ko;
+      ss.speak(u);
+    }catch(e){}
+  }
+
+  function speak(text, opt){
+    opt = opt || {};
+    if (A.muted || !("speechSynthesis" in window)) return;
+    try{
+      const ss = window.speechSynthesis;
+      if (ss.speaking || ss.pending) ss.cancel();  /* 밀리지 않게 이전 발화 정리 */
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "ko-KR";
+      if (A.ko) u.voice = A.ko;
+      u.rate = opt.rate || 1.0;
+      u.pitch = opt.pitch || 1.0;
+      u.volume = 1;
+      ss.speak(u);
+    }catch(e){}
+  }
+
+  /* 기본 음 하나 */
+  function tone(o){
+    if (!A.ctx) return;
+    const ctx = A.ctx;
+    const t0 = (o.t == null) ? ctx.currentTime : o.t;
+    const dur = Math.max(0.03, o.dur || 0.15);
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = o.type || "sine";
+    osc.frequency.setValueAtTime(Math.max(20, o.f), t0);
+    if (o.f2) osc.frequency.exponentialRampToValueAtTime(Math.max(20, o.f2), t0 + (o.span || dur));
+    let node = osc;
+    if (o.flt){
+      const bq = ctx.createBiquadFilter();
+      bq.type = o.flt.type || "lowpass";
+      bq.frequency.value = o.flt.f || 1200;
+      bq.Q.value = o.flt.q == null ? 1 : o.flt.q;
+      node.connect(bq); node = bq;
+    }
+    const peak = o.gain == null ? 0.2 : o.gain;
+    const atk = o.attack == null ? 0.006 : o.attack;
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(Math.max(0.0002, peak), t0 + Math.min(atk, dur * 0.5));
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    node.connect(g);
+    g.connect(o.bus || A.sfx);
+    osc.start(t0);
+    osc.stop(t0 + dur + 0.03);
+    const rec = { src:osc, g:g };
+    A.nodes.add(rec);
+    osc.onended = () => { A.nodes.delete(rec); try{ g.disconnect(); }catch(e){} };
+  }
+
+  /* 노이즈 타격(킥·스네어·햇·심벌) */
+  function hit(o){
+    if (!A.ctx) return;
+    const ctx = A.ctx;
+    const t0 = (o.t == null) ? ctx.currentTime : o.t;
+    const dur = Math.max(0.02, o.dur || 0.1);
+    if (!NOISE_BUF){
+      const len = Math.floor(ctx.sampleRate * 1.2);
+      NOISE_BUF = ctx.createBuffer(1, len, ctx.sampleRate);
+      const d = NOISE_BUF.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = NOISE_BUF;
+    const bq = ctx.createBiquadFilter();
+    bq.type = o.ftype || "bandpass";
+    bq.frequency.setValueAtTime(o.f || 2000, t0);
+    if (o.f2) bq.frequency.exponentialRampToValueAtTime(Math.max(60, o.f2), t0 + dur);
+    bq.Q.value = o.q == null ? 1 : o.q;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(Math.max(0.0002, o.gain == null ? 0.25 : o.gain), t0 + Math.min(0.006, dur * 0.4));
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    src.connect(bq).connect(g);
+    g.connect(o.bus || A.sfx);
+    src.start(t0);
+    src.stop(t0 + dur + 0.03);
+    const rec = { src:src, g:g };
+    A.nodes.add(rec);
+    src.onended = () => { A.nodes.delete(rec); try{ g.disconnect(); }catch(e){} };
+  }
+
+  /* ---------- 달리기 BGM (업템포 아케이드) ---------- */
+  const RUN_STEP = 60 / 152 / 4;   /* 16분음표 · 152 BPM */
+  const RUN_CH = [
+    {root:"C2", third:4, lead:[12,16,19,16,24,19,16,12]},
+    {root:"G2", third:4, lead:[12,16,19,16,24,19,16,12]},
+    {root:"A2", third:3, lead:[12,15,19,15,24,19,15,12]},
+    {root:"F2", third:4, lead:[12,16,19,24,19,16,12,16]},
+    {root:"C2", third:4, lead:[12,16,19,16,24,19,24,28]},
+    {root:"G2", third:4, lead:[19,16,12,16,19,24,19,16]},
+    {root:"F2", third:4, lead:[12,16,19,16,12,19,24,19]},
+    {root:"G2", third:4, lead:[14,19,22,19,14,19,24,26]}
+  ];
+  const RUN_BASS = [0, 0, 12, 7, 0, 12, 0, 7];
+
+  function runNotes(step, t){
+    const bar = Math.floor(step / 16) % RUN_CH.length;
+    const s = step % 16;
+    const ch = RUN_CH[bar];
+    const root = hz(ch.root);
+
+    if (s % 4 === 0){
+      tone({t:t, dur:0.22, f:134, f2:44, type:"sine", gain:0.62, span:0.18, bus:A.music});
+      hit({t:t, dur:0.05, f:120, ftype:"lowpass", gain:0.16, bus:A.music});
+    }
+    if (s === 4 || s === 12){
+      hit({t:t, dur:0.14, f:2000, ftype:"bandpass", q:1.0, gain:0.26, bus:A.music});
+      tone({t:t, dur:0.09, f:220, f2:150, type:"triangle", gain:0.10, bus:A.music});
+    }
+    if (s % 2 === 1){
+      hit({t:t, dur:0.035, f:7200, ftype:"highpass", q:0.7, gain:s % 4 === 3 ? 0.11 : 0.06, bus:A.music});
+    }
+    if (s === 14){
+      hit({t:t, dur:0.18, f:6000, ftype:"highpass", q:0.6, gain:0.07, bus:A.music});
+    }
+    if (s % 2 === 0){
+      const k = s / 2;
+      /* 베이스 */
+      tone({t:t, dur:0.17, f:root * Math.pow(2, RUN_BASS[k] / 12), type:"sawtooth", gain:0.20, bus:A.music, flt:{f:820, q:6}});
+      /* 리드 */
+      tone({t:t, dur:0.19, f:root * 2 * Math.pow(2, ch.lead[k] / 12), type:"square", gain:0.062, bus:A.music, flt:{f:3000, q:1}});
+      if (k % 4 === 0){
+        tone({t:t, dur:0.10, f:root * 4 * Math.pow(2, ch.lead[k] / 12), type:"sine", gain:0.03, bus:A.music});
+      }
+    }
+    if (s === 0){
+      /* 마디 화음 패드 */
+      [0, ch.third, 7].forEach((semi, i) => {
+        tone({t:t, dur:16 * RUN_STEP * 0.92, f:root * 4 * Math.pow(2, semi / 12), type:"triangle", gain:0.05 - i * 0.008, attack:0.16, bus:A.music});
+      });
+    }
+  }
+
+  /* ---------- 엔딩·시상식 BGM ---------- */
+  const END_STEP = 60 / 116 / 4;   /* 116 BPM */
+  const END_CH = [
+    {pad:"C4", bass:"C2", set:[0,4,7,11], arp:[0,7,16,11,19,16,7,12]},
+    {pad:"A3", bass:"A1", set:[0,3,7,10], arp:[0,7,15,10,19,15,7,12]},
+    {pad:"F3", bass:"F2", set:[0,4,7,11], arp:[0,7,16,12,19,16,7,12]},
+    {pad:"G3", bass:"G2", set:[0,4,7,9],  arp:[0,7,14,12,19,14,7,12]}
+  ];
+
+  function endNotes(step, t){
+    const bar = Math.floor(step / 16) % END_CH.length;
+    const s = step % 16;
+    const ch = END_CH[bar];
+    const pad = hz(ch.pad);
+
+    if (s === 0){
+      ch.set.forEach((semi, i) => {
+        tone({t:t, dur:16 * END_STEP * 0.95, f:pad * Math.pow(2, semi / 12), type:"triangle", gain:0.095 - i * 0.012, attack:0.34, bus:A.music});
+      });
+      tone({t:t, dur:1.5, f:hz(ch.bass), type:"sine", gain:0.27, attack:0.05, bus:A.music});
+      hit({t:t, dur:0.10, f:90, ftype:"lowpass", gain:0.30, bus:A.music});
+    }
+    if (s === 8){
+      tone({t:t, dur:0.9, f:hz(ch.bass) * 1.5, type:"sine", gain:0.16, attack:0.04, bus:A.music});
+      hit({t:t, dur:0.06, f:6400, ftype:"highpass", q:0.7, gain:0.08, bus:A.music});
+    }
+    if (s % 2 === 0){
+      const k = s / 2;
+      tone({t:t, dur:0.44, f:pad * Math.pow(2, ch.arp[k] / 12), type:"sine", gain:0.10, attack:0.01, bus:A.music});
+    }
+  }
+
+  /* 승리 팡파르 */
+  function sfxFanfare(){
+    if (!A.ctx) return;
+    const t0 = A.ctx.currentTime + 0.02;
+    [
+      {n:"G4", at:0.00, d:0.17}, {n:"C5", at:0.19, d:0.17},
+      {n:"E5", at:0.38, d:0.17}, {n:"G5", at:0.57, d:0.34}
+    ].forEach(s => {
+      const f = hz(s.n);
+      tone({t:t0 + s.at, dur:s.d, f:f, type:"sawtooth", gain:0.22, attack:0.012, bus:A.sfx, flt:{f:4200, q:2}});
+      tone({t:t0 + s.at, dur:s.d, f:f * 2, type:"square", gain:0.065, bus:A.sfx, flt:{f:6000, q:1}});
+      tone({t:t0 + s.at, dur:s.d, f:f / 2, type:"triangle", gain:0.10, bus:A.sfx});
+    });
+    ["C5", "E5", "G5", "C6"].forEach(n => {
+      tone({t:t0 + 0.95, dur:1.5, f:hz(n), type:"sawtooth", gain:0.11, attack:0.03, bus:A.sfx, flt:{f:5200, q:2}});
+    });
+    hit({t:t0 + 0.95, dur:1.7, f:7000, ftype:"highpass", q:0.6, gain:0.17, bus:A.sfx});
+    tone({t:t0 + 0.95, dur:0.55, f:72, f2:42, type:"sine", gain:0.42, bus:A.sfx});
+    hit({t:t0, dur:0.9, f:9000, ftype:"highpass", q:0.7, gain:0.08, bus:A.sfx});
+  }
+
+  /* ---------- 카운트다운 비프 · 출발 총성 ---------- */
+  const KO_NUM = {3:"삼", 2:"이", 1:"일"};
+
+  function sfxCount(n){
+    if (!A.ctx) return;
+    const f = n === 3 ? 659.25 : (n === 2 ? 783.99 : 987.77);
+    const t = A.ctx.currentTime;
+    tone({t:t, dur:0.17, f:f, type:"triangle", gain:0.42, bus:A.sfx});
+    tone({t:t, dur:0.10, f:f * 2, type:"sine", gain:0.14, bus:A.sfx});
+    hit({t:t, dur:0.045, f:3200, ftype:"highpass", q:0.8, gain:0.09, bus:A.sfx});
+  }
+
+  function sfxStart(){
+    if (!A.ctx) return;
+    const t = A.ctx.currentTime;
+    /* 탕! — 저역 펀치 + 노이즈 버스트 */
+    tone({t:t, dur:0.34, f:190, f2:46, type:"sine", gain:0.7, span:0.3, bus:A.sfx});
+    tone({t:t, dur:0.22, f:96, f2:40, type:"triangle", gain:0.32, bus:A.sfx});
+    hit({t:t, dur:0.28, f:2400, f2:300, ftype:"lowpass", q:0.7, gain:0.5, bus:A.sfx});
+    hit({t:t, dur:0.10, f:5200, ftype:"highpass", q:0.9, gain:0.2, bus:A.sfx});
+    /* 총성 직후 짧고 박력 있게 "출발!" */
+    setTimeout(() => speak("출발", {rate:1.18, pitch:1.04}), 190);
+  }
+
+  /* ---------- BGM 스케줄러 ---------- */
+  function musicPump(){
+    if (!A.ctx || !A.phase || A.muted) return;
+    const dur = A.phase === "run" ? RUN_STEP : END_STEP;
+    const now = A.ctx.currentTime;
+    if (A.next < now - 0.4) A.next = now + 0.02;   /* 탭이 밀린 경우 따라잡기 폭주 방지 */
+    const horizon = now + 0.16;
+    let guard = 0;
+    while (A.next < horizon && guard++ < 48){
+      if (A.phase === "run") runNotes(A.step, A.next);
+      else endNotes(A.step, A.next);
+      A.step++;
+      A.next += dur;
+    }
+    A.sched++;
+  }
+
+  function musicStart(kind){
+    A.want = kind;
+    A.phase = "";
+    if (A.timer){ clearInterval(A.timer); A.timer = 0; }
+    if (!A.ctx || A.muted) return;   /* 음소거 중이면 해제할 때 재개 */
+    A.phase = kind;
+    A.step = 0;
+    A.next = A.ctx.currentTime + 0.06;
+    A.timer = setInterval(musicPump, 25);
+    musicPump();
+  }
+
+  function musicStop(){
+    A.phase = ""; A.want = "";
+    if (A.timer){ clearInterval(A.timer); A.timer = 0; }
+  }
+
+  /* 즉시 무음 — 재생 중인 음을 각자 짧게 페어드아웃시켜 새 소리를 막지 않게 */
+  function silence(fade){
+    if (!A.ctx) return;
+    const now = A.ctx.currentTime;
+    const d = fade == null ? 0.05 : fade;
+    A.nodes.forEach(rec => {
+      try{
+        const g = rec.g;
+        g.gain.cancelScheduledValues(now);
+        g.gain.setValueAtTime(Math.max(0.0001, g.gain.value), now);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + d);
+        rec.src.stop(now + d + 0.01);
+      }catch(e){}
+    });
+    A.nodes.clear();
+    if (A.muted){
+      try{
+        const g = A.master.gain;
+        g.cancelScheduledValues(now);
+        g.setValueAtTime(0.0001, now);
+      }catch(e){}
+    }
+  }
+
+  /* 리셋·비우기·새 경기 때 전부 정지 */
+  function soundStopAll(){
+    musicStop();
+    try{ if ("speechSynthesis" in window) window.speechSynthesis.cancel(); }catch(e){}
+    silence(0.05);
+  }
+
+  /* 결승선 이후: 팡파르 → 엔딩 BGM 루프 */
+  function endSequence(){
+    if (!A.ctx) return;
+    if (A.timer){ clearInterval(A.timer); A.timer = 0; }
+    A.phase = ""; A.want = "end";
+    if (A.muted) return;
+    sfxFanfare();
+    setTimeout(() => {
+      if (A.want === "end" && A.ctx && !A.muted && !A.phase) musicStart("end");
+    }, 2200);
+  }
+
+  /* ---------- 소리 켜기/끄기 ---------- */
+  const soundBtn = $("soundBtn");
+  function paintSoundBtn(){
+    soundBtn.textContent = A.muted ? "🔇 음소거" : "🔊 소리 ON";
+    soundBtn.classList.toggle("off", A.muted);
+    soundBtn.setAttribute("aria-pressed", A.muted ? "false" : "true");
+    soundBtn.title = A.muted ? "누르면 소리가 다시 켜집니다" : "누르면 모든 소리가 즉시 꺼집니다";
+  }
+  function setMuted(m){
+    A.muted = !!m;
+    paintSoundBtn();
+    if (A.muted){
+      const want = A.want;
+      if (A.timer){ clearInterval(A.timer); A.timer = 0; }
+      A.phase = "";
+      A.want = want;
+      try{ if ("speechSynthesis" in window) window.speechSynthesis.cancel(); }catch(e){}
+      silence(0.035);
+    } else {
+      audioUnlock();
+      if (A.ctx){
+        try{ A.master.gain.setValueAtTime(0.92, A.ctx.currentTime); }catch(e){}
+      }
+      if (A.want) musicStart(A.want);
+    }
+  }
+  paintSoundBtn();
+  soundBtn.addEventListener("click", () => { audioUnlock(); setMuted(!A.muted); });
+
+  /* 검증용(주소에 ?debug=1 을 붙였을 때만 노출) */
+  if (QS.get("debug") === "1"){
+    window.__AUDIO__ = {
+      unlock(){ audioUnlock(); return A.ctx ? A.ctx.state : null; },
+      rec(ms){
+        if (ms == null) return A.rec || [];
+        if (!A.ctx || !A.master){ A.rec = []; return A.rec; }
+        const an = A.ctx.createAnalyser();
+        an.fftSize = 1024;
+        A.master.connect(an);
+        const buf = new Float32Array(an.fftSize);
+        const out = [];
+        A.rec = out;
+        const t0 = performance.now();
+        let bucket = 0, bmax = 0, bstart = 0;
+        (function tick(){
+          an.getFloatTimeDomainData(buf);
+          let m = 0;
+          for (let i = 0; i < buf.length; i++){ const v = Math.abs(buf[i]); if (v > m) m = v; }
+          if (m > bmax) bmax = m;
+          const now = performance.now() - t0;
+          while (now >= bstart + 100){
+            out.push([bstart, Math.round(bmax * 1000) / 1000]);
+            bstart += 100; bmax = 0;
+          }
+          if (now < ms) requestAnimationFrame(tick);
+          else { try{ A.master.disconnect(an); }catch(e){} out.push([bstart, Math.round(bmax * 1000) / 1000]); }
+        })();
+        return out;
+      },
+      state(){
+        return {
+          ctx: A.ctx ? A.ctx.state : null,
+          muted: A.muted, phase: A.phase, want: A.want,
+          step: A.step, sched: A.sched, nodes: A.nodes.size,
+          voice: A.ko ? (A.ko.name + " / " + A.ko.lang) : null,
+          voices: A.voices,
+          speech: ("speechSynthesis" in window) ? { speaking: window.speechSynthesis.speaking, pending: window.speechSynthesis.pending } : null,
+          label: soundBtn.textContent
+        };
+      },
+      peak(ms){
+        return new Promise(resolve => {
+          if (!A.ctx || !A.master) return resolve(0);
+          const an = A.ctx.createAnalyser();
+          an.fftSize = 2048;
+          A.master.connect(an);
+          const buf = new Float32Array(an.fftSize);
+          let max = 0;
+          const t0 = performance.now();
+          (function tick(){
+            an.getFloatTimeDomainData(buf);
+            for (let i = 0; i < buf.length; i++){ const v = Math.abs(buf[i]); if (v > max) max = v; }
+            if (performance.now() - t0 < (ms || 500)) requestAnimationFrame(tick);
+            else { try{ A.master.disconnect(an); }catch(e){} resolve(Math.round(max * 1000) / 1000); }
+          })();
+        });
+      }
+    };
   }
 
   /* ---------- 버튼 ---------- */
