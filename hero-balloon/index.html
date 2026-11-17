@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🎈</text></svg>">
-<title>오늘은 내가 주인공 | 정진영 교육 아티스트</title>
+<title>오늘은 내가 주인공 | 강연 크리에이터 · 정진영</title>
 <meta name="description" content="강연장 서바이벌 — 포수가 쏘는 풍선에서 끝까지 살아남는 사람이 오늘의 주인공!">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -208,7 +208,7 @@
     <!-- ============ 입장 ============ -->
     <section class="view on" id="vEntry">
       <div class="entry-card">
-        <div class="kicker">SURVIVAL · ICE BREAKING</div>
+        <div class="kicker">강연 크리에이터 · 정진영</div>
         <h1>오늘은 <em>내가 주인공</em></h1>
         <p class="esub">포수가 쏘는 풍선을 피해<br><b>끝까지 살아남는 사람</b>이 오늘의 주인공!</p>
         <div class="field">
@@ -516,6 +516,12 @@
       startLoop();
       return;
     }
+    if (G.phase === "ended"){
+      if (G.screen !== "sky") show("sky");
+      stopLoop();
+      endedView();
+      return;
+    }
     if (G.phase === "finished"){
       if (G.screen !== "sky") show("sky");
       stopLoop();
@@ -637,7 +643,43 @@
     evaluateMyState();
   }
 
+  function inThisGame(){
+    return !!(G.survivors[pid] || G.pops[pid] || G.popped[pid]);
+  }
+
+  function endedView(){
+    evaluateMyState();
+    if (!inThisGame()){
+      setPhase("다음 판 대기");
+      setStatus("⏳ 이번 판에는 참여하지 못했어요", "다음 판부터 도전할 수 있습니다");
+      $("timeN").textContent = "0";
+      $("aliveN").textContent = String(G.k || 0);
+      return;
+    }
+    $("mAlive").querySelector(".lb").textContent = "생존 풍선";
+    $("mTime").querySelector(".lb").textContent = "남은 시간";
+    $("timeN").textContent = "0";
+    $("timeBar").style.width = "100%";
+    $("aliveN").textContent = String(G.k || Object.keys(G.survivors).length || 0);
+    if (G.isPopped){
+      setPhase("결과 대기 중");
+      setStatus("💥 내 풍선은 터졌어요", "⏱️ 서바이벌 종료 · 결과 발표를 기다리는 중...", "pop-state");
+      $("bottomHint").innerHTML = "오늘의 주인공은 <b>진행자 화면</b>에서 공개됩니다";
+    } else {
+      setPhase("결과 대기 중");
+      setStatus("⏱️ 서바이벌 종료! 결과 발표를 기다리는 중...", "🎈 아직 살아남았습니다 · 주인공 발표를 기다려 주세요", "win-state");
+      $("bottomHint").innerHTML = "끝까지 살아남았습니다 · <b>결과 발표 대기 중</b>";
+    }
+  }
+
   function finishView(){
+    if (!inThisGame()){
+      setPhase("다음 판 대기");
+      setStatus("⏳ 이번 판에는 참여하지 못했어요", "재시작 후 다음 판에 도전해 주세요");
+      $("timeN").textContent = "0";
+      $("aliveN").textContent = String(G.k || 0);
+      return;
+    }
     const survived = G.joined && !G.isPopped && (G.survivors[pid] || (!G.myPopAt && G.phase === "finished"));
     if (G.isPopped){
       setStatus("💥 내 풍선은 터졌어요", "오늘의 주인공 발표를 화면에서 확인해 주세요", "pop-state");
