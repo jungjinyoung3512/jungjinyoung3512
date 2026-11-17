@@ -1203,6 +1203,10 @@
     A.phase = "";
     if (A.timer){ clearInterval(A.timer); A.timer = 0; }
     if (!A.ctx || A.muted) return;   /* 음소거 중이면 해제할 때 재개 */
+    /* 엔딩 BGM은 톤이 잔잔해 같은 음량으론 묻히므로 버스 게인을 올려 균형을 맞춥니다 */
+    try{
+      A.music.gain.setTargetAtTime(kind === "end" ? 0.72 : 0.34, A.ctx.currentTime, 0.06);
+    }catch(e){ A.music.gain.value = kind === "end" ? 0.72 : 0.34; }
     A.phase = kind;
     A.step = 0;
     A.next = A.ctx.currentTime + 0.06;
