@@ -24,11 +24,13 @@
     --serif:"Noto Serif KR",Georgia,serif;
     --mono:ui-monospace,"SF Mono","Roboto Mono",Menlo,Consolas,monospace;
   }
-  html,body{margin:0;padding:0;height:100%;overflow:hidden;overscroll-behavior:none}
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;overscroll-behavior:none;touch-action:manipulation}
   body{
     background:var(--bg);color:var(--text);font-family:var(--sans);
     -webkit-font-smoothing:antialiased;line-height:1.35;letter-spacing:-0.01em;
-    word-break:keep-all;user-select:none;touch-action:manipulation;
+    word-break:keep-all;
+    -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+    touch-action:manipulation;-webkit-tap-highlight-color:transparent;
   }
   body::before{
     content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
@@ -37,8 +39,9 @@
       radial-gradient(60% 40% at 105% 100%, rgba(34,211,238,.18) 0%, rgba(34,211,238,0) 70%),
       radial-gradient(50% 35% at -10% 90%, rgba(251,191,36,.10) 0%, rgba(251,191,36,0) 70%);
   }
-  .app{position:relative;z-index:1;height:100vh;height:100dvh;width:100%;overflow:hidden}
-  .view{position:absolute;inset:0;display:none;flex-direction:column;padding:max(10px,env(safe-area-inset-top)) 14px max(12px,env(safe-area-inset-bottom))}
+  .app{position:relative;z-index:1;height:100vh;height:100dvh;width:100%;overflow:hidden;touch-action:manipulation}
+  .view{position:absolute;inset:0;display:none;flex-direction:column;padding:max(10px,env(safe-area-inset-top)) 14px max(12px,env(safe-area-inset-bottom));
+    touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
   .view.on{display:flex}
 
   /* ---------- 공통 ---------- */
@@ -183,17 +186,31 @@
   .plus.go{animation:plusUp .62s ease-out}
   @keyframes plusUp{0%{opacity:0;transform:translate(-50%,14px) scale(.8)}30%{opacity:1;transform:translate(-50%,-6px) scale(1.1)}100%{opacity:0;transform:translate(-50%,-38px) scale(1)}}
 
-  .pad{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:8px;margin-top:2px}
+  .pad{
+    flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:8px;margin-top:2px;
+    touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;
+  }
   .key{
     border:1px solid rgba(255,255,255,.13);border-radius:15px;cursor:pointer;
     background:linear-gradient(180deg,#1B2A4C,#141F3A);color:#F6F9FF;
     font-family:var(--mono);font-size:clamp(26px,8vw,32px);font-weight:900;
-    display:grid;place-items:center;transition:transform .07s,background .1s,border-color .1s,box-shadow .1s;
+    display:grid;place-items:center;
+    transition:transform .05s ease-out,background .06s linear,border-color .06s linear,box-shadow .06s linear;
     box-shadow:0 3px 0 rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.09);
-    -webkit-user-select:none;user-select:none;touch-action:manipulation;padding:0;
+    -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none;
+    -webkit-tap-highlight-color:transparent;padding:0;will-change:transform;
   }
   .key.fn{font-family:var(--sans);font-size:16px;font-weight:900;letter-spacing:-.02em;color:#C9D8EF;background:linear-gradient(180deg,#22304F,#182440)}
   .key:active{transform:translateY(2px) scale(.985);background:linear-gradient(180deg,#2B3D66,#1D2B4C);box-shadow:0 1px 0 rgba(0,0,0,.35)}
+  /* 눌림 순간의 즉각 피드백 (pointerdown과 동시에 70ms) */
+  .key.pressed{
+    transform:scale(.93);
+    background:linear-gradient(180deg,#C4B5FD,#7C3AED);
+    border-color:#EDE9FE;color:#fff;
+    box-shadow:0 0 0 2px rgba(196,181,253,.55), 0 0 30px -3px rgba(139,92,246,1);
+    transition:none;
+  }
+  .key.fn.pressed{background:linear-gradient(180deg,#A5B4FC,#4F46E5);border-color:#E0E7FF}
   .key.hit{background:linear-gradient(180deg,#8B5CF6,#6D28D9);border-color:#C4B5FD;box-shadow:0 0 26px -6px rgba(139,92,246,.9)}
   .key:disabled{opacity:.4}
 
@@ -443,7 +460,8 @@
     phase: "idle", startAt: 0, dur: 30000, raceId: 0,
     offset: 0, players: {}, total: 0, meta: {},
     results: null, endedShown: false,
-    q: null, input: "", lock: false, raf: 0, lastCd: null, playersOn: false, resultsAt: 0
+    q: null, input: "", lock: false, raf: 0, lastCd: null, playersOn: false, resultsAt: 0,
+    pending: []
   };
 
   const serverNow = () => Date.now() + G.offset;
@@ -546,6 +564,7 @@
     const newRace = G.raceId !== prevRace;
     if (newRace){
       G.score = 0; G.input = ""; G.lastAt = 0; G.lock = false; G.endedShown = false; G.finishRace = 0;
+      G.pending.length = 0;
       $("answerBox").classList.remove("ok","bad");
       $("plus").classList.remove("go");
       $("timeupOverlay").classList.remove("on");
@@ -778,9 +797,29 @@
     if (!G.raf) G.raf = requestAnimationFrame(tick);
   }
 
-  /* ---------- 키 입력 ---------- */
+  /* ---------- 키 입력 (pointerdown 즉시, 입력 유실 0) ---------- */
+  const LOCK_MS = 45;      /* 정답 후 다음 문제 전환 락 (이전 120ms → 45ms) */
+
   function press(k){
-    if (G.screen !== "play" || G.lock) return;
+    if (G.screen !== "play") return;
+    if (G.phase === "timeup" || G.phase === "finished") return;
+    if (G.lock){
+      /* 전환 중에 들어온 연타는 버리지 않고 대기열에 담는다 → 새 문제 첫 입력부터 그대로 반영 */
+      if (G.pending.length < 6) G.pending.push(k);
+      return;
+    }
+    applyKey(k);
+  }
+
+  function flushPending(){
+    let guard = 0;
+    while (!G.lock && G.pending.length && guard++ < 8){
+      applyKey(G.pending.shift());
+    }
+  }
+
+  function applyKey(k){
+    if (G.screen !== "play") return;
     if (G.phase === "timeup" || G.phase === "finished") return;
     if (!G.q) return;
     if (serverNow() < G.startAt) return;          /* 시작 전 */
@@ -820,9 +859,10 @@
     writeScore();
     setTimeout(() => {
       box.classList.remove("ok");
-      G.lock = false;
       newQ();
-    }, 120);
+      G.lock = false;
+      flushPending();
+    }, LOCK_MS);
   }
 
   function wrong(){
@@ -945,14 +985,49 @@
   $("roomInput").addEventListener("keydown", e => { if (e.key === "Enter") $("nameInput").focus(); });
 
   const pad = $("pad");
-  pad.addEventListener("pointerdown", e => {
-    const btn = e.target.closest(".key");
+  let hasPointer = (typeof window.PointerEvent !== "undefined");
+
+  function keyFeedback(btn){
     if (!btn) return;
-    e.preventDefault();
-    press(btn.dataset.k);
-    btn.classList.add("hit");
-    setTimeout(() => btn.classList.remove("hit"), 90);
-  }, { passive:false });
+    btn.classList.add("pressed");
+    clearTimeout(btn._pt);
+    btn._pt = setTimeout(() => btn.classList.remove("pressed"), 70);
+    try{ if (navigator.vibrate) navigator.vibrate(10); }catch(e){}
+  }
+
+  if (hasPointer){
+    pad.addEventListener("pointerdown", e => {
+      const btn = e.target.closest(".key");
+      if (!btn) return;
+      e.preventDefault();               /* 더블탭 줌·포커스 점프·중복 click 차단 */
+      keyFeedback(btn);
+      press(btn.dataset.k);
+    }, { passive:false });
+  } else {
+    pad.addEventListener("touchstart", e => {
+      const btn = e.target.closest(".key");
+      if (!btn) return;
+      e.preventDefault();
+      keyFeedback(btn);
+      press(btn.dataset.k);
+    }, { passive:false });
+    pad.addEventListener("mousedown", e => {
+      const btn = e.target.closest(".key");
+      if (!btn) return;
+      e.preventDefault();
+      keyFeedback(btn);
+      press(btn.dataset.k);
+    });
+  }
+  /* 손을 떼면 남은 눌림 표시를 바로 정리 (다음 연타가 선명하게) */
+  ["pointerup","pointercancel","pointerleave"].forEach(ev => {
+    pad.addEventListener(ev, e => {
+      const btn = e.target.closest && e.target.closest(".key");
+      if (!btn) return;
+      clearTimeout(btn._pt);
+      btn._pt = setTimeout(() => btn.classList.remove("pressed"), 40);
+    }, { passive:true });
+  });
 
   document.addEventListener("keydown", e => {
     if (G.screen !== "play") return;
