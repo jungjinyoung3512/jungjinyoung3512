@@ -97,12 +97,12 @@
   .timerbar.over{color:#FCA5A5;border-color:rgba(239,68,68,.45);background:rgba(239,68,68,.12)}
 
   /* ---------- 본문 ---------- */
-  .main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:6px 0 0}
+  .main{flex:1;display:flex;flex-direction:column;justify-content:stretch;padding:0}
   .view{display:none;flex-direction:column}
-  .view.on{display:flex;animation:fadeUp .45s ease both}
+  .view.on{display:flex;flex:1;animation:fadeUp .45s ease both}
   @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
-  .hero{text-align:center;margin-bottom:18px}
+  .hero{text-align:center;margin:auto 0 18px}
   .hero .emoji{
     font-size:34px;line-height:1;
     filter:drop-shadow(0 0 16px rgba(245,158,11,.75));
@@ -158,8 +158,14 @@
   .chip .ico{font-size:13px;flex:none;opacity:.85}
   .chip .tx{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
+  .privacy{
+    margin:16px 0 12px;text-align:center;font-size:11.5px;font-weight:700;color:#6E7D93;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+  }
+  .privacy b{color:#B7A277;font-weight:800}
+  .privacy .lk{font-size:12px;opacity:.9}
   .send{
-    margin-top:16px;width:100%;appearance:none;border:0;cursor:pointer;
+    margin-top:0;width:100%;appearance:none;border:0;cursor:pointer;
     font-family:inherit;font-size:17.5px;font-weight:900;letter-spacing:-0.02em;
     color:#2A1A02;padding:17px 20px;border-radius:16px;
     background:linear-gradient(180deg,#FCD34D 0%,#F59E0B 100%);
@@ -168,10 +174,10 @@
   }
   .send:active{transform:scale(.985)}
   .send:disabled{opacity:.55;filter:saturate(.7);box-shadow:none;cursor:default}
-  .note{margin:11px 0 0;text-align:center;font-size:11.5px;font-weight:600;color:#718096;line-height:1.5}
+  .note{margin:11px 0 auto;text-align:center;font-size:11.5px;font-weight:600;color:#718096;line-height:1.5}
 
   /* ---------- 전송 완료 ---------- */
-  #doneView{align-items:center;text-align:center;padding:8px 0 0}
+  #doneView{align-items:center;justify-content:center;text-align:center;padding:0 0 8px}
   .done-stage{
     position:relative;width:100%;
     display:flex;flex-direction:column;align-items:center;
@@ -271,6 +277,7 @@
         </div>
       </div>
 
+      <p class="privacy"><span class="lk">🔒</span><b>완전 익명</b> — 이름도 닉네임도 받지 않아요</p>
       <button class="send" id="sendBtn" type="button">💌 마음 보내기</button>
       <p class="note">보낸 마음은 이름 없이 큰 화면에 풍등으로 떠오릅니다</p>
     </section>
@@ -285,7 +292,6 @@
       <h2>따뜻한 마음이<br><em>도착했어요!</em></h2>
       <p class="done-sub">앞 화면을 주목해 주세요</p>
       <p class="done-note" id="doneNote">당신의 한 줄이 곧 밤하늘에 풍등으로 떠오릅니다</p>
-      <button class="again" id="againBtn" type="button" hidden>한 줄 더 보내기</button>
     </section>
   </div>
 
@@ -326,7 +332,6 @@
     writeView: $("#writeView"),
     doneView: $("#doneView"),
     doneNote: $("#doneNote"),
-    againBtn: $("#againBtn"),
     sparks: $("#sparks")
   };
 
@@ -393,12 +398,11 @@
   function showWrite(){
     el.writeView.classList.add("on");
     el.doneView.classList.remove("on");
-    el.againBtn.hidden = true;
+    window.scrollTo(0, 0);
   }
-  function showDone(allowAgain){
+  function showDone(){
     el.writeView.classList.remove("on");
     el.doneView.classList.add("on");
-    el.againBtn.hidden = !allowAgain;
     window.scrollTo(0, 0);
   }
 
@@ -436,7 +440,7 @@
       el.sendBtn.textContent = "💌 마음 보내기";
       el.msg.value = "";
       updateCount();
-      showDone(true);
+      showDone();
       watchMyMessage();
     }).catch(err => {
       S.sending = false;
@@ -462,7 +466,7 @@
     });
   }
 
-  el.againBtn.addEventListener("click", () => {
+  el.againBtn && el.againBtn.addEventListener("click", () => {
     if (S.sent){ toast("이미 마음을 보내셨어요 — 앞 화면을 봐 주세요"); return; }
     showWrite();
   });

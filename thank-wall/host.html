@@ -161,12 +161,13 @@
   }
   @keyframes twinkle{0%,100%{opacity:.18;transform:scale(.85)}50%{opacity:.95;transform:scale(1.12)}}
   .moon{
-    position:absolute;right:6.5%;top:9%;width:112px;height:112px;border-radius:50%;
+    position:absolute;right:3.2%;top:5%;width:88px;height:88px;border-radius:50%;
     background:radial-gradient(circle at 38% 34%, #FFF8E7 0%, #FFE8B8 52%, #F2C97F 100%);
-    box-shadow:0 0 70px 26px rgba(252,211,77,.18), 0 0 130px 52px rgba(252,211,77,.09);
+    box-shadow:0 0 46px 16px rgba(252,211,77,.15), 0 0 90px 34px rgba(252,211,77,.07);
     opacity:0;transition:opacity 1.2s ease;z-index:0;
   }
   .moon.on{opacity:.92}
+  body.gridmode .moon{opacity:0}
 
   /* ---- 대기(모집) ---- */
   .wait{
@@ -233,15 +234,16 @@
   .reveal.grid .board-head{display:flex}
   .bh-t{font-family:var(--serif);font-weight:900;font-size:20px;color:#FFF;letter-spacing:-0.02em}
   .bh-t b{color:var(--amber-lt)}
-  .bh-s{font-size:12px;font-weight:700;color:#8FA0B6;letter-spacing:.02em}
+  .bh-s{font-size:12px;font-weight:700;color:#A3B2C7;letter-spacing:.02em}
   .bh-s b{color:#D6DFEB;font-weight:800}
   .sky{
     flex:1;min-height:0;display:grid;
     grid-template-columns:repeat(var(--cols,3),minmax(0,1fr));
     gap:var(--gap,18px);
-    align-content:center;justify-items:stretch;align-items:stretch;
-    padding:6px 2px;overflow:hidden;
+    align-content:center;justify-items:stretch;align-items:center;
+    padding:8px 2px;overflow:hidden;
   }
+  .reveal.grid .sky{align-items:stretch;grid-auto-rows:minmax(112px,auto);align-content:center}
   .lantern{
     position:relative;opacity:0;transform:translateY(64px) scale(.95) rotate(var(--rot,0deg));
     transition:transform .5s cubic-bezier(.2,.8,.2,1);
@@ -250,7 +252,7 @@
   .lantern.in{opacity:1;transform:translateY(0) scale(1) rotate(var(--rot,0deg))}
   @keyframes rise{to{opacity:1;transform:translateY(0) scale(1) rotate(var(--rot,0deg))}}
   .card{
-    position:relative;height:100%;
+    position:relative;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     border-radius:16px;padding:var(--pad,14px) 14px;
     background:linear-gradient(168deg,#FFFaf0 0%,#FFEFD3 46%,#FFDDAE 100%);
@@ -279,6 +281,7 @@
   /* 한눈에 보기 — 정갈한 보드 */
   .reveal.grid .lantern{opacity:1;transform:none;animation:none}
   .reveal.grid .card{
+    height:100%;
     animation:none;border-radius:14px;
     background:linear-gradient(180deg,#FFFCF5 0%,#FFF4E1 100%);
     box-shadow:0 6px 16px -12px rgba(0,0,0,.9),0 0 0 1px rgba(214,178,120,.55);
@@ -2962,26 +2965,49 @@ var qrcode = function() {
     const W = el.sky.clientWidth || 1000;
     const H = el.sky.clientHeight || 520;
     const grid = S.grid;
-    let cols = grid ? (n <= 2 ? Math.max(1, n) : n <= 6 ? 3 : n <= 12 ? 4 : n <= 20 ? 5 : n <= 30 ? 6 : 7)
-                    : (n <= 1 ? 1 : n <= 4 ? 2 : n <= 9 ? 3 : n <= 16 ? 4 : n <= 24 ? 5 : n <= 36 ? 6 : 7);
     let gap = grid ? 12 : Math.max(12, Math.min(20, Math.round(W / 78)));
-    let fs = 18;
-    for (let k = 0; k < 4; k++){
-      const cw = (W - gap * (cols - 1)) / cols;
-      const rows = Math.max(1, Math.ceil(n / cols));
-      const ch = (H - gap * (rows - 1)) / rows;
-      fs = Math.min(cw / 8.0, ch / 7.4);
-      fs = Math.max(10.5, Math.min(grid ? 19 : 27, fs));
-      const want = Math.round(W / (fs * 6.6));
-      const nextCols = Math.max(1, Math.min(8, want));
-      if (nextCols === cols) break;
-      cols = nextCols;
+    const cols = pickCols(n, W, H, gap, grid);
+
+    /* 글자 크기: 카드 폭과 높이 양쪽에서 감당할 수 있는 선 */
+    const rows = Math.max(1, Math.ceil(n / cols));
+    const cw = (W - gap * (cols - 1)) / cols;
+    let fs;
+    if (grid){
+      fs = Math.min(cw / 9.2, Math.max(96, (H - gap * (rows - 1)) / rows) / 6.2);
+      fs = Math.max(11, Math.min(19, fs));
+    } else {
+      fs = Math.min(cw / 8.2, ((H - gap * (rows - 1)) / rows) / 8.5);
+      fs = Math.max(11, Math.min(28, fs));
     }
     el.sky.style.setProperty("--cols", cols);
     el.sky.style.setProperty("--gap", gap + "px");
     el.sky.style.setProperty("--fs", fs.toFixed(2) + "px");
-    el.sky.style.setProperty("--pad", Math.max(8, Math.round(fs * 0.8)) + "px");
+    el.sky.style.setProperty("--pad", Math.max(9, Math.round(fs * 0.85)) + "px");
     fitAll(fs);
+  }
+
+  /* 카드가 충분히 크게 보이면서 화면을 넓게 쓰는 열 수 */
+  function pickCols(n, W, H, gap, grid){
+    if (!n) return 1;
+    if (grid){
+      /* 사진용: 정사각형에 가까운 정갈한 배열 */
+      let c = Math.ceil(Math.sqrt(n));
+      c = Math.min(c, Math.max(1, Math.floor(W / 185)), 8);
+      return Math.max(1, Math.min(n, c));
+    }
+    const maxC = Math.max(1, Math.min(n, 9));
+    let best = 1;
+    for (let c = 1; c <= maxC; c++){
+      const rows = Math.ceil(n / c);
+      const cw = (W - gap * (c - 1)) / c;
+      const ch = (H - gap * (rows - 1)) / rows;
+      if (cw >= 198 && ch >= 104) best = c;
+    }
+    if (best === 1 && n > 4){
+      /* 메시지가 많아 조건을 못 맞추면 촘촘하게라도 모두 올립니다 */
+      best = Math.max(1, Math.min(maxC, Math.ceil(Math.sqrt(n * 1.7))));
+    }
+    return best;
   }
 
   /* 넘칠 때 글자를 조금씩 줄여 한 화면에 담습니다 */
@@ -3063,6 +3089,7 @@ var qrcode = function() {
   function toggleGrid(force){
     S.grid = (typeof force === "boolean") ? force : !S.grid;
     el.revealView.classList.toggle("grid", S.grid);
+    document.body.classList.toggle("gridmode", S.grid);
     el.gridBtn.innerHTML = S.grid ? "🌙 <span class=\"lbl2\">풍등으로 보기</span>" : "📋 <span class=\"lbl2\">한눈에 보기</span>";
     // 정렬 시 애니메이션 흔적 정리 → 곧바로 보이게
     [].forEach.call(el.sky.children, c => { c.classList.remove("anim"); c.classList.add("in"); });
