@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0A1120">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🐵</text></svg>">
-<title>절묘한 타이밍 · 진행자 | 정진영 강연 크리에이터</title>
+<title>절묘한 타이밍 · 진행자 | 강연 크리에이터 · 정진영</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
@@ -147,6 +147,36 @@
   .lrow.empty .nm{color:#40506B;font-weight:700}
   .lrow.empty .sc{color:#31415B}
 
+  /* 시간 종료 대기(수동 결과 공개) */
+  .run-wrap.dim{opacity:.3;filter:saturate(.55)}
+  .tup{
+    position:absolute;inset:0;z-index:6;display:none;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 46%,rgba(245,165,36,.10),rgba(6,11,20,.74) 62%);
+  }
+  .tup.on{display:flex}
+  .tup .card{
+    background:linear-gradient(180deg,#17253D,#0E1829);border:1px solid rgba(245,165,36,.44);border-radius:26px;
+    padding:34px 56px 30px;text-align:center;
+    box-shadow:0 30px 90px rgba(0,0,0,.62), inset 0 1px 0 rgba(255,255,255,.06);
+    animation:tupIn .42s cubic-bezier(.2,.9,.2,1);
+  }
+  @keyframes tupIn{0%{transform:scale(.9);opacity:0}100%{transform:scale(1);opacity:1}}
+  .tup .ic{font-size:46px;line-height:1}
+  .tup h2{font-family:var(--serif);font-size:40px;font-weight:900;letter-spacing:-.03em;margin:10px 0 8px;color:#FFF3DC}
+  .tup p{font-size:18px;font-weight:800;color:#D9E4F2;margin:0}
+  .tup .hint{
+    margin-top:16px;display:inline-block;font-size:14px;font-weight:800;color:var(--amber-lt);
+    background:var(--amber-soft);border:1px solid rgba(245,165,36,.34);border-radius:11px;padding:9px 18px;
+  }
+  .tup .hint b{color:#FFF3DC}
+  .tup .dots{display:flex;gap:7px;justify-content:center;margin-top:18px}
+  .tup .dots i{width:9px;height:9px;border-radius:50%;background:var(--amber);animation:bdot 1.2s infinite}
+  .tup .dots i:nth-child(2){animation-delay:.16s}
+  .tup .dots i:nth-child(3){animation-delay:.32s}
+  @keyframes bdot{0%,100%{opacity:.22;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
+  .btn.result.pulse{animation:pulseBtn 1.15s infinite;border-color:rgba(52,211,153,.85)}
+  @keyframes pulseBtn{0%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}70%{box-shadow:0 0 0 13px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+
   /* result */
   .res-head{flex:none;display:flex;align-items:flex-end;justify-content:space-between;padding:2px 2px 10px}
   .res-head .h{font-family:var(--serif);font-size:27px;font-weight:900;letter-spacing:-.03em;margin:0}
@@ -199,7 +229,7 @@
 <div class="stage">
 
   <div class="bar">
-    <div class="brand"><span class="emo">🐵</span>절묘한 타이밍<span class="sub">정진영 강연 크리에이터</span></div>
+    <div class="brand"><span class="emo">🐵</span>절묘한 타이밍<span class="sub">강연 크리에이터 · 정진영</span></div>
     <div class="mid">
       <span class="pill off" id="netPill"><span class="live"></span><span id="netTxt">연결 중</span></span>
       <span class="pill">방 코드 <b id="roomTag">JY80</b></span>
@@ -269,6 +299,15 @@
             <span class="c" id="lbMeta">점수가 실시간으로 반영됩니다</span>
           </div>
           <div class="lb" id="lbList"></div>
+        </div>
+      </div>
+      <div class="tup" id="tupPanel">
+        <div class="card">
+          <div class="ic">⏱️</div>
+          <h2>경기 종료!</h2>
+          <p>결과 발표를 기다리는 중...</p>
+          <div class="hint"><b>[🏆 결과보기]</b>를 눌러 순위를 공개하세요</div>
+          <div class="dots"><i></i><i></i><i></i></div>
         </div>
       </div>
     </section>
@@ -612,6 +651,22 @@
     setTimeout(() => fl.classList.remove("on"), 700);
   }
 
+  /* ---------- 종료 신호음(결과는 아직 비공개) ---------- */
+  function timeUpSound(){
+    unlock();
+    if (!A.ctx) return;
+    const t = A.ctx.currentTime + 0.02;
+    /* 휘슬 세 번 */
+    [0, 0.24, 0.48].forEach(d => {
+      tone({f:1620, f2:1520, dur:0.19, type:"square", gain:0.085, t:t + d, flt:{type:"bandpass", f:1900, q:1.6}});
+      tone({f:2430, dur:0.15, type:"sine", gain:0.04, t:t + d});
+    });
+    /* 마무리 징 */
+    tone({f:196, f2:98, dur:0.75, type:"triangle", gain:0.16, t:t + 0.62, bus:A.music});
+    hit({f:520, f2:120, dur:0.4, ftype:"lowpass", gain:0.09, t:t + 0.62});
+    setTimeout(() => speak("경기 종료! 결과 발표를 기다려 주세요.", {rate:1.02, pitch:1.0}), 300);
+  }
+
   function setSound(on){
     A.muted = !on;
     $("btnSound").innerHTML = on ? '🔊 소리 ON' : '🔇 음소거';
@@ -669,9 +724,14 @@
     const round = Number(m.round) || 0;
 
     if (st === "count" || st === "run"){
-      if (startAt !== H.startAt || round !== H.round || H.state === "idle" || H.state === "end"){
+      if (startAt !== H.startAt || round !== H.round || H.state === "idle" || H.state === "end" || H.state === "closed"){
         joinRound(startAt, round, H.state !== "count" && H.state !== "run");
+        if (nowMs() >= startAt + GAME_MS) timeUp(true);
       }
+      return;
+    }
+    if (st === "closed"){
+      if (H.state !== "closed" && H.state !== "end") timeUp(true);
       return;
     }
     if (st === "end"){
@@ -709,9 +769,17 @@
     cancelAnimationFrame(H.raf);
     loopStop();
     setBoard("idle");
+    hideClosed();
     if ($("topTimerNum")) $("topTimerNum").textContent = "36.0";
     $("topTimer").classList.remove("hot");
     paintRoster();
+  }
+
+  /* 시간 종료 오버레이·버튼 펄스 정리 */
+  function hideClosed(){
+    $("tupPanel").classList.remove("on");
+    $("btnResult").classList.remove("pulse");
+    document.querySelector(".run-wrap").classList.remove("dim");
   }
 
   function joinRound(startAt, round, announce){
@@ -721,6 +789,7 @@
     H.phase = "run";
     H.ended = false;
     setBoard("run");
+    hideClosed();
     cancelAnimationFrame(H.raf);
     H.raf = requestAnimationFrame(tick);
 
@@ -739,6 +808,9 @@
     cancelAnimationFrame(H.raf);
     if ($("bigTimerNum")){ $("bigTimerNum").textContent = "0.0"; $("topTimerNum").textContent = "0.0"; }
     $("bigBar").style.width = "0%";
+    $("bigBar").classList.remove("hot");
+    $("topTimer").classList.remove("hot");
+    hideClosed();
     loopStop();
     unlock();
     if (!H.ended){
@@ -748,6 +820,35 @@
     }
     setBoard("res");
     paintResult();
+  }
+
+  /* =========================================================
+     36초 종료 — 여기서는 절대 결과를 자동 공개하지 않는다.
+     진행자가 [🏆 결과보기]를 눌러야만 goResult()로 순위 공개.
+     ========================================================= */
+  function timeUp(remote){
+    if (H.state === "end" || H.state === "closed") return;
+    H.state = "closed";
+    cancelAnimationFrame(H.raf);
+    loopStop();
+    if ($("bigTimerNum")){ $("bigTimerNum").textContent = "0.0"; $("topTimerNum").textContent = "0.0"; }
+    $("bigBar").style.width = "0%";
+    $("bigBar").classList.remove("hot");
+    $("bigClock").classList.remove("hot");
+    $("topTimer").classList.remove("hot");
+    setBoard("run");
+    document.querySelector(".run-wrap").classList.add("dim");
+    $("phaseTag").innerHTML = "종료 · <b>결과 대기</b>";
+    $("tupPanel").classList.add("on");
+    $("btnResult").classList.add("pulse");
+    paintLeaderboard(false);
+    if (!remote){
+      unlock();
+      timeUpSound();
+      if (db && metaRef){
+        metaRef.update({ state: "closed", closedAt: firebase.database.ServerValue.TIMESTAMP }).catch(() => {});
+      }
+    }
   }
 
   /* ================= 진행 루프 ================= */
@@ -763,7 +864,7 @@
         paintLeaderboard(false);
       }
     }
-    if (remain <= 0 && H.state !== "end"){ goResult(); return; }
+    if (remain <= 0){ timeUp(false); return; }
     H.raf = requestAnimationFrame(tick);
   }
 
@@ -935,6 +1036,7 @@
     }).catch(() => toast("초기화에 실패했어요. 다시 시도해 주세요."));
   }
 
+  /* 결과보기 = 마감 + 결과 공개(팡파르·엔딩 BGM) */
   function endNow(){
     if (!db) return;
     if (H.state === "end"){ goResult(); return; }
