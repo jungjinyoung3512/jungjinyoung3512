@@ -880,6 +880,7 @@
 
   function beginCountdown(){
     var cd = $("countdown"), num = $("cdNum"), sub = $("cdSub");
+    if (cd.classList.contains("on")) return;   /* 중복 호출(시작 직후 meta 수신) 방지 — "삼"이 두 번 나오지 않게 */
     cd.classList.add("on");
     $("idleNote").classList.remove("on");
     var last = "";
@@ -1406,6 +1407,7 @@
   /* ---------------- 전체 비우기 ---------------- */
   function clearAll(){
     sndStopAll();
+    S.selTeam = 0;
     clearInterval(S.cdTimer);
     S.phase = "idle"; S.startAt = 0; S.endAt = 0; S.elapsed = 0;
     S.teams = {}; S.result = null; S.slots = {}; S.locks = {}; S.emptySince = {}; S.paintKey = "";
