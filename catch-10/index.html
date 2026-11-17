@@ -153,10 +153,12 @@
   .timer-wrap{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:12px 0 2px;position:relative}
   .timer{
     font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:800;
-    font-size:64px;line-height:1;letter-spacing:-0.045em;color:#FFFFFF;
+    font-size:64px;line-height:1;color:#FFFFFF;
     text-shadow:0 0 34px rgba(245,158,11,.4);transition:color .25s;
+    display:flex;align-items:baseline;justify-content:center;gap:4px;
   }
-  .timer .u{font-size:24px;font-weight:700;color:var(--muted);margin-left:4px;letter-spacing:0}
+  .timer .num{letter-spacing:-0.045em}
+  .timer .u{font-size:22px;font-weight:700;color:var(--muted);letter-spacing:0}
   .timer.blind{color:var(--amber-lt);letter-spacing:.02em;animation:blink 1.05s steps(1) infinite}
   @keyframes blink{0%,60%{opacity:1}61%,100%{opacity:.42}}
   .timer-label{margin-top:7px;font-size:11px;font-weight:700;color:#7C8BA3;letter-spacing:.02em}
@@ -329,7 +331,7 @@
     <section class="view" id="view-play">
       <div class="play-head"><span class="play-kicker">⏱️ 10.00초에 가장 가까운 사람이 승리</span></div>
       <div class="timer-wrap">
-        <div class="timer" id="timer">0.00<span class="u">초</span></div>
+        <div class="timer" id="timer"><span class="num">0.00</span><span class="u">초</span></div>
         <div class="timer-label" id="timerLabel">버튼을 준비하세요</div>
       </div>
       <div class="btn-zone">
@@ -715,19 +717,20 @@
 
   function paintTimer(){
     const t = elapsed();
+    const num = timerEl.querySelector(".num");
     if (t < 0){
       timerEl.classList.remove("blind");
-      timerEl.innerHTML = '0.00<span class="u">초</span>';
+      num.textContent = "0.00";
       timerLabel.textContent = "곧 시작합니다";
       return;
     }
     if (G.blind && t >= BLIND_MS){
       timerEl.classList.add("blind");
-      timerEl.innerHTML = '??.??<span class="u">초</span>';
+      num.textContent = "??.??";
       timerLabel.textContent = "숫자가 사라졌습니다 — 감으로!";
     } else {
       timerEl.classList.remove("blind");
-      timerEl.innerHTML = fmt(t) + '<span class="u">초</span>';
+      num.textContent = fmt(t);
       timerLabel.textContent = G.blind ? "3.00초부터 가려집니다" : "10.00초를 노리세요";
     }
   }
