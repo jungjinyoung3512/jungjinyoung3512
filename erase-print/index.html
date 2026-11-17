@@ -944,7 +944,7 @@
       paintTimer();
       const t = elapsed();
       if (G.phase === "countdown" || t < 0){ paintCountdown(t); }
-      else { $("cdOverlay").classList.remove("on"); }
+      else if (G.cdShown !== "go"){ $("cdOverlay").classList.remove("on"); }
 
       /* 제한시간 종료 → 자동 결과 전환 금지. 진행자가 공개할 때까지 대기 */
       if (G.phase === "running" && remaining() <= 0){
