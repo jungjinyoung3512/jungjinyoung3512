@@ -74,8 +74,34 @@
                     rgba(20, 18, 16, 0.94) 78%,
                     #141210 100%);
         }
+        /* 모바일·태블릿: 사장님 얼굴 위로 글자가 겹치지 않도록 사진은 상단 밴드, 글자는 아래 */
+        @media (max-width: 1023px) {
+            section.hero {
+                display: block;
+                min-height: 0;
+                padding-top: 0;
+            }
+            section.hero .hero-bg {
+                position: relative;
+                inset: auto;
+                height: max(50vh, 85vw);
+                min-height: 300px;
+                max-height: 660px;
+            }
+            .hero-photo {
+                object-position: 50% 20%;
+            }
+            .hero-overlay {
+                background: linear-gradient(to bottom,
+                    rgba(20, 18, 16, 0.52) 0%,
+                    rgba(20, 18, 16, 0.14) 30%,
+                    rgba(20, 18, 16, 0.30) 60%,
+                    rgba(20, 18, 16, 0.86) 88%,
+                    #141210 100%);
+            }
+        }
         /* PC(가로 화면): 세로 사진이 잘리지 않도록 우측에 원본 비율로 세우고 왼쪽은 어둡게 */
-        @media (min-width: 1280px) {
+        @media (min-width: 1024px) {
             .hero-photo {
                 position: absolute;
                 top: 0;
@@ -157,9 +183,9 @@
     </header>
 
     <!-- 히어로 섹션 (메인 배너) -->
-    <section class="relative min-h-[92vh] flex items-center pt-20 overflow-hidden">
+    <section class="hero relative min-h-[92vh] flex items-center pt-20 overflow-hidden">
         <!-- 대문 배경 사진: 육가 서면본점 대표 -->
-        <div class="absolute inset-0 z-0">
+        <div class="hero-bg absolute inset-0 z-0">
             <img id="menu-img-5" src="./hero.jpg"
                  onerror="this.src='https://placehold.co/1920x1080/1E1B18/D4AF37?text=Yugga+Seomyeon'"
                  alt="육가 서면본점 대표가 직접 고른 고기를 들고 있는 모습"
