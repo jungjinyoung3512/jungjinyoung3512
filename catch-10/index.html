@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>⏱</text></svg>">
-<title>10초를 잡아라 | 정진영 교육 아티스트</title>
+<title>10초를 잡아라 | 정진영 강연 크리에이터</title>
 <meta name="description" content="강연장 아이스브레이킹 — 10초를 가장 가깝게 잡은 사람이 이기는 초감각 타이밍 게임">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -97,19 +97,24 @@
   .input:focus{border-color:rgba(245,158,11,.75);box-shadow:0 0 0 3px rgba(245,158,11,.14)}
   .row2{display:flex;gap:8px}
   .row2 .input.flex{flex:1;min-width:0}
-  .mini-room{width:104px;flex:none;text-align:center;letter-spacing:.09em;font-weight:900;color:var(--amber)}
+  .mini-room{width:88px;flex:none;text-align:center;letter-spacing:.09em;font-weight:900;color:var(--amber)}
   .mini-room::placeholder{color:#7C6A45;letter-spacing:.09em;font-weight:800}
-  .swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-  .sw{
-    appearance:none;border:1px solid var(--line);background:#111C30;border-radius:13px;
-    padding:9px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;
-    font-family:inherit;font-size:10.5px;font-weight:700;color:#B7C3D4;cursor:pointer;
+  .teams{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+  .tm{
+    appearance:none;position:relative;border:1px solid var(--line);background:#111C30;border-radius:11px;
+    padding:8px 2px 7px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    font-family:inherit;font-size:12px;font-weight:900;color:#C3CFE0;cursor:pointer;
     transition:transform .12s,border-color .12s,background .12s,color .12s;
   }
-  .sw .orb{width:19px;height:19px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px rgba(255,255,255,.035) inset,0 3px 10px -3px var(--c)}
-  .sw:active{transform:scale(.96)}
-  .sw.sel{border-color:rgba(245,158,11,.85);background:rgba(245,158,11,.12);color:#FFF7E6;box-shadow:0 0 0 2px rgba(245,158,11,.2) inset}
-  .sw.sel .orb{box-shadow:0 0 0 2px #0F172A inset,0 0 0 4px rgba(245,158,11,.55)}
+  .tm .tn{letter-spacing:-.02em;line-height:1.1}
+  .tm .tag{font-size:8.5px;font-weight:800;letter-spacing:0;color:#5F7290;line-height:1;min-height:9px}
+  .tm::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--c);position:absolute;top:5px;right:6px}
+  .tm:active{transform:scale(.96)}
+  .tm.sel{border-color:rgba(252,211,77,.9);background:linear-gradient(180deg,rgba(245,158,11,.28),rgba(245,158,11,.1));color:#FFF7E6;box-shadow:0 0 0 2px rgba(245,158,11,.2) inset}
+  .tm.sel .tag{color:#FCD34D}
+  .tm.taken{color:#4B5C75;background:#0C1526;border-color:rgba(255,255,255,.05);border-style:dashed;cursor:not-allowed}
+  .tm.taken::before{opacity:.22}
+  .tm.taken .tag{color:#8B5E5E}
   .cta{
     appearance:none;border:0;width:100%;margin-top:auto;
     font-family:inherit;font-size:16px;font-weight:900;letter-spacing:-0.02em;color:#241703;
@@ -275,7 +280,7 @@
 <body>
 <div class="app">
   <div class="top">
-    <div class="brand"><span class="dot"></span><b>정진영 · 교육 아티스트</b></div>
+    <div class="brand"><span class="dot"></span><b>정진영 · 강연 크리에이터</b></div>
     <div class="roomtag">방 <b id="roomTag">JY10</b></div>
   </div>
 
@@ -289,17 +294,13 @@
       </div>
 
       <div class="card entry-card">
-        <div class="flabel"><span>이름 또는 팀명</span><i>최대 10자</i></div>
-        <input class="input" id="nameInput" maxlength="10" placeholder="예) 김하늘 / 3조" autocomplete="off" enterkeyhint="done">
-        <div class="flabel" style="margin-top:13px"><span>방 코드</span><i>진행자 화면과 같아야 해요</i></div>
+        <div class="flabel"><span>조 선택</span><i id="teamHint">1조 ~ 20조 · 먼저 고른 사람이 그 조</i></div>
+        <div class="teams" id="teams"></div>
+        <div class="flabel" style="margin-top:12px"><span>이름 <span style="font-weight:600;color:#7C8BA3">(선택)</span></span><i>비워두면 조 이름으로 입장</i></div>
         <div class="row2">
+          <input class="input flex" id="nameInput" maxlength="10" placeholder="예) 김하늘" autocomplete="off" enterkeyhint="done">
           <input class="input mini-room" id="roomInput" maxlength="8" placeholder="JY10" autocomplete="off" enterkeyhint="done">
-          <div style="flex:1;display:flex;align-items:center;font-size:10.5px;color:#64748B;line-height:1.45">
-            화면에 뜬<br>방 코드를 확인하세요
-          </div>
         </div>
-        <div class="flabel" style="margin-top:13px"><span>컬러 선택</span><i>순위표에 이 색으로 표시</i></div>
-        <div class="swatches" id="swatches"></div>
       </div>
 
       <div class="stat-line"><span class="pulse-dot"></span>현재 <b id="entryCount">0</b> / 20명 대기 중</div>
@@ -321,8 +322,8 @@
       <div class="wait-foot">
         <div class="wait-count">현재 <b id="waitCount">1</b> / 20명 참여</div>
         <div class="tipbox">
-          <b>이기는 법</b> — 숫자가 보이는 건 3초까지. 그 뒤로는 감으로!<br>
-          <b>주의</b> — 12초가 지나면 자동 실격이에요.
+          <b>이기는 법</b> — 숫자가 보이는 건 <b id="blindTip">6</b>초까지. 그 뒤로는 감으로!<br>
+          <b>주의</b> — 16초가 지나면 자동 실격이에요.
         </div>
       </div>
     </section>
@@ -340,7 +341,7 @@
           <span class="tx">10초 잡아라!<small>지금이라고 생각될 때</small></span>
         </button>
       </div>
-      <div class="play-foot" id="playFoot"><b>3.00초</b>가 지나면 숫자가 가려집니다 · 한 번만 누를 수 있어요</div>
+      <div class="play-foot" id="playFoot"><b id="playFootAt">6.00초</b>가 지나면 숫자가 가려집니다 · 한 번만 누를 수 있어요</div>
 
       <div class="locked" id="locked">
         <div class="lock-badge">✅</div>
@@ -368,7 +369,7 @@
         <div class="list-head"><span>순위 · 참가자</span><span>기록 / 오차</span></div>
         <div id="resList"></div>
       </div>
-      <div class="res-foot"><span id="resFoot">12.00초 종료</span></div>
+      <div class="res-foot"><span id="resFoot">16.00초 종료</span></div>
     </section>
   </main>
 </div>
@@ -415,22 +416,17 @@
     appId: "1:977342156141:web:f9842fcc67a819ce621e64"
   };
 
-  const RACE_MS = 12000;   /* 경기 길이 */
-  const BLIND_MS = 3000;   /* 이 시점부터 숫자 가림 */
-  const TARGET_MS = 10000; /* 목표 10초 */
-  const CAP = 20;
-  const MAX = 30;
+  const RACE_MS = 16000;      /* 경기 길이 */
+  const DEFAULT_BLIND = 6000; /* 기본: 6.00초부터 숫자 가림 */
+  const TARGET_MS = 10000;    /* 목표 10초 */
+  const CAP = 20;             /* 1조 ~ 20조 */
+  const MAX = 20;
 
-  const COLORS = [
-    {id:"red",    name:"빨강", hex:"#EF4444"},
-    {id:"orange", name:"주황", hex:"#F97316"},
-    {id:"amber",  name:"노랑", hex:"#FACC15"},
-    {id:"mint",   name:"초록", hex:"#34D399"},
-    {id:"cyan",   name:"하늘", hex:"#22D3EE"},
-    {id:"blue",   name:"파랑", hex:"#3B82F6"},
-    {id:"purple", name:"보라", hex:"#A78BFA"},
-    {id:"pink",   name:"분홍", hex:"#F472B6"}
-  ];
+  /* 조별 고유 포인트 색상 (자동 배정) */
+  function teamColor(n){
+    const hue = (Number(n) * 47) % 360;
+    return "hsl(" + hue + ", 82%, 60%)";
+  }
 
   const store = {
     get(k, d){ try{ const v = localStorage.getItem(k); return v == null ? d : v; }catch(e){ return d; } },
@@ -448,8 +444,9 @@
     screen: "entry",
     joined: false,
     name: "",
-    color: COLORS[4].hex,
-    colorName: COLORS[4].name,
+    team: 0,
+    color: "#22D3EE",
+    blindAt: DEFAULT_BLIND,
     joinedAt: 0,
     myHit: null,
     phase: "idle",
@@ -495,25 +492,78 @@
   $("roomInput").value = ROOM;
   $("nameInput").value = store.get("c10_name", "");
 
-  function buildSwatches(){
-    const wrap = $("swatches");
-    wrap.replaceChildren(...COLORS.map(c => {
+  let teamSig = "";
+
+  function takenTeams(){
+    const taken = {};
+    Object.keys(G.players || {}).forEach(k => {
+      if (k === pid) return;
+      const p = G.players[k];
+      const t = Number(p && p.team) || 0;
+      if (t) taken[t] = true;
+    });
+    return taken;
+  }
+
+  function buildTeams(force){
+    const taken = takenTeams();
+    const sig = Object.keys(taken).sort((a, b) => a - b).join(",") + "|" + G.team;
+    if (!force && sig === teamSig) return;
+    teamSig = sig;
+
+    const frag = [];
+    for (let n = 1; n <= 20; n++){
+      const isTaken = !!taken[n];
+      const mine = G.team === n;
       const b = document.createElement("button");
       b.type = "button";
-      b.className = "sw" + (G.color === c.hex ? " sel" : "");
-      b.style.setProperty("--c", c.hex);
-      b.setAttribute("aria-label", c.name);
-      b.setAttribute("aria-pressed", G.color === c.hex ? "true" : "false");
-      b.innerHTML = '<span class="orb"></span><span>' + c.name + '</span>';
-      b.addEventListener("click", () => {
-        G.color = c.hex; G.colorName = c.name; buildSwatches();
-      });
-      return b;
-    }));
+      b.className = "tm" + (isTaken ? " taken" : "") + (mine ? " sel" : "");
+      b.setAttribute("data-team", String(n));
+      b.style.setProperty("--c", teamColor(n));
+      b.disabled = isTaken;
+      b.setAttribute("aria-label", n + "조" + (isTaken ? " 마감" : ""));
+      b.setAttribute("aria-pressed", mine ? "true" : "false");
+      b.innerHTML = '<span class="tn">' + n + '조</span>'
+        + '<span class="tag">' + (isTaken ? "마감" : (mine ? "선택" : "\u00A0")) + '</span>';
+      if (!isTaken) b.addEventListener("click", () => selectTeam(n));
+      frag.push(b);
+    }
+    $("teams").replaceChildren(...frag);
+
+    const free = 20 - Object.keys(taken).length;
+    $("teamHint").textContent = free > 0
+      ? ("남은 조 " + free + "개 · 먼저 고른 사람이 그 조")
+      : "모든 조가 마감됐어요";
   }
-  G.color = COLORS[Math.floor(Math.random() * COLORS.length)].hex;
-  G.colorName = (COLORS.find(c => c.hex === G.color) || COLORS[0]).name;
-  buildSwatches();
+
+  function selectTeam(n){
+    if (n === G.team) return;
+    G.team = n;
+    G.color = teamColor(n);
+    store.set("c10_team", String(n));
+    buildTeams(true);
+  }
+
+  function pLabel(p){
+    const nm = String((p && p.name) || "").trim();
+    const t = Number(p && p.team) || 0;
+    if (nm && t) return nm + " (" + t + "조)";
+    if (nm) return nm;
+    if (t) return t + "조";
+    return "참가자";
+  }
+
+  function paintBlindAt(){
+    const sec = Math.round((Number(G.blindAt) || DEFAULT_BLIND) / 1000);
+    const at = (sec).toFixed(2);
+    const tip = $("blindTip"); if (tip) tip.textContent = String(sec);
+    const foot = $("playFootAt"); if (foot) foot.textContent = at + "초";
+  }
+
+  G.team = Math.min(20, Math.max(0, Number(store.get("c10_team", "0")) || 0));
+  G.color = G.team ? teamColor(G.team) : "#22D3EE";
+  paintBlindAt();
+  buildTeams(true);
 
   /* ================= Firebase ================= */
   const FB = {db:null, base:null, ok:false};
@@ -579,7 +629,8 @@
     G.phase = m.status || "idle";
     G.startAt = Number(m.startAt) || 0;
     G.raceId = Number(m.raceId) || 0;
-    G.blind = m.blind !== false;
+    G.blindAt = Number(m.blindAt) || G.blindAt || DEFAULT_BLIND;
+    paintBlindAt();
 
     const isNewRace = G.raceId !== prevRace || (G.phase === "countdown" && prevPhase === "idle");
 
@@ -619,6 +670,18 @@
       if (G.joined) showResult();
       return;
     }
+    if (G.phase === "closed"){
+      /* 경기 종료 — 진행자가 [결과보기]를 누를 때까지 대기 */
+      if (G.active){
+        if (G.screen !== "play") show("play");
+        G.ended = true;
+        if (G.raf){ cancelAnimationFrame(G.raf); G.raf = 0; }
+        lockWait();
+      } else if (G.screen !== "wait"){
+        show("wait");
+      }
+      return;
+    }
     /* idle */
     if (G.screen === "play" || G.screen === "result"){
       $("flash").classList.remove("on");
@@ -640,23 +703,24 @@
     $("waitCount").textContent = String(ids.length);
     const me = G.players[pid];
     if (me){
-      $("meChipName").textContent = me.name || "참가자";
-      $("meChip").style.setProperty("--c", me.color || G.color);
+      $("meChipName").textContent = pLabel(me);
+      $("meChip").style.setProperty("--c", me.color || teamColor(me.team));
     }
+    buildTeams();
     if (G.screen === "play") paintCounts();
     if (G.screen === "result") paintResult();
   }
 
   /* ================= 입장 ================= */
   function join(){
-    const name = ($("nameInput").value || "").trim().replace(/\s+/g, " ").slice(0, 10);
-    const room = normRoom($("roomInput").value) || DEFAULT_ROOM;
-    if (!name){
-      $("nameInput").classList.add("shake");
-      setTimeout(() => $("nameInput").classList.remove("shake"), 400);
-      $("nameInput").focus();
+    if (!G.team){
+      $("teams").classList.add("shake");
+      setTimeout(() => $("teams").classList.remove("shake"), 420);
+      $("teamHint").textContent = "조를 먼저 골라 주세요";
       return;
     }
+    const name = ($("nameInput").value || "").trim().replace(/\s+/g, " ").slice(0, 10);
+    const room = normRoom($("roomInput").value) || DEFAULT_ROOM;
     if (room !== ROOM){
       ROOM = room;
       $("roomTag").textContent = ROOM;
@@ -667,36 +731,49 @@
     const btn = $("joinBtn");
     btn.disabled = true;
 
-    const ids = Object.keys(G.players);
-    if (ids.length >= MAX){
-      toast("정원이 가득 찼어요 (최대 " + MAX + "명)", 3000);
-      btn.disabled = false;
-      return;
-    }
-
+    const team = G.team;
     G.name = name;
-    G.colorName = (COLORS.find(c => c.hex === G.color) || COLORS[0]).name;
+    G.color = teamColor(team);
     G.joinedAt = serverNow();
 
     const payload = {
       name: name,
+      team: team,
+      teamName: team + "조",
+      label: name ? (name + " (" + team + "조)") : (team + "조"),
       color: G.color,
-      colorName: G.colorName,
       joinedAt: G.joinedAt,
       hit: null,
       online: true
     };
 
-    FB.db.ref(FB.base + "/players/" + pid).set(payload).then(() => {
+    /* 선점 조 잠금 — 동시 입장 경합까지 transaction으로 방어 */
+    FB.db.ref(FB.base + "/players").transaction(cur => {
+      const all = cur || {};
+      for (const k in all){
+        if (k === pid) continue;
+        if (Number(all[k] && all[k].team) === team) return;   /* 누가 이미 선점 → 중단 */
+      }
+      if (!all[pid] && Object.keys(all).length >= MAX) return;
+      all[pid] = payload;
+      return all;
+    }).then(res => {
+      btn.disabled = false;
+      if (!res || !res.committed){
+        buildTeams(true);
+        toast(team + "조는 방금 마감됐어요. 다른 조를 골라 주세요.", 3200);
+        return;
+      }
       G.joined = true;
       store.set("c10_name", name);
+      store.set("c10_team", String(team));
       store.set("c10_joined", "1");
-      btn.disabled = false;
       if (G.phase === "countdown" || G.phase === "running"){
         show("wait");
         toast("경기가 진행 중이에요. 다음 판부터 참여할 수 있어요.", 2800);
         return;
       }
+      if (G.phase === "closed"){ show("wait"); return; }
       if (G.phase === "finished"){ showResult(); return; }
       show("wait");
     }).catch(() => {
@@ -725,14 +802,14 @@
       timerLabel.textContent = "곧 시작합니다";
       return;
     }
-    if (G.blind && t >= BLIND_MS){
+    if (t >= (Number(G.blindAt) || DEFAULT_BLIND)){
       timerEl.classList.add("blind");
       num.textContent = "??.??";
       timerLabel.textContent = "숫자가 사라졌습니다 — 감으로!";
     } else {
       timerEl.classList.remove("blind");
       num.textContent = fmt(t);
-      timerLabel.textContent = G.blind ? "3.00초부터 가려집니다" : "10.00초를 노리세요";
+      timerLabel.textContent = (Math.round((Number(G.blindAt) || DEFAULT_BLIND) / 1000)).toFixed(2) + "초부터 가려집니다";
     }
   }
 
@@ -755,10 +832,7 @@
       if (G.myHit == null && !G.ended && t >= RACE_MS){
         G.ended = true;
         $("hitBtn").disabled = true;
-        $("locked").classList.add("on");
-        $("locked").querySelector(".lock-title").textContent = "시간 초과!";
-        $("locked").querySelector(".lock-sub").textContent = "결과 발표를 기다리는 중...";
-        $("locked").querySelector(".lock-badge").textContent = "⌛";
+        lockWait();
       }
       if (!G.ended) G.raf = requestAnimationFrame(step);
     };
@@ -795,6 +869,16 @@
   }
 
   /* ---------- 버튼 ---------- */
+  function lockWait(){
+    const l = $("locked");
+    if (!l) return;
+    l.classList.add("on");
+    l.querySelector(".lock-title").textContent = "경기 종료!";
+    l.querySelector(".lock-sub").textContent = "결과 발표를 기다리는 중...";
+    l.querySelector(".lock-badge").textContent = "⏱️";
+    hitBtn.disabled = true;
+  }
+
   function press(){
     if (G.screen !== "play" || G.phase !== "running" && G.phase !== "countdown") return;
     if (G.myHit != null || G.ended) return;
@@ -816,7 +900,7 @@
     f.classList.add("on");
     setTimeout(() => {
       f.classList.remove("on");
-      if (G.screen === "play" && G.phase !== "finished"){
+      if (G.screen === "play" && G.phase !== "finished" && G.phase !== "closed"){
         $("locked").classList.add("on");
         $("locked").querySelector(".lock-title").textContent = "기록 완료!";
         $("locked").querySelector(".lock-sub").textContent = "결과 발표를 기다리는 중...";
@@ -834,7 +918,7 @@
       if (!p) return;
       const j = Number(p.joinedAt) || 0;
       if (G.startAt && j > G.startAt + 900) return;  /* 이번 판에 늦게 온 사람 제외 */
-      out.push({ id: k, name: p.name || "참가자", color: p.color || "#888", hit: (p.hit == null ? null : Number(p.hit)) });
+      out.push({ id: k, name: pLabel(p), team: Number(p.team) || 0, color: p.color || (Number(p.team) ? teamColor(p.team) : "#888"), hit: (p.hit == null ? null : Number(p.hit)) });
     });
     return out;
   }
@@ -882,7 +966,7 @@
       $("myName").innerHTML = '<span class="orb" style="--c:' + esc(me.color) + '"></span><span>' + esc(me.name) + '</span>';
       $("myName").querySelector(".orb").style.setProperty("--c", me.color);
       $("myTime").innerHTML = me.hit == null
-        ? '12초 안에 누르지 못했어요'
+        ? '16초 안에 누르지 못했어요'
         : '내 기록 <b>' + fmt(me.hit) + '초</b>';
       const dEl = $("myDelta");
       dEl.className = "my-delta " + deltaClass(me.delta);
@@ -919,15 +1003,12 @@
   /* ================= 자동 종료 판정 ================= */
   setInterval(() => {
     if (G.screen !== "play") return;
-    const t = elapsed();
     paintCounts();
-    /* 전원 체크 완료 → 결과 (내 화면이 잠긴 뒤 1.6초 뒤) */
-    if (G.myHit != null && G.phase === "running" && G.total > 0 && G.hits >= G.total && t >= 1200){
-      showResult();
-    }
-    /* 12초 초과 → 결과 */
-    if (t >= RACE_MS + 900 && G.phase === "running"){
-      showResult();
+    /* 전원 체크 완료 / 16초 종료 — 자동으로 결과 화면으로 넘어가지 않고
+       진행자가 [🏆 결과보기]를 누를 때까지 대기한다 */
+    if (!G.ended && elapsed() >= RACE_MS){
+      G.ended = true;
+      lockWait();
     }
   }, 300);
 
@@ -947,7 +1028,9 @@
         G.joined = true;
         G.joinedAt = Number(me.joinedAt) || serverNow();
         G.name = me.name || "";
+        G.team = Number(me.team) || G.team;
         G.color = me.color || G.color;
+        buildTeams(true);
         G.active = G.joined && G.joinedAt > 0 && (!G.startAt || G.joinedAt <= G.startAt + 900);
         syncView(G.phase);
       }

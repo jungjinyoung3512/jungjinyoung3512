@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0B1220">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>⏱</text></svg>">
-<title>10초를 잡아라 · 진행자 | 정진영 교육 아티스트</title>
+<title>10초를 잡아라 · 진행자 | 정진영 강연 크리에이터</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
@@ -68,6 +68,17 @@
   .btn.danger.armed{background:rgba(251,113,133,.2);border-color:#FB7185;color:#FFE4E6}
   .btn .k{font-size:11px;font-weight:700;opacity:.6}
   .btn:disabled{opacity:.38;cursor:not-allowed}
+  .btn.result.pulse{animation:pulseBtn 1.15s infinite}
+  @keyframes pulseBtn{0%,100%{box-shadow:0 10px 26px -14px rgba(14,165,233,.8)}50%{box-shadow:0 0 0 3px rgba(125,211,252,.45),0 10px 30px -8px rgba(14,165,233,.95)}}
+
+  /* blind timing */
+  .blindset{display:inline-flex;align-items:center;gap:5px;padding:4px 5px 4px 11px;border:1px solid var(--line2);border-radius:12px;background:#111C30}
+  .blindset .lbl{font-size:11.5px;font-weight:800;color:#8FA2BC;margin-right:2px;white-space:nowrap}
+  .seg{appearance:none;border:1px solid transparent;background:#0C1526;color:#9FB0C6;font-family:inherit;font-size:13px;font-weight:900;
+       padding:6px 12px;border-radius:8px;cursor:pointer;font-variant-numeric:tabular-nums;transition:background .12s,color .12s,transform .1s}
+  .seg:hover{background:#16233D;color:#DDE5F1}
+  .seg:active{transform:scale(.96)}
+  .seg.on{background:linear-gradient(180deg,#FCD34D,#F59E0B);border-color:#FDE68A;color:#2A1A00;box-shadow:0 6px 16px -10px rgba(245,158,11,.95)}
   .spacer{flex:1}
 
   /* ---------- boards ---------- */
@@ -110,6 +121,7 @@
   @keyframes popcard{0%{transform:scale(1)}18%{transform:scale(1.07);box-shadow:0 0 0 2px rgba(52,211,153,.7),0 0 34px rgba(52,211,153,.45)}100%{transform:scale(1)}}
   .pcard.empty{background:transparent;border-style:dashed;border-color:rgba(255,255,255,.07);color:#3E4E67;font-weight:700;font-size:12px}
   .pcard.empty .pdot{background:#26364F;box-shadow:none}
+  .pteam{flex:none;font-size:10.5px;font-weight:900;color:#0A1220;background:var(--c);padding:2px 6px;border-radius:6px;letter-spacing:-.03em;line-height:1.35;white-space:nowrap}
 
   /* running */
   #bRun{flex-direction:row;gap:26px}
@@ -134,7 +146,7 @@
   .big-note{margin-top:4px;font-size:14px;font-weight:700;color:#7C8BA3}
   .meter{width:min(680px,74%);height:8px;border-radius:99px;background:#101B2E;border:1px solid var(--line);margin:22px 0 0;position:relative;overflow:hidden}
   .meter-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#F59E0B,#FCD34D);border-radius:99px;transition:width .08s linear}
-  .meter-mark{position:absolute;top:-4px;bottom:-4px;width:2px;background:rgba(255,255,255,.5);left:83.33%}
+  .meter-mark{position:absolute;top:-4px;bottom:-4px;width:2px;background:rgba(255,255,255,.5);left:37.5%}
   .meter.off{opacity:.25}
   .meter.off .meter-fill{background:linear-gradient(90deg,#475569,#64748B)}
   .check-count{margin-top:15px;font-size:16px;font-weight:800;color:#B8C6D9;display:flex;align-items:center;gap:8px}
@@ -150,6 +162,15 @@
   .countdown-big.on{display:grid}
   .countdown-big .num{font-family:var(--serif);font-size:clamp(150px,20vw,260px);font-weight:900;line-height:1;color:#fff;text-shadow:0 0 90px rgba(245,158,11,.7);animation:cdp .9s ease-out}
   @keyframes cdp{0%{transform:scale(.6);opacity:0}25%{transform:scale(1.05);opacity:1}100%{transform:scale(1)}}
+
+  /* 경기 종료 → 결과 발표 대기 */
+  .closed-ov{position:absolute;inset:0;display:none;place-items:center;background:rgba(9,15,27,.93);border-radius:18px;z-index:6;text-align:center;padding:20px}
+  .closed-ov.on{display:grid;animation:cdp .35s ease-out}
+  .closed-ov .tag{font-size:15px;font-weight:900;letter-spacing:.14em;color:#FCD34D}
+  .closed-ov .ttl{font-family:var(--serif);font-size:clamp(30px,3.6vw,52px);font-weight:900;margin:12px 0 8px;letter-spacing:-.035em}
+  .closed-ov .sub{font-size:14.5px;color:#9AA9BF;font-weight:700;margin-bottom:24px}
+  .closed-ov .big{padding:17px 38px;font-size:19px;border-radius:14px}
+  .closed-ov .hint{margin-top:16px;font-size:12.5px;color:#64748B;font-weight:700}
 
   /* result */
   #bRes{overflow:hidden}
@@ -180,6 +201,7 @@
   .rrow.top .rk{color:var(--amber-lt)}
   .rrow .nm{flex:1;min-width:0;display:flex;align-items:center;gap:8px;font-weight:800;color:#E2E8F0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .rrow .nm .pdot{width:9px;height:9px}
+  .rrow .nm .pteam{font-size:10px;padding:2px 5px;border-radius:5px}
   .rrow .tm{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:13.5px;font-weight:800;color:#fff}
   .rrow .dl{width:62px;text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:12px;font-weight:800;flex:none}
   .rrow.out .tm,.rrow.out .dl{color:#5B6B84}
@@ -212,7 +234,7 @@
 <body>
 <div class="stage">
   <div class="bar">
-    <div class="brandline"><span class="dot"></span><b>정진영 · 교육 아티스트</b><span style="color:#3F5070">|</span><span>아이스브레이킹</span></div>
+    <div class="brandline"><span class="dot"></span><b>정진영 · 강연 크리에이터</b><span style="color:#3F5070">|</span><span>아이스브레이킹</span></div>
     <div class="mid"><span class="tm">⏱️</span> 10초를 잡아라!</div>
     <div class="right">
       <span class="pill off" id="netPill"><span class="live"></span><span id="netTxt">연결 중</span></span>
@@ -227,7 +249,12 @@
     <button class="btn result" id="btnResult">🏆 결과보기</button>
     <button class="btn danger" id="btnClear">🧹 참가자 비우기</button>
     <div class="spacer"></div>
-    <button class="btn" id="btnBlind">👁️ 블라인드 <span class="k">ON</span></button>
+    <div class="blindset" id="blindSet" role="group" aria-label="숫자 가리는 시점">
+      <span class="lbl">숫자 가리기</span>
+      <button class="seg" type="button" data-at="6">6초</button>
+      <button class="seg" type="button" data-at="4">4초</button>
+      <button class="seg" type="button" data-at="2">2초</button>
+    </div>
     <button class="btn" id="btnSound">🔊 소리 ON</button>
     <button class="btn" id="btnQR">📱 QR 입장</button>
   </div>
@@ -246,7 +273,7 @@
       <div class="roster-wrap">
         <div class="roster-head">
           <span>입장한 참가자 <span class="n" id="idleCount">0</span> <span style="font-size:12px;color:#64748B">/ 20명</span></span>
-          <span class="hint">최대 30명까지 입장 가능</span>
+          <span class="hint">1조 ~ 20조 · 조당 1명 선점</span>
         </div>
         <div class="roster" id="idleRoster"></div>
       </div>
@@ -257,10 +284,19 @@
       <div class="run-main">
         <div class="phase-tag"><i></i> LIVE</div>
         <div class="big-timer" id="bigTimer"><span class="num">0.00</span><span class="u">초</span></div>
-        <div class="big-note" id="bigNote">3.00초부터 숫자가 가려집니다</div>
+        <div class="big-note" id="bigNote">6.00초부터 숫자가 가려집니다</div>
         <div class="meter" id="meter"><div class="meter-fill" id="meterFill"></div><div class="meter-mark"></div></div>
         <div class="check-count">체크 완료 <b id="checkN">0</b> <span class="sl">/</span> <span id="checkT">0</span>명</div>
         <div class="countdown-big" id="cdBig"><div class="num" id="cdNum">3</div></div>
+        <div class="closed-ov" id="closedWait">
+          <div>
+            <div class="tag">⏱️ 경기 종료!</div>
+            <div class="ttl">결과 발표를 기다리는 중...</div>
+            <div class="sub">종료! [🏆 결과보기]를 눌러 순위를 공개하세요</div>
+            <button class="btn result big" id="btnReveal">🏆 결과보기</button>
+            <div class="hint">청중 화면도 함께 열립니다</div>
+          </div>
+        </div>
       </div>
       <aside class="run-side">
         <div class="side-head">참가자 현황 · 누른 사람만 체크</div>
@@ -321,10 +357,18 @@
     appId: "1:977342156141:web:f9842fcc67a819ce621e64"
   };
 
-  const RACE_MS = 12000, BLIND_MS = 3000, TARGET_MS = 10000, CAP = 20, MAX = 30;
+  const RACE_MS = 16000, TARGET_MS = 10000, CAP = 20, MAX = 20;
+  const BLIND_OPTS = [6, 4, 2];
+  function teamCol(n){ const hue = (Number(n) * 47) % 360; return "hsl(" + hue + ", 82%, 60%)"; }
+  function pDispName(p){ const nm = String((p && p.name) || "").trim(); return nm || ((Number(p && p.team) || 0) ? "" : "참가자"); }
+  function pTeamChip(p){
+    const t = Number(p && p.team) || 0;
+    if (!t) return "";
+    return '<span class="pteam" style="--c:' + esc((p && p.color) || teamCol(t)) + '">' + t + '조</span>';
+  }
 
   const H = {
-    phase: "idle", startAt: 0, raceId: 0, blind: true, offset: 0,
+    phase: "idle", startAt: 0, raceId: 0, blindAt: 6000, offset: 0,
     players: {}, total: 0, hits: 0, raf: 0, ending: false,
     lastHits: {}, armed: false, armedT: 0, shownResult: false
   };
@@ -659,8 +703,8 @@
   }
 
   function onMeta(m){
-    H.blind = m.blind !== false;
-    paintBlindBtn();
+    const at = Number(m.blindAt) || 0;
+    if (at >= 1000 && at !== H.blindAt){ H.blindAt = at; paintBlindBtns(); }
     /* 다른 창에서 시작한 경우도 화면 동기화 */
     const st = m.status || "idle";
     const startAt = Number(m.startAt) || 0;
@@ -675,6 +719,16 @@
         $("checkT").textContent = String(H.total);
         renderRunRoster();
         startLoop();
+      }
+    } else if (st === "closed"){
+      if (H.phase !== "closed" && H.phase !== "finished"){
+        H.phase = "closed";
+        H.ending = true;
+        stopLoop();
+        loopStop();
+        $("cdBig").classList.remove("on");
+        $("closedWait").classList.add("on");
+        $("btnResult").classList.add("pulse");
       }
     } else if (st === "finished"){
       if (H.phase !== "finished"){
@@ -733,9 +787,11 @@
       const p = H.players[id] || {};
       const done = mode === "run" && p.hit != null;
       const isFresh = fresh && fresh.indexOf(id) >= 0;
+      const t = Number(p.team) || 0;
       return '<div class="pcard' + (done ? " done" : "") + (isFresh ? " pop" : "") + '">'
-        + '<span class="pdot" style="--c:' + esc(p.color || "#888") + '"></span>'
-        + '<span class="pname">' + esc(p.name || "참가자") + '</span>'
+        + '<span class="pdot" style="--c:' + esc(p.color || (t ? teamCol(t) : "#888")) + '"></span>'
+        + (t ? '<span class="pteam" style="--c:' + esc(p.color || teamCol(t)) + '">' + t + '조</span>' : '')
+        + '<span class="pname">' + esc(pDispName(p)) + '</span>'
         + '<span class="pchk">✓</span>'
         + '</div>';
     }).join("");
@@ -772,11 +828,11 @@
       if (H.phase === "running"){
         if (!H.ending && H.total > 0 && H.hits >= H.total && t > 700){
           H.ending = true;
-          setTimeout(() => finish(false), 520);
+          closeRound();
         }
         if (!H.ending && t >= RACE_MS){
           H.ending = true;
-          finish(false);
+          closeRound();
         }
       }
       if (H.phase === "countdown" || H.phase === "running") H.raf = requestAnimationFrame(step);
@@ -808,25 +864,42 @@
       nd.style.animation = "none"; void nd.offsetWidth; nd.style.animation = "";
       setTimeout(() => { $("cdBig").classList.remove("on"); H.cdGo = false; }, 640);
     }
-    const blindOn = H.blind && t >= BLIND_MS;
+    const blindOn = H.blindAt > 0 && t >= H.blindAt;
     if (blindOn){
       el.classList.add("blind");
       el.querySelector(".num").textContent = '??.??';
-      note.textContent = "블라인드 — 결과 발표에서 공개됩니다";
+      note.textContent = "숫자 가림 — 결과 발표에서 공개됩니다";
       meter.classList.add("off");
       fill.style.width = "0%";
     } else {
       el.classList.remove("blind");
       el.querySelector(".num").textContent = fmt(t);
-      note.textContent = "3.00초부터 숫자가 가려집니다";
+      note.textContent = (H.blindAt / 1000).toFixed(2) + "초부터 숫자가 가려집니다";
       meter.classList.remove("off");
       fill.style.width = Math.min(100, (t / RACE_MS) * 100) + "%";
     }
   }
 
-  function paintBlindBtn(){
-    $("btnBlind").innerHTML = '👁️ 블라인드 <span class="k">' + (H.blind ? "ON" : "OFF") + '</span>';
-    $("btnBlind").style.opacity = H.blind ? "1" : ".7";
+  function paintBlindBtns(){
+    const sec = Math.round(H.blindAt / 1000);
+    document.querySelectorAll("#blindSet .seg").forEach(b => {
+      const on = Number(b.getAttribute("data-at")) === sec;
+      b.classList.toggle("on", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    const mark = document.querySelector(".meter-mark");
+    if (mark) mark.style.left = Math.min(99, Math.max(1, (H.blindAt / RACE_MS) * 100)) + "%";
+    const note = $("bigNote");
+    if (note && H.phase !== "running" && H.phase !== "countdown") note.textContent = (H.blindAt / 1000).toFixed(2) + "초부터 숫자가 가려집니다";
+  }
+
+  function setBlindAt(sec){
+    if (BLIND_OPTS.indexOf(sec) < 0) return;
+    H.blindAt = sec * 1000;
+    store.set("c10_blindAt", String(sec));
+    paintBlindBtns();
+    if (FB.ok) FB.room.update({ "meta/blindAt": H.blindAt });
+    toast("숫자는 " + sec.toFixed(2) + "초부터 가려집니다", 1900);
   }
 
   /* ================= 컨트롤 ================= */
@@ -851,12 +924,14 @@
     H.cdGo = false;
     H.hits = 0;
     H.syncing = true;
+    $("closedWait").classList.remove("on");
+    $("btnResult").classList.remove("pulse");
 
     const upd = {
       "meta/status": "countdown",
       "meta/startAt": startAt,
       "meta/raceId": startAt,
-      "meta/blind": H.blind,
+      "meta/blindAt": H.blindAt,
       "meta/total": Object.keys(H.players).length,
       "meta/endedAt": null
     };
@@ -877,24 +952,44 @@
     startLoop();
   }
 
-  function finish(manual){
+  /* 경기 마감 — 순위는 숨기고 [🏆 결과보기] 대기 */
+  function closeRound(){
     if (!FB.ok) return;
-    if (!H.startAt || (H.phase === "idle" && !Object.keys(H.players).length)){
+    if (H.phase !== "running" && H.phase !== "countdown") return;
+    stopLoop();
+    H.ending = true;
+    H.phase = "closed";
+    $("cdBig").classList.remove("on");
+    loopStop();
+    $("closedWait").classList.add("on");
+    $("btnResult").classList.add("pulse");
+    FB.room.update({ "meta/status": "closed", "meta/closedAt": serverNow() });
+    toast("경기 종료! [🏆 결과보기]를 누르면 순위가 공개됩니다", 3600);
+  }
+
+  /* 진행자가 직접 결과 공개 — 팡파르·엔딩 BGM */
+  function reveal(){
+    unlock();
+    if (!FB.ok) return;
+    if (!H.startAt){
       toast("아직 경기 기록이 없습니다. 시작을 눌러 주세요.", 2400);
       return;
     }
+    if (H.phase === "finished"){ setBoard("res"); paintResult(); return; }
     stopLoop();
-    H.phase = "finished";
     H.ending = true;
+    H.phase = "finished";
+    H.shownResult = true;
     $("cdBig").classList.remove("on");
+    $("closedWait").classList.remove("on");
+    $("btnResult").classList.remove("pulse");
     loopStop();
     fanfare();
     setTimeout(() => { if (!A.muted && H.phase === "finished") loopStart("ending"); }, 1400);
-
-    FB.room.update({ "meta/status": "finished", "meta/endAt": serverNow() });
+    FB.room.update({ "meta/status": "finished", "meta/endAt": serverNow(), "meta/revealedAt": serverNow() });
     setBoard("res");
     paintResult();
-    toast(manual ? "경기를 마감하고 결과를 공개했습니다." : "경기 종료!", 2400);
+    toast("🏆 결과 공개!", 2200);
   }
 
   function reround(){
@@ -938,6 +1033,8 @@
     H.startAt = 0;
     H.raceId = 0;
     H.shownResult = false;
+    $("closedWait").classList.remove("on");
+    $("btnResult").classList.remove("pulse");
     setBoard("idle");
     renderRoster();
     $("headCount").textContent = "0";
@@ -958,16 +1055,13 @@
 
   $("btnStart").addEventListener("click", startRound);
   $("btnAgain").addEventListener("click", () => { unlock(); reround(); });
-  $("btnResult").addEventListener("click", () => { unlock(); finish(true); });
+  $("btnResult").addEventListener("click", reveal);
+  $("btnReveal").addEventListener("click", reveal);
+  document.querySelectorAll("#blindSet .seg").forEach(b => {
+    b.addEventListener("click", () => { unlock(); setBlindAt(Number(b.getAttribute("data-at"))); });
+  });
   $("btnClear").addEventListener("click", clearPlayers);
   $("btnSound").addEventListener("click", () => { unlock(); setSound(A.muted); });
-  $("btnBlind").addEventListener("click", () => {
-    unlock();
-    H.blind = !H.blind;
-    paintBlindBtn();
-    if (FB.ok) FB.room.update({ "meta/blind": H.blind });
-    toast(H.blind ? "블라인드 ON — 3초 뒤 숫자가 가려집니다" : "블라인드 OFF — 전체 숫자가 보입니다", 2000);
-  });
   $("btnQR").addEventListener("click", () => { unlock(); $("qrModal").classList.add("on"); });
   $("btnCloseQR").addEventListener("click", () => $("qrModal").classList.remove("on"));
   $("qrModal").addEventListener("click", e => { if (e.target === $("qrModal")) $("qrModal").classList.remove("on"); });
@@ -983,11 +1077,11 @@
       const p = H.players[id] || {};
       const joined = Number(p.joinedAt) || 0;
       if (H.startAt && joined > H.startAt + 900) return;
-      out.push({id:id, name:p.name || "참가자", color:p.color || "#888", hit:(p.hit == null ? null : Number(p.hit))});
+      out.push({id:id, name:String(p.name || "").trim(), team:Number(p.team) || 0, color:p.color || (Number(p.team) ? teamCol(p.team) : "#888"), hit:(p.hit == null ? null : Number(p.hit))});
     });
     const done = out.filter(p => p.hit != null)
       .sort((a, b) => Math.abs(a.hit - TARGET_MS) - Math.abs(b.hit - TARGET_MS) || a.hit - b.hit);
-    const missed = out.filter(p => p.hit == null).sort((a, b) => String(a.name).localeCompare(String(b.name)));
+    const missed = out.filter(p => p.hit == null).sort((a, b) => (a.team || 99) - (b.team || 99) || String(a.name).localeCompare(String(b.name)));
     const rows = done.concat(missed).map(p => ({...p, delta: p.hit == null ? null : p.hit - TARGET_MS}));
     rows.forEach((p, i) => { p.rank = i + 1; });
     return rows;
@@ -1017,7 +1111,7 @@
         return '<div class="pod p' + (i + 1) + '">'
           + '<span class="medal">' + medals[i] + '</span>'
           + '<span class="who">'
-          +   '<span class="nm"><span class="pdot" style="--c:' + esc(r.color) + '"></span>' + esc(r.name) + '</span>'
+          +   '<span class="nm">' + pTeamChip(r) + (pDispName(r) ? '<span>' + esc(pDispName(r)) + '</span>' : '') + '</span>'
           +   '<span class="tm">' + fmt(r.hit) + '초 <em>· ' + dlText(r.delta) + '초</em></span>'
           + '</span></div>';
       }).join('');
@@ -1027,7 +1121,7 @@
       const medal = (r.hit != null && r.rank <= 3) ? medals[r.rank - 1] + " " : "";
       return '<div class="rrow' + (r.hit == null ? " out" : (r.rank <= 3 ? " top" : "")) + '">'
         + '<span class="rk">' + medal + r.rank + '</span>'
-        + '<span class="nm"><span class="pdot" style="--c:' + esc(r.color) + '"></span>' + esc(r.name) + '</span>'
+        + '<span class="nm">' + pTeamChip(r) + (pDispName(r) ? '<span>' + esc(pDispName(r)) + '</span>' : '') + '</span>'
         + '<span class="tm">' + (r.hit == null ? "—" : fmt(r.hit) + "초") + '</span>'
         + '<span class="dl ' + dlClass(r.delta) + '">' + (r.hit == null ? "실격" : dlText(r.delta)) + '</span>'
         + '</div>';
@@ -1035,8 +1129,8 @@
   }
 
   /* ================= 시작 ================= */
-  H.blind = store.get("c10_blind", "1") !== "0";
-  paintBlindBtn();
+  H.blindAt = (Number(store.get("c10_blindAt", "6")) || 6) * 1000;
+  paintBlindBtns();
   if (store.get("c10_sound", "1") === "0"){ A.muted = true; $("btnSound").innerHTML = '🔇 음소거'; }
 
   initFirebase();
