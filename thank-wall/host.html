@@ -243,7 +243,7 @@
     align-content:center;justify-items:stretch;align-items:center;
     padding:8px 2px;overflow:hidden;
   }
-  .reveal.grid .sky{align-items:stretch;grid-auto-rows:minmax(112px,auto);align-content:center}
+  .reveal.grid .sky{align-items:stretch;grid-auto-rows:minmax(124px,1fr);align-content:stretch}
   .lantern{
     position:relative;opacity:0;transform:translateY(64px) scale(.95) rotate(var(--rot,0deg));
     transition:transform .5s cubic-bezier(.2,.8,.2,1);
@@ -3018,8 +3018,16 @@ var qrcode = function() {
   /* 넘칠 때 글자를 조금씩 줄여 한 화면에 담습니다 */
   function fitAll(startFs){
     let fs = startFs;
-    for (let i = 0; i < 12; i++){
-      if (el.sky.scrollHeight <= el.sky.clientHeight + 2) break;
+    for (let i = 0; i < 14; i++){
+      const cards = el.sky.querySelectorAll(".card");
+      let over = el.sky.scrollHeight > el.sky.clientHeight + 2;
+      if (!over){
+        for (let k = 0; k < cards.length; k++){
+          const c = cards[k];
+          if (c.scrollHeight > c.clientHeight + 2 || c.scrollWidth > c.clientWidth + 2){ over = true; break; }
+        }
+      }
+      if (!over) break;
       fs = Math.max(9, fs * 0.93);
       el.sky.style.setProperty("--fs", fs.toFixed(2) + "px");
       el.sky.style.setProperty("--pad", Math.max(6, Math.round(fs * 0.78)) + "px");
