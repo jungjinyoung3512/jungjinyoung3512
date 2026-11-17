@@ -415,7 +415,7 @@
   const DUR_OPTS = [36, 26, 16, 6];   /* 진행자가 고르는 제한시간 */
 
   const H = {
-    phase: "idle", startAt: 0, raceId: 0, duration: DURATION_MS, durSec: 36,
+    phase: "idle", startAt: 0, raceId: 0, duration: DURATION_MS, durSec: 36, runSec: 36,
     players: {}, total: 0, offset: 0, raf: 0,
     ending: false, armed: false, armedT: 0, rows: {}, lastOrder: [],
     cdShown: "", started: false, prevRank: {}
@@ -427,7 +427,7 @@
   };
 
   const serverNow = () => Date.now() + H.offset;
-  const durText = () => H.durSec + "초";
+  const durText = () => H.runSec + "초";
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
   function toast(msg, ms){
@@ -763,7 +763,8 @@
       if (startAt && startAt !== H.startAt && !H.syncing){
         H.startAt = startAt;
         H.duration = Number(m.duration) || DURATION_MS;
-        H.durSec = Math.round(H.duration / 1000);
+        H.runSec = Math.round(H.duration / 1000);
+        H.durSec = H.runSec;
         paintDurBtns();
         H.phase = st;
         H.raceId = raceId;
@@ -863,15 +864,16 @@
   function setDuration(sec){
     if (DUR_OPTS.indexOf(sec) < 0) return;
     if (H.phase === "countdown" || H.phase === "running"){
-      toast("경기 중에는 바꿀 수 없습니다. 다음 판부터 " + sec + "초로 진행됩니다.", 2600);
+      /* 진행 중인 판의 시간은 건드리지 않고, 다음 판 값만 바꾼다 */
       H.durSec = sec;
-      H.duration = sec * 1000;
       paintDurBtns();
       store.set("ep_dur", String(sec));
+      toast("이번 판은 " + H.runSec + "초 그대로! 다음 판부터 " + sec + "초로 진행됩니다.", 2600);
       return;
     }
     H.durSec = sec;
     H.duration = sec * 1000;
+    H.runSec = sec;
     store.set("ep_dur", String(sec));
     paintDurBtns();
     resetTimerPaint();
@@ -1034,7 +1036,8 @@
 
     $("closedWait").classList.remove("on");
     $("btnResult").classList.remove("pulse");
-    H.duration = H.durSec * 1000;
+    H.runSec = H.durSec;
+    H.duration = H.runSec * 1000;
 
     const startAt = serverNow() + COUNTDOWN_MS + 120;
     H.startAt = startAt;
@@ -1238,6 +1241,7 @@
 
   H.durSec = Number(store.get("ep_dur", "36")) || 36;
   if (DUR_OPTS.indexOf(H.durSec) < 0) H.durSec = 36;
+  H.runSec = H.durSec;
   H.duration = H.durSec * 1000;
   paintDurBtns();
 
