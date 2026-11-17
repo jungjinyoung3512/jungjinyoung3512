@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0F172A">
+<title>800m 릴레이 계주 전광판 | 강사 정진영</title>
+<meta name="description" content="강연장 프로젝터용 800m 릴레이 계주 실황 중계 화면">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  :root{
+    --bg:#0F172A; --bg-deep:#0A1120; --panel:#15203A; --panel-2:#1A2743;
+    --line:rgba(255,255,255,.09); --line-strong:rgba(255,255,255,.16);
+    --amber:#F59E0B; --amber-lt:#FBBF24; --amber-soft:rgba(245,158,11,.14);
+    --text:#F1F5F9; --muted:#9AA9BF; --track:#101A2E;
+    --sans:"Pretendard Variable",Pretendard,"Noto Sans KR","Noto Sans CJK KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR","Noto Serif CJK KR",Georgia,serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Noto Sans Mono CJK KR",monospace;
+  }
+  html,body{margin:0;padding:0;height:100%;background:var(--bg-deep)}
+  body{color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased;letter-spacing:-0.01em;-webkit-user-select:none;user-select:none;overflow:hidden}
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(120% 50% at 50% -8%, rgba(245,158,11,.16) 0%, rgba(245,158,11,0) 60%),
+      radial-gradient(80% 50% at 100% 104%, rgba(37,99,235,.15) 0%, rgba(37,99,235,0) 70%);
+  }
+  .stage{position:relative;z-index:1;width:100vw;height:100vh;height:100dvh;display:flex;flex-direction:column;padding:14px 20px 16px;gap:11px}
+
+  /* ---------- top ---------- */
+  .top{flex:none;display:flex;align-items:center;gap:14px}
+  .brand{display:flex;align-items:center;gap:9px;min-width:0}
+  .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 14px rgba(245,158,11,.95);flex:none}
+  .brand .t{
+    font-family:var(--serif);font-weight:900;font-size:clamp(18px,2.6vh,27px);letter-spacing:-0.03em;line-height:1.15;
+    background:linear-gradient(180deg,#FFFFFF 0%,#C9D6E8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap;
+  }
+  .brand .t .hl{-webkit-text-fill-color:var(--amber);color:var(--amber)}
+  .top-right{margin-left:auto;display:flex;align-items:center;gap:8px;flex:none}
+  .pill{
+    display:inline-flex;align-items:center;gap:6px;font-size:clamp(11px,1.55vh,14px);font-weight:700;color:#C7D2E1;
+    border:1px solid var(--line-strong);background:rgba(255,255,255,.035);padding:7px 12px;border-radius:11px;white-space:nowrap;
+  }
+  .pill b{color:#fff;font-weight:800;font-variant-numeric:tabular-nums}
+  .pill .k{color:var(--amber);font-weight:800}
+  .pill.room{border-color:rgba(245,158,11,.32);background:var(--amber-soft)}
+  .pill.room b{color:var(--amber-lt);letter-spacing:.08em}
+  .pill.clock b{font-family:var(--mono);letter-spacing:-0.03em}
+  #netTag{font-size:clamp(10px,1.35vh,12px);font-weight:800;color:#6E7F97;white-space:nowrap}
+  #netTag.on{color:var(--amber)}
+  #netTag.on::before{content:"●";font-size:8px;margin-right:5px;vertical-align:1px}
+  .btn{
+    appearance:none;border:0;cursor:pointer;font-family:inherit;font-size:clamp(11.5px,1.6vh,14.5px);font-weight:900;letter-spacing:-0.01em;
+    padding:10px 18px;border-radius:12px;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;
+    transition:transform .1s ease,filter .15s ease,opacity .15s ease;
+  }
+  .btn:active{transform:scale(.97)}
+  .btn-start{background:linear-gradient(180deg,#FBBF24,#F59E0B);color:#221502;box-shadow:0 12px 26px -14px rgba(245,158,11,.9)}
+  .btn-start:hover{filter:brightness(1.05)}
+  .btn-start:disabled{opacity:.45;cursor:default;box-shadow:none}
+  .btn-end{background:rgba(239,68,68,.14);color:#FCA5A5;border:1px solid rgba(239,68,68,.45)}
+  .btn-end:hover{background:rgba(239,68,68,.22)}
+  .btn-end:disabled{opacity:.35;cursor:default}
+  .btn-qr{background:rgba(255,255,255,.045);color:#C7D2E1;border:1px solid rgba(245,158,11,.42)}
+  .btn-qr:hover{background:rgba(245,158,11,.14);color:#FFF7E6}
+  .btn-reset{background:transparent;color:#C7D2E1;border:1px solid var(--line-strong)}
+  .btn-reset:hover{background:rgba(255,255,255,.05)}
+
+  /* ---------- board ---------- */
+  .board{
+    flex:1;min-height:0;position:relative;border:1px solid var(--line);border-radius:22px;
+    background:linear-gradient(180deg,var(--panel-2),var(--panel));box-shadow:0 26px 60px -40px rgba(0,0,0,.95);
+    padding:12px 16px 14px;display:flex;flex-direction:column;gap:9px;
+  }
+  .board-head{flex:none;display:flex;align-items:center;gap:12px}
+  .bh-l{display:flex;align-items:center;gap:8px;font-size:clamp(11px,1.55vh,13.5px);font-weight:800;color:#8496AE;letter-spacing:.02em}
+  .bh-l .live{display:inline-flex;align-items:center;gap:5px;color:var(--amber)}
+  .bh-l .live i{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse 1.1s infinite}
+  .bh-l .live.off{color:#6E7F97}
+  .bh-l .live.off i{background:#6E7F97;animation:none}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.75)}}
+  .bh-r{margin-left:auto;font-size:clamp(11px,1.5vh,13px);font-weight:800;color:#8496AE;font-variant-numeric:tabular-nums}
+  .bh-r b{color:var(--amber-lt)}
+
+  .lanes{position:relative;flex:1;min-height:0;border-radius:16px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0) 30%),var(--track);border:1px solid rgba(255,255,255,.07)}
+  .lane{position:absolute;left:0;right:0;display:flex;align-items:center;gap:10px;padding:0 14px 0 10px;border-bottom:1px dashed rgba(245,158,11,.18)}
+  .lane:nth-child(odd){background:rgba(255,255,255,.015)}
+  .lane:last-child{border-bottom:0}
+  .lane .rk{
+    flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
+    font-size:clamp(12px,1.9vh,17px);font-weight:900;color:#93A5BE;font-variant-numeric:tabular-nums;
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);
+  }
+  .lane.first .rk{background:var(--amber);border-color:var(--amber);color:#221502}
+  .lane .tchip{
+    flex:none;width:clamp(54px,6.4vh,72px);height:clamp(32px,4.2vh,46px);border-radius:11px;display:flex;align-items:center;justify-content:center;gap:2px;
+    background:color-mix(in srgb,var(--c) 18%,#0F172A);border:1px solid color-mix(in srgb,var(--c) 62%,transparent);
+    color:var(--c);font-weight:900;font-size:clamp(15px,2.4vh,22px);letter-spacing:-0.04em;font-variant-numeric:tabular-nums;
+    box-shadow:0 0 18px -8px var(--c);
+  }
+  .lane .tchip small{font-size:.55em;font-weight:800;opacity:.75;letter-spacing:0}
+  .lane .badge{
+    flex:none;min-width:clamp(50px,6vh,66px);height:clamp(22px,2.9vh,30px);padding:0 7px;border-radius:8px;display:grid;place-items:center;
+    font-size:clamp(10px,1.45vh,13px);font-weight:900;letter-spacing:-0.02em;color:#0F172A;
+    background:color-mix(in srgb,var(--c) 78%,#fff);white-space:nowrap;
+  }
+  .lane .badge.done{background:rgba(255,255,255,.14);color:#DCE4F0}
+  .lane .badge.none{background:rgba(255,255,255,.07);color:#7C8BA3}
+  .lane .who{flex:none;width:clamp(74px,10vw,150px);min-width:0}
+  .lane .who .nm{
+    font-size:clamp(12px,1.95vh,19px);font-weight:800;color:#E2E8F0;letter-spacing:-0.02em;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .lane.first .who .nm{color:#fff}
+  .lane .trk{position:relative;flex:1;min-width:60px;height:clamp(26px,4.4vh,48px);border-radius:9px;background:rgba(255,255,255,.028);overflow:hidden;border:1px solid rgba(255,255,255,.05)}
+  .lane .trk .fill{position:absolute;left:0;top:0;bottom:0;width:calc(var(--p,0) * 100%);background:linear-gradient(90deg,rgba(255,255,255,.02),var(--c));opacity:.30;border-radius:0 8px 8px 0;border-right:2px solid var(--c)}
+  .lane .trk .mk{position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.09)}
+  .lane .trk .mk span{position:absolute;bottom:1px;left:3px;font-size:clamp(7px,.95vh,9px);font-weight:800;color:#7C8BA3;font-family:var(--mono)}
+  .lane .trk .fin{position:absolute;top:0;bottom:0;right:0;width:9px;background:repeating-conic-gradient(#fff 0 25%,#0F172A 0 50%) 0 0/5px 5px;opacity:.9}
+  .lane .trk .av{position:absolute;top:50%;left:calc(var(--p,0) * (100% - 34px));width:30px;height:34px;margin-top:-15px;transition:left .12s linear;z-index:2}
+  .lane .dcell{flex:none;width:clamp(84px,8.4vw,124px);text-align:right;font-variant-numeric:tabular-nums;line-height:1.1}
+  .lane .dcell b{font-size:clamp(15px,2.35vh,24px);font-weight:900;color:#E2E8F0;letter-spacing:-0.04em}
+  .lane .dcell small{font-size:.6em;font-weight:800;color:#7C8BA3;margin-left:1px}
+  .lane .dcell .of{font-size:clamp(9px,1.2vh,11px);font-weight:800;color:#5E7089;display:block;letter-spacing:0}
+  .lane .dcell.done b{color:var(--amber-lt)}
+  .lane .dcell.done .of{color:var(--amber)}
+
+  /* runner svg */
+  .runner{display:block;overflow:visible}
+  .runner .rshadow{fill:rgba(0,0,0,.45)}
+  .runner .rtorso{stroke:var(--jersey,#F59E0B);stroke-width:6.6;stroke-linecap:round;fill:none}
+  .runner .rhead{fill:#F2C39C}
+  .runner .rleg,.runner .rarm{stroke:#F2C39C;fill:none;stroke-linecap:round;stroke-linejoin:round;transform-box:view-box}
+  .runner .rleg{stroke-width:2.9}
+  .runner .rarm{stroke-width:2.3}
+  .runner .rshoe{fill:#E8EEF7}
+  .runner .rleg-front{transform-origin:15px 26px;animation:swing var(--step,.4s) ease-in-out infinite}
+  .runner .rleg-back{transform-origin:15px 26px;animation:swing var(--step,.4s) ease-in-out infinite reverse}
+  .runner .rarm-back{transform-origin:24px 14.5px;animation:swing2 var(--step,.4s) ease-in-out infinite reverse}
+  .runner .rarm-front{transform-origin:24px 14.5px;animation:swing2 var(--step,.4s) ease-in-out infinite}
+  .runner.idle .rleg,.runner.idle .rarm{animation-play-state:paused}
+  @keyframes swing{0%{transform:rotate(22deg)}50%{transform:rotate(-20deg)}100%{transform:rotate(22deg)}}
+  @keyframes swing2{0%{transform:rotate(16deg)}50%{transform:rotate(-16deg)}100%{transform:rotate(16deg)}}
+
+  /* ---------- overlays ---------- */
+  .countdown{position:absolute;inset:0;z-index:30;display:none;place-items:center;background:radial-gradient(60% 60% at 50% 45%,rgba(15,23,42,.9),rgba(10,17,32,.97))}
+  .countdown.on{display:grid}
+  .cd-num{font-family:var(--serif);font-weight:900;font-size:clamp(90px,20vh,170px);line-height:1;letter-spacing:-0.06em;color:#fff;text-shadow:0 0 80px rgba(245,158,11,.6),0 0 180px rgba(245,158,11,.35)}
+  .cd-num.go{color:var(--amber);font-size:clamp(64px,14vh,120px)}
+  .cd-num.pop{animation:cdpop .6s cubic-bezier(.2,.9,.25,1) both}
+  @keyframes cdpop{0%{opacity:0;transform:scale(.5)}45%{opacity:1;transform:scale(1.05)}100%{opacity:1;transform:scale(1)}}
+  .cd-box{text-align:center}
+  .cd-sub{margin-top:10px;font-size:clamp(12px,1.9vh,17px);font-weight:800;color:#9AA9BF;letter-spacing:.02em}
+  .cd-sub b{color:var(--amber)}
+
+  .idle-note{position:absolute;inset:0;z-index:20;display:none;place-items:center;pointer-events:none}
+  .idle-note.on{display:grid}
+  .idle-note .card{
+    display:flex;align-items:center;gap:30px;text-align:left;
+    background:rgba(10,17,32,.74);border:1px solid rgba(245,158,11,.3);border-radius:20px;padding:22px 32px;
+    backdrop-filter:blur(3px);box-shadow:0 30px 70px -40px rgba(0,0,0,.95);max-width:min(1180px,92vw);
+  }
+  .idle-note .txt{max-width:620px;min-width:0}
+  .idle-note .w{font-family:var(--serif);font-weight:900;font-size:clamp(22px,3.6vh,38px);letter-spacing:-0.04em;color:#fff;line-height:1.22}
+  .idle-note .w .hl{color:var(--amber)}
+  .idle-note .s{margin-top:8px;font-size:clamp(11.5px,1.65vh,15.5px);line-height:1.55;color:#9AA9BF;font-weight:700}
+  .idle-note .s b{color:var(--amber-lt)}
+  .idle-note .qr-mini{flex:none;background:#fff;border-radius:14px;padding:10px;box-shadow:0 18px 40px -24px #000;display:flex;flex-direction:column;align-items:center;gap:5px}
+  .idle-note .qr-mini .qrbox{width:clamp(96px,14vh,150px);height:clamp(96px,14vh,150px);display:grid;place-items:center}
+  .idle-note .qr-mini .qrbox svg{width:100%;height:100%;display:block}
+  .idle-note .qr-mini span{font-size:10px;font-weight:800;color:#0F172A;letter-spacing:.04em}
+  .wait-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;max-width:620px;max-height:86px;overflow:hidden}
+  .wait-chips b{
+    font-size:clamp(10px,1.4vh,12.5px);font-weight:800;color:#C7D2E1;border:1px solid var(--line-strong);
+    background:rgba(255,255,255,.045);border-radius:99px;padding:4px 10px;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;
+  }
+  .wait-chips b .d{width:7px;height:7px;border-radius:50%;background:var(--c);flex:none}
+  .wait-chips b.full{border-color:rgba(245,158,11,.5);background:var(--amber-soft);color:#FFF7E6}
+  .wait-chips b.more{color:var(--amber-lt);border-color:rgba(245,158,11,.4);background:var(--amber-soft)}
+  .wait-chips b.lock{border-color:rgba(239,68,68,.55);background:rgba(239,68,68,.13);color:#FCA5A5}
+  .wait-empty{font-size:clamp(11px,1.5vh,13.5px);font-weight:700;color:#6E7F97;margin-top:10px}
+
+  /* 팀 마감(솔드아웃) 관리 */
+  .lock-box{margin-top:11px;pointer-events:auto}
+  .lock-head{display:flex;align-items:center;gap:8px;font-size:clamp(10px,1.4vh,12.5px);font-weight:800;color:#8496AE;margin-bottom:5px}
+  .lock-head b{color:var(--amber-lt)}
+  .lock-head .tip{font-size:clamp(9px,1.25vh,11px);font-weight:700;color:#5E7089}
+  .lock-admin{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
+  .lk{
+    appearance:none;font-family:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line-strong);
+    background:rgba(255,255,255,.05);color:#C7D2E1;padding:3px 2px 4px;display:flex;flex-direction:column;align-items:center;gap:1px;
+    transition:transform .1s ease,background .12s ease,border-color .12s ease;
+  }
+  .lk:hover{background:rgba(255,255,255,.1)}
+  .lk:active{transform:scale(.95)}
+  .lk .n{font-size:clamp(10px,1.4vh,13px);font-weight:900;line-height:1.1;font-variant-numeric:tabular-nums}
+  .lk .c{font-size:clamp(8px,1.1vh,10px);font-weight:800;color:#8496AE;line-height:1.1}
+  .lk.locked{border-color:rgba(239,68,68,.6);background:rgba(239,68,68,.16);color:#FCA5A5}
+  .lk.locked .c{color:#FCA5A5}
+  .lk.zero{opacity:.55}
+  .lk.off{cursor:default;opacity:.4}
+
+  .podium{position:absolute;inset:0;z-index:40;display:none;place-items:center;background:radial-gradient(70% 70% at 50% 40%,rgba(15,23,42,.9),rgba(10,17,32,.97))}
+  .podium.on{display:grid}
+  .pod-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;animation:rise .5s cubic-bezier(.2,.9,.3,1) both}
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  .pod-title{font-family:var(--serif);font-weight:900;font-size:clamp(26px,4.4vh,46px);letter-spacing:-0.04em;color:#fff;text-shadow:0 0 60px rgba(245,158,11,.55)}
+  .pod-title .hl{color:var(--amber)}
+  .pod-row{display:flex;align-items:flex-end;gap:clamp(14px,2.4vw,30px)}
+  .pod{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .pod .medal{width:clamp(40px,6vh,64px);height:clamp(40px,6vh,64px);border-radius:50%;display:grid;place-items:center;font-size:clamp(18px,3vh,30px);box-shadow:0 0 0 1px rgba(255,255,255,.18),0 14px 30px -16px rgba(0,0,0,.9)}
+  .pod.p1 .medal{background:linear-gradient(180deg,#FDE68A,#F59E0B)}
+  .pod.p2 .medal{background:linear-gradient(180deg,#F1F5F9,#94A3B8)}
+  .pod.p3 .medal{background:linear-gradient(180deg,#F0C39C,#C2703F)}
+  .pod .block{
+    width:clamp(104px,13vw,156px);border-radius:14px 14px 6px 6px;background:linear-gradient(180deg,var(--panel-2),var(--panel));
+    border:1px solid var(--line-strong);border-bottom:3px solid var(--c,#F59E0B);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  }
+  .pod.p1 .block{height:clamp(96px,15vh,152px);border-color:rgba(245,158,11,.55);border-bottom-color:#F59E0B}
+  .pod.p2 .block{height:clamp(72px,11vh,112px)}
+  .pod.p3 .block{height:clamp(58px,9vh,90px)}
+  .pod .rk{font-size:clamp(9px,1.25vh,12px);font-weight:900;letter-spacing:.14em;color:var(--amber)}
+  .pod .nm{font-size:clamp(15px,2.4vh,22px);font-weight:900;letter-spacing:-0.03em;color:#fff}
+  .pod .nm .d{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);margin-right:5px;vertical-align:1px}
+  .pod .tm{font-size:clamp(11px,1.7vh,15px);font-weight:800;color:#C7D2E1;font-variant-numeric:tabular-nums;font-family:var(--mono)}
+  .pod .tm small{font-size:.72em;color:#7C8BA3;font-family:var(--sans);font-weight:700;margin-left:1px}
+  .pod-foot{display:flex;align-items:center;gap:16px;font-size:clamp(10.5px,1.5vh,13.5px);font-weight:700;color:#9AA9BF;flex-wrap:wrap;justify-content:center;max-width:min(1100px,90vw)}
+  .pod-foot b{color:#DCE4F0;font-weight:800;font-variant-numeric:tabular-nums}
+  .pod-foot .dim{color:#5E7089}
+  .pod-actions{margin-top:2px}
+
+  .qr-modal{position:fixed;inset:0;z-index:90;display:none;place-items:center;background:rgba(8,13,24,.95);backdrop-filter:blur(4px);cursor:pointer}
+  .qr-modal.on{display:grid}
+  .qr-card{background:#fff;border-radius:26px;padding:30px 46px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;box-shadow:0 40px 90px -30px #000;animation:rise .35s cubic-bezier(.2,.9,.3,1) both}
+  .qr-card .t1{font-family:var(--serif);font-weight:900;font-size:clamp(22px,3.4vh,34px);letter-spacing:-0.04em;color:#0F172A;line-height:1.2}
+  .qr-card .t1 span{color:#B45309}
+  .qr-card .qrbox{width:min(50vh,420px);height:min(50vh,420px);display:grid;place-items:center}
+  .qr-card .qrbox svg{width:100%;height:100%;display:block}
+  .qr-card .u{font-size:clamp(12px,1.7vh,15px);font-weight:700;color:#1E293B;word-break:break-all;text-align:center;max-width:560px}
+  .qr-pick{display:flex;align-items:center;gap:8px;font-size:clamp(11px,1.5vh,13px);font-weight:900;color:#334155}
+  .qr-pick select{
+    appearance:none;font-family:inherit;font-size:clamp(11px,1.5vh,13px);font-weight:800;color:#0F172A;
+    border:1px solid #CBD5E1;background:#F8FAFC;border-radius:9px;padding:6px 26px 6px 10px;cursor:pointer;
+    background-image:linear-gradient(45deg,transparent 50%,#64748B 50%),linear-gradient(135deg,#64748B 50%,transparent 50%);
+    background-position:calc(100% - 14px) 52%,calc(100% - 9px) 52%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;
+  }
+  .qr-card .c{font-size:clamp(13px,1.9vh,17px);font-weight:900;color:#0F172A}
+  .qr-card .c b{color:#B45309;letter-spacing:.12em}
+  .qr-card .hint2{font-size:11.5px;font-weight:700;color:#64748B}
+  .qr-fallback{width:100%;height:100%;display:grid;place-items:center;background:#F1F5F9;border-radius:10px;color:#0F172A;font-size:11px;font-weight:800;text-align:center;padding:8px;line-height:1.5}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(10px);z-index:95;background:rgba(15,23,42,.96);border:1px solid rgba(245,158,11,.5);color:#FFF7E6;font-size:13px;font-weight:800;padding:11px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="top">
+    <div class="brand">
+      <span class="dot"></span>
+      <div class="t">강사 정진영 · <span class="hl">800m 릴레이 계주</span></div>
+    </div>
+    <div class="top-right">
+      <span id="netTag">연결 중…</span>
+      <div class="pill"><span class="k">등록</span> <b id="teamCount">0</b>팀 <span style="opacity:.5">/</span> <b id="playerCount">0</b>명</div>
+      <div class="pill clock" id="clockPill"><b id="clockVal">00.0</b><span style="opacity:.55">초</span></div>
+      <div class="pill room">방 코드 <b id="roomCode">JY400</b></div>
+      <button class="btn btn-qr" id="qrBtn" type="button">QR 입장</button>
+      <button class="btn btn-start" id="startBtn" type="button">▶ 경기 시작</button>
+      <button class="btn btn-end" id="endBtn" type="button" disabled>■ 종료</button>
+      <button class="btn btn-reset" id="resetBtn" type="button">리셋</button>
+    </div>
+  </div>
+
+  <div class="board">
+    <div class="board-head">
+      <div class="bh-l"><span id="laneLabel">TOP 8 실시간 중계</span> <span class="live off" id="liveTag"><i></i>LIVE</span></div>
+      <div class="bh-r" id="statusText">대기 중 — [경기 시작]을 누르세요</div>
+    </div>
+
+    <div class="lanes" id="lanes"></div>
+
+    <div class="idle-note on" id="idleNote">
+      <div class="card">
+        <div class="txt">
+          <div class="w">8명이 1팀 — <span class="hl">800m</span> 릴레이 계주</div>
+          <div class="s">
+            핸드폰 카메라로 QR을 찍고 <b>팀</b>과 <b>주자 순서</b>를 고른 뒤 입장하세요.<br>
+            방 코드 <b id="idleCode">JY400</b> · 지금 <b id="idleTeams">0</b>팀 <b id="idlePlayers">0</b>명 입장
+          </div>
+          <div class="wait-chips" id="waitList"></div>
+          <div class="wait-empty" id="waitEmpty">아직 입장한 참가자가 없습니다 — QR을 띄워 안내하세요</div>
+          <div class="lock-box" id="lockBox" style="display:none">
+            <div class="lock-head">팀 마감(솔드아웃) 관리 <b id="lockCount">0</b>팀 마감 <span class="tip">팀 버튼을 누르면 마감 · 다시 누르면 열립니다</span></div>
+            <div class="lock-admin" id="lockAdmin"></div>
+          </div>
+          <div style="margin-top:12px;display:flex;align-items:center;gap:10px;pointer-events:auto">
+            <button class="btn btn-reset" id="clearBtn" type="button" style="font-size:11.5px;padding:7px 12px">입장 명단 비우기</button>
+            <span style="font-size:10.5px;font-weight:700;color:#5E7089">다른 차수·다른 강연에서 다시 시작할 때만</span>
+          </div>
+        </div>
+        <div class="qr-mini">
+          <div class="qrbox" id="qrMini"></div>
+          <span>SCAN ME</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="countdown" id="countdown">
+      <div class="cd-box">
+        <div class="cd-num" id="cdNum">3</div>
+        <div class="cd-sub" id="cdSub">1주자부터 <b>차례대로</b> 바통을 잇습니다</div>
+      </div>
+    </div>
+
+    <div class="podium" id="podium">
+      <div class="pod-wrap">
+        <div class="pod-title"><span class="hl">🏁</span> 800m 릴레이 결과</div>
+        <div class="pod-row">
+          <div class="pod p2">
+            <div class="medal">🥈</div>
+            <div class="block"><div class="rk">2위</div><div class="nm" id="p2n">–</div><div class="tm" id="p2t">–</div></div>
+          </div>
+          <div class="pod p1">
+            <div class="medal">🥇</div>
+            <div class="block"><div class="rk">1위</div><div class="nm" id="p1n">–</div><div class="tm" id="p1t">–</div></div>
+          </div>
+          <div class="pod p3">
+            <div class="medal">🥉</div>
+            <div class="block"><div class="rk">3위</div><div class="nm" id="p3n">–</div><div class="tm" id="p3t">–</div></div>
+          </div>
+        </div>
+        <div class="pod-foot" id="podFoot"></div>
+        <div class="pod-actions"><button class="btn btn-reset" id="podReset" type="button">다음 판 준비 (리셋)</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="qr-modal" id="qrModal">
+  <div class="qr-card">
+    <div class="t1">800m 릴레이 계주 · <span>입장</span></div>
+    <div class="qrbox" id="qrBig"></div>
+    <div class="qr-pick" id="qrPick"><span>팀 지정</span>
+      <select id="qrTeamSel"><option value="0">전체 (자유 선택)</option></select>
+    </div>
+    <div class="u" id="qrUrl">—</div>
+    <div class="c">방 코드 <b id="qrCode">JY400</b> · 참가 <b id="qrCount">0</b>팀</div>
+    <div class="hint2">화면을 누르거나 ESC를 누르면 닫힙니다</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<script>
+(function(){
+  "use strict";
+  var $ = function(id){ return document.getElementById(id); };
+
+  var QS = new URLSearchParams(location.search);
+  var ROOM = (QS.get("room") || "JY400").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8) || "JY400";
+  /* Firebase 보안 규칙이 rooms/* 만 허용 → relayRooms 를 rooms 아래에 둡니다(100m 방과 절대 충돌 없음). */
+  var DB_PATH = "rooms/relayRooms/" + ROOM;
+
+  var N_TEAMS = 20, N_SLOTS = 8, LEG = 100, TOTAL = 800, LANE_N = 8;
+  var LIMIT_MS = 180000;
+
+  var FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "977342156141",
+    appId: "1:977342156141:web:f9842fcc67a819ce621e64"
+  };
+
+  var TEAM_COLORS = [
+    "#E11D48","#EF4444","#F97316","#FB923C","#F59E0B",
+    "#FBBF24","#FACC15","#BEF264","#A3E635","#4ADE80",
+    "#22C55E","#10B981","#14B8A6","#06B6D4","#0EA5E9",
+    "#3B82F6","#6366F1","#8B5CF6","#A855F7","#E879F9"
+  ];
+  /* 무지개 20색을 7칸 간격으로 배치 — 이웃한 팀 번호끼리 색이 최대한 멀어져 전광판에서 구분이 쉽습니다 */
+  function teamColor(n){
+    var i = (Math.min(N_TEAMS, Math.max(0, Math.round(n) || 1)) - 1) * 7 % N_TEAMS;
+    return TEAM_COLORS[((i % N_TEAMS) + N_TEAMS) % N_TEAMS];
+  }
+  function escapeHtml(s){
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];
+    });
+  }
+  function fmt(t){
+    var s = Math.max(0, t || 0);
+    var sec = Math.floor(s), cs = Math.floor((s - sec) * 100);
+    return String(sec).padStart(2, "0") + "." + String(cs).padStart(2, "0");
+  }
+  function toArr(v){
+    if (!v) return [];
+    if (Array.isArray(v)) return v.slice();
+    return Object.keys(v).sort(function(a, b){ return (+a) - (+b); }).map(function(k){ return v[k]; });
+  }
+  function runnerSVG(hex, still){
+    return '<svg class="runner' + (still ? " idle" : "") + '" viewBox="0 0 40 44" width="100%" height="100%" aria-hidden="true">'
+      + '<ellipse class="rshadow" cx="20" cy="41.4" rx="9" ry="1.7"/>'
+      + '<g class="rleg rleg-back"><path d="M15 26 L9 29.6 L4.6 36.2"/><circle class="rshoe" cx="4.2" cy="37" r="1.7"/></g>'
+      + '<g class="rleg rleg-front"><path d="M15 26 L21 29 L26.2 35"/><circle class="rshoe" cx="26.6" cy="35.8" r="1.7"/></g>'
+      + '<path class="rtorso" d="M15.4 25.8 L23.8 13.4" style="stroke:' + hex + '"/>'
+      + '<circle class="rhead" cx="27" cy="9.2" r="4.3"/>'
+      + '<g class="rarm rarm-back"><path d="M22.8 16 L18.2 20.4 L20 25.6"/></g>'
+      + '<g class="rarm rarm-front"><path d="M24 15.6 L28.8 20 L26.8 25"/></g>'
+      + '</svg>';
+  }
+
+  /* ---------------- state ---------------- */
+  var FB = { db: null, root: null, offset: 0, connected: false, live: false };
+  var S = {
+    countSig: "",
+    phase: "idle",          /* idle | countdown | race | finished */
+    startAt: 0, endAt: 0, elapsed: 0,
+    meta: {}, slots: {}, teams: {}, result: null, locks: {},
+    last: 0, raf: 0, cdTimer: 0, purged: false, emptySince: {}, paintKey: ""
+  };
+  var laneEls = [];
+
+  function serverNow(){ return Date.now() + FB.offset; }
+  function setNet(text, on){
+    var el = $("netTag");
+    el.textContent = text;
+    el.classList.toggle("on", !!on);
+  }
+  var toastTimer = 0;
+  function toast(msg){
+    var el = $("toast");
+    el.textContent = msg;
+    el.classList.add("on");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ el.classList.remove("on"); }, 2600);
+  }
+
+  /* ---------------- audience URL / QR ---------------- */
+  function audUrl(team){
+    var u = new URL(location.href);
+    u.hash = "";
+    u.pathname = u.pathname.replace(/host\.html$/, "");
+    u.search = "?room=" + encodeURIComponent(ROOM) + (team ? "&team=" + team : "");
+    return u.toString();
+  }
+  var QR_TEAM = 0;
+  var AUD_URL = audUrl(0);
+  function qrMarkup(text){
+    try {
+      if (typeof qrcode === "function"){
+        var q = qrcode(0, "M");
+        q.addData(text);
+        q.make();
+        return q.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+      }
+    } catch(e){}
+    return '<div class="qr-fallback">' + escapeHtml(text) + "</div>";
+  }
+  function paintQR(){
+    var url = audUrl(QR_TEAM);
+    var m = qrMarkup(url);
+    var mini = $("qrMini"), big = $("qrBig");
+    if (mini) mini.innerHTML = m;
+    if (big) big.innerHTML = m;
+    $("qrUrl").textContent = url.replace(/^https?:\/\//, "");
+  }
+
+  /* ---------------- lanes skeleton ---------------- */
+  var lanesEl = $("lanes");
+  for (var i = 0; i < LANE_N; i++){
+    var lane = document.createElement("div");
+    lane.className = "lane";
+    lane.style.top = (i * (100 / LANE_N)) + "%";
+    lane.style.height = (100 / LANE_N) + "%";
+    lane.style.display = "none";
+    lane.innerHTML =
+        '<div class="rk">' + (i + 1) + '</div>'
+      + '<div class="tchip">1<small>팀</small></div>'
+      + '<div class="badge">1주자</div>'
+      + '<div class="who"><div class="nm">—</div></div>'
+      + '<div class="trk">'
+      +   '<div class="fill" style="--p:0"></div>'
+      +   '<div class="mk" style="left:12.5%"><span>100</span></div>'
+      +   '<div class="mk" style="left:25%"><span>200</span></div>'
+      +   '<div class="mk" style="left:37.5%"><span>300</span></div>'
+      +   '<div class="mk" style="left:50%"><span>400</span></div>'
+      +   '<div class="mk" style="left:62.5%"><span>500</span></div>'
+      +   '<div class="mk" style="left:75%"><span>600</span></div>'
+      +   '<div class="mk" style="left:87.5%"><span>700</span></div>'
+      +   '<div class="av" style="--p:0"></div>'
+      +   '<div class="fin"></div>'
+      + '</div>'
+      + '<div class="dcell"><b>0</b><small>m</small><span class="of">/ 800m</span></div>';
+    lanesEl.appendChild(lane);
+    laneEls.push(lane);
+  }
+
+  /* ---------------- firebase ---------------- */
+  function initFirebase(){
+    $("roomCode").textContent = ROOM;
+    $("idleCode").textContent = ROOM;
+    $("qrCode").textContent = ROOM;
+    paintQR();
+    if (typeof firebase === "undefined" || !firebase.initializeApp){
+      setNet("연결 실패 — 새로고침", false);
+      return;
+    }
+    try {
+      firebase.initializeApp(FB_CONFIG);
+      FB.db = firebase.database();
+      FB.root = FB.db.ref(DB_PATH);
+      FB.db.ref(".info/serverTimeOffset").on("value", function(s){ FB.offset = s.val() || 0; });
+      FB.db.ref(".info/connected").on("value", function(s){
+        FB.connected = !!s.val();
+        setNet(FB.connected ? "실시간 연결" : "연결 중…", FB.connected);
+      });
+
+      FB.root.child("meta").on("value", function(s){
+        var prev = S.meta || {};
+        S.meta = s.val() || {};
+        onMeta(prev, S.meta);
+      });
+
+      FB.root.child("slots").on("value", function(s){
+        S.slots = s.val() || {};
+        if (!S.purged){ S.purged = true; purgeStale(); }
+        paintWaitList();
+        paintLockAdmin();
+        if (S.phase === "idle"){
+          renderLanes();
+          var sig = registeredTeams().length + "/" + registeredPlayers();
+          if (sig !== S.countSig){
+            S.countSig = sig;
+            FB.root.update({ "meta/totalTeams": registeredTeams().length, "meta/totalPlayers": registeredPlayers() });
+          }
+        }
+      });
+
+      /* 팀 마감(솔드아웃) — 경기 기록(teams)과 분리된 locks 노드에 보관해
+         경기 시작·리셋으로 지워지지 않게 합니다. */
+      FB.root.child("locks").on("value", function(s){
+        S.locks = s.val() || {};
+        paintLockAdmin();
+        paintWaitList();
+      });
+
+      var tref = FB.root.child("teams");
+      tref.on("child_added", function(s){ S.teams[s.key] = s.val() || {}; });
+      tref.on("child_changed", function(s){ S.teams[s.key] = s.val() || {}; });
+      tref.on("child_removed", function(s){ delete S.teams[s.key]; });
+
+      FB.root.child("result").on("value", function(s){ S.result = s.val() || null; });
+
+      FB.live = true;
+    } catch(e){
+      setNet("연결 실패 — 새로고침", false);
+    }
+  }
+
+  /* 지난 강연에서 남은 슬롯 정리 (4시간 이상 지난 것) */
+  function purgeStale(){
+    if (!FB.live) return;
+    var cut = serverNow() - 4 * 3600 * 1000;
+    var upd = {};
+    var changed = false;
+    Object.keys(S.slots).forEach(function(tk){
+      var row = S.slots[tk] || {};
+      Object.keys(row).forEach(function(sk){
+        var c = row[sk];
+        if (!c || !c.ts || c.ts < cut){
+          upd["slots/" + tk + "/" + sk] = null;
+          if (S.slots[tk]) delete S.slots[tk][sk];
+          changed = true;
+        }
+      });
+    });
+    if (changed) FB.root.update(upd);
+  }
+
+  /* ---------------- meta ---------------- */
+  function onMeta(prev, m){
+    var st = m.status || "waiting";
+    if (st === "countdown" && prev.status !== "countdown"){
+      S.phase = "countdown";
+      S.startAt = m.startAt || 0;
+      beginCountdown();
+    }
+    if (st === "running" && prev.status !== "running"){
+      S.phase = "race";
+      S.startAt = m.startAt || S.startAt;
+      $("countdown").classList.remove("on");
+      $("idleNote").classList.remove("on");
+      $("liveTag").classList.remove("off");
+      $("startBtn").disabled = true;
+      $("startBtn").innerHTML = "▶ 경기 중…";
+      $("endBtn").disabled = false;
+      $("laneLabel").textContent = "TOP " + LANE_N + " 실시간 중계";
+    }
+    if (st === "finished" && prev.status !== "finished"){
+      S.phase = "finished";
+      $("liveTag").classList.add("off");
+      $("startBtn").disabled = false;
+      $("startBtn").innerHTML = "↻ 새 경기";
+      $("endBtn").disabled = true;
+      showPodium();
+    }
+    if (st === "waiting" && (prev.status === "running" || prev.status === "countdown" || prev.status === "finished")){
+      clearInterval(S.cdTimer);
+      $("countdown").classList.remove("on");
+      $("podium").classList.remove("on");
+      $("idleNote").classList.add("on");
+      $("liveTag").classList.add("off");
+      S.teams = {};
+    }
+    paintLockAdmin();
+  }
+
+  function beginCountdown(){
+    var cd = $("countdown"), num = $("cdNum"), sub = $("cdSub");
+    cd.classList.add("on");
+    $("idleNote").classList.remove("on");
+    var last = "";
+    clearInterval(S.cdTimer);
+    S.cdTimer = setInterval(function(){
+      var remain = (S.startAt - serverNow()) / 1000;
+      if (remain <= 0){
+        num.classList.add("go");
+        num.textContent = "출발!";
+        sub.innerHTML = "첫 주자 <b>지금</b> 출발 — 바통을 이어 800m";
+        clearInterval(S.cdTimer); S.cdTimer = 0;
+        setTimeout(function(){ cd.classList.remove("on"); }, 620);
+        return;
+      }
+      var n = Math.min(3, Math.max(1, Math.ceil(remain - 0.3)));
+      if (String(n) !== last){
+        last = String(n);
+        num.classList.remove("pop"); void num.offsetWidth; num.classList.add("pop");
+        num.classList.remove("go");
+        num.textContent = String(last);
+        sub.innerHTML = n === 3 ? "8명이 1팀 — <b>800m</b> 릴레이" : "준비…";
+      }
+    }, 60);
+  }
+
+  /* ---------------- 집계 ---------------- */
+  function teamNums(){
+    var set = {};
+    Object.keys(S.teams || {}).forEach(function(k){
+      var n = parseInt(String(k).replace("t", ""), 10);
+      if (n >= 1 && n <= N_TEAMS) set[n] = true;
+    });
+    return Object.keys(set).map(Number).sort(function(a, b){ return a - b; });
+  }
+  function slotOf(team, slot){
+    var row = S.slots["t" + team];
+    return row ? (row[slot] || null) : null;
+  }
+  function teamInfo(n){
+    var t = S.teams["t" + n] || {};
+    var row = S.slots["t" + n] || {};
+    var count = 0;
+    for (var k = 1; k <= N_SLOTS; k++){ if (row[k]) count++; }
+    return {
+      n: n,
+      color: teamColor(n),
+      dist: Math.max(0, Math.min(TOTAL, t.dist || 0)),
+      baton: t.baton || 0,
+      done: !!t.done,
+      dnf: !!t.dnf,
+      finishMs: t.finishMs || 0,
+      rank: t.rank || 0,
+      count: count
+    };
+  }
+  function rankList(){
+    var arr = teamNums().map(teamInfo);
+    arr.sort(function(a, b){
+      var af = a.done && !a.dnf, bf = b.done && !b.dnf;
+      if (af !== bf) return af ? -1 : 1;
+      if (af && bf) return (a.finishMs || 9e9) - (b.finishMs || 9e9);
+      return b.dist - a.dist;
+    });
+    return arr;
+  }
+  function registeredTeams(){
+    var nums = Object.keys(S.slots || {}).map(function(k){ return parseInt(String(k).replace("t", ""), 10); })
+      .filter(function(n){ return n >= 1 && n <= N_TEAMS; });
+    nums = Array.from(new Set(nums)).sort(function(a, b){ return a - b; });
+    return nums;
+  }
+  function registeredPlayers(){
+    var n = 0;
+    Object.keys(S.slots || {}).forEach(function(tk){
+      var row = S.slots[tk] || {};
+      Object.keys(row).forEach(function(sk){ if (row[sk] && row[sk].pid) n++; });
+    });
+    return n;
+  }
+
+  /* ---------------- render ---------------- */
+  function renderLanes(){
+    var list = (S.phase === "idle") ? [] : rankList().slice(0, LANE_N);
+    var n = Math.max(1, Math.min(LANE_N, list.length));
+    var h = 100 / n;
+    for (var i = 0; i < LANE_N; i++){
+      var lane = laneEls[i];
+      var p = list[i];
+      if (!p){ lane.style.display = "none"; continue; }
+      lane.style.display = "flex";
+      lane.style.top = (i * h) + "%";
+      lane.style.height = h + "%";
+      lane.style.borderBottom = (i === n - 1) ? "0" : "";
+      lane.classList.toggle("first", i === 0 && S.phase === "race");
+
+      var runnerNow = slotOf(p.n, p.baton);
+      var sig = [p.n, p.color, p.baton, p.done, p.dnf, runnerNow ? (runnerNow.nick || "") : "-", teamCount(p.n)].join("|");
+      var badge = lane.querySelector(".badge");
+      var nickBox = lane.querySelector(".who .nm");
+      if (lane.dataset.sig !== sig){
+        lane.dataset.sig = sig;
+        lane.style.setProperty("--c", p.color);
+        var tc = lane.querySelector(".tchip");
+        tc.innerHTML = p.n + "<small>팀</small>";
+        tc.style.setProperty("--c", p.color);
+        var runner = slotOf(p.n, p.baton);
+        if (p.done){ badge.className = "badge done"; badge.textContent = p.dnf ? "미완주" : "완주"; }
+        else if (p.baton >= 1 && p.baton <= N_SLOTS) { badge.className = "badge"; badge.textContent = p.baton + "주자"; }
+        else { badge.className = "badge none"; badge.textContent = "대기"; }
+        nickBox.textContent = p.done
+          ? (p.dnf ? "주자 없음" : "결승선 통과")
+          : (runner ? (runner.nick || "참가자") : "주자 없음");
+        var av = lane.querySelector(".av");
+        av.innerHTML = runnerSVG(p.color, p.done);
+        av.style.setProperty("--step", p.done ? "0.6s" : "0.4s");
+      }
+      var prog = Math.max(0, Math.min(1, p.dist / TOTAL));
+      lane.querySelector(".fill").style.setProperty("--p", prog.toFixed(4));
+      lane.querySelector(".av").style.setProperty("--p", prog.toFixed(4));
+      var dc = lane.querySelector(".dcell");
+      dc.classList.toggle("done", p.done);
+      dc.innerHTML = "<b>" + p.dist.toFixed(1) + "</b><small>m</small>"
+        + '<span class="of">' + (p.done && p.finishMs ? "완주 " + fmt(p.finishMs / 1000) + "초" : "/ " + TOTAL + "m") + "</span>";
+    }
+  }
+
+  function paintWaitList(){
+    var teams = registeredTeams();
+    var players = registeredPlayers();
+    $("teamCount").textContent = String(teams.length);
+    $("playerCount").textContent = String(players);
+    $("idleTeams").textContent = String(teams.length);
+    $("idlePlayers").textContent = String(players);
+    $("qrCount").textContent = String(teams.length);
+    $("laneLabel").textContent = S.phase === "idle" ? "입장 현황" : "TOP " + LANE_N + " 실시간 중계";
+
+    var box = $("waitList");
+    if (!box) return;
+    var html = teams.slice(0, 20).map(function(n){
+      var c = teamCount(n);
+      var lk = !!S.locks["t" + n];
+      return '<b class="' + (lk ? "lock" : (c >= N_SLOTS ? "full" : "")) + '" style="--c:' + teamColor(n) + '">'
+        + '<span class="d"></span>' + (lk ? "🔒 " : "") + n + "팀 " + c + "/" + N_SLOTS + (lk ? " 마감" : "") + "</b>";
+    }).join("");
+    box.innerHTML = html;
+    $("waitEmpty").style.display = teams.length ? "none" : "block";
+  }
+
+  /* ---------------- 팀 마감(슬드아웃) 관리 ---------------- */
+  function paintLockAdmin(){
+    var box = $("lockAdmin");
+    if (!box) return;
+    $("lockBox").style.display = "block";
+    var nLock = 0;
+    var frag = document.createDocumentFragment();
+    for (var t = 1; t <= N_TEAMS; t++){
+      var lk = !!S.locks["t" + t];
+      var c = teamCount(t);
+      if (lk) nLock++;
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "lk" + (lk ? " locked" : "") + (c ? "" : " zero") + (S.phase === "idle" ? "" : " off");
+      b.setAttribute("data-team", t);
+      b.title = t + "팀 " + (lk ? "마감 — 누르면 다시 열기" : "열림 — 누르면 마감");
+      b.innerHTML = '<span class="n">' + t + '</span><span class="c">' + (lk ? "마감" : c + "/" + N_SLOTS) + "</span>";
+      frag.appendChild(b);
+    }
+    box.replaceChildren(frag);
+    $("lockCount").textContent = String(nLock);
+  }
+
+  function toggleLock(team){
+    if (!FB.live){ toast("서버에 연결되지 않았습니다"); return; }
+    if (S.phase !== "idle"){ toast("경기 중에는 마감을 바꿀 수 없습니다 — 리셋 후 조정하세요"); return; }
+    var on = !S.locks["t" + team];
+    S.locks["t" + team] = on ? true : undefined;
+    if (!on) delete S.locks["t" + team];
+    paintLockAdmin();
+    paintWaitList();
+    FB.root.child("locks/t" + team).set(on ? true : null);
+    toast(team + "팀 " + (on ? "마감 — 이제 입장할 수 없습니다" : "다시 열었습니다 — 입장 가능"));
+  }
+
+  function teamCount(n){
+    var row = S.slots["t" + n] || {};
+    var c = 0;
+    for (var k = 1; k <= N_SLOTS; k++){ if (row[k]) c++; }
+    return c;
+  }
+
+  function updateStatus(){
+    var st = $("statusText");
+    if (S.phase === "idle"){
+      st.innerHTML = "대기 중 — [경기 시작]을 누르세요 · " + registeredTeams().length + "팀 / " + registeredPlayers() + "명";
+    } else if (S.phase === "countdown"){
+      st.innerHTML = "카운트다운 — <b>3 · 2 · 1</b>";
+    } else if (S.phase === "race"){
+      var list = rankList();
+      var lead = list[0];
+      var doneN = list.filter(function(p){ return p.done; }).length;
+      var remain = Math.max(0, (LIMIT_MS - S.elapsed * 1000) / 1000);
+      st.innerHTML = "경기 중 <b>" + S.elapsed.toFixed(1) + "초</b> · 1위 "
+        + (lead ? "<b>" + lead.n + "팀</b> " + lead.dist.toFixed(1) + "m" : "–")
+        + " · 완주 <b>" + doneN + "/" + list.length + "</b>팀 · 남은 <b>" + remain.toFixed(0) + "초</b>";
+    } else {
+      st.innerHTML = "경기 종료 — 시상식";
+    }
+  }
+
+  function paintClock(){
+    var el = $("clockVal");
+    if (!el) return;
+    if (S.phase === "race") el.textContent = S.elapsed.toFixed(1);
+    else if (S.phase === "finished") el.textContent = ((S.endAt && S.startAt) ? (S.endAt - S.startAt) / 1000 : 0).toFixed(1);
+    else el.textContent = "0.0";
+  }
+
+  /* ---------------- loop ---------------- */
+  function loop(now){
+    S.last = now;
+    if (S.phase === "countdown" || S.phase === "race"){
+      S.elapsed = Math.max(0, (serverNow() - (S.startAt || serverNow())) / 1000);
+    }
+    if (S.phase === "countdown" && serverNow() >= S.startAt){
+      S.phase = "race";
+      if (FB.live) FB.root.update({ "meta/status": "running" });
+    }
+    renderLanes();
+    updateStatus();
+    paintClock();
+    S.raf = requestAnimationFrame(loop);
+  }
+
+  /* ---------------- 순위 기록 ---------------- */
+  setInterval(function(){
+    if (S.phase !== "race" || !FB.live) return;
+    var list = rankList();
+    var upd = {}, key = [];
+    list.forEach(function(p, i){
+      upd["teams/t" + p.n + "/rank"] = i + 1;
+      key.push(p.n + ":" + (i + 1) + ":" + p.dist.toFixed(0) + ":" + p.done);
+    });
+    var sig = key.join("|");
+    if (sig === S.paintKey) return;
+    S.paintKey = sig;
+    FB.root.update(upd);
+  }, 450);
+
+  /* ---------------- 빈 주자 자동 패스 (진행자 권한) ---------------- */
+  /* 경기 시작 때 확정한 주자 명단(teams/t{n}/runners)을 기준으로,
+     해당 순번 자리가 비면(중도 이탈 등) 2.5초 뒤 다음 입장 주자에게 넘깁니다. */
+  setInterval(function(){
+    if (S.phase !== "race" || !FB.live) return;
+    var now = serverNow();
+    teamNums().forEach(function(n){
+      var t = S.teams["t" + n];
+      if (!t || t.done) return;
+      var b = t.baton || 0;
+      if (b < 1 || b > N_SLOTS) return;
+      var r = toArr(t.runners);
+      var i = r.indexOf(b);
+      if (i < 0) return;
+      var cell = slotOf(n, b);
+      if (cell && cell.pid){ delete S.emptySince[n]; return; }
+      if (!S.emptySince[n]){ S.emptySince[n] = now; return; }
+      if (now - S.emptySince[n] < 2500) return;
+      delete S.emptySince[n];
+      FB.root.child("teams/t" + n).transaction(function(x){
+        if (!x) return x;
+        if (x.baton !== b) return x;
+        var rr = toArr(x.runners);
+        if (!rr.length) rr = r;
+        var L = (x.legLen > 0) ? x.legLen : (TOTAL / (rr.length || 1));
+        var ii = rr.indexOf(b);
+        if (ii < 0) return x;
+        x.dist = Math.max(x.dist || 0, +(ii * L).toFixed(2));
+        x.leg = 0;
+        if (ii + 1 >= rr.length){
+          x.baton = N_SLOTS + 1;
+          x.done = true;
+          x.dnf = true;
+          x.finishMs = Math.max(1, Math.round(serverNow() - (S.startAt || serverNow())));
+        } else {
+          x.baton = rr[ii + 1];
+        }
+        return x;
+      });
+      toast(n + "팀 " + b + "주자 자리가 비어 자동으로 넘어갑니다");
+    });
+  }, 500);
+
+  /* ---------------- 종료 판정 ---------------- */
+  setInterval(function(){
+    if (S.phase !== "race") return;
+    var list = rankList();
+    if (!list.length) return;
+    var allDone = list.every(function(p){ return p.done; });
+    if (allDone) endRace("all");
+    else if (S.elapsed * 1000 >= LIMIT_MS) endRace("time");
+  }, 400);
+
+  /* ---------------- 경기 시작 ---------------- */
+  function startRace(){
+    if (S.phase === "race" || S.phase === "countdown") return;
+    if (!FB.live){ toast("서버에 연결되지 않았습니다"); return; }
+    /* 실제 입장한 자리만 주자 순서로 삼킵니다. 팀 인원(N)에 따라 1인당 거리 = 800 / N */
+    var ready = [];
+    registeredTeams().forEach(function(n){
+      var row = S.slots["t" + n] || {};
+      var r = [];
+      for (var k = 1; k <= N_SLOTS; k++){ if (row[k] && row[k].pid) r.push(k); }
+      if (r.length) ready.push({ n: n, runners: r });
+    });
+    if (!ready.length){ toast("입장한 참가자가 없습니다 — QR로 입장을 먼저 안내하세요"); return; }
+
+    var startAt = serverNow() + 3600;
+    $("podium").classList.remove("on");
+    $("idleNote").classList.remove("on");
+    $("startBtn").disabled = true;
+    $("startBtn").innerHTML = "▶ 준비 중…";
+    $("endBtn").disabled = true;
+    $("laneLabel").textContent = "TOP " + LANE_N + " 실시간 중계";
+    S.emptySince = {};
+    S.paintKey = "";
+
+    FB.root.child("teams").remove().then(function(){
+      var upd = {};
+      ready.forEach(function(o){
+        var L = +(TOTAL / o.runners.length).toFixed(4);
+        upd["teams/t" + o.n] = {
+          dist: 0, leg: 0, baton: o.runners[0], done: false, dnf: false, finishMs: 0, rank: 0, ts: startAt,
+          runners: o.runners.slice(), legLen: L, count: o.runners.length
+        };
+      });
+      upd["result"] = null;
+      upd["meta/status"] = "countdown";
+      upd["meta/startAt"] = startAt;
+      upd["meta/raceId"] = startAt;
+      upd["meta/limitMs"] = LIMIT_MS;
+      upd["meta/startTeams"] = ready.length;
+      upd["meta/totalTeams"] = registeredTeams().length;
+      upd["meta/totalPlayers"] = registeredPlayers();
+      FB.root.update(upd).then(function(){
+        S.phase = "countdown";
+        S.startAt = startAt;
+        S.endAt = 0;
+        S.elapsed = 0;
+        S.teams = {};
+        ready.forEach(function(o){
+          var L = +(TOTAL / o.runners.length).toFixed(4);
+          S.teams["t" + o.n] = {
+            dist: 0, leg: 0, baton: o.runners[0], done: false, dnf: false, finishMs: 0, rank: 0, ts: startAt,
+            runners: o.runners.slice(), legLen: L, count: o.runners.length
+          };
+        });
+        paintLockAdmin();
+        beginCountdown();
+      });
+    });
+  }
+
+  /* ---------------- 경기 종료 ---------------- */
+  function endRace(reason){
+    if (S.phase !== "race") return;
+    S.phase = "finished";
+    S.endAt = serverNow();
+    clearInterval(S.cdTimer);
+    $("liveTag").classList.add("off");
+    $("startBtn").disabled = false;
+    $("startBtn").innerHTML = "↻ 새 경기";
+    $("endBtn").disabled = true;
+
+    var list = rankList();
+    var upd = {};
+    list.forEach(function(p, i){ upd["teams/t" + p.n + "/rank"] = i + 1; });
+    var podium = list.slice(0, 3).map(function(p){
+      return { team: p.n, color: p.color, time: p.done ? p.finishMs : 0, dist: p.dist, dnf: !!p.dnf };
+    });
+    upd["result"] = {
+      podium: podium,
+      order: list.slice(0, 10).map(function(p, i){
+        return { rank: i + 1, team: p.n, color: p.color, dist: p.dist, time: p.done ? p.finishMs : 0, dnf: !!p.dnf };
+      }),
+      total: list.length,
+      reason: reason || "host",
+      ts: serverNow()
+    };
+    upd["meta/status"] = "finished";
+    upd["meta/finishAt"] = S.endAt;
+    if (FB.live) FB.root.update(upd);
+    S.result = upd.result;
+    showPodium();
+  }
+
+  function showPodium(){
+    var res = S.result;
+    var list = rankList();
+    var podium = (res && res.podium && res.podium.length) ? res.podium : list.slice(0, 3).map(function(p){
+      return { team: p.n, color: p.color, time: p.done ? p.finishMs : 0, dist: p.dist, dnf: !!p.dnf };
+    });
+    [1, 2, 3].forEach(function(i){
+      var p = podium[i - 1];
+      var nm = $("p" + i + "n"), tm = $("p" + i + "t"), block = nm.closest(".block");
+      if (!p){
+        nm.textContent = "–"; tm.innerHTML = "–";
+        if (block) block.style.setProperty("--c", "#94A3B8");
+        return;
+      }
+      nm.innerHTML = '<span class="d" style="--c:' + p.color + '"></span>' + p.team + "팀";
+      if (!p.dnf && p.time) tm.innerHTML = (p.time / 1000).toFixed(2) + "<small>초</small>";
+      else tm.innerHTML = Math.round(p.dist) + "<small>m</small>";
+      if (block) block.style.setProperty("--c", p.color);
+    });
+    var rest = list.slice(3, 9).map(function(p, k){
+      return "<b>" + (k + 4) + "위 " + p.n + "팀 " + (p.done && !p.dnf ? fmt(p.finishMs / 1000) + "초" : Math.round(p.dist) + "m") + "</b>";
+    });
+    var total = list.length;
+    var fin = list.filter(function(p){ return p.done && !p.dnf; }).length;
+    $("podFoot").innerHTML = rest.join('<span class="dim">·</span>')
+      + (total - fin > 0 ? '<span class="dim">·</span><b>미완주 ' + (total - fin) + "팀</b>" : "");
+    $("podium").classList.add("on");
+  }
+
+  /* ---------------- 리셋 ---------------- */
+  function resetRoom(){
+    if (!FB.live){ toast("서버에 연결되지 않았습니다"); return; }
+    clearInterval(S.cdTimer);
+    S.phase = "idle";
+    S.startAt = 0; S.endAt = 0; S.elapsed = 0;
+    S.teams = {}; S.result = null; S.emptySince = {}; S.paintKey = "";
+    $("countdown").classList.remove("on");
+    $("podium").classList.remove("on");
+    $("idleNote").classList.add("on");
+    $("liveTag").classList.add("off");
+    $("startBtn").disabled = false;
+    $("startBtn").innerHTML = "▶ 경기 시작";
+    $("endBtn").disabled = true;
+    laneEls.forEach(function(l){ l.style.display = "none"; l.dataset.sig = ""; });
+
+    FB.root.update({
+      "meta/status": "waiting",
+      "meta/startAt": 0,
+      "meta/finishAt": 0,
+      "meta/startTeams": 0,
+      "result": null
+    }).then(function(){
+      return FB.root.child("teams").remove();
+    }).then(function(){
+      paintWaitList();
+      paintLockAdmin();
+      toast("방을 초기화했습니다 — 명단·마감 상태는 그대로, 바로 다음 판 가능");
+      setTimeout(function(){ if (S.phase === "idle") FB.root.child("teams").remove(); }, 700);
+    });
+  }
+
+  /* ---------------- 전체 비우기 ---------------- */
+  function clearAll(){
+    clearInterval(S.cdTimer);
+    S.phase = "idle"; S.startAt = 0; S.endAt = 0; S.elapsed = 0;
+    S.teams = {}; S.result = null; S.slots = {}; S.locks = {}; S.emptySince = {}; S.paintKey = "";
+    $("countdown").classList.remove("on");
+    $("podium").classList.remove("on");
+    $("idleNote").classList.add("on");
+    $("liveTag").classList.add("off");
+    $("startBtn").disabled = false;
+    $("startBtn").innerHTML = "▶ 경기 시작";
+    $("endBtn").disabled = true;
+    laneEls.forEach(function(l){ l.style.display = "none"; l.dataset.sig = ""; });
+    FB.root.update({
+      "slots": null,
+      "locks": null,
+      "teams": null,
+      "result": null,
+      "meta/status": "waiting",
+      "meta/startAt": 0,
+      "meta/finishAt": 0,
+      "meta/startTeams": 0
+    }).then(function(){
+      paintWaitList();
+      paintLockAdmin();
+      toast("입장 명단과 팀 마감을 모두 비웠습니다");
+    });
+  }
+
+  /* ---------------- buttons ---------------- */
+  $("startBtn").addEventListener("click", startRace);
+  $("endBtn").addEventListener("click", function(){ endRace("host"); });
+  $("resetBtn").addEventListener("click", resetRoom);
+  $("podReset").addEventListener("click", resetRoom);
+  $("clearBtn").addEventListener("click", function(){
+    if (!FB.live) return;
+    if (!window.confirm("입장 명단(팀·주자 자리)을 모두 비웁니다.\n참가자 전원이 다시 QR로 입장해야 합니다. 계속할까요?")) return;
+    clearAll();
+  });
+
+  var qrModal = $("qrModal");
+  $("qrBtn").addEventListener("click", function(){ paintWaitList(); paintQR(); qrModal.classList.add("on"); });
+
+  /* 팀 마감 버튼 (이벤트 위임) */
+  $("lockAdmin").addEventListener("click", function(e){
+    var b = e.target.closest && e.target.closest(".lk");
+    if (!b) return;
+    toggleLock(parseInt(b.getAttribute("data-team"), 10));
+  });
+  /* QR 모달 — 팀 지정 QR */
+  (function(){
+    var sel = $("qrTeamSel");
+    for (var t = 1; t <= N_TEAMS; t++){
+      var o = document.createElement("option");
+      o.value = String(t); o.textContent = t + "팀 전용";
+      sel.appendChild(o);
+    }
+    sel.addEventListener("change", function(){
+      QR_TEAM = parseInt(sel.value, 10) || 0;
+      paintQR();
+      toast(QR_TEAM ? (QR_TEAM + "팀 전용 QR — 휴대폰에서 팀이 미리 선택됩니다") : "전체 QR — 참가자가 팀을 직접 고름");
+    });
+    $("qrPick").addEventListener("click", function(e){ e.stopPropagation(); });
+  })();
+  qrModal.addEventListener("click", function(){ qrModal.classList.remove("on"); });
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Escape") qrModal.classList.remove("on");
+    if (e.key === " " && e.target === document.body){
+      e.preventDefault();
+      if (S.phase === "idle" || S.phase === "finished") startRace();
+    }
+  });
+  window.addEventListener("resize", function(){ renderLanes(); });
+
+  /* ---------------- go ---------------- */
+  initFirebase();
+  paintWaitList();
+  S.last = performance.now();
+  S.raf = requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
