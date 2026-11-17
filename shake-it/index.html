@@ -67,11 +67,17 @@
   .kicker::before{content:"";width:16px;height:2px;border-radius:2px;background:var(--amber)}
   h1.title{
     font-family:var(--serif);font-weight:900;font-size:33px;line-height:1.12;
-    margin:0 0 9px;letter-spacing:-0.045em;
+    margin:0;letter-spacing:-0.045em;
     background:linear-gradient(180deg,#FFFFFF 0%,#C3D1E4 100%);
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
   h1.title .hl{-webkit-text-fill-color:var(--amber);color:var(--amber)}
+  .title-row{display:flex;align-items:center;gap:9px;margin:0 0 9px}
+  .title-row .tico{
+    flex:none;width:31px;height:31px;color:var(--amber);
+    filter:drop-shadow(0 0 14px rgba(245,158,11,.5));
+  }
+  .title-row .tico svg{display:block;width:100%;height:100%}
   .sub{margin:0;font-size:12.5px;line-height:1.62;color:var(--muted)}
   .card{border:1px solid var(--line);background:linear-gradient(180deg,var(--panel2),var(--panel));border-radius:20px;box-shadow:0 18px 40px -32px rgba(0,0,0,.95)}
   .entry-card{padding:15px 15px 16px;margin-top:14px}
@@ -274,7 +280,16 @@
     <!-- ================= 입장 ================= -->
     <section class="view on" id="view-entry">
       <div class="kicker">아이스브레이킹 · SHAKE GAME</div>
-      <h1 class="title">📱 흔들어<span class="hl">주세요!</span></h1>
+      <div class="title-row">
+        <span class="tico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="6.4" y="2.2" width="11.2" height="19.6" rx="3.2"/>
+            <path d="M10.4 5.4h3.2"/>
+            <path d="M12 18.2h.01"/>
+          </svg>
+        </span>
+        <h1 class="title">흔들어<span class="hl">주세요!</span></h1>
+      </div>
       <p class="sub">36초 동안 가장 많이 흔든 사람이 우승!<br>폰을 쥐고 힘껏 흔들어 주세요.</p>
 
       <div class="card entry-card">
