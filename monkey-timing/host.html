@@ -85,7 +85,7 @@
     padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
   }
   .qr-card .frame{background:#fff;border-radius:14px;padding:10px;box-shadow:0 12px 34px rgba(0,0,0,.45)}
-  .qr-card img{width:212px;height:212px;display:block;border-radius:6px}
+  .qr-card img{width:244px;height:244px;display:block;border-radius:6px}
   .qr-card .code{font-family:var(--mono);font-size:30px;font-weight:800;letter-spacing:.16em;color:var(--amber-lt);margin-top:2px}
   .qr-card .lbl{font-size:11.5px;font-weight:800;color:var(--dim);letter-spacing:.1em}
   .qr-card .url{font-size:10.5px;color:#5C6E88;text-align:center;line-height:1.5}
@@ -94,7 +94,7 @@
   .roster-head .t{font-size:12.5px;font-weight:900;color:#C7D3E4;letter-spacing:.02em}
   .roster-head .c{font-size:12px;font-weight:800;color:var(--dim)}
   .roster-head .c b{color:var(--amber-lt);font-size:15px}
-  .roster{flex:1;min-height:0;display:grid;grid-template-columns:repeat(8,1fr);grid-auto-rows:min-content;gap:6px;overflow-y:auto;align-content:start;padding-right:2px}
+  .roster{flex:1;min-height:0;display:grid;grid-template-columns:repeat(8,1fr);grid-auto-rows:minmax(30px,1fr);gap:7px;overflow-y:auto;align-content:stretch;padding-right:2px}
   .roster::-webkit-scrollbar{width:6px}
   .roster::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:9px}
   .rcell{
@@ -169,12 +169,12 @@
   .pod .sc{font-family:var(--mono);font-size:26px;font-weight:800;color:#FFD37A;line-height:1.1}
   .pod.p1 .sc{font-size:34px;color:#FFE7A8}
   .pod .sc span{font-size:12px;color:var(--muted);margin-left:2px}
-  .res-list{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px 14px;overflow:hidden;align-content:start}
-  .rrow{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.028);border:1px solid rgba(255,255,255,.05);border-radius:9px;padding:5px 9px;min-width:0}
+  .res-list{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:5px 12px;overflow:hidden;align-content:start}
+  .rrow{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.028);border:1px solid rgba(255,255,255,.05);border-radius:8px;padding:3.5px 8px;min-width:0}
   .rrow .rk{width:26px;flex:none;font-family:var(--mono);font-size:12.5px;font-weight:800;color:#6C7F9C;text-align:right}
   .rrow.top .rk{color:var(--gold)}
-  .rrow .nm{flex:1;font-size:12.5px;font-weight:800;color:#DCE6F3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .rrow .sc{font-family:var(--mono);font-size:13px;font-weight:800;color:#FFD37A;flex:none}
+  .rrow .nm{flex:1;font-size:12px;font-weight:800;color:#DCE6F3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rrow .sc{font-family:var(--mono);font-size:12.5px;font-weight:800;color:#FFD37A;flex:none}
   .rrow.zero .sc{color:#54657F}
   .res-empty{grid-column:1/-1;text-align:center;color:var(--dim);font-size:14px;font-weight:700;padding:40px 0}
 
@@ -738,6 +738,8 @@
   function goResult(){
     H.state = "end";
     cancelAnimationFrame(H.raf);
+    if ($("bigTimerNum")){ $("bigTimerNum").textContent = "0.0"; $("topTimerNum").textContent = "0.0"; }
+    $("bigBar").style.width = "0%";
     loopStop();
     unlock();
     if (!H.ended){
@@ -892,6 +894,8 @@
       list.innerHTML = '<div class="res-empty">참가자 기록이 없습니다</div>';
       return;
     }
+    const cols = Math.max(2, Math.min(6, Math.ceil(arr.length / 14)));
+    list.style.gridTemplateColumns = "repeat(" + cols + ",1fr)";
     list.innerHTML = arr.map((p, i) =>
       '<div class="rrow' + (i < 3 ? " top" : "") + (p.s === 0 ? " zero" : "") + '">' +
       '<span class="rk">' + (i + 1) + '</span>' +
