@@ -187,7 +187,8 @@
   .qtag{font-size:11px;font-weight:600;color:var(--muted-2);letter-spacing:.02em}
   .track{margin-top:9px;height:5px;border-radius:999px;background:rgba(255,255,255,.09);overflow:hidden}
   .track i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#F2AE45,#FFD68B);transition:width .45s cubic-bezier(.22,.8,.2,1)}
-  .qbody{margin-top:26px;transition:opacity .17s ease, transform .17s ease}
+  #sQuiz .qbody{margin-top:0;flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;padding:14px 0 8px}
+  .qbody{transition:opacity .17s ease, transform .17s ease}
   .qbody.is-out{opacity:0;transform:translateY(-8px)}
   .qbody.is-in{animation:qin .24s ease both}
   @keyframes qin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -377,7 +378,6 @@
       <div class="opts" id="opts" role="group" aria-label="선택지"></div>
     </div>
 
-    <div class="spacer"></div>
     <p class="qhint">정답은 없습니다. 지금 끌리는 쪽으로 눌러주세요.</p>
     <button class="back" id="backBtn" type="button" hidden>← 이전 문항</button>
   </section>
