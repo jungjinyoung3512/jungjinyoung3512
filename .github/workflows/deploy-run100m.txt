@@ -1,0 +1,26 @@
+name: deploy-run100m
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: fetch
+        run: |
+          mkdir -p run-100m
+          BASE=https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app/rooms/_deploy
+          curl -s "$BASE/index.json" -o /tmp/a.json
+          curl -s "$BASE/host.json" -o /tmp/b.json
+          python3 -c "import json;open('run-100m/index.html','w',encoding='utf-8').write(json.load(open('/tmp/a.json')))"
+          python3 -c "import json;open('run-100m/host.html','w',encoding='utf-8').write(json.load(open('/tmp/b.json')))"
+          wc -c run-100m/index.html run-100m/host.html
+          grep -c "100m" run-100m/index.html
+      - name: commit
+        run: |
+          git config user.name jungjinyoung3512
+          git config user.email star1010245@naver.com
+          git add run-100m
+          git commit -m "run-100m: Firebase 실시간 연동 게임 배포" || true
+          git push
