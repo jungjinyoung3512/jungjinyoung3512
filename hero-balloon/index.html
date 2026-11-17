@@ -321,7 +321,8 @@
   };
 
   const CAP = 99;       /* 정원 */
-  const TOTAL_MS = 26000;
+  const DUR_DEFAULT = 26;
+  const DUR_ALLOWED = [26, 16];
 
   const COLORS = ["#FF6B6B","#FFA94D","#FFD43B","#69DB7C","#38D9A9","#4DABF7","#9775FA","#F783AC","#FF922B","#63E6BE","#F06595","#74C0FC"];
 
@@ -339,7 +340,7 @@
 
   const G = {
     joined:false, name:"", color:COLORS[0], joinedAt:0,
-    phase:"idle", startAt:0, gameId:0, k:0,
+    phase:"idle", startAt:0, gameId:0, k:0, durationSec:DUR_DEFAULT,
     pops:{}, popped:{}, survivors:{}, total:0,
     offset:0, raf:0, screen:"entry",
     myPopAt:0, isPopped:false, isAlive:true, winShown:false, joinedCount:0,
@@ -347,6 +348,7 @@
   };
 
   const serverNow = () => Date.now() + G.offset;
+  const gameMs = () => (DUR_ALLOWED.indexOf(G.durationSec) >= 0 ? G.durationSec : DUR_DEFAULT) * 1000;
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
   function toast(msg, ms){
@@ -428,6 +430,9 @@
     G.popped = m.popped || {};
     G.survivors = m.survivors || {};
     G.total = Number(m.total) || 0;
+    /* 진행자가 고른 게임 길이 (26초 / 16초) */
+    const ds = Number(m.durationSec);
+    if (DUR_ALLOWED.indexOf(ds) >= 0) G.durationSec = ds;
 
     if (G.gameId !== prevId && G.gameId > 0){
       hideWin();
@@ -505,7 +510,7 @@
       setStatus("🎈 내 풍선이 하늘로 올라가는 중...", "곧 시작합니다 · 진행자의 시작을 기다려 주세요");
       $("mTime").querySelector(".lb").textContent = "게임 길이";
       $("mAlive").querySelector(".lb").textContent = "대기 참가자";
-      $("timeN").textContent = "26";
+      $("timeN").textContent = String(G.durationSec);
       $("timeBar").style.width = "0%";
       $("aliveN").textContent = String(G.joinedCount || 0);
       $("bottomHint").innerHTML = "끝까지 살아남으면 <b>오늘의 주인공</b>!";
@@ -612,7 +617,7 @@
         G.lastCd = String(n);
         setStatus("🎈 풍선이 올라갑니다...", n > 0 ? n + "초 뒤 출발!" : "출발!");
       }
-      $("timeN").textContent = "26";
+      $("timeN").textContent = String(G.durationSec);
       $("timeBar").style.width = "0%";
       $("aliveN").textContent = String(G.total || 0);
       evaluateMyState();
@@ -621,11 +626,12 @@
     if (G.phase !== "running") return;
 
     const el = now - G.startAt;
-    const remain = Math.max(0, TOTAL_MS - el);
+    const totalMs = gameMs();
+    const remain = Math.max(0, totalMs - el);
     $("mTime").querySelector(".lb").textContent = "남은 시간";
     $("mAlive").querySelector(".lb").textContent = "생존 풍선";
     $("timeN").textContent = String(Math.ceil(remain / 1000));
-    $("timeBar").style.width = (100 - (remain / TOTAL_MS) * 100).toFixed(1) + "%";
+    $("timeBar").style.width = (100 - (remain / totalMs) * 100).toFixed(1) + "%";
     $("aliveN").textContent = String(surviveCount());
     if (!G.isPopped){
       const n = surviveCount();

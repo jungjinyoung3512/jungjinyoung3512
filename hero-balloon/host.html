@@ -264,6 +264,11 @@
       <button class="kbtn" data-k="4">4<span class="u">명</span></button>
       <button class="kbtn" data-k="5">5<span class="u">명</span></button>
     </div>
+    <div class="seg" id="segDur">
+      <span class="lb">시간</span>
+      <button class="kbtn on" data-dur="26">26<span class="u">초</span></button>
+      <button class="kbtn" data-dur="16">16<span class="u">초</span></button>
+    </div>
     <button class="btn start" id="btnStart">▶ 시작 <span class="kbd">Space</span></button>
     <button class="btn" id="btnRestart">🔄 재시작</button>
     <button class="btn result" id="btnResult">🏆 결과보기</button>
@@ -306,7 +311,7 @@
           <span>·</span>
           <span>생존 <b id="idleK">1</b>명 뽑기</span>
           <span>·</span>
-          <span>26초 서바이벌</span>
+          <span id="idleDur">26초 서바이벌</span>
         </div>
         <div class="ib-url" id="idleUrl">jungjinyoung3512.github.io/jungjinyoung3512/hero-balloon/</div>
       </div>
@@ -375,10 +380,10 @@
     appId: "1:977342156141:web:f9842fcc67a819ce621e64"
   };
 
-  const CAP = 99, K_MAX = 5, TOTAL_MS = 26000, CD_MS = 2950;
+  const CAP = 99, K_MAX = 5, DUR_DEFAULT = 26, DUR_ALLOWED = [26, 16], CD_MS = 2950;
 
   const H = {
-    phase:"idle", startAt:0, cdStart:0, gameId:0, k:1,
+    phase:"idle", startAt:0, cdStart:0, gameId:0, k:1, durationSec:DUR_DEFAULT,
     players:{}, total:0, offset:0,
     pops:{}, popped:{}, survivors:{}, gameIds:[],
     balloons:[], sched:[], schedIdx:0,
@@ -389,6 +394,7 @@
   };
 
   const serverNow = () => Date.now() + H.offset;
+  const totalMs = () => (DUR_ALLOWED.indexOf(H.durationSec) >= 0 ? H.durationSec : DUR_DEFAULT) * 1000;
   const clamp = (v,a,b) => v < a ? a : (v > b ? b : v);
   const lerp = (a,b,t) => a + (b-a)*t;
   const easeOut = t => 1 - Math.pow(1-t, 3);
@@ -559,15 +565,41 @@
     setTimeout(() => speak("출발!", {rate:1.15, pitch:1.1}), 2890);
   }
 
-  /* 탕! 풍선 터지는 소리 */
-  function popSound(i){
-    const n = (i % 7) * 40;
-    hit({f: 2800 + n, f2: 420, dur: 0.085, ftype:"bandpass", q:1.05, gain:0.42});
-    tone({f: 190 + n * 0.4, f2: 62, dur: 0.13, type:"sine", gain:0.30});
-    tone({f: 1250 + n, f2: 520, dur: 0.05, type:"square", gain:0.05});
+  /* =========================================================
+     총소리 "탕!" — 포수가 발사하는 순간 (깊은 저역 + 날카로운 크랙 + 야외 잔향)
+     ========================================================= */
+  function playGunshot(when){
+    if (!A.ctx) return;
+    const t = (when == null) ? A.ctx.currentTime : when;
+    /* 1) 앞머리 크랙 — 아주 짧고 밝게 터지는 총구 폭발 */
+    hit({f: 9200, dur: 0.016, ftype:"highpass", q:0.7, gain:0.60, t:t});
+    hit({f: 4400, f2: 1500, dur: 0.045, ftype:"bandpass", q:0.85, gain:0.58, t:t});
+    /* 2) 몸통 — 공기를 찢는 중저역 스윕 */
+    hit({f: 2000, f2: 300, dur: 0.17, ftype:"lowpass", q:1.6, gain:0.50, t:t + 0.004});
+    /* 3) 저역 펀치 — 가슴을 때리는 '탕' */
+    tone({f: 220, f2: 40, dur: 0.26, type:"sine", gain:0.55, t:t});
+    tone({f: 96, f2: 32, dur: 0.34, type:"triangle", gain:0.28, t:t + 0.008});
+    /* 4) 야외 잔향 — 멀리 퍼져 사라지는 꼬리 */
+    hit({f: 1300, f2: 220, dur: 0.44, ftype:"bandpass", q:0.55, gain:0.13, t:t + 0.02});
   }
-  function muzzleSound(){
-    hit({f: 5200, dur: 0.05, ftype:"highpass", gain:0.12});
+
+  /* =========================================================
+     풍선 파열 "펑!" — 총알이 맞고 터지는 순간 (고무 크랙 + 공기 배출, 총소리보다 밝고 짧게)
+     ========================================================= */
+  function playPop(i){
+    if (!A.ctx) return;
+    const t = A.ctx.currentTime;
+    const n = ((i || 0) % 7) * 45;
+    /* 1) 고무가 찢어지는 날카로운 크랙 */
+    hit({f: 6800 + n, dur: 0.013, ftype:"highpass", q:0.8, gain:0.50, t:t});
+    /* 2) 터지며 퍼지는 공기 — 밝은 대역에서 아래로 스윕 */
+    hit({f: 3600 + n, f2: 380, dur: 0.12, ftype:"bandpass", q:1.15, gain:0.46, t:t + 0.003});
+    /* 3) 고무 스냅 (딱) */
+    tone({f: 1650 + n, f2: 540, dur: 0.042, type:"square", gain:0.10, t:t});
+    /* 4) 빠져나가는 공기 쉬익 */
+    hit({f: 5200, f2: 1900, dur: 0.22, ftype:"highpass", q:0.5, gain:0.11, t:t + 0.028});
+    /* 5) 얕은 몸통 — 총소리와 확실히 구분되도록 낮고 짧게 */
+    tone({f: 320 + n * 0.6, f2: 95, dur: 0.11, type:"sine", gain:0.26, t:t});
   }
   function aimSound(){
     tone({f: 2200, dur: 0.03, type:"sine", gain:0.05, flt:{type:"highpass", f:1500}});
@@ -581,7 +613,7 @@
       const s = this.step;
       const bar = Math.floor(s / 16) % 4;
       const e = s % 16;
-      const prog = clamp((serverNow() - H.startAt) / TOTAL_MS, 0, 1);
+      const prog = clamp((serverNow() - H.startAt) / totalMs(), 0, 1);
       const at = t + 0.03;
       if (e % 4 === 0){
         const roots = ["D2","D2","F2","A2"];
@@ -738,6 +770,8 @@
         if (FB.ok) FB.room.child("meta").update({ status: "idle", startAt: 0, gameId: 0, pops: null, popped: null, survivors: null, finishedAt: null });
         toast("이전 판 상태를 정리했습니다 · 참가자 " + Object.keys(m.players || {}).length + "명 유지", 2800);
       }
+      const ds = Number(m.durationSec);
+      if (DUR_ALLOWED.indexOf(ds) >= 0) setDuration(ds, true);
     }
   }
 
@@ -1287,6 +1321,24 @@
     $("kTag").textContent = String(H.k);
   }
 
+  /* 게임 길이 26초 / 16초 */
+  function setDuration(sec, silent){
+    const d = DUR_ALLOWED.indexOf(Number(sec)) >= 0 ? Number(sec) : DUR_DEFAULT;
+    const changed = H.durationSec !== d;
+    H.durationSec = d;
+    document.querySelectorAll("#segDur .kbtn").forEach(b => {
+      b.classList.toggle("on", Number(b.dataset.dur) === d);
+    });
+    if ($("idleDur")) $("idleDur").textContent = d + "초 서바이벌";
+    /* 대기 중일 때만 DB에 반영 (진행 중엔 현재 판 시간이 흔들리지 않게) */
+    if (FB.ok && H.phase === "idle") FB.room.child("meta/durationSec").set(d);
+    if (H.phase === "idle"){
+      $("hudTimeN").textContent = String(d);
+      $("timeTxt").textContent = String(d);
+    }
+    if (!silent && changed && H.phase !== "idle") toast("게임 길이는 다음 판부터 적용됩니다", 2200);
+  }
+
   function phaseUI(){
     const chip = $("phaseChip");
     const txt = $("phaseTxt");
@@ -1310,6 +1362,7 @@
   }
 
   function buildSchedule(ids, K, startAt){
+    const D = totalMs();
     const mixed = shuffle(ids);
     const survivors = mixed.slice(0, K);
     const losers = shuffle(mixed.slice(K));
@@ -1317,7 +1370,7 @@
     const pops = {};
     if (n > 0){
       const t0 = startAt + 1400;
-      const t1 = startAt + TOTAL_MS - 800;
+      const t1 = startAt + D - 800;
       const gap = n > 1 ? (t1 - t0) / (n - 1) : 0;
       losers.forEach((id, i) => {
         let at = n === 1 ? (t0 + t1) / 2 : t0 + gap * i;
@@ -1332,7 +1385,7 @@
         if (pops[k] < last + minGap) pops[k] = last + minGap;
         last = pops[k];
       });
-      /* 26초 창 안으로 다시 맞춘다 (마지막 풍선은 반드시 t1 이전) */
+      /* 게임 길이 창 안으로 다시 맞춘다 (마지막 풍선은 반드시 t1 이전) */
       const firstV = pops[keys[0]], lastV = pops[keys[keys.length - 1]];
       if (lastV > t1 || firstV < t0){
         const scale = (t1 - t0) / Math.max(1, lastV - firstV);
@@ -1377,6 +1430,7 @@
       status: "countdown",
       gameId: H.gameId,
       startAt: startAt,
+      durationSec: H.durationSec,
       k: K,
       requestedK: H.k,
       total: N,
@@ -1411,7 +1465,10 @@
     burst(b.slotX + (b.x - b.slotX || 0), balloonY(b, sNow), b.color, 16, 1);
     H.rings.push({x: b.slotX, y: balloonY(b, sNow), r: 4, life: 1, color: b.color});
     H.shake = Math.max(H.shake, 0.9);
-    popSound(H.schedIdx);
+    /* 발사음(탕!) → 총알이 날아가 맞는 짧은 간격 뒤 파열음(펑!) */
+    playGunshot();
+    const popIdx = H.schedIdx;
+    setTimeout(() => { if (!A.muted) playPop(popIdx); }, 85);
     const corner = (H.schedIdx % 2 === 0)
       ? {x: 140 + Math.random() * 30, y: H.Hh - 58}
       : {x: H.W - 140 - Math.random() * 30, y: H.Hh - 58};
@@ -1465,7 +1522,7 @@
       if (b && !b.popped) popBalloonAt(b, sNow);
       H.schedIdx++;
     }
-    const endAt = H.startAt + TOTAL_MS;
+    const endAt = H.startAt + totalMs();
     if (sNow >= endAt + 200) endGame();
   }
 
@@ -1474,7 +1531,7 @@
     const sNow = serverNow();
     H.phase = "ended";
     H.endedAt = sNow;
-    /* 26초 종료 시점에 남은 비생존 풍선은 즉시 터뜨려 K명만 남긴다 */
+    /* 게임 종료 시점에 남은 비생존 풍선은 즉시 터뜨려 K명만 남긴다 */
     H.balloons.forEach(b => {
       if (!b.popped && !H.survivors[b.id]){
         b.popped = true;
@@ -1624,6 +1681,13 @@
     });
   });
 
+  document.querySelectorAll("#segDur .kbtn").forEach(b => {
+    b.addEventListener("click", () => {
+      unlock();
+      setDuration(Number(b.dataset.dur));
+    });
+  });
+
   $("btnStart").addEventListener("click", () => { unlock(); startGame(); });
   $("btnRestart").addEventListener("click", () => { unlock(); restart(); });
   $("btnResult").addEventListener("click", () => {
@@ -1661,14 +1725,15 @@
         el.textContent = String(n);
         el.classList.remove("go");
       }
-      $("hudTimeN").textContent = "26";
-      $("timeTxt").textContent = "26";
+      $("hudTimeN").textContent = String(H.durationSec);
+      $("timeTxt").textContent = String(H.durationSec);
     } else if (H.phase === "running"){
-      const remain = Math.max(0, H.startAt + TOTAL_MS - sNow);
+      const total = totalMs();
+      const remain = Math.max(0, H.startAt + total - sNow);
       const sec = Math.ceil(remain / 1000);
       $("hudTimeN").textContent = String(sec);
       $("timeTxt").textContent = String(sec);
-      $("progBar").style.width = (100 - (remain / TOTAL_MS) * 100).toFixed(1) + "%";
+      $("progBar").style.width = (100 - (remain / total) * 100).toFixed(1) + "%";
       const alive = H.balloons.filter(b => !b.popped).length;
       $("aliveN").textContent = String(alive);
       tickGame(sNow);
@@ -1684,8 +1749,8 @@
       $("timeTxt").textContent = "0";
       $("progBar").style.width = "100%";
     } else {
-      $("hudTimeN").textContent = "26";
-      $("timeTxt").textContent = "26";
+      $("hudTimeN").textContent = String(H.durationSec);
+      $("timeTxt").textContent = String(H.durationSec);
       $("progBar").style.width = "0%";
       $("aliveN").textContent = String(H.balloons.filter(b => !b.popped).length);
     }
@@ -1696,6 +1761,7 @@
   /* ================= 시작 ================= */
   setK(1);
   initFirebase();
+  setDuration(DUR_DEFAULT, true);
   resize();
   phaseUI();
   requestAnimationFrame(frame);
