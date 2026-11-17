@@ -1490,7 +1490,6 @@
     $("endBanner").classList.add("on");
     timeUpSound();
     if (FB.ok) FB.room.child("meta").update({ status: "ended", endedAt: sNow });
-    toast("26초 종료 — [🏆 결과보기]를 누르면 주인공이 공개됩니다", 3400);
   }
 
   function finishGame(manual){
