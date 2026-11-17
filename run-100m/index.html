@@ -116,7 +116,7 @@
   .chip .cd{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.5;flex:none}
   .chip.sel .cd{background:var(--amber);opacity:1;box-shadow:0 0 6px var(--amber)}
 
-  .swatches{display:flex;gap:8px;justify-content:space-between}
+  .swatches{display:flex;gap:6px;justify-content:space-between}
   .sw{
     appearance:none;width:100%;aspect-ratio:1/1;max-width:44px;border-radius:50%;cursor:pointer;
     border:2px solid transparent;background:var(--c);position:relative;
@@ -546,12 +546,13 @@
 
   /* ---------- 데이터 ---------- */
   const COLORS = [
-    {id:"amber",  name:"앰버",    hex:"#F59E0B"},
-    {id:"cyan",   name:"시안",    hex:"#22D3EE"},
-    {id:"lime",   name:"라임",    hex:"#A3E635"},
-    {id:"coral",  name:"코랄",    hex:"#FB7185"},
-    {id:"violet", name:"바이올렛",hex:"#A78BFA"},
-    {id:"sky",    name:"스카이",  hex:"#60A5FA"}
+    {id:"red",    name:"빨강", hex:"#EF4444"},
+    {id:"orange", name:"주황", hex:"#F97316"},
+    {id:"yellow", name:"노랑", hex:"#FACC15"},
+    {id:"green",  name:"초록", hex:"#22C55E"},
+    {id:"blue",   name:"파랑", hex:"#0EA5E9"},
+    {id:"indigo", name:"남색", hex:"#6366F1"},
+    {id:"purple", name:"보라", hex:"#A855F7"}
   ];
   const CHARS = [
     {id:"sprinter", name:"스프린터"},
