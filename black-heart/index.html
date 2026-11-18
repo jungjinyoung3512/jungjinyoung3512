@@ -146,7 +146,11 @@
     transition:transform .12s ease, box-shadow .25s ease, filter .25s ease;
     -webkit-appearance:none;appearance:none;text-align:left;
   }
-  .vbtn .mark{font-size:29px;line-height:1;flex:0 0 auto;filter:drop-shadow(0 2px 6px rgba(0,0,0,.28))}
+  .vbtn .mark{width:35px;height:35px;flex:0 0 auto;position:relative;display:block;filter:drop-shadow(0 2px 5px rgba(0,0,0,.22))}
+  .vbtn .mark.o{border:4.5px solid currentColor;border-radius:50%}
+  .vbtn .mark.x::before,.vbtn .mark.x::after{content:"";position:absolute;left:50%;top:50%;width:37px;height:5px;
+    background:currentColor;border-radius:3px;transform:translate(-50%,-50%) rotate(45deg)}
+  .vbtn .mark.x::after{transform:translate(-50%,-50%) rotate(-45deg)}
   .vbtn .lab{display:flex;flex-direction:column;gap:2px;min-width:0}
   .vbtn .lab b{font-size:20px;font-weight:900}
   .vbtn .lab span{font-size:11px;font-weight:800;letter-spacing:.16em;opacity:.62}
@@ -249,12 +253,12 @@
       </div>
       <div class="votes">
         <button class="vbtn yes" id="btnYes" type="button">
-          <span class="mark">⭕</span>
-          <span class="lab"><b>그렇다 (YES)</b><span>SOLHONEST · YES</span></span>
+          <span class="mark o" aria-hidden="true"></span>
+          <span class="lab"><b>그렇다 (YES)</b><span>익명 보장 · 솔직하게</span></span>
         </button>
         <button class="vbtn no" id="btnNo" type="button">
-          <span class="mark">❌</span>
-          <span class="lab"><b>아니다 (NO)</b><span>SOLHONEST · NO</span></span>
+          <span class="mark x" aria-hidden="true"></span>
+          <span class="lab"><b>아니다 (NO)</b><span>익명 보장 · 솔직하게</span></span>
         </button>
       </div>
       <div class="hintline" id="voteHint">둘 중 하나만 · 다시 바꿀 수 없습니다</div>
