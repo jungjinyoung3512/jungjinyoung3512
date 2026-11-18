@@ -322,10 +322,16 @@
   let db = null, roomRef = null, live = false;
   let cur = { rid: null, phase: "idle", q: "" };
   let voted = null;          // "O" | "X" | null (이번 라운드 내 기록)
+  let myVote = null;         // { rid, v, confirmed } 내 표 추적
   let busy = false;
 
   const views = { idle:$("viewIdle"), vote:$("viewVote"), done:$("viewDone"), reveal:$("viewReveal") };
   let shown = "idle";
+
+  function setButtons(enabled){
+    $("btnYes").disabled = !enabled;
+    $("btnNo").disabled = !enabled;
+  }
 
   function show(name){
     if(shown === name) return;
@@ -372,18 +378,29 @@
     if(rid !== cur.rid){
       cur.rid = rid;
       voted = null;
+      myVote = null;
+      busy = false;
+      setButtons(true);
     }
     cur.phase = phase; cur.q = q;
 
     const roundVotes = (rid && data.votes && data.votes[rid]) || null;
-    if(roundVotes && roundVotes[UID]) voted = roundVotes[UID];
+    const serverVote = (roundVotes && roundVotes[UID]) || null;
+    if(serverVote){
+      myVote = { rid: rid, v: serverVote, confirmed: true };
+      voted = serverVote;
+    }else if(myVote && myVote.rid === rid && !myVote.confirmed){
+      voted = myVote.v;                 // 전송 직후 낙관 표시
+    }else{
+      myVote = null; voted = null;      // 초기화된 라운드 → 다시 투표 가능
+    }
 
     document.body.classList.toggle("voting", phase === "voting");
 
     if(phase === "voting"){
       $("qtext").textContent = q || "—";
-      if(voted) show("done");
-      else show("vote");
+      if(voted){ show("done"); }
+      else { setButtons(true); show("vote"); }
       return;
     }
     if(phase === "revealed"){
@@ -410,10 +427,11 @@
     busy = true;
     $("btnYes").disabled = true; $("btnNo").disabled = true;
     voted = v;
+    myVote = { rid: cur.rid, v: v, confirmed: false };
     roomRef.child("votes/" + cur.rid + "/" + UID).set(v)
       .then(() => { busy = false; show("done"); if(navigator.vibrate) navigator.vibrate(18); })
       .catch(() => {
-        busy = false; voted = null;
+        busy = false; voted = null; myVote = null;
         $("btnYes").disabled = false; $("btnNo").disabled = false;
         toast("전송 실패 · 다시 눌러 주세요");
       });
