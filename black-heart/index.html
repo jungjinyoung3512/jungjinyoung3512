@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#05070C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🕵️</text></svg>">
+<title>익명 흑심 투시경 | 강연 크리에이터 · 정진영</title>
+<meta name="description" content="강연장 익명 O/X 체험 — 개인 기록 0%, 오직 전체 %만 공개됩니다">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --bg:#05070C;
+    --panel:#0B1119;
+    --panel2:#101A24;
+    --line:rgba(120,255,200,.16);
+    --line2:rgba(120,255,200,.30);
+    --mint:#3DFFA8;
+    --aqua:#35E8FF;
+    --rose:#FF3D7F;
+    --text:#EAF6F1;
+    --muted:#8FA3B0;
+    --dim:#5C6E7A;
+    --sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR",Georgia,serif;
+  }
+  html{-webkit-text-size-adjust:100%;background:#030507}
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;overscroll-behavior:none}
+  body{
+    background:var(--bg);color:var(--text);font-family:var(--sans);
+    word-break:keep-all;-webkit-font-smoothing:antialiased;
+    line-height:1.45;letter-spacing:-0.01em;
+    -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+  }
+  /* ---------- 배경: 투시경 스캔 ---------- */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(115% 46% at 50% -10%, rgba(61,255,168,.16) 0%, rgba(61,255,168,0) 62%),
+      radial-gradient(90% 40% at 50% 108%, rgba(53,232,255,.12) 0%, rgba(53,232,255,0) 70%);
+    transition:background .6s ease;
+  }
+  body.voting::before{
+    background:
+      radial-gradient(120% 56% at 50% -8%, rgba(61,255,168,.26) 0%, rgba(61,255,168,0) 64%),
+      radial-gradient(100% 46% at 50% 110%, rgba(53,232,255,.20) 0%, rgba(53,232,255,0) 72%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.35;
+    background:repeating-linear-gradient(180deg, rgba(120,255,200,.055) 0 1px, rgba(0,0,0,0) 1px 4px);
+    animation:scan 7s linear infinite;
+  }
+  @keyframes scan{from{background-position-y:0}to{background-position-y:400px}}
+
+  .app{
+    position:relative;z-index:2;width:100%;max-width:440px;margin:0 auto;
+    height:100vh;height:100dvh;display:flex;flex-direction:column;
+    padding:calc(env(safe-area-inset-top,0px) + 14px) 20px calc(env(safe-area-inset-bottom,0px) + 16px);
+  }
+
+  /* ---------- 헤더 ---------- */
+  .top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex:0 0 auto}
+  .brand{display:flex;flex-direction:column;gap:5px;min-width:0}
+  .brand .name{
+    font-size:15px;font-weight:800;letter-spacing:-0.02em;color:#F2FFFA;
+    display:flex;align-items:center;gap:6px;white-space:nowrap;
+    text-shadow:0 0 18px rgba(61,255,168,.35);
+  }
+  .brand .creator{font-size:11.5px;font-weight:600;color:var(--mint);letter-spacing:.01em;opacity:.92}
+  .net{
+    display:flex;align-items:center;gap:6px;flex:0 0 auto;
+    font-size:10.5px;font-weight:700;color:var(--muted);
+    padding:5px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.03);white-space:nowrap;
+  }
+  .net i{width:6px;height:6px;border-radius:50%;background:var(--dim);display:block;transition:.3s}
+  .net.on{color:#BFFFE2;border-color:rgba(61,255,168,.34);background:rgba(61,255,168,.09)}
+  .net.on i{background:var(--mint);box-shadow:0 0 8px var(--mint)}
+
+  /* ---------- 무대 ---------- */
+  .stage{
+    flex:1 1 auto;min-height:0;display:flex;flex-direction:column;
+    justify-content:center;gap:16px;padding:8px 0;
+  }
+  .view{display:none;flex-direction:column;gap:16px;animation:fade .38s ease both}
+  .view.on{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* 질문 카드 */
+  .qcard{
+    position:relative;border-radius:22px;padding:22px 20px;
+    background:linear-gradient(165deg, rgba(16,26,36,.96), rgba(8,13,20,.96));
+    border:1px solid var(--line);
+    box-shadow:0 0 0 1px rgba(0,0,0,.4) inset, 0 18px 46px rgba(0,0,0,.55), 0 0 42px rgba(61,255,168,.07);
+  }
+  .qcard::before{
+    content:"";position:absolute;inset:-1px;border-radius:23px;pointer-events:none;
+    background:linear-gradient(140deg, rgba(61,255,168,.42), rgba(53,232,255,.10) 42%, rgba(255,61,127,.20));
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;padding:1px;opacity:.75;
+  }
+  .qlabel{
+    display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:800;
+    letter-spacing:.14em;color:var(--mint);opacity:.9;margin-bottom:12px;
+    text-transform:uppercase;
+  }
+  .qlabel::before{content:"";width:14px;height:1px;background:var(--mint);opacity:.7}
+  .qtext{
+    font-family:var(--serif);font-weight:700;font-size:clamp(20px,6.1vw,26px);
+    line-height:1.42;letter-spacing:-0.015em;color:#F7FFFC;
+    text-shadow:0 0 30px rgba(61,255,168,.18);
+  }
+  .qtext em{font-style:normal;color:var(--mint)}
+
+  /* 대기 상태 */
+  .idlebox{
+    display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center;
+    padding:34px 16px;border-radius:22px;
+    background:radial-gradient(120% 100% at 50% 0%, rgba(61,255,168,.10), rgba(6,10,15,.7));
+    border:1px dashed rgba(61,255,168,.28);
+  }
+  .eye{position:relative;width:96px;height:96px;display:grid;place-items:center}
+  .eye .ring{
+    position:absolute;inset:0;border-radius:50%;border:1px solid rgba(61,255,168,.5);
+    animation:ring 2.4s ease-out infinite;
+  }
+  .eye .ring:nth-child(2){animation-delay:.8s}
+  .eye .ring:nth-child(3){animation-delay:1.6s}
+  @keyframes ring{0%{transform:scale(.55);opacity:.85}100%{transform:scale(1.35);opacity:0}}
+  .eye .core{font-size:44px;filter:drop-shadow(0 0 18px rgba(61,255,168,.6))}
+  .idle-t{font-size:16px;font-weight:800;color:#E9FFF6;letter-spacing:-0.02em}
+  .idle-s{font-size:13px;color:var(--muted);line-height:1.6;max-width:270px}
+
+  /* O / X 버튼 */
+  .votes{display:flex;flex-direction:column;gap:12px}
+  .vbtn{
+    position:relative;width:100%;border:0;cursor:pointer;font-family:var(--sans);
+    border-radius:20px;padding:20px 18px;display:flex;align-items:center;gap:14px;
+    color:#04110C;font-weight:900;letter-spacing:-0.02em;
+    transition:transform .12s ease, box-shadow .25s ease, filter .25s ease;
+    -webkit-appearance:none;appearance:none;text-align:left;
+  }
+  .vbtn .mark{font-size:29px;line-height:1;flex:0 0 auto;filter:drop-shadow(0 2px 6px rgba(0,0,0,.28))}
+  .vbtn .lab{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .vbtn .lab b{font-size:20px;font-weight:900}
+  .vbtn .lab span{font-size:11px;font-weight:800;letter-spacing:.16em;opacity:.62}
+  .vbtn.yes{
+    background:linear-gradient(135deg,#4BFFB0,#22E88C 55%,#12D07A);
+    box-shadow:0 12px 34px rgba(24,232,140,.34), 0 0 0 1px rgba(255,255,255,.18) inset;
+  }
+  .vbtn.no{
+    background:linear-gradient(135deg,#FF6A9E,#FF2E72 55%,#E4145C);
+    color:#25030D;
+    box-shadow:0 12px 34px rgba(255,45,114,.32), 0 0 0 1px rgba(255,255,255,.16) inset;
+  }
+  .vbtn:active{transform:scale(.975);filter:brightness(1.06)}
+  .vbtn[disabled]{opacity:.35;pointer-events:none}
+  .hintline{
+    text-align:center;font-size:12px;color:var(--dim);letter-spacing:-0.01em;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+  }
+
+  /* 투표 완료 */
+  .done{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:8px 4px}
+  .check{
+    width:88px;height:88px;border-radius:50%;display:grid;place-items:center;font-size:40px;
+    background:radial-gradient(circle at 50% 40%, rgba(61,255,168,.28), rgba(61,255,168,.06));
+    border:1px solid rgba(61,255,168,.55);
+    box-shadow:0 0 46px rgba(61,255,168,.32), 0 0 0 8px rgba(61,255,168,.05);
+    animation:pop .5s cubic-bezier(.2,1.5,.4,1) both, breathe 2.6s ease-in-out 0.5s infinite;
+  }
+  @keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+  @keyframes breathe{0%,100%{box-shadow:0 0 40px rgba(61,255,168,.26),0 0 0 8px rgba(61,255,168,.05)}50%{box-shadow:0 0 62px rgba(61,255,168,.5),0 0 0 14px rgba(61,255,168,.08)}}
+  .done b.dt{font-size:22px;font-weight:900;letter-spacing:-0.03em;color:#F4FFFB}
+  .done p.ds{font-size:13.5px;color:var(--muted);line-height:1.65;margin:0}
+  .watch{
+    margin-top:6px;display:inline-flex;align-items:center;gap:8px;
+    font-size:12.5px;font-weight:800;color:var(--mint);
+    padding:9px 15px;border-radius:999px;
+    background:rgba(61,255,168,.09);border:1px solid rgba(61,255,168,.28);
+  }
+  .watch .dot{width:7px;height:7px;border-radius:50%;background:var(--mint);animation:blink 1.5s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+  /* 공개 중 화면 */
+  .revealbox{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;padding:26px 14px;border-radius:22px;
+    background:radial-gradient(120% 100% at 50% 0%, rgba(255,61,127,.14), rgba(6,10,15,.7));
+    border:1px solid rgba(255,61,127,.28);}
+  .trophy{font-size:52px;filter:drop-shadow(0 0 24px rgba(255,61,127,.55));animation:bounce 1.6s ease-in-out infinite}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  .revealbox b{font-size:19px;font-weight:900;color:#FFEFF5;letter-spacing:-0.03em}
+  .revealbox span{font-size:13px;color:#FFC2D6;opacity:.9;line-height:1.6}
+
+  /* 하단 익명 배지 */
+  .foot{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:7px;padding-top:4px}
+  .anonbadge{
+    display:inline-flex;align-items:center;gap:7px;
+    font-size:11.5px;font-weight:700;color:#A9F5D6;letter-spacing:-0.01em;
+    padding:7px 13px;border-radius:999px;
+    background:rgba(61,255,168,.07);border:1px solid rgba(61,255,168,.2);
+    text-align:center;line-height:1.35;
+  }
+  .roomline{font-size:10px;font-weight:700;color:var(--dim);letter-spacing:.12em}
+
+  .toast{
+    position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);transform:translate(-50%,14px);
+    background:rgba(10,18,26,.96);border:1px solid var(--line2);color:#E9FFF6;
+    padding:10px 16px;border-radius:12px;font-size:12.5px;font-weight:700;
+    opacity:0;pointer-events:none;transition:.25s;z-index:20;box-shadow:0 12px 30px rgba(0,0,0,.5);
+    max-width:86%;text-align:center;
+  }
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <div class="name">🕵️‍♂️ 익명 흑심 투시경</div>
+      <div class="creator">강연 크리에이터 · 정진영</div>
+    </div>
+    <div class="net" id="net"><i></i><span id="netTxt">연결 중</span></div>
+  </header>
+
+  <main class="stage">
+    <!-- 입장/대기 -->
+    <section class="view on" id="viewIdle">
+      <div class="idlebox">
+        <div class="eye">
+          <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+          <span class="core">👁️</span>
+        </div>
+        <div class="idle-t">투시경 준비 완료</div>
+        <div class="idle-s" id="idleMsg">진행자가 질문을 열면<br>여기에 나타납니다</div>
+      </div>
+    </section>
+
+    <!-- 질문 + O/X -->
+    <section class="view" id="viewVote">
+      <div class="qcard">
+        <div class="qlabel">오늘의 흑심 질문</div>
+        <div class="qtext" id="qtext">—</div>
+      </div>
+      <div class="votes">
+        <button class="vbtn yes" id="btnYes" type="button">
+          <span class="mark">⭕</span>
+          <span class="lab"><b>그렇다 (YES)</b><span>SOLHONEST · YES</span></span>
+        </button>
+        <button class="vbtn no" id="btnNo" type="button">
+          <span class="mark">❌</span>
+          <span class="lab"><b>아니다 (NO)</b><span>SOLHONEST · NO</span></span>
+        </button>
+      </div>
+      <div class="hintline" id="voteHint">둘 중 하나만 · 다시 바꿀 수 없습니다</div>
+    </section>
+
+    <!-- 투표 완료 -->
+    <section class="view" id="viewDone">
+      <div class="done">
+        <div class="check">✅</div>
+        <b class="dt">솔직한 한 표 완료!</b>
+        <p class="ds">내 답은 아무도 볼 수 없습니다.<br>이제 앞 화면을 주목하세요.</p>
+        <div class="watch"><span class="dot"></span>앞 화면에서 결과가 공개됩니다</div>
+      </div>
+    </section>
+
+    <!-- 결과 공개 중 -->
+    <section class="view" id="viewReveal">
+      <div class="revealbox">
+        <div class="trophy">🏆</div>
+        <b>결과 공개 중!</b>
+        <span>앞 스크린의 O/X 게이지를<br>함께 확인해 주세요</span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="anonbadge">🔒 개인 기록 0% · 오직 전체 %만 공개됩니다</div>
+    <div class="roomline" id="roomLine">ROOM JY99</div>
+  </footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+
+  const QS = new URLSearchParams(location.search);
+  const ROOM = (QS.get("room") || "JY99").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 10) || "JY99";
+
+  const FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "977342156141",
+    appId: "1:977342156141:web:f9842fcc67a819ce621e64"
+  };
+
+  /* ---------- 익명 식별자 (기기 로컬에만) ---------- */
+  let UID = "";
+  try{
+    UID = localStorage.getItem("bh_uid") || "";
+    if(!UID){
+      UID = "u" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+      localStorage.setItem("bh_uid", UID);
+    }
+  }catch(e){
+    UID = "u" + Math.random().toString(36).slice(2, 12);
+  }
+
+  let db = null, roomRef = null, live = false;
+  let cur = { rid: null, phase: "idle", q: "" };
+  let voted = null;          // "O" | "X" | null (이번 라운드 내 기록)
+  let busy = false;
+
+  const views = { idle:$("viewIdle"), vote:$("viewVote"), done:$("viewDone"), reveal:$("viewReveal") };
+  let shown = "idle";
+
+  function show(name){
+    if(shown === name) return;
+    Object.keys(views).forEach(k => views[k].classList.toggle("on", k === name));
+    shown = name;
+  }
+  function toast(msg){
+    const t = $("toast"); t.textContent = msg; t.classList.add("on");
+    clearTimeout(toast._h); toast._h = setTimeout(() => t.classList.remove("on"), 2400);
+  }
+  function setNet(ok, label){
+    $("net").classList.toggle("on", !!ok);
+    $("netTxt").textContent = label || (ok ? "실시간 연결" : "연결 중");
+  }
+  $("roomLine").textContent = "ROOM " + ROOM;
+
+  /* ---------- Firebase ---------- */
+  function initFB(){
+    if(typeof firebase === "undefined" || !firebase.initializeApp){
+      setNet(false, "연결 실패");
+      return;
+    }
+    try{
+      firebase.initializeApp(FB_CONFIG);
+      db = firebase.database();
+      db.ref(".info/connected").on("value", s => {
+        live = !!s.val();
+        setNet(live, live ? "실시간 연결" : "연결 중");
+      });
+      roomRef = db.ref("rooms/blackHeart/" + ROOM);
+      roomRef.on("value", snap => render(snap.val() || {}));
+    }catch(e){
+      setNet(false, "연결 실패");
+    }
+  }
+
+  /* ---------- 화면 렌더 ---------- */
+  function render(data){
+    const meta = data.meta || {};
+    const phase = meta.phase || "idle";
+    const rid = meta.rid || null;
+    const q = meta.q || "";
+
+    if(rid !== cur.rid){
+      cur.rid = rid;
+      voted = null;
+    }
+    cur.phase = phase; cur.q = q;
+
+    const roundVotes = (rid && data.votes && data.votes[rid]) || null;
+    if(roundVotes && roundVotes[UID]) voted = roundVotes[UID];
+
+    document.body.classList.toggle("voting", phase === "voting");
+
+    if(phase === "voting"){
+      $("qtext").textContent = q || "—";
+      if(voted) show("done");
+      else show("vote");
+      return;
+    }
+    if(phase === "revealed"){
+      show("reveal");
+      return;
+    }
+    // ready / idle
+    if(q){
+      $("idleMsg").innerHTML = "다음 질문이 준비되었습니다<br><span style=\"color:#CFFCE8;font-weight:700\">" + escapeHTML(q) + "</span>";
+    }else{
+      $("idleMsg").innerHTML = "진행자가 질문을 열면<br>여기에 나타납니다";
+    }
+    show("idle");
+  }
+  function escapeHTML(s){
+    return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+
+  /* ---------- 투표 ---------- */
+  function vote(v){
+    if(busy) return;
+    if(!roomRef || !cur.rid || cur.phase !== "voting"){ toast("아직 투표가 열리지 않았습니다"); return; }
+    if(voted){ toast("이미 한 표를 던졌습니다"); return; }
+    busy = true;
+    $("btnYes").disabled = true; $("btnNo").disabled = true;
+    voted = v;
+    roomRef.child("votes/" + cur.rid + "/" + UID).set(v)
+      .then(() => { busy = false; show("done"); if(navigator.vibrate) navigator.vibrate(18); })
+      .catch(() => {
+        busy = false; voted = null;
+        $("btnYes").disabled = false; $("btnNo").disabled = false;
+        toast("전송 실패 · 다시 눌러 주세요");
+      });
+  }
+  $("btnYes").addEventListener("click", () => vote("O"));
+  $("btnNo").addEventListener("click", () => vote("X"));
+
+  initFB();
+})();
+</script>
+</body>
+</html>
