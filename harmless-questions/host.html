@@ -57,6 +57,7 @@
   }
   .side::-webkit-scrollbar{width:7px}
   .side::-webkit-scrollbar-thumb{background:rgba(255,190,140,.24);border-radius:4px}
+  .side > *{flex:0 0 auto}
   .brandline{display:flex;align-items:center;justify-content:space-between;gap:8px}
   .bl-left{display:flex;flex-direction:column;gap:2px;min-width:0}
   .bl-left b{display:flex;align-items:center;gap:6px;font-size:14.5px;font-weight:800;letter-spacing:-0.03em;color:#FFF8F1;white-space:nowrap}
@@ -188,7 +189,7 @@
   .btn:disabled{opacity:.35;cursor:default;filter:grayscale(.4)}
   .half{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
   .half .btn{font-size:12.5px;padding:11px 6px;gap:5px}
-  .half .btn small{font-size:9px;opacity:.5}
+  .half .btn small{display:none}
 
   .qrbox{
     display:flex;gap:9px;align-items:center;padding:9px;border-radius:12px;
@@ -212,7 +213,7 @@
   .bgmline{display:flex;align-items:center;gap:8px;margin-top:5px}
   .bgmvolLab{flex:0 0 auto;font-size:10.5px;font-weight:700;color:#8B7B87}
   .bgmnow{
-    flex:1 1 auto;min-width:0;font-size:11px;font-weight:700;color:#FFE0BE;
+    flex:0 0 auto;width:100%;font-size:11px;font-weight:700;color:#FFE0BE;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
   .bgmnow.idle{color:#8B7B87;font-weight:600}
@@ -502,13 +503,13 @@
     <div class="ctrls">
       <button class="btn primary" id="btnStart" type="button">▶ 60초 시작 <small>SPACE</small></button>
       <div class="half">
-        <button class="btn" id="btnStop" type="button">■ 조기 마감</button>
-        <button class="btn reveal" id="btnReveal" type="button">🏆 결과 비교 <small>R</small></button>
+        <button class="btn" id="btnStop" type="button" title="입력 조기 마감">■ 조기 마감</button>
+        <button class="btn reveal" id="btnReveal" type="button" title="결과 비교 (R)">🏆 결과 비교</button>
       </div>
       <button class="btn book" id="btnBook" type="button">📖 책 질문 꺼내기 <small>B</small></button>
       <div class="half">
-        <button class="btn" id="btnNext" type="button">🔄 다음 질문 <small>N</small></button>
-        <button class="btn danger" id="btnClear" type="button">🧹 응답 비우기 <small>C</small></button>
+        <button class="btn" id="btnNext" type="button" title="다음 질문 (N)">🔄 다음 질문</button>
+        <button class="btn danger" id="btnClear" type="button" title="이번 질문의 응답 비우기 (C)">🧹 응답 비우기</button>
       </div>
     </div>
 
