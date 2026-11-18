@@ -170,8 +170,8 @@
   .alertov.on{display:flex}
   .alertov .flash{position:absolute;inset:0;opacity:0;
     background:radial-gradient(circle at 50% 45%, rgba(255,255,255,0) 26%, rgba(255,255,255,.92) 100%)}
-  .alertov.gold{background:radial-gradient(circle at 50% 40%, #FFF8DC 0%, #FFD24A 42%, #DE8800 100%)}
-  .alertov.red{background:radial-gradient(circle at 50% 40%, #FFE2E2 0%, #FF2F4E 44%, #68000F 100%)}
+  .alertov.gold{background:radial-gradient(circle at 50% 42%, #FFE38C 0%, #FFC42A 48%, #C87A00 100%)}
+  .alertov.red{background:radial-gradient(circle at 50% 42%, #FF9AA8 0%, #F01838 46%, #6A0010 100%)}
   .alertov.gold .flash{animation:whiteflash .62s ease-in-out infinite}
   .alertov.red .flash{animation:whiteflash .62s ease-in-out infinite}
   @keyframes whiteflash{0%{opacity:0}18%{opacity:.62}40%{opacity:.04}64%{opacity:.5}100%{opacity:0}}
@@ -863,7 +863,7 @@
     $("alRank").textContent = String(rank);
     $("alName").textContent = (S.me && S.me.name) || "-";
     $("alPts").textContent = fmt((S.me && S.me.score) || 0);
-    $("alTip").textContent = gold ? "지금 화면을 들어 보세요! 🎉" : "다음 문제에서 만회하세요!";
+    $("alTip").textContent = gold ? "탭하면 닫혀요 · 축하합니다! 🎉" : "탭하면 닫혀요 · 다음 문제에서 만회!";
 
     if(gold) playCelebrate(); else playDespair();
 
