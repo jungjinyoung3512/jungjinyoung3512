@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#05070C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🎯</text></svg>">
+<title>눈치제로 | 강연 크리에이터 · 정진영</title>
+<meta name="description" content="1부터 66까지, 겹치지 않는 가장 작은 번호를 고르는 눈치 게임">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --bg:#05070C;
+    --panel:#0A0F16;
+    --panel2:#101823;
+    --line:rgba(255,210,74,.16);
+    --line2:rgba(255,210,74,.34);
+    --gold:#FFD24A;
+    --gold2:#FFB01F;
+    --aqua:#35E8FF;
+    --rose:#FF3D7F;
+    --text:#EDF4F8;
+    --muted:#8FA3B0;
+    --dim:#5C6E7A;
+    --sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR",Georgia,serif;
+  }
+  html{-webkit-text-size-adjust:100%;background:#030507}
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;overscroll-behavior:none}
+  body{
+    background:var(--bg);color:var(--text);font-family:var(--sans);
+    word-break:keep-all;-webkit-font-smoothing:antialiased;
+    line-height:1.45;letter-spacing:-0.01em;
+    -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(115% 46% at 50% -10%, rgba(255,210,74,.15) 0%, rgba(255,210,74,0) 62%),
+      radial-gradient(90% 40% at 50% 108%, rgba(53,232,255,.10) 0%, rgba(53,232,255,0) 70%);
+    transition:background .6s ease;
+  }
+  body.voting::before{
+    background:
+      radial-gradient(120% 56% at 50% -8%, rgba(255,210,74,.24) 0%, rgba(255,210,74,0) 64%),
+      radial-gradient(100% 46% at 50% 110%, rgba(255,61,127,.14) 0%, rgba(255,61,127,0) 72%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.30;
+    background:repeating-linear-gradient(180deg, rgba(255,210,74,.05) 0 1px, rgba(0,0,0,0) 1px 4px);
+  }
+  .app{
+    position:relative;z-index:2;width:100%;max-width:460px;margin:0 auto;
+    height:100vh;height:100dvh;display:flex;flex-direction:column;
+    padding:calc(env(safe-area-inset-top,0px) + 12px) 16px calc(env(safe-area-inset-bottom,0px) + 12px);
+  }
+  /* ---------- 헤더 ---------- */
+  .top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex:0 0 auto}
+  .brand{display:flex;flex-direction:column;gap:4px;min-width:0}
+  .brand .name{
+    font-size:16px;font-weight:900;letter-spacing:-0.03em;color:#FFF9E8;
+    display:flex;align-items:center;gap:6px;white-space:nowrap;
+    text-shadow:0 0 18px rgba(255,210,74,.4);
+  }
+  .brand .creator{font-size:11.5px;font-weight:700;color:var(--gold);opacity:.92}
+  .net{
+    display:flex;align-items:center;gap:6px;flex:0 0 auto;
+    font-size:10.5px;font-weight:700;color:var(--muted);
+    padding:5px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.03);white-space:nowrap;
+  }
+  .net i{width:6px;height:6px;border-radius:50%;background:var(--dim);display:block;transition:.3s}
+  .net.on{color:#FFEFC0;border-color:rgba(255,210,74,.34);background:rgba(255,210,74,.10)}
+  .net.on i{background:var(--gold);box-shadow:0 0 8px var(--gold)}
+
+  .stage{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;padding:10px 0 6px}
+  .view{display:none;flex-direction:column;gap:14px;animation:fade .35s ease both;min-height:0}
+  .view.on{display:flex}
+  .view.fill{flex:1 1 auto;justify-content:center}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* ---------- 공통 카드 ---------- */
+  .card{
+    position:relative;border-radius:22px;padding:20px 18px;
+    background:linear-gradient(165deg, rgba(16,24,35,.97), rgba(7,11,17,.97));
+    border:1px solid var(--line);
+    box-shadow:0 0 0 1px rgba(0,0,0,.45) inset, 0 18px 46px rgba(0,0,0,.55), 0 0 42px rgba(255,210,74,.06);
+  }
+  .qlabel{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:900;
+    letter-spacing:.14em;color:var(--gold);opacity:.92;margin-bottom:10px;text-transform:uppercase}
+  .qlabel::before{content:"";width:14px;height:1px;background:var(--gold);opacity:.7}
+  .qtext{font-family:var(--serif);font-weight:700;font-size:clamp(19px,5.6vw,24px);line-height:1.42;color:#FFFBF0}
+  .qtext em{font-style:normal;color:var(--gold)}
+
+  /* ---------- 입장 ---------- */
+  .entry{display:flex;flex-direction:column;gap:14px}
+  .entry .hero{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:6px 0 2px}
+  .entry .hero .mark{font-size:46px;filter:drop-shadow(0 0 22px rgba(255,210,74,.55))}
+  .entry .hero b{font-size:24px;font-weight:900;letter-spacing:-0.04em;color:#FFF9E8}
+  .entry .hero span{font-size:12.5px;color:var(--muted);line-height:1.55;max-width:280px}
+  .field{display:flex;flex-direction:column;gap:7px}
+  .field label{font-size:11px;font-weight:800;color:#B7C7D2;letter-spacing:.02em}
+  .field input{
+    width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:13px;
+    padding:14px 14px;color:#F4FAFF;font-family:var(--sans);font-size:16px;font-weight:700;outline:none;transition:.16s;
+  }
+  .field input:focus{border-color:rgba(255,210,74,.5);background:rgba(255,210,74,.07)}
+  .field input::placeholder{color:#61737F;font-weight:600}
+  .bigbtn{
+    width:100%;cursor:pointer;font-family:var(--sans);border:0;border-radius:15px;padding:17px 16px;
+    font-size:17px;font-weight:900;letter-spacing:-0.02em;color:#231801;
+    background:linear-gradient(135deg,#FFE07A,#FFB81F);box-shadow:0 12px 30px rgba(255,184,31,.30);
+    transition:transform .12s, filter .2s;
+  }
+  .bigbtn:active{transform:scale(.98);filter:brightness(1.05)}
+  .bigbtn[disabled]{opacity:.4;pointer-events:none}
+  .cap{font-size:11.5px;color:var(--dim);text-align:center;line-height:1.5}
+
+  /* ---------- 대기 ---------- */
+  .lobby{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;padding:24px 14px;border-radius:22px;
+    background:radial-gradient(120% 100% at 50% 0%, rgba(255,210,74,.10), rgba(6,10,15,.72));
+    border:1px dashed rgba(255,210,74,.28)}
+  .pulse{position:relative;width:86px;height:86px;display:grid;place-items:center}
+  .pulse .ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(255,210,74,.5);animation:ring 2.4s ease-out infinite}
+  .pulse .ring:nth-child(2){animation-delay:.8s}
+  .pulse .ring:nth-child(3){animation-delay:1.6s}
+  @keyframes ring{0%{transform:scale(.55);opacity:.85}100%{transform:scale(1.35);opacity:0}}
+  .pulse .core{font-size:40px;filter:drop-shadow(0 0 18px rgba(255,210,74,.6))}
+  .lobby b.lt{font-size:17px;font-weight:900;color:#FFF9E8}
+  .lobby p{font-size:12.5px;color:var(--muted);line-height:1.65;margin:0}
+  .whoami{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:#FFE9A8;
+    padding:7px 13px;border-radius:999px;background:rgba(255,210,74,.09);border:1px solid rgba(255,210,74,.24)}
+
+  /* ---------- 번호판 ---------- */
+  .boardwrap{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:9px}
+  .boardhead{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex:0 0 auto}
+  .boardhead b{font-size:15px;font-weight:900;letter-spacing:-0.03em;color:#FFF9E8}
+  .boardhead span{font-size:11px;font-weight:800;color:var(--muted)}
+  .grid{
+    flex:1 1 auto;min-height:0;overflow-y:auto;
+    display:grid;grid-template-columns:repeat(6,1fr);gap:6px;align-content:start;
+    padding:2px;-webkit-overflow-scrolling:touch;
+  }
+  .num{
+    position:relative;cursor:pointer;font-family:var(--sans);border:1px solid rgba(255,210,74,.15);
+    background:linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+    color:#DCE9F1;border-radius:11px;font-size:clamp(16px,4.6vw,20px);font-weight:900;
+    letter-spacing:-0.03em;padding:0;aspect-ratio:1/0.98;display:grid;place-items:center;
+    transition:transform .1s, background .18s, border-color .18s, color .18s;
+    -webkit-appearance:none;appearance:none;font-variant-numeric:tabular-nums;
+  }
+  .num:active{transform:scale(.93)}
+  .num.pick{background:linear-gradient(180deg,#FFE07A,#FFB81F);border-color:#FFE9A8;color:#241801;
+    box-shadow:0 0 0 2px rgba(255,225,140,.35), 0 10px 26px rgba(255,184,31,.35);transform:scale(1.05)}
+  .num.mine{background:linear-gradient(180deg,#FFE07A,#FFB81F);border-color:#FFE9A8;color:#241801;
+    box-shadow:0 0 26px rgba(255,184,31,.45)}
+  .num.other{opacity:.28;pointer-events:none}
+
+  /* 확인 시트 */
+  .sheet{
+    position:fixed;left:0;right:0;bottom:0;z-index:30;transform:translateY(103%);
+    transition:transform .28s cubic-bezier(.2,.9,.3,1);
+    padding:16px 16px calc(env(safe-area-inset-bottom,0px) + 16px);
+    background:linear-gradient(180deg, rgba(12,18,26,.99), rgba(8,12,18,.99));
+    border-top:1px solid rgba(255,210,74,.35);border-radius:22px 22px 0 0;
+    box-shadow:0 -22px 60px rgba(0,0,0,.7);
+  }
+  .sheet.on{transform:translateY(0)}
+  .sheet .sh-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+  .sheet .sh-num{font-size:44px;font-weight:900;letter-spacing:-0.05em;line-height:1;color:var(--gold);
+    text-shadow:0 0 30px rgba(255,210,74,.4);font-variant-numeric:tabular-nums}
+  .sheet .sh-num small{font-size:15px;font-weight:800;color:#C7B27A;margin-left:5px;letter-spacing:0}
+  .sheet .sh-cancel{cursor:pointer;font-family:var(--sans);font-size:12.5px;font-weight:800;color:#B9CBD6;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);border-radius:10px;padding:8px 13px}
+  .sheet .sh-note{font-size:11.5px;color:#7E93A0;text-align:center;margin-top:9px;line-height:1.5}
+
+  /* ---------- 제출 완료 ---------- */
+  .picked{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:6px 4px}
+  .picked .big{
+    width:132px;height:132px;border-radius:50%;display:grid;place-items:center;
+    font-size:54px;font-weight:900;letter-spacing:-0.06em;color:#241801;font-variant-numeric:tabular-nums;
+    background:radial-gradient(circle at 50% 38%, #FFE991, #FFB81F 78%);
+    box-shadow:0 0 0 8px rgba(255,210,74,.07), 0 0 60px rgba(255,184,31,.42);
+    animation:pop .5s cubic-bezier(.2,1.5,.4,1) both, breathe 2.6s ease-in-out .5s infinite;
+  }
+  @keyframes pop{from{transform:scale(.45);opacity:0}to{transform:scale(1);opacity:1}}
+  @keyframes breathe{0%,100%{box-shadow:0 0 0 8px rgba(255,210,74,.07),0 0 54px rgba(255,184,31,.32)}
+    50%{box-shadow:0 0 0 14px rgba(255,210,74,.11),0 0 74px rgba(255,184,31,.5)}}
+  .picked b.pt{font-size:19px;font-weight:900;color:#FFF9E8;letter-spacing:-0.02em}
+  .picked p{font-size:12.5px;color:var(--muted);line-height:1.65;margin:0;max-width:280px}
+  .watch{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:var(--gold);
+    padding:8px 14px;border-radius:999px;background:rgba(255,210,74,.09);border:1px solid rgba(255,210,74,.26)}
+  .watch .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:blink 1.5s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.22}}
+
+  /* ---------- 결과 ---------- */
+  .reveal{display:flex;flex-direction:column;gap:13px;text-align:center}
+  .winbox{border-radius:22px;padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:8px;
+    background:radial-gradient(120% 110% at 50% 0%, rgba(255,210,74,.20), rgba(7,11,17,.85));
+    border:1px solid rgba(255,210,74,.4);box-shadow:0 0 46px rgba(255,184,31,.18)}
+  .winbox .wt{font-size:11px;font-weight:900;letter-spacing:.18em;color:#FFE9A8;opacity:.9}
+  .winbox .wn{font-size:66px;font-weight:900;line-height:.95;letter-spacing:-0.06em;color:#FFE07A;
+    font-variant-numeric:tabular-nums;text-shadow:0 0 44px rgba(255,184,31,.55)}
+  .winbox .wp{font-size:16px;font-weight:900;color:#FFF9E8;letter-spacing:-0.02em}
+  .winbox .ws{font-size:11.5px;color:#B7C7D2;line-height:1.5}
+  .myres{border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:5px;text-align:left;
+    background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.09)}
+  .myres .mr-t{font-size:10.5px;font-weight:900;letter-spacing:.14em;color:var(--dim)}
+  .myres .mr-b{font-size:14.5px;font-weight:800;color:#EAF4FA;line-height:1.4}
+  .myres.good{border-color:rgba(255,210,74,.42);background:rgba(255,210,74,.09)}
+  .myres.good .mr-b{color:#FFE9A8}
+  .noWin{border-radius:22px;padding:24px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;
+    background:radial-gradient(120% 110% at 50% 0%, rgba(255,61,127,.16), rgba(7,11,17,.85));
+    border:1px solid rgba(255,61,127,.34)}
+  .noWin b{font-size:19px;font-weight:900;color:#FFE3EC;letter-spacing:-0.02em}
+  .noWin p{font-size:12.5px;color:#FFC2D6;line-height:1.6;margin:0}
+  .again{display:flex;align-items:center;justify-content:center;gap:7px;font-size:12px;font-weight:800;color:var(--muted)}
+
+  /* ---------- 마감 ---------- */
+  .fullbox{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;padding:28px 16px;border-radius:22px;
+    background:radial-gradient(120% 100% at 50% 0%, rgba(255,61,127,.13), rgba(7,11,17,.8));
+    border:1px solid rgba(255,61,127,.3)}
+  .fullbox .fx{font-size:44px}
+  .fullbox b{font-size:18px;font-weight:900;color:#FFE3EC}
+  .fullbox p{font-size:12.5px;color:#FFC2D6;line-height:1.6;margin:0}
+
+  /* ---------- 푸터 ---------- */
+  .foot{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:6px}
+  .rule{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#A9BECB;text-align:center;line-height:1.4}
+  .roomline{font-size:10px;font-weight:800;color:var(--dim);letter-spacing:.14em}
+
+  .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 96px);transform:translate(-50%,14px);
+    background:rgba(10,16,24,.97);border:1px solid var(--line2);color:#FFF9E8;
+    padding:11px 17px;border-radius:12px;font-size:12.5px;font-weight:800;
+    opacity:0;pointer-events:none;transition:.25s;z-index:40;box-shadow:0 12px 30px rgba(0,0,0,.55);
+    max-width:86%;text-align:center}
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+  @media (max-height:720px){ .brand .name{font-size:15px} .grid{gap:5px} }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <div class="name">🎯 눈치제로</div>
+      <div class="creator">강연 크리에이터 · 정진영</div>
+    </div>
+    <div class="net" id="net"><i></i><span id="netTxt">연결 중</span></div>
+  </header>
+
+  <main class="stage">
+    <!-- 입장 -->
+    <section class="view on fill" id="viewEntry">
+      <div class="entry">
+        <div class="hero">
+          <div class="mark">🎯</div>
+          <b>눈치제로</b>
+          <span>1부터 <em>66</em>까지, 딱 하나만 고르세요.<br>겹치지 않게 혼자 고른 <em>가장 작은 번호</em>가 우승!</span>
+        </div>
+        <div class="field">
+          <label for="nameInput">이름 · 닉네임 <span style="color:#7E93A0;font-weight:700">(선택)</span></label>
+          <input id="nameInput" type="text" maxlength="12" autocomplete="off" placeholder="우승자 호명 때 불릴 이름">
+        </div>
+        <button class="bigbtn" id="joinBtn" type="button">입장하기</button>
+        <div class="cap" id="entryCap">정원 96명 · 지금 <b id="entryCount">0</b>명 입장</div>
+      </div>
+    </section>
+
+    <!-- 대기 -->
+    <section class="view fill" id="viewLobby">
+      <div class="lobby">
+        <div class="pulse">
+          <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+          <span class="core">👀</span>
+        </div>
+        <b class="lt">입장 완료 · 기다리는 중</b>
+        <p>진행자가 시작하면 <b style="color:#FFE9A8">1~66 번호판</b>이 열립니다.<br>손가락을 미리 준비하세요.</p>
+        <div class="whoami" id="whoami">나 · 익명 참가자</div>
+      </div>
+    </section>
+
+    <!-- 번호판 -->
+    <section class="view" id="viewBoard">
+      <div class="boardwrap">
+        <div class="boardhead">
+          <b>1~66 · 딱 하나!</b>
+          <span id="boardStat">제출 0명</span>
+        </div>
+        <div class="grid" id="grid"></div>
+      </div>
+    </section>
+
+    <!-- 제출 완료 -->
+    <section class="view fill" id="viewPicked">
+      <div class="picked">
+        <div class="big" id="pickedNum">0</div>
+        <b class="pt">제출 완료!</b>
+        <p>다른 사람이 몇 번을 골랐는지는<br>아무도 볼 수 없습니다. 결과는 무대에서!</p>
+        <div class="watch"><span class="dot"></span>결과는 진행자가 공개합니다</div>
+      </div>
+    </section>
+
+    <!-- 결과 -->
+    <section class="view" id="viewReveal">
+      <div class="reveal" id="revealBody"></div>
+    </section>
+
+    <!-- 마감 -->
+    <section class="view fill" id="viewFull">
+      <div class="fullbox">
+        <div class="fx">🚪</div>
+        <b>정원 96명이 마감되었습니다</b>
+        <p>이번 판은 입장이 끝났어요.<br>다음 판은 진행자에게 말씀해 주세요.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="rule">🎯 1~66 중 1개 · 겹치지 않는 가장 작은 번호가 우승</div>
+    <div class="roomline" id="roomLine">ROOM JY66</div>
+  </footer>
+</div>
+
+<div class="sheet" id="sheet">
+  <div class="sh-top">
+    <div>
+      <div class="sh-num"><span id="sheetNum">0</span><small>번</small></div>
+      <div style="font-size:11.5px;color:#8FA3B0;margin-top:5px">한 번 제출하면 바꿀 수 없습니다</div>
+    </div>
+    <button class="sh-cancel" id="sheetCancel" type="button">다시 고르기</button>
+  </div>
+  <button class="bigbtn" id="sheetOk" type="button">✅ 이 번호로 제출</button>
+  <div class="sh-note">작은 번호일수록 우승에 가깝지만, 겹치면 탈락!</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const QS = new URLSearchParams(location.search);
+  const ROOM = (QS.get("room") || "JY66").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 10) || "JY66";
+  const MAX_PLAYERS = 96;
+
+  const FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "977342156141",
+    appId: "1:977342156141:web:f9842fcc67a819ce621e64"
+  };
+
+  /* ---------- 기기 로컬 식별자 ---------- */
+  let UID = "";
+  try{
+    UID = localStorage.getItem("nz_uid") || "";
+    if(!UID){
+      UID = "u" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+      localStorage.setItem("nz_uid", UID);
+    }
+  }catch(e){
+    UID = "u" + Math.random().toString(36).slice(2, 12);
+  }
+
+  const S = { joined:false, name:"", phase:"ready", rid:null, meta:{}, myVote:null, preview:null, full:false, busy:false };
+
+  const views = { entry:$("viewEntry"), lobby:$("viewLobby"), board:$("viewBoard"), picked:$("viewPicked"), reveal:$("viewReveal"), full:$("viewFull") };
+  let shown = "entry";
+
+  function show(name){
+    if(shown === name) return;
+    Object.keys(views).forEach(k => views[k].classList.toggle("on", k === name));
+    shown = name;
+  }
+  function toast(msg){
+    const t = $("toast"); t.textContent = msg; t.classList.add("on");
+    clearTimeout(toast._h); toast._h = setTimeout(() => t.classList.remove("on"), 2400);
+  }
+  function setNet(ok, label){
+    $("net").classList.toggle("on", !!ok);
+    $("netTxt").textContent = label || (ok ? "실시간 연결" : "연결 중");
+  }
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+
+  $("roomLine").textContent = "ROOM " + ROOM;
+
+  /* 번호판 생성 */
+  const grid = $("grid");
+  for(let n = 1; n <= 66; n++){
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "num"; b.textContent = String(n);
+    b.dataset.n = String(n);
+    b.addEventListener("click", () => pickPreview(n));
+    grid.appendChild(b);
+  }
+
+  /* ---------- Firebase ---------- */
+  let db = null, roomRef = null, voteRef = null, voteRid = null;
+
+  function initFB(){
+    if(typeof firebase === "undefined" || !firebase.initializeApp){ setNet(false, "연결 실패"); return; }
+    try{
+      firebase.initializeApp(FB_CONFIG);
+      db = firebase.database();
+      db.ref(".info/connected").on("value", s => {
+        const on = !!s.val();
+        setNet(on, on ? "실시간 연결" : "연결 중");
+      });
+      roomRef = db.ref("rooms/nunchiZero/" + ROOM);
+      roomRef.child("meta").on("value", snap => onMeta(snap.val() || {}));
+    }catch(e){
+      setNet(false, "연결 실패");
+    }
+  }
+
+  function bindVote(rid){
+    if(!roomRef || !rid) return;
+    if(voteRid === rid && voteRef) return;
+    if(voteRef) voteRef.off();
+    voteRid = rid;
+    voteRef = roomRef.child("votes/" + rid + "/" + UID);
+    voteRef.on("value", s => {
+      const v = s.val();
+      S.myVote = (typeof v === "number") ? v : (v == null ? null : Number(v));
+      if(S.myVote != null && !(S.myVote >= 1 && S.myVote <= 66)) S.myVote = null;
+      render();
+    });
+  }
+
+  function onMeta(meta){
+    S.meta = meta;
+    const rid = meta.rid || null;
+    if(rid !== S.rid){
+      S.rid = rid;
+      S.myVote = null;
+      S.preview = null;
+      closeSheet();
+      if(rid) bindVote(rid);
+    }else if(rid && !voteRef){
+      bindVote(rid);
+    }
+    S.phase = meta.phase || "ready";
+    render();
+  }
+
+  /* ---------- 화면 렌더 ---------- */
+  function render(){
+    document.body.classList.toggle("voting", S.phase === "voting");
+    const entered = Number(S.meta.entered || 0);
+    $("entryCount").textContent = String(Math.min(entered, MAX_PLAYERS));
+    $("boardStat").textContent = "제출 " + Number(S.meta.submitted || 0) + "명";
+
+    if(S.full){ show("full"); return; }
+    if(!S.joined){ show("entry"); return; }
+
+    if(S.phase === "revealed"){
+      paintReveal();
+      show("reveal");
+      return;
+    }
+    if(S.phase === "voting"){
+      if(S.myVote != null){
+        $("pickedNum").textContent = String(S.myVote);
+        show("picked");
+      }else{
+        paintGrid();
+        show("board");
+      }
+      return;
+    }
+    $("whoami").textContent = "나 · " + (S.name || "익명 참가자");
+    show("lobby");
+  }
+
+  function paintGrid(){
+    const cells = grid.children;
+    for(let i = 0; i < cells.length; i++){
+      const c = cells[i];
+      c.classList.toggle("pick", S.preview === i + 1);
+    }
+  }
+
+  function pickPreview(n){
+    if(S.phase !== "voting" || S.myVote != null || S.busy) return;
+    S.preview = n;
+    paintGrid();
+    $("sheetNum").textContent = String(n);
+    $("sheet").classList.add("on");
+  }
+  function closeSheet(){
+    S.preview = null;
+    $("sheet").classList.remove("on");
+    paintGrid();
+  }
+
+  /* ---------- 입장 ---------- */
+  function join(){
+    if(S.busy) return;
+    const nm = ($("nameInput").value || "").replace(/\s+/g, " ").trim().slice(0, 12);
+    if(!roomRef){ toast("연결 중입니다 · 잠시 후 다시 눌러 주세요"); return; }
+    S.busy = true;
+    $("joinBtn").disabled = true;
+    attemptJoin(nm, 3).then(committed => {
+      S.busy = false;
+      $("joinBtn").disabled = false;
+      if(!committed){ S.full = true; render(); return; }
+      S.joined = true; S.name = nm;
+      try{ localStorage.setItem("nz_name", nm); }catch(e){}
+      if(navigator.vibrate) navigator.vibrate(12);
+      render();
+    }).catch(() => {
+      S.busy = false;
+      $("joinBtn").disabled = false;
+      toast("입장 실패 · 다시 한 번 눌러 주세요");
+    });
+  }
+
+  // 정원 96명 확인과 등록을 원자적으로 — 경합으로 중단되면 한 번 더 시도
+  function attemptJoin(nm, tries){
+    const playersRef = roomRef.child("players");
+    return playersRef.transaction(cur => {
+      cur = cur || {};
+      if(cur[UID]){ cur[UID].n = nm; cur[UID].t = Date.now(); return cur; }
+      if(Object.keys(cur).length >= MAX_PLAYERS) return;   // 중단 → 정원 초과
+      cur[UID] = { n: nm, t: Date.now() };
+      return cur;
+    }, undefined, false).then(res => {
+      if(res.committed) return true;
+      // 중단됐지만 실제로 자리가 남아 있으면(경합) 한 번 더
+      if(tries <= 1) return false;
+      return playersRef.once("value").then(s => {
+        const cur = s.val() || {};
+        if(cur[UID]) return true;
+        if(Object.keys(cur).length >= MAX_PLAYERS) return false;
+        return new Promise(r => setTimeout(r, 220 + Math.random() * 380)).then(() => attemptJoin(nm, tries - 1));
+      });
+    });
+  }
+
+  /* ---------- 투표 ---------- */
+  function submitVote(){
+    const n = S.preview;
+    if(n == null) return;
+    if(S.phase !== "voting" || !S.rid){ closeSheet(); toast("지금은 제출할 수 없습니다"); return; }
+    if(S.myVote != null){ closeSheet(); return; }
+    S.busy = true;
+    $("sheetOk").disabled = true;
+    roomRef.child("votes/" + S.rid + "/" + UID).set(n).then(() => {
+      S.busy = false;
+      $("sheetOk").disabled = false;
+      S.myVote = n;
+      closeSheet();
+      if(navigator.vibrate) navigator.vibrate([14, 40, 14]);
+      render();
+    }).catch(() => {
+      S.busy = false;
+      $("sheetOk").disabled = false;
+      toast("전송 실패 · 다시 눌러 주세요");
+    });
+  }
+
+  /* ---------- 결과 화면 ---------- */
+  function paintReveal(){
+    const res = S.meta.result || null;
+    const body = $("revealBody");
+    const my = S.myVote;
+
+    if(!res){
+      body.innerHTML = '<div class="noWin"><b>결과 집계 중…</b><p>잠시만 기다려 주세요</p></div>';
+      return;
+    }
+    const hits = res.hits || {};
+    const total = Number(res.total || 0);
+    const win = Number(res.win || 0);
+
+    let html = "";
+    if(win > 0){
+      html += '<div class="winbox">'
+        + '<div class="wt">🏆 우승 번호</div>'
+        + '<div class="wn">' + win + '</div>'
+        + '<div class="wp">' + esc(res.winName || "익명 참가자") + ' 님</div>'
+        + '<div class="ws">아무도 겹치지 않은 가장 작은 번호</div>'
+        + '</div>';
+    }else{
+      html += '<div class="noWin"><b>모두 겹쳐서 우승자 없음!</b><p>전원 눈치 탈락 😂<br>아무도 혼자 고른 번호가 없었습니다.</p></div>';
+    }
+
+    if(my != null){
+      const c = Number(hits[my] || 0);
+      let cls = "myres", line = "";
+      if(win > 0 && my === win){
+        cls = "myres good";
+        line = "🎉 눈치왕! 당신이 우승입니다";
+      }else if(c === 1){
+        line = "혼자 골랐지만, 더 작은 단독 번호(" + win + "번)가 있었어요";
+      }else if(c >= 2){
+        line = c + "명이 같은 번호를 골랐어요 · 눈치 실패 😭";
+      }else{
+        line = "집계 정보를 불러오는 중";
+      }
+      html += '<div class="' + cls + '"><div class="mr-t">내 선택</div>'
+        + '<div class="mr-b">' + my + '번 · ' + line + '</div></div>';
+    }else{
+      html += '<div class="myres"><div class="mr-t">내 선택</div>'
+        + '<div class="mr-b">' + (S.phase === "revealed" ? "이번 판은 번호를 고르지 않았어요" : "—") + '</div></div>';
+    }
+
+    html += '<div class="again">총 ' + total + '명 참여 · 다음 판은 진행자가 엽니다</div>';
+    body.innerHTML = html;
+  }
+
+  /* ---------- 이벤트 ---------- */
+  $("joinBtn").addEventListener("click", join);
+  $("nameInput").addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); $("nameInput").blur(); join(); } });
+  $("sheetCancel").addEventListener("click", closeSheet);
+  $("sheetOk").addEventListener("click", submitVote);
+  $("sheet").addEventListener("click", e => { if(e.target === $("sheet")) closeSheet(); });
+
+  // 이전에 쓰던 이름이 있으면 미리 채워 둔다
+  try{
+    const saved = localStorage.getItem("nz_name");
+    if(saved) $("nameInput").value = saved;
+  }catch(e){}
+
+  initFB();
+})();
+</script>
+</body>
+</html>
