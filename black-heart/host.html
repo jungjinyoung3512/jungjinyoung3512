@@ -80,6 +80,48 @@
   .preset.on{border-color:rgba(61,255,168,.55);background:rgba(61,255,168,.13);color:#F2FFFB;
     box-shadow:0 0 0 1px rgba(61,255,168,.16) inset, 0 6px 20px rgba(0,0,0,.35)}
   .preset.on::before{color:var(--mint)}
+  .preset[data-i]{overflow-wrap:anywhere}
+
+  /* 프리셋 한 줄: 질문 + 수정·삭제 */
+  .prow{display:flex;gap:6px;align-items:stretch}
+  .prow .preset{flex:1 1 auto;min-width:0}
+  .pacts{flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;gap:4px}
+  .pact{width:28px;height:21px;padding:0;cursor:pointer;display:grid;place-items:center;
+    font-family:var(--sans);font-size:11px;line-height:1;color:#93A6B2;
+    border:1px solid rgba(255,255,255,.09);border-radius:7px;background:rgba(255,255,255,.035);
+    transition:.15s;user-select:none;opacity:.6}
+  .prow:hover .pact,.pact:focus-visible{opacity:1}
+  .pact:hover{color:#EAFFF6;border-color:rgba(61,255,168,.38);background:rgba(61,255,168,.14)}
+  .pact.del:hover{color:#FFC2D6;border-color:rgba(255,61,127,.42);background:rgba(255,61,127,.16)}
+  .pact:focus-visible{outline:2px solid rgba(61,255,168,.45);outline-offset:1px}
+
+  /* 프리셋 추가 · 기본값 복원 (섹션 헤더 옆) */
+  .secrow{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+  .secrow .sec-t{flex:1 1 auto;min-width:0}
+  .pbar{display:flex;gap:5px;flex:0 0 auto}
+  .pbar button{cursor:pointer;font-family:var(--sans);font-size:10.5px;font-weight:900;letter-spacing:-0.01em;
+    padding:5px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.11);background:rgba(255,255,255,.04);
+    color:#C9DBE5;transition:.15s;white-space:nowrap}
+  .pbar button:hover{background:rgba(61,255,168,.12);border-color:rgba(61,255,168,.32);color:#EAFFF6}
+  .pbar button.add{border-color:rgba(61,255,168,.34);background:rgba(61,255,168,.11);color:#CFFCE8}
+  .pbar button.armed{background:rgba(255,61,127,.88);border-color:#FF7AA8;color:#20030D}
+
+  /* 프리셋 인라인 편집 */
+  .pedit{display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:11px;
+    border:1px solid rgba(61,255,168,.45);background:rgba(61,255,168,.08);
+    box-shadow:0 0 0 1px rgba(61,255,168,.12) inset;animation:fade .18s ease both}
+  .pedit input{width:100%;background:rgba(0,0,0,.30);border:1px solid rgba(255,255,255,.14);border-radius:8px;
+    padding:8px 9px;color:#F2FFFB;font-family:var(--sans);font-size:12.5px;font-weight:600;outline:none}
+  .pedit input:focus{border-color:rgba(61,255,168,.55);background:rgba(61,255,168,.06)}
+  .pedit input::placeholder{color:#5F717D}
+  .pedit .row{display:flex;gap:6px;align-items:center}
+  .pedit .hint{flex:1 1 auto;font-size:10px;font-weight:800;color:#7E96A2;font-family:var(--mono);letter-spacing:0}
+  .pedit button{cursor:pointer;font-family:var(--sans);font-size:11.5px;font-weight:900;border-radius:8px;
+    padding:6px 11px;border:1px solid transparent;transition:.15s}
+  .pedit .ok{background:linear-gradient(135deg,#4BFFB0,#19DD82);color:#04120C}
+  .pedit .ok:hover{filter:brightness(1.07)}
+  .pedit .cancel{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14);color:#D3E3EC}
+  .pedit .cancel:hover{background:rgba(255,255,255,.12)}
 
   .custom{display:flex;gap:7px}
   .custom input{flex:1;min-width:0;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.11);
@@ -236,7 +278,13 @@
 
   <main>
     <aside class="side">
-      <div class="sec-t">질문 프리셋</div>
+      <div class="secrow">
+        <div class="sec-t">질문 프리셋</div>
+        <div class="pbar">
+          <button class="add" id="btnAddPreset" type="button" title="새 질문을 프리셋에 추가">＋ 추가</button>
+          <button id="btnResetPresets" type="button" title="기본 8개 질문으로 되돌리기">↺ 기본값 복원</button>
+        </div>
+      </div>
       <div class="presets" id="presets"></div>
 
       <div class="sec-t">직접 질문 입력</div>
@@ -375,7 +423,8 @@
     appId: "1:977342156141:web:f9842fcc67a819ce621e64"
   };
 
-  const PRESETS = [
+  /* 기본 8개 질문 — [↺ 기본값 복원]의 고정 기준값 */
+  const DEFAULT_PRESETS = Object.freeze([
     "최근 3개월 안에, 이직 사이트에 몰래 들어가 본 적 있다",
     "솔직히 오늘은 회식·야근 없이 그냥 칼퇴하고 싶다",
     "우리 팀에 말이 안 통하는 사람이 최소 한 명은 있다",
@@ -384,7 +433,30 @@
     "월급날 통장에 돈이 스쳐 지나간 지 일주일도 안 됐다",
     "단톡방에서 나만 빠진 약속이 있었던 것 같다 (기분 탓이길)",
     "술자리에서 '다음에 또 봐요' 하고 다시는 안 본 사람이 있다"
-  ];
+  ]);
+
+  /* 진행자가 고친 프리셋은 이 브라우저(localStorage)에 저장된다 */
+  const MAX_Q = 80, MAX_PRESETS = 30, LS_KEY = "bh_presets_v1";
+
+  function sanitizePresets(arr){
+    if(!Array.isArray(arr)) return null;
+    const out = arr.filter(x => typeof x === "string")
+      .map(x => x.replace(/\s+/g, " ").trim().slice(0, MAX_Q))
+      .filter(x => x.length > 0)
+      .slice(0, MAX_PRESETS);
+    return out.length ? out : null;
+  }
+  function loadPresets(){
+    try{
+      const raw = window.localStorage.getItem(LS_KEY);
+      if(!raw) return DEFAULT_PRESETS.slice();
+      return sanitizePresets(JSON.parse(raw)) || DEFAULT_PRESETS.slice();
+    }catch(e){ return DEFAULT_PRESETS.slice(); }
+  }
+  function savePresets(){
+    try{ window.localStorage.setItem(LS_KEY, JSON.stringify(PRESETS)); }catch(e){}
+  }
+  let PRESETS = loadPresets();
 
   const S = {
     phase:"ready", rid:null, q:"",
@@ -755,21 +827,200 @@
     $("customQ").blur();
   }
 
-  /* ================= 프리셋 렌더 ================= */
+  /* ================= 프리셋 렌더 (진행자가 직접 수정) ================= */
+  let editing = null;   // null | { i:인덱스, isNew:bool, draft:문자열 }
+
   function markPresets(){
-    document.querySelectorAll("#presets .preset").forEach((el, i) => el.classList.toggle("on", i === idx));
+    document.querySelectorAll("#presets .preset").forEach(el => {
+      el.classList.toggle("on", Number(el.dataset.i) === idx);
+    });
   }
+
+  function presetRow(t, i){
+    const row = document.createElement("div");
+    row.className = "prow";
+
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "preset";
+    b.dataset.n = String(i + 1).padStart(2, "0"); b.dataset.i = String(i);
+    b.textContent = t; b.title = "이 질문으로 진행";
+    b.addEventListener("click", () => { $("customQ").value = ""; newRound(PRESETS[i], i); });
+
+    const acts = document.createElement("div");
+    acts.className = "pacts";
+
+    const eb = document.createElement("button");
+    eb.type = "button"; eb.className = "pact edit"; eb.textContent = "✏️";
+    eb.title = "이 질문 수정"; eb.setAttribute("aria-label", (i + 1) + "번 질문 수정");
+    eb.addEventListener("click", e => { e.stopPropagation(); beginEdit(i); });
+
+    const xbtn = document.createElement("button");
+    xbtn.type = "button"; xbtn.className = "pact del"; xbtn.textContent = "✕";
+    xbtn.title = "이 질문 삭제"; xbtn.setAttribute("aria-label", (i + 1) + "번 질문 삭제");
+    xbtn.addEventListener("click", e => { e.stopPropagation(); deletePreset(i); });
+
+    acts.append(eb, xbtn);
+    row.append(b, acts);
+    return row;
+  }
+
+  function editBox(){
+    const box = document.createElement("div");
+    box.className = "pedit";
+
+    const inp = document.createElement("input");
+    inp.type = "text"; inp.maxLength = MAX_Q; inp.autocomplete = "off";
+    inp.value = editing.draft || "";
+    inp.placeholder = editing.isNew ? "새 질문을 입력하세요" : "질문을 고쳐 쓰세요";
+    inp.setAttribute("aria-label", "프리셋 질문 수정");
+
+    const row = document.createElement("div");
+    row.className = "row";
+    const hint = document.createElement("span");
+    hint.className = "hint";
+    hint.textContent = (editing.draft || "").length + " / " + MAX_Q + "자";
+
+    inp.addEventListener("input", () => {
+      editing.draft = inp.value;
+      hint.textContent = inp.value.length + " / " + MAX_Q + "자";
+    });
+    inp.addEventListener("keydown", e => {
+      e.stopPropagation();
+      if(e.key === "Enter"){ e.preventDefault(); commitEdit(); }
+      else if(e.key === "Escape"){ e.preventDefault(); cancelEdit(); }
+    });
+
+    const ok = document.createElement("button");
+    ok.type = "button"; ok.className = "ok"; ok.textContent = editing.isNew ? "추가" : "저장";
+    ok.addEventListener("click", commitEdit);
+    const cc = document.createElement("button");
+    cc.type = "button"; cc.className = "cancel"; cc.textContent = "취소";
+    cc.addEventListener("click", cancelEdit);
+
+    row.append(hint, cc, ok);
+    box.append(inp, row);
+    return box;
+  }
+
   function renderPresets(){
     const wrap = $("presets");
     wrap.innerHTML = "";
     PRESETS.forEach((t, i) => {
-      const b = document.createElement("button");
-      b.type = "button"; b.className = "preset"; b.dataset.n = String(i + 1).padStart(2, "0");
-      b.textContent = t;
-      b.addEventListener("click", () => { $("customQ").value = ""; newRound(t, i); });
-      wrap.appendChild(b);
+      if(editing && !editing.isNew && editing.i === i){ wrap.appendChild(editBox()); return; }
+      wrap.appendChild(presetRow(t, i));
     });
+    if(editing && editing.isNew) wrap.appendChild(editBox());
     markPresets();
+    if(editing){
+      const inp = wrap.querySelector(".pedit input");
+      if(inp){
+        inp.focus();
+        try{ inp.setSelectionRange(inp.value.length, inp.value.length); }catch(e){}
+        if(editing.isNew && inp.scrollIntoView) inp.scrollIntoView({ block:"nearest" });
+      }
+    }
+  }
+
+  function beginEdit(i){
+    editing = { i: i, isNew: false, draft: PRESETS[i] };
+    renderPresets();
+  }
+  function beginAdd(){
+    if(PRESETS.length >= MAX_PRESETS){ toast("프리셋은 " + MAX_PRESETS + "개까지 저장됩니다"); return; }
+    editing = { i: -1, isNew: true, draft: "" };
+    renderPresets();
+  }
+  function cancelEdit(){
+    const wasNew = editing && editing.isNew;
+    editing = null;
+    renderPresets();
+    toast(wasNew ? "새 질문 입력을 취소했습니다" : "수정을 취소했습니다");
+  }
+
+  function commitEdit(){
+    if(!editing) return;
+    const text = (editing.draft || "").replace(/\s+/g, " ").trim().slice(0, MAX_Q);
+    if(!text){
+      toast("질문을 입력해 주세요");
+      const inp = $("presets").querySelector(".pedit input");
+      if(inp) inp.focus();
+      return;
+    }
+    const isNew = editing.isNew, i = editing.i;
+
+    if(isNew){
+      PRESETS.push(text);
+      editing = null;
+      savePresets();
+      renderPresets();
+      toast("프리셋 " + PRESETS.length + "번에 추가했습니다 · 클릭하면 이 질문으로 진행됩니다");
+      return;
+    }
+
+    const old = PRESETS[i];
+    PRESETS[i] = text;
+    editing = null;
+    savePresets();
+    renderPresets();
+
+    // 지금 화면에 떠 있는 질문을 고쳤다면: 대기 중일 때만 즉시 반영 (집계 중인 라운드는 건드리지 않음)
+    if(i === idx && S.q === old){
+      if(S.phase === "ready"){
+        S.q = text;
+        $("qText").textContent = text;
+        pub({ q: text });
+        toast("질문을 수정했습니다 · 무대 화면에도 반영됐습니다");
+      }else{
+        toast("질문을 수정했습니다 · 진행 중인 질문은 그대로 두고 다음 라운드부터 반영됩니다");
+      }
+    }else{
+      toast("질문을 수정했습니다 · 이 브라우저에 저장됐습니다");
+    }
+  }
+
+  function deletePreset(i){
+    if(PRESETS.length <= 1){
+      toast("프리셋은 최소 1개가 필요합니다 · [＋ 프리셋 추가]로 먼저 넣어 주세요");
+      return;
+    }
+    const removed = PRESETS[i];
+    PRESETS.splice(i, 1);
+    if(idx === i) idx = -1;
+    else if(idx > i) idx--;
+    if(editing && !editing.isNew){
+      if(editing.i === i) editing = null;
+      else if(editing.i > i) editing.i--;
+    }
+    savePresets();
+    renderPresets();
+    toast("삭제했습니다 · [↺ 기본값 복원]으로 언제든 되돌릴 수 있습니다");
+  }
+
+  let resetArmed = false, resetTimer = null;
+  function resetPresets(){
+    const btn = $("btnResetPresets");
+    if(!resetArmed){
+      resetArmed = true;
+      btn.classList.add("armed");
+      btn.textContent = "⚠️ 한 번 더 누르면 복원";
+      clearTimeout(resetTimer);
+      resetTimer = setTimeout(() => {
+        resetArmed = false;
+        btn.classList.remove("armed");
+        btn.textContent = "↺ 기본값 복원";
+      }, 3200);
+      return;
+    }
+    resetArmed = false;
+    clearTimeout(resetTimer);
+    btn.classList.remove("armed");
+    btn.textContent = "↺ 기본값 복원";
+    PRESETS = DEFAULT_PRESETS.slice();
+    editing = null;
+    if(idx >= PRESETS.length) idx = -1;
+    savePresets();
+    renderPresets();
+    toast("기본 " + DEFAULT_PRESETS.length + "개 질문으로 되돌렸습니다");
   }
 
   /* ================= 유틸 ================= */
@@ -785,6 +1036,8 @@
   $("btnNext").addEventListener("click", nextQuestion);
   $("btnClear").addEventListener("click", clearResponses);
   $("btnApply").addEventListener("click", applyCustom);
+  $("btnAddPreset").addEventListener("click", beginAdd);
+  $("btnResetPresets").addEventListener("click", resetPresets);
   $("customQ").addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); applyCustom(); } });
 
   $("btnSound").addEventListener("click", () => {
