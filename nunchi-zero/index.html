@@ -79,10 +79,45 @@
   .net.on{color:#FFEFC0;border-color:rgba(255,210,74,.34);background:rgba(255,210,74,.10)}
   .net.on i{background:var(--gold);box-shadow:0 0 8px var(--gold)}
 
+  /* ---------- 상단 제한시간 바 (26초) ---------- */
+  .app.timing{padding-top:calc(env(safe-area-inset-top,0px) + 62px)}
+  .timerbar{
+    position:fixed;left:0;right:0;top:0;z-index:25;display:none;
+    padding:calc(env(safe-area-inset-top,0px) + 8px) 16px 9px;
+    background:linear-gradient(180deg, rgba(6,9,14,.99), rgba(6,9,14,.86));
+    border-bottom:1px solid rgba(255,210,74,.30);
+    box-shadow:0 10px 30px rgba(0,0,0,.55);backdrop-filter:blur(10px);
+  }
+  .timerbar.on{display:block}
+  .timerbar .tb-row{display:flex;align-items:center;gap:9px;max-width:460px;margin:0 auto}
+  .timerbar .tb-k{font-size:10px;font-weight:900;letter-spacing:.16em;color:var(--gold);opacity:.88}
+  .timerbar .tb-v{margin-left:auto;display:flex;align-items:baseline;gap:3px;color:#FFF9E8;line-height:1;font-variant-numeric:tabular-nums}
+  .timerbar .tb-v b{font-size:28px;font-weight:900;letter-spacing:-0.05em}
+  .timerbar .tb-v small{font-size:11px;font-weight:900;color:#C9B77C;letter-spacing:0}
+  .timerbar .tb-gauge{max-width:460px;margin:7px auto 0;height:6px;border-radius:99px;background:rgba(255,255,255,.10);overflow:hidden}
+  .timerbar .tb-gauge i{display:block;height:100%;width:100%;border-radius:99px;background:linear-gradient(90deg,#FFD24A,#FF8A1F);transition:width .18s linear}
+  .timerbar.hot{border-bottom-color:rgba(255,61,127,.60);background:linear-gradient(180deg, rgba(30,6,15,.99), rgba(12,4,10,.9));animation:tbpulse .9s ease-in-out infinite}
+  .timerbar.hot .tb-k{color:#FF9DBD}
+  .timerbar.hot .tb-v{color:#FF5C8D}
+  .timerbar.hot .tb-v small{color:#FF9DBD}
+  .timerbar.hot .tb-gauge i{background:linear-gradient(90deg,#FF6B9A,#FF2D6B)}
+  @keyframes tbpulse{0%,100%{box-shadow:0 10px 30px rgba(0,0,0,.55)}50%{box-shadow:0 0 30px rgba(255,61,127,.45)}}
+
+  /* ---------- 시간 종료 ---------- */
+  .timebox{display:flex;flex-direction:column;align-items:center;gap:13px;text-align:center;padding:30px 18px;border-radius:22px;
+    background:radial-gradient(120% 100% at 50% 0%, rgba(255,61,127,.14), rgba(7,11,17,.82));
+    border:1px solid rgba(255,61,127,.32)}
+  .timebox .tx{font-size:46px;filter:drop-shadow(0 0 22px rgba(255,61,127,.5))}
+  .timebox b{font-size:19px;font-weight:900;color:#FFE3EC;letter-spacing:-0.02em}
+  .timebox p{font-size:12.5px;color:#FFC2D6;line-height:1.65;margin:0}
+  .timebox .badge{font-size:12.5px;font-weight:900;color:#FFE9A8;padding:8px 15px;border-radius:999px;
+    background:rgba(255,210,74,.10);border:1px solid rgba(255,210,74,.28)}
+
   .stage{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;padding:10px 0 6px}
   .view{display:none;flex-direction:column;gap:14px;animation:fade .35s ease both;min-height:0}
   .view.on{display:flex}
   .view.fill{flex:1 1 auto;justify-content:center}
+  .view.boardview{flex:1 1 auto;justify-content:flex-start}
   @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
   /* ---------- 공통 카드 ---------- */
@@ -112,6 +147,8 @@
   }
   .field input:focus{border-color:rgba(255,210,74,.5);background:rgba(255,210,74,.07)}
   .field input::placeholder{color:#61737F;font-weight:600}
+  .fieldhint{font-size:11px;font-weight:700;color:#8FA3B0;line-height:1.45}
+  .fieldhint.warn{color:#FF9DBD}
   .bigbtn{
     width:100%;cursor:pointer;font-family:var(--sans);border:0;border-radius:15px;padding:17px 16px;
     font-size:17px;font-weight:900;letter-spacing:-0.02em;color:#231801;
@@ -143,15 +180,15 @@
   .boardhead b{font-size:15px;font-weight:900;letter-spacing:-0.03em;color:#FFF9E8}
   .boardhead span{font-size:11px;font-weight:800;color:var(--muted)}
   .grid{
-    flex:1 1 auto;min-height:0;overflow-y:auto;
-    display:grid;grid-template-columns:repeat(6,1fr);gap:6px;align-content:start;
+    flex:1 1 auto;min-height:0;overflow:hidden;
+    display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(11,minmax(0,1fr));gap:6px;
     padding:2px;-webkit-overflow-scrolling:touch;
   }
   .num{
     position:relative;cursor:pointer;font-family:var(--sans);border:1px solid rgba(255,210,74,.15);
     background:linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
     color:#DCE9F1;border-radius:11px;font-size:clamp(16px,4.6vw,20px);font-weight:900;
-    letter-spacing:-0.03em;padding:0;aspect-ratio:1/0.98;display:grid;place-items:center;
+    letter-spacing:-0.03em;padding:0;min-height:0;display:grid;place-items:center;
     transition:transform .1s, background .18s, border-color .18s, color .18s;
     -webkit-appearance:none;appearance:none;font-variant-numeric:tabular-nums;
   }
@@ -245,6 +282,13 @@
 </style>
 </head>
 <body>
+<div class="timerbar" id="timerbar">
+  <div class="tb-row">
+    <span class="tb-k">⏱ 남은 시간</span>
+    <span class="tb-v"><b id="tbNum">26</b><small>초</small></span>
+  </div>
+  <div class="tb-gauge"><i id="tbBar"></i></div>
+</div>
 <div class="app">
   <header class="top">
     <div class="brand">
@@ -264,10 +308,12 @@
           <span>1부터 <em>66</em>까지, 딱 하나만 고르세요.<br>겹치지 않게 혼자 고른 <em>가장 작은 번호</em>가 우승!</span>
         </div>
         <div class="field">
-          <label for="nameInput">이름 · 닉네임 <span style="color:#7E93A0;font-weight:700">(선택)</span></label>
-          <input id="nameInput" type="text" maxlength="12" autocomplete="off" placeholder="우승자 호명 때 불릴 이름">
+          <label for="nameInput">이름 · 닉네임 <span style="color:#FF9DBD;font-weight:900">(필수)</span></label>
+          <input id="nameInput" type="text" maxlength="12" autocomplete="off" required
+                 aria-required="true" placeholder="예) 김하늘" enterkeyhint="go">
+          <div class="fieldhint" id="nameHint">이름을 입력해야 입장할 수 있습니다 · 우승자 호명과 1~5위에 이 이름이 표시됩니다</div>
         </div>
-        <button class="bigbtn" id="joinBtn" type="button">입장하기</button>
+        <button class="bigbtn" id="joinBtn" type="button" disabled>입장하기</button>
         <div class="cap" id="entryCap">정원 96명 · 지금 <b id="entryCount">0</b>명 입장</div>
       </div>
     </section>
@@ -286,7 +332,7 @@
     </section>
 
     <!-- 번호판 -->
-    <section class="view" id="viewBoard">
+    <section class="view boardview" id="viewBoard">
       <div class="boardwrap">
         <div class="boardhead">
           <b>1~66 · 딱 하나!</b>
@@ -309,6 +355,16 @@
     <!-- 결과 -->
     <section class="view" id="viewReveal">
       <div class="reveal" id="revealBody"></div>
+    </section>
+
+    <!-- 시간 종료 -->
+    <section class="view fill" id="viewTimeup">
+      <div class="timebox">
+        <div class="tx">⏱</div>
+        <b>시간 종료!</b>
+        <p>26초가 끝나 번호 입력이 마감되었습니다.<br>결과를 기다려 주세요.</p>
+        <div class="badge">제출하지 못했어요 · 다음 판에 도전!</div>
+      </div>
     </section>
 
     <!-- 마감 -->
@@ -373,9 +429,9 @@
     UID = "u" + Math.random().toString(36).slice(2, 12);
   }
 
-  const S = { joined:false, name:"", phase:"ready", rid:null, meta:{}, myVote:null, preview:null, full:false, busy:false };
+  const S = { joined:false, name:"", phase:"ready", rid:null, meta:{}, myVote:null, preview:null, full:false, busy:false, offset:0, timeLocked:false };
 
-  const views = { entry:$("viewEntry"), lobby:$("viewLobby"), board:$("viewBoard"), picked:$("viewPicked"), reveal:$("viewReveal"), full:$("viewFull") };
+  const views = { entry:$("viewEntry"), lobby:$("viewLobby"), board:$("viewBoard"), picked:$("viewPicked"), reveal:$("viewReveal"), timeup:$("viewTimeup"), full:$("viewFull") };
   let shown = "entry";
 
   function show(name){
@@ -420,6 +476,7 @@
         setNet(on, on ? "실시간 연결" : "연결 중");
       });
       roomRef = db.ref("rooms/nunchiZero/" + ROOM);
+      db.ref(".info/serverTimeOffset").on("value", s => { S.offset = Number(s.val() || 0); });
       roomRef.child("meta").on("value", snap => onMeta(snap.val() || {}));
     }catch(e){
       setNet(false, "연결 실패");
@@ -453,12 +510,62 @@
       bindVote(rid);
     }
     S.phase = meta.phase || "ready";
+    if(!meta.endsAt) S.timeLocked = false;
     render();
+    paintTimer();
   }
+
+  /* ---------- 26초 제한시간 ---------- */
+  const DURATION = 26000;
+  function serverNow(){ return Date.now() + (S.offset || 0); }
+  function timerInfo(){
+    const endsAt = Number(S.meta.endsAt || 0);
+    if(!endsAt) return null;
+    const dur = Number(S.meta.duration || 0) || DURATION;
+    const left = Math.max(0, endsAt - serverNow());
+    return { left:left, dur:dur, sec:Math.ceil(left / 1000),
+             pct:Math.max(0, Math.min(1, left / dur)) };
+  }
+  function timeOver(){
+    if(S.phase === "closed") return true;
+    if(S.phase !== "voting") return false;
+    const t = timerInfo();
+    return !!t && t.left <= 0;
+  }
+  function paintTimer(){
+    const t = timerInfo();
+    const show = !!t && (S.phase === "voting" || S.phase === "closed");
+    const bar = $("timerbar");
+    bar.classList.toggle("on", show);
+    const app = document.querySelector(".app");
+    if(app) app.classList.toggle("timing", show);
+    if(!show) return;
+    $("tbNum").textContent = String(t.sec);
+    $("tbBar").style.width = (t.pct * 100).toFixed(1) + "%";
+    bar.classList.toggle("hot", t.left <= 5000);
+  }
+  let tickOn = false;
+  function tick(){
+    paintTimer();
+    const over = timeOver();
+    if(over && !tickOn){
+      tickOn = true;
+      if(S.phase === "voting" && S.myVote == null){
+        if(navigator.vibrate) navigator.vibrate([30, 60, 30]);
+        toast("⏱ 26초 종료! 입력이 마감되었습니다");
+      }
+      render();
+    }else if(!over && tickOn && S.phase === "voting"){
+      tickOn = false;
+      render();
+    }
+    if(S.phase !== "voting" && S.phase !== "closed") tickOn = false;
+  }
+  setInterval(tick, 120);
 
   /* ---------- 화면 렌더 ---------- */
   function render(){
-    document.body.classList.toggle("voting", S.phase === "voting");
+    document.body.classList.toggle("voting", S.phase === "voting" || S.phase === "closed");
     const entered = Number(S.meta.entered || 0);
     $("entryCount").textContent = String(Math.min(entered, MAX_PLAYERS));
     $("boardStat").textContent = "제출 " + Number(S.meta.submitted || 0) + "명";
@@ -469,6 +576,15 @@
     if(S.phase === "revealed"){
       paintReveal();
       show("reveal");
+      return;
+    }
+    if(timeOver()){
+      if(S.myVote != null){
+        $("pickedNum").textContent = String(S.myVote);
+        show("picked");
+      }else{
+        show("timeup");
+      }
       return;
     }
     if(S.phase === "voting"){
@@ -495,6 +611,7 @@
 
   function pickPreview(n){
     if(S.phase !== "voting" || S.myVote != null || S.busy) return;
+    if(timeOver()){ closeSheet(); toast("⏱ 시간이 종료되었습니다"); render(); return; }
     S.preview = n;
     paintGrid();
     $("sheetNum").textContent = String(n);
@@ -507,15 +624,30 @@
   }
 
   /* ---------- 입장 ---------- */
+  function readName(){
+    return ($("nameInput").value || "").replace(/\s+/g, " ").trim().slice(0, 12);
+  }
+  function updateJoinState(){
+    const ok = readName().length > 0;
+    $("joinBtn").disabled = !ok || S.busy;
+    $("nameHint").classList.toggle("warn", !ok);
+  }
+
   function join(){
     if(S.busy) return;
-    const nm = ($("nameInput").value || "").replace(/\s+/g, " ").trim().slice(0, 12);
+    const nm = readName();
+    if(!nm){
+      toast("이름/닉네임을 입력해 주세요");
+      $("nameInput").focus();
+      updateJoinState();
+      return;
+    }
     if(!roomRef){ toast("연결 중입니다 · 잠시 후 다시 눌러 주세요"); return; }
     S.busy = true;
     $("joinBtn").disabled = true;
     attemptJoin(nm, 3).then(committed => {
       S.busy = false;
-      $("joinBtn").disabled = false;
+      updateJoinState();
       if(!committed){ S.full = true; render(); return; }
       S.joined = true; S.name = nm;
       try{ localStorage.setItem("nz_name", nm); }catch(e){}
@@ -523,7 +655,7 @@
       render();
     }).catch(() => {
       S.busy = false;
-      $("joinBtn").disabled = false;
+      updateJoinState();
       toast("입장 실패 · 다시 한 번 눌러 주세요");
     });
   }
@@ -555,6 +687,7 @@
     const n = S.preview;
     if(n == null) return;
     if(S.phase !== "voting" || !S.rid){ closeSheet(); toast("지금은 제출할 수 없습니다"); return; }
+    if(timeOver()){ closeSheet(); toast("⏱ 시간이 종료되었습니다"); render(); return; }
     if(S.myVote != null){ closeSheet(); return; }
     S.busy = true;
     $("sheetOk").disabled = true;
@@ -624,7 +757,8 @@
 
   /* ---------- 이벤트 ---------- */
   $("joinBtn").addEventListener("click", join);
-  $("nameInput").addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); $("nameInput").blur(); join(); } });
+  $("nameInput").addEventListener("input", updateJoinState);
+  $("nameInput").addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); $("nameInput").blur(); if(readName()) join(); else { toast("이름/닉네임을 입력해 주세요"); updateJoinState(); } } });
   $("sheetCancel").addEventListener("click", closeSheet);
   $("sheetOk").addEventListener("click", submitVote);
   $("sheet").addEventListener("click", e => { if(e.target === $("sheet")) closeSheet(); });
@@ -634,6 +768,7 @@
     const saved = localStorage.getItem("nz_name");
     if(saved) $("nameInput").value = saved;
   }catch(e){}
+  updateJoinState();
 
   initFB();
 })();

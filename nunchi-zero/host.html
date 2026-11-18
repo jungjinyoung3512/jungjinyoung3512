@@ -56,6 +56,22 @@
   .snd:hover{background:rgba(255,210,74,.17)}
   .snd.muted{color:#93A4AE;border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.04)}
 
+  /* 26초 제한시간 칩 */
+  .tchip{display:none;align-items:center;gap:10px;padding:5px 14px;border-radius:999px;
+    border:1px solid rgba(255,210,74,.32);background:rgba(255,210,74,.10);white-space:nowrap}
+  .tchip.on{display:flex}
+  .tchip .tl{font-size:10px;font-weight:900;letter-spacing:.14em;color:var(--gold);opacity:.88}
+  .tchip .tv{display:flex;align-items:baseline;gap:2px;color:#FFF9E8;line-height:1;font-variant-numeric:tabular-nums}
+  .tchip .tv b{font-size:24px;font-weight:900;letter-spacing:-0.05em}
+  .tchip .tv small{font-size:10px;font-weight:900;color:#C9B77C}
+  .tchip .tbar{width:96px;height:5px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden}
+  .tchip .tbar i{display:block;height:100%;width:100%;border-radius:99px;background:linear-gradient(90deg,#FFD24A,#FF8A1F);transition:width .18s linear}
+  .tchip.hot{border-color:rgba(255,61,127,.62);background:rgba(255,61,127,.16);animation:tcpulse .9s ease-in-out infinite}
+  .tchip.hot .tl{color:#FF9DBD}
+  .tchip.hot .tv b{color:#FF5C8D}
+  .tchip.hot .tbar i{background:linear-gradient(90deg,#FF6B9A,#FF2D6B)}
+  @keyframes tcpulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 22px rgba(255,61,127,.5)}}
+
   main{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:352px minmax(0,1fr)}
 
   /* 좌측 컨트롤 */
@@ -138,6 +154,14 @@
   .vtop .r{text-align:right;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
   .vtop .r .kv{font-size:clamp(12px,1.1vw,15px);font-weight:800;color:var(--muted)}
   .vtop .r .kv b{color:#FFE07A;font-variant-numeric:tabular-nums}
+  .btime{display:none;align-items:baseline;gap:6px;line-height:1;font-variant-numeric:tabular-nums;margin-bottom:2px}
+  .btime.on{display:flex}
+  .btime b{font-size:clamp(34px,4.6vw,74px);font-weight:900;letter-spacing:-0.06em;color:#FFF9E8;
+    text-shadow:0 0 44px rgba(255,210,74,.45)}
+  .btime span{font-size:clamp(11px,1vw,15px);font-weight:900;color:#C9B77C}
+  .btime.hot b{color:#FF5C8D;text-shadow:0 0 44px rgba(255,61,127,.6);animation:btpulse .8s ease-in-out infinite}
+  .btime.hot span{color:#FF9DBD}
+  @keyframes btpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
   .lockline{display:inline-flex;align-items:center;gap:8px;font-size:clamp(11px,1vw,14px);font-weight:800;color:#8FA3B0;
     padding:7px 13px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03)}
   .lockline .pulse{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:bl 1.3s infinite;box-shadow:0 0 12px var(--gold)}
@@ -204,8 +228,8 @@
 
   /* TOP5 오버레이 */
   .top5{position:absolute;inset:0;z-index:20;display:none;flex-direction:column;justify-content:center;gap:14px;
-    padding:26px 40px;background:radial-gradient(70% 80% at 50% 40%, rgba(10,15,22,.985), rgba(5,8,12,.99));
-    backdrop-filter:blur(3px);animation:fade .28s ease both}
+    padding:26px 40px;background:radial-gradient(80% 80% at 50% 42%, #0B111A 0%, #05080C 100%);
+    animation:fade .28s ease both}
   .top5.on{display:flex}
   .top5 .th{display:flex;align-items:center;gap:14px}
   .top5 .th b{font-size:clamp(20px,2.3vw,36px);font-weight:900;letter-spacing:-0.03em;color:#FFF9E8}
@@ -230,6 +254,25 @@
   .t5row .pc{font-size:clamp(15px,1.6vw,27px);font-weight:900;color:#FFE07A;font-variant-numeric:tabular-nums;flex:0 0 auto;min-width:2.6em;text-align:right}
   .t5row .pc small{font-size:.6em;color:#B4A06A;margin-left:2px}
   .t5empty{text-align:center;font-size:15px;font-weight:800;color:#7E929E;padding:30px 0}
+
+  /* 1~5위는 클릭할 때마다 하나씩 공개 */
+  .t5row{width:100%;font-family:var(--sans);text-align:left;cursor:pointer;color:inherit;
+    -webkit-appearance:none;appearance:none;
+    transition:background .18s, border-color .18s, transform .1s}
+  .t5row:active{transform:scale(.995)}
+  .t5row:hover{border-color:rgba(255,210,74,.42);background:rgba(255,255,255,.05)}
+  .t5row .mask{font-size:clamp(24px,2.8vw,44px);font-weight:900;letter-spacing:-0.05em;color:#5F727E;
+    min-width:2.9em;flex:0 0 auto;line-height:1;font-variant-numeric:tabular-nums}
+  .t5row .unlock{font-size:clamp(10px,.95vw,13px);font-weight:900;color:#9DB0BB;white-space:nowrap;
+    padding:6px 11px;border-radius:999px;border:1px dashed rgba(255,210,74,.34);background:rgba(255,210,74,.05);flex:0 0 auto}
+  .t5row .pc.mask-pc{color:#5F727E}
+  .t5row.openrow{animation:rowpop .38s cubic-bezier(.2,1.3,.4,1) both}
+  .t5row.openrow .unlock{border-style:solid;border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:#8FA3B0}
+  @keyframes rowpop{from{transform:scale(.94);opacity:.4}to{transform:scale(1);opacity:1}}
+  .t5row.empty{opacity:.42;cursor:default;pointer-events:none}
+  .t5row.empty .mask{font-size:clamp(14px,1.4vw,20px);letter-spacing:-0.02em}
+  .t5hint{font-size:clamp(11px,1vw,14px);font-weight:800;color:#8FA3B0;text-align:center;padding-top:2px}
+  .t5hint b{color:#FFE07A}
 
   .bottombar{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;
     padding-top:8px;border-top:1px solid rgba(255,255,255,.06);font-size:11px;color:#4F616D;font-weight:700}
@@ -259,6 +302,11 @@
       <span>강연 크리에이터 · 정진영</span>
     </div>
     <div class="hspacer"></div>
+    <div class="tchip" id="tchip">
+      <span class="tl">⏱ 제한</span>
+      <span class="tv"><b id="tchipNum">26</b><small>초</small></span>
+      <span class="tbar"><i id="tchipBar"></i></span>
+    </div>
     <div class="chip room" id="roomChip">ROOM JY66</div>
     <div class="chip" id="netChip"><i></i><span id="netTxt">연결 중</span></div>
     <div class="snd" id="btnSound">🔊 소리 ON</div>
@@ -324,7 +372,8 @@
           <div class="vtop">
             <div class="l"><b id="bigVotes">0</b><span>명 제출 완료</span></div>
             <div class="r">
-              <div class="lockline"><span class="pulse"></span>실시간 집계 중 · 결과 잠김 🔒</div>
+              <div class="btime" id="btime"><b id="btimeNum">26</b><span>초 남음</span></div>
+              <div class="lockline" id="vLock"><span class="pulse"></span>실시간 집계 중 · 결과 잠김 🔒</div>
               <div class="kv">참여 <b id="vPlayers">0</b> / 96명</div>
             </div>
           </div>
@@ -352,10 +401,11 @@
       <div class="top5" id="top5">
         <div class="th">
           <b>🔥 많이 누른 번호 1~5위</b>
-          <span id="top5sub">사람이 몰린 번호일수록 눈치 실패!</span>
+          <span id="top5sub">순위 카드를 하나씩 눌러 공개하세요</span>
           <button class="close" id="top5Close" type="button">닫기 ✕</button>
         </div>
         <div class="t5rows" id="t5rows"></div>
+        <div class="t5hint" id="t5hint">가려진 카드 <b>1~5위</b>를 마우스로 클릭하면 그 순위만 열립니다 · 다시 누르면 가려집니다</div>
       </div>
 
       <div class="bottombar">
@@ -384,7 +434,7 @@
   const $ = id => document.getElementById(id);
   const QS = new URLSearchParams(location.search);
   const ROOM = (QS.get("room") || "JY66").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 10) || "JY66";
-  const NUMS = 66, MAX_PLAYERS = 96;
+  const NUMS = 66, MAX_PLAYERS = 96, DURATION = 26000;
 
   const FB_CONFIG = {
     apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
@@ -398,7 +448,8 @@
 
   const S = {
     phase:"ready", rid:null, meta:{}, players:{}, votes:{},
-    revealing:false, top5Open:false, lastVoteCount:0, lastPlayers:0
+    revealing:false, top5Open:false, lastVoteCount:0, lastPlayers:0,
+    offsetMs:0, closedFor:null, t5Shown:[false,false,false,false,false]
   };
 
   /* ================= 사운드 (Web Audio 생성음) ================= */
@@ -540,6 +591,24 @@
       this.tone(t0 + 0.30, 311, 0.52, "sawtooth", 0.16);
       this.tone(t0 + 0.30, 233, 0.60, "square", 0.06);
       this.thump(t0, 0.4, 92);
+    },
+    alarm(){
+      if(!this.ensure() || !this.on) return;
+      const t0 = this.ctx.currentTime + 0.02;
+      [988, 740, 494].forEach((f, i) => this.tone(t0 + i * 0.15, f, 0.13, "square", 0.10));
+      this.thump(t0 + 0.46, 0.42, 78);
+      this.thump(t0 + 0.60, 0.42, 70);
+    },
+    unlock(){
+      if(!this.ensure() || !this.on) return;
+      const t0 = this.ctx.currentTime + 0.01;
+      [659.25, 880, 1174.66].forEach((f, i) => this.tone(t0 + i * 0.055, f, 0.22, "triangle", 0.15));
+      this.thump(t0, 0.26, 128);
+    },
+    lockBtn(){
+      if(!this.ensure() || !this.on) return;
+      const t0 = this.ctx.currentTime + 0.01;
+      this.tone(t0, 320, 0.09, "triangle", 0.09);
     }
   };
 
@@ -556,6 +625,7 @@
         setNet(on, on ? "실시간 연결" : "연결 중…");
       });
       roomRef = db.ref("rooms/nunchiZero/" + ROOM);
+      db.ref(".info/serverTimeOffset").on("value", s => { S.offsetMs = Number(s.val() || 0); });
       roomRef.on("value", snap => onRoom(snap.val() || {}));
       roomRef.child("meta").once("value").then(s => {
         const m = s.val();
@@ -601,7 +671,7 @@
     $("bigVotes").textContent = String(vc);
     $("vPlayers").textContent = String(pc);
 
-    if(changedRid){ S.lastVoteCount = 0; closeTop5(); }
+    if(changedRid){ S.lastVoteCount = 0; S.closedFor = null; S.t5Shown = [false,false,false,false,false]; closeTop5(); }
     else if(phase === "voting" && vc > S.lastVoteCount && !S.revealing) Sound.tick();
     S.lastVoteCount = vc;
 
@@ -623,6 +693,13 @@
       $("stVoting").classList.add("on");
       $("btnStart").disabled = true;
       $("btnResult").disabled = false;
+      $("vLock").innerHTML = '<span class="pulse"></span>실시간 집계 중 · 결과 잠김 🔒';
+    }else if(phase === "closed"){
+      tag.className = "tag rose"; tag.textContent = "시간 종료 · 입력 마감";
+      $("stVoting").classList.add("on");
+      $("btnStart").disabled = true;
+      $("btnResult").disabled = false;
+      $("vLock").innerHTML = '⏱ 입력 마감 · 결과 잠김 🔒';
     }else if(phase === "revealed"){
       tag.className = "tag gold"; tag.textContent = "결과 공개";
       $("stRevealed").classList.add("on");
@@ -633,9 +710,48 @@
       $("stReady").classList.add("on");
       $("btnStart").disabled = false;
       $("btnResult").disabled = true;
+      $("vLock").innerHTML = '<span class="pulse"></span>실시간 집계 중 · 결과 잠김 🔒';
       closeTop5();
     }
   }
+
+  /* ================= 26초 제한시간 ================= */
+  function serverNow(){ return Date.now() + (S.offsetMs || 0); }
+  function tRemain(){
+    const endsAt = Number(S.meta.endsAt || 0);
+    if(!endsAt) return null;
+    const dur = Number(S.meta.duration || 0) || DURATION;
+    const left = Math.max(0, endsAt - serverNow());
+    return { left:left, sec:Math.ceil(left / 1000), pct:Math.max(0, Math.min(1, left / dur)) };
+  }
+  function paintHTimer(){
+    const t = tRemain();
+    const show = !!t && (S.phase === "voting" || S.phase === "closed") && !S.revealing;
+    $("tchip").classList.toggle("on", show);
+    $("btime").classList.toggle("on", show);
+    if(!show) return;
+    $("tchipNum").textContent = String(t.sec);
+    $("btimeNum").textContent = String(t.sec);
+    $("tchipBar").style.width = (t.pct * 100).toFixed(1) + "%";
+    const hot = t.left <= 5000;
+    $("tchip").classList.toggle("hot", hot);
+    $("btime").classList.toggle("hot", hot);
+  }
+  function hostTick(){
+    paintHTimer();
+    const t = tRemain();
+    if(!t) return;
+    if(t.left > 0 && t.left <= 5000 && !S.warned5){ S.warned5 = true; Sound.tick(); }
+    if(t.left <= 0 && S.phase === "voting" && !S.revealing && S.closedFor !== S.rid){
+      S.closedFor = S.rid;
+      if(roomRef) roomRef.child("meta").update({ phase:"closed", closedAt:serverNow(), ts:Date.now() }).catch(()=>{});
+      Sound.stopBgm();
+      Sound.alarm();
+      toast("⏱ 26초 종료 · 입력을 마감했습니다 · [🏆 결과보기]");
+      applyPhase("closed");
+    }
+  }
+  setInterval(hostTick, 120);
 
   /* ================= 번호판 ================= */
   const lockedBoard = $("lockedBoard"), revealBoard = $("revealBoard");
@@ -729,23 +845,55 @@
     return arr.slice(0, 5);
   }
 
+  const T5RANK = ["🥇 1위", "🥈 2위", "🥉 3위", "4위", "5위"];
+
   function paintTop5(){
     const rows = topList();
     const wrap = $("t5rows");
     if(!rows.length){
       wrap.innerHTML = '<div class="t5empty">아직 제출된 번호가 없습니다</div>';
+      $("top5sub").textContent = "제출된 번호가 없습니다";
       return;
     }
     const max = rows[0].c;
-    wrap.innerHTML = rows.map((r, i) =>
-      '<div class="t5row' + (i === 0 ? " top" : "") + '">'
-      + '<div class="rk">' + (i === 0 ? "🥇" : (i + 1) + "위") + '</div>'
-      + '<div class="no">' + r.n + '번</div>'
-      + '<div class="bar"><i style="width:' + Math.max(6, Math.round(r.c / max * 100)) + '%"></i></div>'
-      + '<div class="pc">' + r.c + '<small>명</small></div>'
-      + '</div>'
-    ).join("");
-    $("top5sub").textContent = rows[0].n + "번에 " + rows[0].c + "명이 몰렸습니다 · 눈치 실패!";
+    let html = "";
+    for(let i = 0; i < 5; i++){
+      const r = rows[i];
+      if(!r){
+        html += '<div class="t5row empty"><div class="rk">' + T5RANK[i] + '</div>'
+          + '<div class="mask">기록 없음</div></div>';
+        continue;
+      }
+      const open = !!S.t5Shown[i];
+      html += '<button type="button" class="t5row' + (open ? " openrow" : "") + (open && i === 0 ? " top" : "") + '" data-i="' + i + '">'
+        + '<div class="rk">' + T5RANK[i] + '</div>';
+      if(open){
+        html += '<div class="no">' + r.n + '번</div>'
+          + '<div class="bar"><i style="width:' + Math.max(8, Math.round(r.c / max * 100)) + '%"></i></div>'
+          + '<div class="pc">' + r.c + '<small>명</small></div>'
+          + '<span class="unlock">🔒 다시 누르면 가림</span>';
+      }else{
+        html += '<div class="mask">? 번</div>'
+          + '<div class="bar"><i style="width:0%"></i></div>'
+          + '<div class="pc mask-pc">?<small>명</small></div>'
+          + '<span class="unlock">🔓 클릭해서 공개</span>';
+      }
+      html += '</button>';
+    }
+    wrap.innerHTML = html;
+    const opened = S.t5Shown.slice(0, Math.min(5, rows.length)).filter(Boolean).length;
+    $("top5sub").textContent = opened
+      ? "공개 " + opened + " / " + Math.min(5, rows.length) + " · 카드를 다시 누르면 가려집니다"
+      : "순위 카드를 하나씩 눌러 공개하세요";
+  }
+
+  function toggleT5(i){
+    if(!(i >= 0 && i < 5)) return;
+    const rows = topList();
+    if(!rows[i]) return;
+    S.t5Shown[i] = !S.t5Shown[i];
+    if(S.t5Shown[i]) Sound.unlock(); else Sound.lockBtn();
+    paintTop5();
   }
 
   function openTop5(){
@@ -765,17 +913,23 @@
 
   /* ================= 액션 ================= */
   function startGame(){
-    if(S.phase === "voting" && !S.revealing){ toast("이미 진행 중입니다"); return; }
+    if((S.phase === "voting" || S.phase === "closed") && !S.revealing){
+      toast(S.phase === "closed" ? "이미 마감됐습니다 · [🏆 결과보기] 또는 [🔄 다음 판]" : "이미 진행 중입니다");
+      return;
+    }
     Sound.ensure();
     closeTop5();
     const rid = newRid();
+    const t0 = serverNow();
     roomRef.child("votes").remove().catch(()=>{});
-    roomRef.child("meta").update({ phase:"voting", rid:rid, ts:Date.now(), result:null, submitted:0 }).catch(()=>{});
+    roomRef.child("meta").update({ phase:"voting", rid:rid, ts:Date.now(), result:null, submitted:0,
+      startedAt:t0, endsAt:t0 + DURATION, duration:DURATION }).catch(()=>{});
     S.votes = {}; S.lastVoteCount = 0; S.revealing = false;
+    S.closedFor = null; S.warned5 = false; S.t5Shown = [false,false,false,false,false];
     applyPhase("voting");
     $("cntVotes").textContent = "0"; $("bigVotes").textContent = "0";
     Sound.startBgm();
-    toast("▶ 게임 시작! 청중 폰에 1~66 번호판이 열렸습니다");
+    toast("▶ 게임 시작! 청중 폰에 26초 제한시간이 걸립니다");
   }
 
   function reveal(){
@@ -827,8 +981,10 @@
     Sound.stopBgm();
     const rid = newRid();
     roomRef.child("votes").remove().catch(()=>{});
-    roomRef.child("meta").update({ phase:"ready", rid:rid, ts:Date.now(), result:null, submitted:0 }).catch(()=>{});
+    roomRef.child("meta").update({ phase:"ready", rid:rid, ts:Date.now(), result:null, submitted:0,
+      startedAt:null, endsAt:null, duration:null }).catch(()=>{});
     S.votes = {}; S.lastVoteCount = 0; S.revealing = false;
+    S.closedFor = null; S.warned5 = false; S.t5Shown = [false,false,false,false,false];
     applyPhase("ready");
     $("cntVotes").textContent = "0"; $("bigVotes").textContent = "0";
     toast("🔄 다음 판 준비 완료 · 입장 " + Object.keys(S.players).length + "명 그대로, 번호만 새로 받습니다");
@@ -856,8 +1012,10 @@
     closeTop5();
     roomRef.child("players").remove().catch(()=>{});
     roomRef.child("votes").remove().catch(()=>{});
-    roomRef.child("meta").update({ phase:"ready", rid:newRid(), ts:Date.now(), result:null, entered:0, submitted:0 }).catch(()=>{});
+    roomRef.child("meta").update({ phase:"ready", rid:newRid(), ts:Date.now(), result:null, entered:0, submitted:0,
+      startedAt:null, endsAt:null, duration:null }).catch(()=>{});
     S.players = {}; S.votes = {}; S.lastVoteCount = 0; S.revealing = false;
+    S.closedFor = null; S.warned5 = false; S.t5Shown = [false,false,false,false,false];
     applyPhase("ready");
     $("cntPlayers").textContent = "0"; $("cntVotes").textContent = "0";
     $("readyEntered").textContent = "0"; $("bigVotes").textContent = "0"; $("vPlayers").textContent = "0";
@@ -876,6 +1034,11 @@
   $("btnResult").addEventListener("click", reveal);
   $("btnTop5").addEventListener("click", toggleTop5);
   $("top5Close").addEventListener("click", closeTop5);
+  $("t5rows").addEventListener("click", e => {
+    const btn = e.target.closest ? e.target.closest(".t5row") : null;
+    if(!btn || btn.classList.contains("empty")) return;
+    toggleT5(Number(btn.dataset.i));
+  });
   $("btnNext").addEventListener("click", nextRound);
   $("btnClear").addEventListener("click", clearAll);
 
@@ -896,6 +1059,7 @@
   document.addEventListener("keydown", e => {
     if(e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
     const k = e.key.toLowerCase();
+    if(S.top5Open && /^[1-5]$/.test(k)){ e.preventDefault(); toggleT5(Number(k) - 1); return; }
     if(e.code === "Space" || k === " "){ e.preventDefault(); startGame(); }
     else if(k === "r"){ reveal(); }
     else if(k === "t"){ toggleTop5(); }
