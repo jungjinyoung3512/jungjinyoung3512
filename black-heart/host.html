@@ -1003,12 +1003,13 @@
       resetArmed = true;
       btn.classList.add("armed");
       btn.textContent = "⚠️ 한 번 더 누르면 복원";
+      toast("한 번 더 누르면 기본 " + DEFAULT_PRESETS.length + "개 질문으로 돌아갑니다");
       clearTimeout(resetTimer);
       resetTimer = setTimeout(() => {
         resetArmed = false;
         btn.classList.remove("armed");
         btn.textContent = "↺ 기본값 복원";
-      }, 3200);
+      }, 8000);
       return;
     }
     resetArmed = false;
