@@ -611,6 +611,18 @@
   function subscribe(){
     S.root.child("meta").on("value", function(snap){
       S.meta = snap.val() || {state:"idle"};
+      /* 진행자 새로고침 복구: 진행 중이면 남은 시간에 맞춰 자동 마감 예약 */
+      const m = S.meta;
+      if(m.state === "playing" && m.qEndAt && m.qIndex){
+        const remain = m.qEndAt - now();
+        if(remain > 150){
+          if(!S.autoQ || S.autoQ !== m.qIndex || !S.autoEnd || S.autoEnd !== m.qEndAt) scheduleAuto(m.qIndex, remain);
+        }else if(!S.revealing){
+          S.revealing = true;
+          root_reveal(m.qIndex);
+          setTimeout(function(){ S.revealing = false; }, 1200);
+        }
+      }
       render();
     });
     S.root.child("questions").on("value", function(snap){
@@ -641,13 +653,18 @@
       state:"playing", qIndex:n, qStartAt:t0, qEndAt:t0 + QMS, qMs:QMS,
       total:TOTAL, pts:(q && q.p) || (n<=10?1:2), updatedAt:t0, scored:Math.max(0, n-1)
     });
+    scheduleAuto(n, QMS + 160);
+    if(!silent){ startTicking(); }
+  }
+
+  function scheduleAuto(n, delay){
     clearTimeout(S.autoT);
+    S.autoQ = n; S.autoEnd = (S.meta && S.meta.qEndAt) || 0;
     S.autoT = setTimeout(function(){
       if(S.meta && S.meta.state === "playing" && S.meta.qIndex === n){
         root_reveal(n);
       }
-    }, QMS + 160);
-    if(!silent){ startTicking(); }
+    }, Math.max(60, delay));
   }
 
   function root_reveal(n){
