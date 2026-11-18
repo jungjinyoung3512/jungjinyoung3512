@@ -184,8 +184,8 @@
     background:rgba(255,190,60,.05);border:1px solid rgba(255,190,60,.24)}
 
   /* ---- revealed ---- */
-  .gaugezone{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:20px;min-height:0}
-  .gbar{display:flex;height:clamp(126px,23vh,250px);border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.12);
+  .gaugezone{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:24px;min-height:0}
+  .gbar{display:flex;height:clamp(132px,30vh,330px);border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.12);
     box-shadow:0 22px 60px rgba(0,0,0,.55)}
   .gside{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;overflow:hidden;
     transition:width 1.55s cubic-bezier(.16,.9,.2,1)}
@@ -195,11 +195,10 @@
   .gside .cap{font-size:clamp(11px,1vw,14px);font-weight:900;letter-spacing:.1em;opacity:.72}
   .glegend{display:flex;align-items:center;justify-content:center;gap:26px;flex-wrap:wrap}
   .lg{display:flex;align-items:center;gap:9px;font-size:clamp(13px,1.15vw,17px);font-weight:800;color:#D6E7DF}
-  .lg .sw{width:13px;height:13px;border-radius:4px;flex:0 0 auto}
-  .lg .sw.yes{background:#2CE58B;box-shadow:0 0 14px rgba(44,229,139,.6)}
-  .lg .sw.no{background:#FF3D7F;box-shadow:0 0 14px rgba(255,61,127,.55)}
+  .lg.yes b{color:#4BFFB0}
+  .lg.no b{color:#FF7AA8}
   .lg b{font-variant-numeric:tabular-nums}
-  .total{text-align:center;font-size:clamp(13px,1.15vw,16px);font-weight:800;color:var(--muted);letter-spacing:-0.01em}
+  .total{text-align:center;font-size:clamp(14px,1.35vw,21px);font-weight:800;color:var(--muted);letter-spacing:-0.01em}
   .total b{color:#EAFBF4;font-variant-numeric:tabular-nums}
 
   .bottombar{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;
@@ -331,8 +330,8 @@
             </div>
           </div>
           <div class="glegend">
-            <div class="lg"><span class="sw yes"></span>⭕ 그렇다 <b id="cntYes">0명</b></div>
-            <div class="lg"><span class="sw no"></span>❌ 아니다 <b id="cntNo">0명</b></div>
+            <div class="lg yes">⭕ 그렇다 <b id="cntYes">0명</b></div>
+            <div class="lg no">❌ 아니다 <b id="cntNo">0명</b></div>
           </div>
           <div class="total">총 <b id="cntTotal">0</b>명 응답</div>
         </div>
