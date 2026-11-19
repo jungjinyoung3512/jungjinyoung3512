@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<title>합법적 자리 탈출기 · 강연 크리에이터 정진영</title>
+<meta name="theme-color" content="#05070c" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="자리 탈출기" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="description" content="회식·야근 자리에서 3초 만에 도망가는 가짜 긴급전화. 강연 크리에이터 정진영" />
+<style>
+  :root{
+    --bg:#05070c;
+    --gold:#ffd24a;
+    --aqua:#4de3ff;
+    --ink:#f5f7fb;
+    --dim:#93a3b5;
+    --line:rgba(255,255,255,.10);
+    --card:rgba(255,255,255,.045);
+    --red:#ff3b30;
+    --green:#34c759;
+    --safe-t:env(safe-area-inset-top,0px);
+    --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;margin:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,"Helvetica Neue",Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overscroll-behavior:none;
+    -webkit-user-select:none;user-select:none;
+    touch-action:manipulation;
+    letter-spacing:-.01em;
+  }
+  .screen{position:fixed;inset:0;display:none;flex-direction:column}
+  .screen.on{display:flex}
+
+  /* ───────────────────────── 설정 화면 */
+  #setup{overflow-y:auto;-webkit-overflow-scrolling:touch;background:
+     radial-gradient(900px 520px at 82% -12%, rgba(255,210,74,.16), transparent 62%),
+     radial-gradient(700px 460px at 6% 8%, rgba(77,227,255,.10), transparent 60%),
+     linear-gradient(180deg,#0a1019 0%,#05070c 55%,#04060a 100%);}
+  #setup::-webkit-scrollbar{display:none}
+  .wrap{width:100%;max-width:540px;margin:0 auto;padding:calc(22px + var(--safe-t)) 20px calc(30px + var(--safe-b))}
+
+  .brand{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;letter-spacing:.06em;
+    color:var(--gold);border:1px solid rgba(255,210,74,.34);background:rgba(255,210,74,.08);
+    padding:6px 12px;border-radius:99px}
+  h1{font-size:clamp(27px,8.2vw,36px);line-height:1.16;margin:16px 0 8px;font-weight:900;letter-spacing:-.035em}
+  h1 .fire{display:inline-block;transform:translateY(-1px)}
+  .sub{margin:0;color:#c3d0dd;font-size:14.5px;line-height:1.5;font-weight:600}
+  .sub b{color:#fff}
+
+  .card{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 15px 15px;
+    backdrop-filter:blur(8px)}
+  .label{font-size:12.5px;font-weight:800;color:#8fa1b4;letter-spacing:.04em;margin:0 0 10px 2px}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.05);color:#e8eef6;
+    font-family:inherit;font-size:14px;font-weight:700;padding:10px 14px;border-radius:99px;cursor:pointer;
+    transition:transform .12s,background .15s,border-color .15s,color .15s}
+  .chip:active{transform:scale(.96)}
+  .chip.sel{background:var(--gold);border-color:var(--gold);color:#221a00;box-shadow:0 6px 18px rgba(255,210,74,.24)}
+
+  .direct{display:none;gap:8px;margin-top:10px}
+  .direct.on{display:flex}
+  .direct input{flex:1;min-width:0;background:rgba(0,0,0,.34);border:1px solid rgba(255,255,255,.14);color:#fff;
+    font-family:inherit;font-size:14px;font-weight:600;padding:12px 13px;border-radius:12px;outline:none}
+  .direct input::placeholder{color:#6d7d8e;font-weight:600}
+  .direct input:focus{border-color:rgba(255,210,74,.6);background:rgba(0,0,0,.5)}
+
+  .preview{margin-top:12px;display:flex;align-items:center;gap:10px;border:1px dashed rgba(255,255,255,.16);
+    border-radius:14px;padding:10px 12px;background:rgba(0,0,0,.24)}
+  .preview .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(52,199,89,.14);flex:none}
+  .preview .txt{font-size:12.5px;color:#9fb0c1;font-weight:700}
+  .preview .txt b{color:#fff;font-weight:900;font-size:13.5px}
+  .preview .txt i{font-style:normal;color:#6f8093}
+
+  .seg{display:flex;gap:8px}
+  .seg-btn{flex:1;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.04);color:#c8d5e2;
+    font-family:inherit;font-size:13.5px;font-weight:800;padding:13px 6px;border-radius:14px;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:7px;transition:transform .12s,background .15s,border-color .15s,color .15s}
+  .seg-btn:active{transform:scale(.97)}
+  .seg-btn.sel{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.5);color:#fff}
+  .seg-btn .mini{width:34px;height:22px;border-radius:6px;border:1px solid rgba(255,255,255,.28);
+    background:linear-gradient(160deg,#243043,#0b0f16);display:flex;align-items:center;justify-content:space-between;padding:0 3px}
+  .seg-btn .mini span{width:6px;height:6px;border-radius:50%}
+  .seg-btn .mini.i{border-color:rgba(255,255,255,.34)}
+  .seg-btn .mini.g{background:linear-gradient(160deg,#123c3a,#08110f)}
+  #timerSeg .seg-btn{font-size:14px;padding:14px 4px}
+  .label2{font-size:12.5px;font-weight:800;color:#8fa1b4;letter-spacing:.04em;margin:18px 0 10px 2px}
+
+  .cta{margin-top:20px;width:100%;border:0;border-radius:19px;padding:19px 16px;font-family:inherit;
+    font-size:17.5px;font-weight:900;letter-spacing:-.02em;color:#1d1500;cursor:pointer;
+    background:linear-gradient(180deg,#ffe07a,#ffc81f);
+    box-shadow:0 12px 30px rgba(255,200,31,.28),inset 0 1px 0 rgba(255,255,255,.6);
+    transition:transform .12s,box-shadow .12s}
+  .cta:active{transform:scale(.975);box-shadow:0 6px 18px rgba(255,200,31,.24)}
+  .note{margin:11px 0 0;text-align:center;font-size:12.5px;color:#8c9caf;font-weight:700}
+  .micro{margin:16px 0 0;display:flex;flex-direction:column;gap:9px}
+  .minirow{display:flex;gap:8px}
+  .minirow button{flex:1;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);color:#b7c6d6;
+    font-family:inherit;font-size:12px;font-weight:800;padding:11px 8px;border-radius:11px;cursor:pointer}
+  .minirow button:active{transform:scale(.98)}
+  .tips{margin:12px 0 0;font-size:11.5px;line-height:1.65;color:#6f8093;font-weight:600;text-align:center}
+  .tips b{color:#9fb0c1}
+
+  .foot{margin-top:22px;border-top:1px solid rgba(255,255,255,.08);padding-top:16px;
+    display:flex;flex-direction:column;align-items:center;gap:11px}
+  .foot .fb{font-size:12px;font-weight:800;color:#7f8fa2;letter-spacing:.03em}
+  .socials{display:flex;gap:9px;width:100%}
+  .soc{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;text-decoration:none;
+    border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.05);color:#e9f0f8;
+    font-size:12.5px;font-weight:800;padding:12px 8px;border-radius:13px}
+  .soc:active{transform:scale(.98)}
+  .soc svg{width:15px;height:15px;flex:none}
+  .soc.ig{border-color:rgba(255,94,148,.35);background:rgba(255,94,148,.09)}
+  .soc.th{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.07)}
+
+  /* ───────────────────────── 대기 화면 */
+  #wait{background:radial-gradient(700px 420px at 50% 12%,#16202e,#05070c 70%);align-items:center;justify-content:center;padding:24px}
+  .wait-box{width:100%;max-width:440px;text-align:center;display:flex;flex-direction:column;align-items:center}
+  .ring{position:relative;width:190px;height:190px;margin:6px 0 26px}
+  .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .ring .track{fill:none;stroke:rgba(255,255,255,.08);stroke-width:5}
+  .ring .prog{fill:none;stroke:var(--gold);stroke-width:5;stroke-linecap:round;
+    filter:drop-shadow(0 0 8px rgba(255,210,74,.45));transition:stroke-dashoffset .12s linear}
+  .ring .num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+  .ring .num b{font-size:52px;font-weight:900;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+  .ring .num i{font-style:normal;font-size:12px;font-weight:800;color:#8fa1b4;letter-spacing:.14em}
+  .wait-title{font-size:18px;font-weight:900;line-height:1.5;margin:0 0 10px}
+  .wait-title em{font-style:normal;color:var(--gold)}
+  .wait-sub{margin:0 0 30px;font-size:13.5px;line-height:1.7;color:#9fb0c1;font-weight:600;max-width:330px}
+  .cancel{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:#dbe6f1;
+    font-family:inherit;font-size:14.5px;font-weight:800;padding:13px 40px;border-radius:99px;cursor:pointer}
+  .cancel:active{transform:scale(.97)}
+  .wake{margin-top:16px;font-size:11.5px;color:#63758a;font-weight:700}
+
+  /* ───────────────────────── 수신 / 통화 화면 공통 */
+  #call{position:fixed;inset:0;display:none;flex-direction:column;overflow:hidden}
+  #call.on{display:flex}
+  #call .bgA,#call .bgB{position:absolute;border-radius:50%;filter:blur(60px);opacity:.85;pointer-events:none}
+  #call.theme-iphone{background:linear-gradient(165deg,#2b3748 0%,#141b26 42%,#080b10 100%);color:#fff}
+  #call.theme-iphone .bgA{width:420px;height:420px;left:-120px;top:-90px;background:rgba(86,124,180,.42)}
+  #call.theme-iphone .bgB{width:460px;height:460px;right:-160px;bottom:-140px;background:rgba(255,196,120,.20)}
+  #call.theme-galaxy{background:linear-gradient(170deg,#0d3a37 0%,#0a2321 40%,#050d0c 100%);color:#fff}
+  #call.theme-galaxy .bgA{width:440px;height:440px;right:-130px;top:-120px;background:rgba(31,190,170,.44)}
+  #call.theme-galaxy .bgB{width:420px;height:420px;left:-150px;bottom:-130px;background:rgba(56,120,220,.30)}
+
+  .call-inner{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;
+    padding:calc(30px + var(--safe-t)) 24px calc(34px + var(--safe-b));min-height:0}
+
+  /* 수신 */
+  #incoming{flex:1;display:flex;flex-direction:column;min-height:0}
+  #incoming .top{text-align:center;padding-top:6vh}
+  .who{font-size:clamp(30px,9vw,38px);font-weight:900;letter-spacing:-.03em;line-height:1.2;word-break:keep-all}
+  .who-num{margin-top:8px;font-size:14px;font-weight:700;color:rgba(255,255,255,.72);font-variant-numeric:tabular-nums}
+  .status-line{margin-top:14px;display:inline-flex;align-items:center;gap:7px;font-size:14.5px;font-weight:700;
+    color:rgba(255,255,255,.86)}
+  .status-line .pulse{width:7px;height:7px;border-radius:50%;background:#5ee07f;animation:pulseDot 1.4s ease-in-out infinite}
+  @keyframes pulseDot{0%,100%{opacity:.35;transform:scale(.85)}50%{opacity:1;transform:scale(1.15)}}
+  .status-line span{animation:blink 2.2s ease-in-out infinite}
+  @keyframes blink{0%,100%{opacity:.5}50%{opacity:1}}
+
+  .call-fill{flex:1}
+  .btns{display:flex;justify-content:space-between;align-items:flex-end;padding:0 14px}
+  .btns.solo{justify-content:center}
+  .abtn{display:flex;flex-direction:column;align-items:center;gap:11px;border:0;background:none;padding:0;
+    font-family:inherit;color:inherit;cursor:pointer}
+  .abtn .circ{width:74px;height:74px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    transition:transform .12s}
+  .abtn:active .circ{transform:scale(.93)}
+  .abtn .circ svg{width:30px;height:30px}
+  .abtn .cap{font-size:12.5px;font-weight:700;color:rgba(255,255,255,.78);letter-spacing:.02em}
+  .decline .circ{background:linear-gradient(180deg,#ff5a4f,#e5221a);box-shadow:0 10px 24px rgba(229,34,26,.38)}
+  .decline .circ svg{transform:rotate(133deg)}
+  .accept .circ{background:linear-gradient(180deg,#4ce06f,#1fb54a);box-shadow:0 10px 26px rgba(31,181,74,.36)}
+  #call.theme-galaxy .accept .circ{position:relative}
+  #call.theme-galaxy .accept .circ::after{content:"";position:absolute;inset:-9px;border-radius:50%;
+    border:2px solid rgba(76,224,111,.55);animation:ripple 1.8s ease-out infinite}
+  @keyframes ripple{0%{transform:scale(.94);opacity:.85}70%{transform:scale(1.18);opacity:0}100%{opacity:0}}
+  #call.theme-galaxy .btns{justify-content:space-between}
+  #call.theme-galaxy .who{font-size:clamp(28px,8.4vw,34px)}
+  #call.theme-galaxy .top{text-align:left;padding:2vh 8px 0}
+  #call.theme-galaxy .status-line{justify-content:flex-start}
+  .galaxy-tag{font-size:12px;font-weight:800;letter-spacing:.12em;color:rgba(255,255,255,.55);margin-bottom:12px}
+
+  /* 통화 중 */
+  #incall{flex:1;display:none;flex-direction:column;min-height:0}
+  #call.state-incall #incoming{display:none}
+  #call.state-incall #incall{display:flex}
+  #incall .top{text-align:center;padding-top:7vh}
+  #incall .who{font-size:clamp(26px,7.6vw,32px)}
+  .timer{margin-top:12px;font-size:17px;font-weight:800;letter-spacing:.06em;color:rgba(255,255,255,.9);
+    font-variant-numeric:tabular-nums}
+  .toggles{display:flex;justify-content:center;gap:26px;margin-bottom:26px}
+  .tg{display:flex;flex-direction:column;align-items:center;gap:9px;border:0;background:none;padding:0;
+    font-family:inherit;color:inherit;cursor:pointer}
+  .tg .c{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.13);display:flex;align-items:center;
+    justify-content:center;transition:background .15s,color .15s,transform .12s}
+  .tg .c svg{width:26px;height:26px;color:#fff}
+  .tg .t{font-size:11.5px;font-weight:700;color:rgba(255,255,255,.7)}
+  .tg.on .c{background:#fff}
+  .tg.on .c svg{color:#111}
+  .tg.on .t{color:#fff}
+  .tg:active .c{transform:scale(.94)}
+  .endbtns{display:flex;justify-content:center;padding-bottom:6px}
+
+  /* ───────────────────────── 탈출 완료 */
+  #done{background:radial-gradient(760px 480px at 50% 0%,#1a2333,#05070c 72%);align-items:center;justify-content:center;padding:24px;
+    overflow-y:auto}
+  .done-card{width:100%;max-width:460px;text-align:center;padding:4px 0 0}
+  .big-emoji{font-size:62px;line-height:1;margin-bottom:14px;animation:pop .5s cubic-bezier(.2,1.5,.4,1)}
+  @keyframes pop{0%{transform:scale(.5);opacity:0}100%{transform:scale(1);opacity:1}}
+  .done-t{font-size:clamp(24px,7vw,29px);font-weight:900;letter-spacing:-.03em;margin:0 0 10px;line-height:1.3}
+  .done-t em{font-style:normal;color:var(--gold)}
+  .done-sub{margin:0 auto 6px;font-size:13.5px;line-height:1.7;color:#a7b6c7;font-weight:600;max-width:330px}
+  .done-meta{display:inline-block;margin:14px 0 26px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.055);
+    border-radius:99px;padding:8px 16px;font-size:12.5px;font-weight:800;color:#c9d6e3}
+  .done-meta b{color:#fff;font-variant-numeric:tabular-nums}
+  .follow-label{font-size:12px;font-weight:800;letter-spacing:.08em;color:#8b9cb0;margin:0 0 11px}
+  .follows{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+  .fbtn{display:flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;border-radius:16px;
+    padding:16px 14px;font-size:15px;font-weight:900;letter-spacing:-.01em}
+  .fbtn svg{width:19px;height:19px}
+  .fbtn.ig{background:linear-gradient(100deg,#f9ce34,#ee2a7b 52%,#6228d7);color:#fff;
+    box-shadow:0 10px 26px rgba(238,42,123,.26)}
+  .fbtn.th{background:#fff;color:#0b0b0f}
+  .fbtn:active{transform:scale(.985)}
+  .again{width:100%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:#eef4fb;
+    font-family:inherit;font-size:14.5px;font-weight:800;padding:15px;border-radius:15px;cursor:pointer}
+  .again:active{transform:scale(.985)}
+  .done-brand{margin-top:22px;font-size:12px;font-weight:800;letter-spacing:.05em;color:#7d8ea1}
+  .done-brand a{color:inherit;text-decoration:none}
+
+  @media (max-height:700px){
+    #incoming .top{padding-top:3vh}
+    #incall .top{padding-top:4vh}
+    .abtn .circ{width:68px;height:68px}
+    .ring{width:160px;height:160px}
+    .ring .num b{font-size:44px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════ 설정 -->
+<section class="screen on" id="setup">
+  <div class="wrap">
+    <div class="brand">강연 크리에이터 · 정진영</div>
+    <h1><span class="fire">🚨</span> 합법적 자리 탈출기</h1>
+    <p class="sub">회식·야근 자리에서 <b>3초 만에 도망가는</b> 가짜 긴급전화</p>
+
+    <div class="card">
+      <p class="label">누구한테 전화가 올까요?</p>
+      <div class="chips" id="chips">
+        <button class="chip sel" data-k="mom">엄마 ❤️</button>
+        <button class="chip" data-k="office">관리사무소</button>
+        <button class="chip" data-k="delivery">택배기사님</button>
+        <button class="chip" data-k="home">집 전화</button>
+        <button class="chip" data-k="boss">김팀장님</button>
+        <button class="chip" data-k="custom">직접 입력</button>
+      </div>
+      <div class="direct" id="direct">
+        <input id="cName" type="text" placeholder="발신자 이름 (예: 아빠)" maxlength="16" autocomplete="off" />
+        <input id="cNum" type="tel" placeholder="번호 (선택)" maxlength="18" autocomplete="off" />
+      </div>
+      <div class="preview">
+        <span class="dot"></span>
+        <span class="txt">수신 화면 미리보기 · <b id="pvName">엄마 ❤️</b> <i>휴대전화</i></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="label">화면 테마</p>
+      <div class="seg" id="themeSeg">
+        <button class="seg-btn sel" data-theme="iphone">
+          <span class="mini i"><span style="background:#ff453a"></span><span style="background:#30d158"></span></span>
+          아이폰 스타일
+        </button>
+        <button class="seg-btn" data-theme="galaxy">
+          <span class="mini g"><span style="background:#30d158"></span><span style="background:#ff453a"></span></span>
+          갤럭시 스타일
+        </button>
+      </div>
+      <p class="label2">몇 초 뒤에 울릴까요?</p>
+      <div class="seg" id="timerSeg">
+        <button class="seg-btn sel" data-sec="5">5초 뒤</button>
+        <button class="seg-btn" data-sec="10">10초 뒤</button>
+        <button class="seg-btn" data-sec="30">30초 뒤</button>
+        <button class="seg-btn" data-sec="60">1분 뒤</button>
+      </div>
+    </div>
+
+    <button class="cta" id="reserve">📞 긴급전화 예약하기</button>
+    <p class="note">무음 모드를 해제하면 실제 벨소리가 울립니다</p>
+
+    <div class="micro">
+      <div class="minirow">
+        <button id="previewRing">🔔 벨소리 미리 듣기</button>
+        <button id="fullscreenBtn">⛶ 전체화면으로 열기</button>
+      </div>
+      <p class="tips"><b>홈 화면에 추가</b>하면 진짜 전화처럼 뜹니다 · iPhone 공유 → <b>홈 화면에 추가</b> / Android Chrome 메뉴 → <b>홈 화면에 추가</b></p>
+    </div>
+
+    <footer class="foot">
+      <span class="fb">강연 크리에이터 · 정진영</span>
+      <div class="socials">
+        <a class="soc ig" href="https://www.instagram.com/_j_jin0/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.06 1.8.25 2.2.42.6.23 1 .5 1.4.9.4.4.7.8.9 1.4.17.4.36 1 .42 2.2.06 1.3.07 1.7.07 4.9s0 3.6-.07 4.9c-.06 1.2-.25 1.8-.42 2.2-.23.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.17-1 .36-2.2.42-1.3.06-1.7.07-4.9.07s-3.6 0-4.9-.07c-1.2-.06-1.8-.25-2.2-.42-.6-.23-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.17-.4-.36-1-.42-2.2C2.21 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.06-1.2.25-1.8.42-2.2.23-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.17 1-.36 2.2-.42C8.4 2.21 8.8 2.2 12 2.2zm0 3.3a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zm0 10.7a4.2 4.2 0 1 1 0-8.4 4.2 4.2 0 0 1 0 8.4zm6.8-11a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg>
+          인스타그램
+        </a>
+        <a class="soc th" href="https://www.threads.com/@_j_jin0" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.5 2C7 2 3.6 5.9 3.6 12s3.4 10 8.9 10c4.4 0 7.3-2.3 7.3-5.5 0-2.9-2.1-4.7-5.3-4.9-.4-1.9-1.6-3-3.5-3-1.6 0-2.9.9-3.3 2.2l1.8.6c.2-.7.8-1.1 1.5-1.1.9 0 1.4.5 1.5 1.5-2.9.1-4.7 1.4-4.7 3.6 0 1.9 1.6 3.2 3.8 3.2 2 0 3.4-.9 4-2.3.4.5.6 1.1.6 1.9 0 2.1-1.8 3.6-4.6 3.6-4.2 0-6.9-3-6.9-7.8S7.6 4.2 12.4 4.2c3.4 0 5.6 1.4 6.6 3.9l1.8-.8C19.4 4.1 16.5 2 12.5 2zm-.6 12.5c-1.2 0-2.1-.6-2.1-1.5 0-1 1-1.6 2.9-1.7.1 2-.4 3.2-.8 3.2z"/></svg>
+          스레드
+        </a>
+      </div>
+    </footer>
+  </div>
+</section>
+
+<!-- ══════════════════════════ 대기 -->
+<section class="screen" id="wait">
+  <div class="wait-box">
+    <div class="ring">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle class="track" cx="60" cy="60" r="54"></circle>
+        <circle class="prog" id="prog" cx="60" cy="60" r="54" stroke-dasharray="339.29" stroke-dashoffset="0"></circle>
+      </svg>
+      <div class="num"><b id="wNum">5</b><i>SEC</i></div>
+    </div>
+    <p class="wait-title"><em id="wSec">5초</em> 뒤 전화가 울립니다</p>
+    <p class="wait-sub">폰을 책상 위나 주머니에 두고<br />모르는 척 자연스럽게 계세요</p>
+    <button class="cancel" id="cancelBtn">취소</button>
+    <p class="wake">화면이 꺼지면 벨소리가 늦을 수 있어요 · 화면을 켜 두세요</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════ 수신 / 통화 -->
+<section id="call" class="theme-iphone">
+  <div class="bgA"></div><div class="bgB"></div>
+  <div class="call-inner">
+    <!-- 수신 -->
+    <div id="incoming">
+      <div class="top">
+        <div class="galaxy-tag" id="galaxyTag" hidden>수신 전화</div>
+        <div class="who" id="callName">엄마 ❤️</div>
+        <div class="who-num" id="callNum">010-0000-1234</div>
+        <div class="status-line"><span class="pulse"></span><span>수신 전화…</span></div>
+        <div class="galaxy-tag" id="galaxyTag2" hidden style="margin-top:14px">밀어서 받기</div>
+      </div>
+      <div class="call-fill"></div>
+      <div class="btns">
+        <button class="abtn decline" id="declineBtn">
+          <span class="circ"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.24.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z"/></svg></span>
+          <span class="cap">거절</span>
+        </button>
+        <button class="abtn accept" id="acceptBtn">
+          <span class="circ"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.24.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z"/></svg></span>
+          <span class="cap">응답</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 통화 중 -->
+    <div id="incall">
+      <div class="top">
+        <div class="who" id="callName2">엄마 ❤️</div>
+        <div class="timer" id="callTimer">00:00</div>
+      </div>
+      <div class="call-fill"></div>
+      <div class="toggles">
+        <button class="tg" data-tg="spk">
+          <span class="c"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 10v4h3.5L11 18V6L6.5 10H3zm11.5 2a3.5 3.5 0 0 0-2-3.15v6.3c1.2-.5 2-1.7 2-3.15zm-2-7.1v2.06c2.3.7 4 2.8 4 5.04s-1.7 4.34-4 5.04v2.06c3.45-.75 6-3.8 6-7.1s-2.55-6.35-6-7.1z"/></svg></span>
+          <span class="t">스피커</span>
+        </button>
+        <button class="tg" data-tg="mute">
+          <span class="c"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-9.9 1H5.04A7 7 0 0 0 11 18.92V22h2v-3.08A7 7 0 0 0 19 12v-1h-2v0z"/><path d="M3.3 3.3l17.4 17.4" stroke="#111" stroke-width="0"/></svg></span>
+          <span class="t">음소거</span>
+        </button>
+        <button class="tg" data-tg="pad">
+          <span class="c"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="6" r="1.8"/><circle cx="12" cy="6" r="1.8"/><circle cx="18" cy="6" r="1.8"/><circle cx="6" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="18" cy="12" r="1.8"/><circle cx="6" cy="18" r="1.8"/><circle cx="12" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/></svg></span>
+          <span class="t">키패드</span>
+        </button>
+      </div>
+      <div class="endbtns">
+        <button class="abtn decline" id="hangupBtn">
+          <span class="circ"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.24.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z"/></svg></span>
+          <span class="cap">통화 종료</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════ 탈출 완료 -->
+<section class="screen" id="done">
+  <div class="done-card">
+    <div class="big-emoji">😎</div>
+    <p class="done-t">오늘도 <em>합법적 탈출</em> 성공!</p>
+    <p class="done-sub">이제 자리에서 조용히 일어나면 됩니다.<br />다음 회식엔 이 앱 하나면 충분해요.</p>
+    <div class="done-meta"><span id="doneLabel">통화 시간</span> <b id="doneTime">00:07</b> · <span id="doneName">엄마 ❤️</span></div>
+    <p class="follow-label">만든 사람의 진짜 이야기는 여기서</p>
+    <div class="follows">
+      <a class="fbtn ig" href="https://www.instagram.com/_j_jin0/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.06 1.8.25 2.2.42.6.23 1 .5 1.4.9.4.4.7.8.9 1.4.17.4.36 1 .42 2.2.06 1.3.07 1.7.07 4.9s0 3.6-.07 4.9c-.06 1.2-.25 1.8-.42 2.2-.23.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.17-1 .36-2.2.42-1.3.06-1.7.07-4.9.07s-3.6 0-4.9-.07c-1.2-.06-1.8-.25-2.2-.42-.6-.23-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.17-.4-.36-1-.42-2.2C2.21 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.06-1.2.25-1.8.42-2.2.23-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.17 1-.36 2.2-.42C8.4 2.21 8.8 2.2 12 2.2zm0 3.3a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zm0 10.7a4.2 4.2 0 1 1 0-8.4 4.2 4.2 0 0 1 0 8.4zm6.8-11a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg>
+        인스타그램 팔로우
+      </a>
+      <a class="fbtn th" href="https://www.threads.com/@_j_jin0" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.5 2C7 2 3.6 5.9 3.6 12s3.4 10 8.9 10c4.4 0 7.3-2.3 7.3-5.5 0-2.9-2.1-4.7-5.3-4.9-.4-1.9-1.6-3-3.5-3-1.6 0-2.9.9-3.3 2.2l1.8.6c.2-.7.8-1.1 1.5-1.1.9 0 1.4.5 1.5 1.5-2.9.1-4.7 1.4-4.7 3.6 0 1.9 1.6 3.2 3.8 3.2 2 0 3.4-.9 4-2.3.4.5.6 1.1.6 1.9 0 2.1-1.8 3.6-4.6 3.6-4.2 0-6.9-3-6.9-7.8S7.6 4.2 12.4 4.2c3.4 0 5.6 1.4 6.6 3.9l1.8-.8C19.4 4.1 16.5 2 12.5 2zm-.6 12.5c-1.2 0-2.1-.6-2.1-1.5 0-1 1-1.6 2.9-1.7.1 2-.4 3.2-.8 3.2z"/></svg>
+        스레드 팔로우
+      </a>
+    </div>
+    <button class="again" id="againBtn">📞 다시 예약하기</button>
+    <p class="done-brand">강연 크리에이터 · 정진영</p>
+  </div>
+</section>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ── 발신자 프리셋 ─────────────────────────────── */
+  var CALLERS = {
+    mom:      { name:"엄마 ❤️",     num:"010-0000-1234" },
+    office:   { name:"관리사무소",   num:"02-0000-1234"  },
+    delivery: { name:"택배기사님",   num:"010-0000-5678" },
+    home:     { name:"집 전화",      num:"02-0000-1111"  },
+    boss:     { name:"김팀장님",     num:"010-0000-3333" }
+  };
+
+  var state = { key:"mom", name:CALLERS.mom.name, num:CALLERS.mom.num, theme:"iphone", sec:5 };
+
+  var $ = function(id){ return document.getElementById(id); };
+  var screens = { setup:$("setup"), wait:$("wait"), call:$("call"), done:$("done") };
+
+  function show(which){
+    Object.keys(screens).forEach(function(k){ screens[k].classList.toggle("on", k===which); });
+    if(which!=="setup"){ window.scrollTo(0,0); }
+  }
+
+  /* ── 발신자 선택 ───────────────────────────────── */
+  var chips = [].slice.call(document.querySelectorAll("#chips .chip"));
+  chips.forEach(function(btn){
+    btn.addEventListener("click", function(){
+      chips.forEach(function(b){ b.classList.remove("sel"); });
+      btn.classList.add("sel");
+      var k = btn.dataset.k;
+      $("direct").classList.toggle("on", k==="custom");
+      state.key = k;
+      if(k==="custom"){
+        var n = $("cName").value.trim();
+        state.name = n || "엄마";
+        state.num  = $("cNum").value.trim() || "010-0000-0000";
+        if(n){ setTimeout(function(){ $("cName").focus(); }, 60); }
+      }else{
+        state.name = CALLERS[k].name;
+        state.num  = CALLERS[k].num;
+      }
+      paintPreview();
+    });
+  });
+  $("cName").addEventListener("input", function(){
+    state.name = this.value.trim() || "엄마";
+    paintPreview();
+  });
+  $("cNum").addEventListener("input", function(){
+    state.num = this.value.trim() || "010-0000-0000";
+    paintPreview();
+  });
+  function paintPreview(){ $("pvName").textContent = state.name; }
+
+  /* ── 테마 / 타이머 ─────────────────────────────── */
+  [].slice.call(document.querySelectorAll("#themeSeg .seg-btn")).forEach(function(b){
+    b.addEventListener("click", function(){
+      [].slice.call(document.querySelectorAll("#themeSeg .seg-btn")).forEach(function(x){ x.classList.remove("sel"); });
+      b.classList.add("sel");
+      state.theme = b.dataset.theme;
+    });
+  });
+  [].slice.call(document.querySelectorAll("#timerSeg .seg-btn")).forEach(function(b){
+    b.addEventListener("click", function(){
+      [].slice.call(document.querySelectorAll("#timerSeg .seg-btn")).forEach(function(x){ x.classList.remove("sel"); });
+      b.classList.add("sel");
+      state.sec = parseInt(b.dataset.sec,10);
+    });
+  });
+
+  /* ── 오디오: 벨소리 엔진 (Web Audio) ───────────── */
+  var ac=null, master=null, ringGain=null, ringTimer=null, ringing=false;
+
+  function initAudio(){
+    try{
+      if(!ac){
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if(!AC) return null;
+        ac = new AC();
+        master = ac.createGain();
+        master.gain.value = 0.75;
+        master.connect(ac.destination);
+      }
+      if(ac.state === "suspended"){ ac.resume(); }
+      // iOS: 무음 버퍼로 컨텍스트 잠금 해제
+      try{
+        var b = ac.createBuffer(1,1,22050);
+        var s = ac.createBufferSource();
+        s.buffer = b; s.connect(ac.destination); s.start(0);
+      }catch(e){}
+      return ac;
+    }catch(e){ return null; }
+  }
+
+  function tone(t, freq, dur, vol, type){
+    if(!ac) return;
+    var o = ac.createOscillator(), g = ac.createGain();
+    o.type = type || "triangle";
+    o.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(vol, t + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0002, t + dur);
+    o.connect(g); g.connect(ringGain);
+    o.start(t); o.stop(t + dur + 0.03);
+    // 금속성 배음
+    var o2 = ac.createOscillator(), g2 = ac.createGain();
+    o2.type = "sine";
+    o2.frequency.setValueAtTime(freq * 2.01, t);
+    g2.gain.setValueAtTime(0.0001, t);
+    g2.gain.linearRampToValueAtTime(vol * 0.28, t + 0.006);
+    g2.gain.exponentialRampToValueAtTime(0.0002, t + dur * 0.55);
+    o2.connect(g2); g2.connect(ringGain);
+    o2.start(t); o2.stop(t + dur + 0.03);
+  }
+
+  // 아이폰 느낌: 밝은 벨 아르페지오
+  var SEQ_IPHONE = [
+    [523.25, 0.00], [659.25, 0.14], [783.99, 0.28], [1046.50, 0.42],
+    [783.99, 0.60], [1046.50, 0.74], [1318.51, 0.88], [1046.50, 1.02]
+  ];
+  // 갤럭시 느낌: 부드러운 플럭 아르페지오
+  var SEQ_GALAXY = [
+    [392.00, 0.00], [493.88, 0.16], [587.33, 0.32], [783.99, 0.48],
+    [587.33, 0.70], [493.88, 0.88], [392.00, 1.06]
+  ];
+
+  function ringCycle(){
+    if(!ac || !ringing) return;
+    var t0 = ac.currentTime + 0.03;
+    var seq = state.theme === "galaxy" ? SEQ_GALAXY : SEQ_IPHONE;
+    var vol = state.theme === "galaxy" ? 0.30 : 0.26;
+    for(var i=0;i<seq.length;i++){
+      tone(t0 + seq[i][1], seq[i][0], 0.55, vol, state.theme === "galaxy" ? "sine" : "triangle");
+    }
+    // 저음 베이스로 두께
+    tone(t0, state.theme === "galaxy" ? 196 : 261.63, 1.1, vol * 0.55, "sine");
+    try{ if(navigator.vibrate) navigator.vibrate(state.theme === "galaxy" ? [520,260,520] : [420,300,420]); }catch(e){}
+  }
+
+  function startRing(){
+    if(ringing) return;
+    if(!initAudio()) return;
+    ringing = true;
+    ringGain = ac.createGain();
+    ringGain.gain.value = 0;
+    ringGain.connect(master);
+    ringGain.gain.linearRampToValueAtTime(1, ac.currentTime + 0.06);
+    ringCycle();
+    var period = state.theme === "galaxy" ? 2600 : 2300;
+    ringTimer = setInterval(ringCycle, period);
+  }
+
+  function stopRing(){
+    ringing = false;
+    if(ringTimer){ clearInterval(ringTimer); ringTimer = null; }
+    try{ if(navigator.vibrate) navigator.vibrate(0); }catch(e){}
+    if(ac && ringGain){
+      try{
+        var g = ringGain;
+        g.gain.cancelScheduledValues(ac.currentTime);
+        g.gain.setValueAtTime(g.gain.value || 1, ac.currentTime);
+        g.gain.linearRampToValueAtTime(0.0001, ac.currentTime + 0.12);
+        setTimeout(function(){ try{ g.disconnect(); }catch(e){} }, 400);
+      }catch(e){}
+      ringGain = null;
+    }
+  }
+
+  /* ── 화면 깨우기 ───────────────────────────────── */
+  var wakeLock = null, wantAwake = false;
+  function keepAwake(on){
+    wantAwake = on;
+    if(!on){ if(wakeLock){ try{ wakeLock.release(); }catch(e){} wakeLock = null; } return; }
+    try{
+      if("wakeLock" in navigator && !wakeLock){
+        navigator.wakeLock.request("screen").then(function(l){
+          wakeLock = l;
+          l.addEventListener("release", function(){ wakeLock = null; });
+        }).catch(function(){});
+      }
+    }catch(e){}
+  }
+  document.addEventListener("visibilitychange", function(){
+    if(document.visibilityState === "visible"){
+      if(wantAwake) keepAwake(true);
+      if(ac && ac.state === "suspended"){ try{ ac.resume(); }catch(e){} }
+      if(state.phase === "waiting" && Date.now() >= deadline){ fire(); }
+    }
+  });
+
+  /* ── 예약 → 대기 → 수신 ────────────────────────── */
+  var deadline = 0, tickId = null, callStart = 0, callTick = null;
+  var RING_LEN = 339.29;
+
+  function reserve(){
+    state.phase = "waiting";
+    state.called = false;
+    callStart = 0;
+    $("callName").textContent = state.name;
+    $("callName2").textContent = state.name;
+    $("callNum").textContent = state.num;
+    $("doneName").textContent = state.name;
+    $("wSec").textContent = state.sec >= 60 ? "1분" : state.sec + "초";
+    $("wNum").textContent = state.sec >= 60 ? "60" : state.sec;
+    $("prog").setAttribute("stroke-dashoffset", "0");
+    show("wait");
+    keepAwake(true);
+    deadline = Date.now() + state.sec * 1000;
+    if(tickId) clearInterval(tickId);
+    tickId = setInterval(function(){
+      var left = Math.max(0, deadline - Date.now());
+      var sec = Math.ceil(left/1000);
+      $("wNum").textContent = sec;
+      var frac = left / (state.sec * 1000);
+      $("prog").setAttribute("stroke-dashoffset", String(RING_LEN * (1 - frac)));
+      if(left <= 0){ clearInterval(tickId); tickId = null; fire(); }
+    }, 80);
+  }
+
+  function fire(){
+    if(state.phase === "ringing" || state.phase === "incall") return;
+    state.phase = "ringing";
+    if(tickId){ clearInterval(tickId); tickId = null; }
+    var call = screens.call;
+    call.className = "theme-" + state.theme + " on";
+    call.classList.remove("state-incall");
+    var gal = state.theme === "galaxy";
+    $("galaxyTag").hidden = !gal;
+    $("galaxyTag2").hidden = !gal;
+    // 갤럭시는 응답(초록) 왼쪽, 거절(빨강) 오른쪽
+    var btns = document.querySelector("#incoming .btns");
+    if(gal){ btns.insertBefore($("acceptBtn"), $("declineBtn")); }
+    else   { btns.insertBefore($("declineBtn"), $("acceptBtn")); }
+    show("call");
+    startRing();
+  }
+
+  function cancel(){
+    state.phase = "idle";
+    if(tickId){ clearInterval(tickId); tickId = null; }
+    stopRing();
+    keepAwake(false);
+    show("setup");
+  }
+
+  function accept(){
+    stopRing();
+    state.phase = "incall";
+    screens.call.classList.add("state-incall");
+    callStart = Date.now();
+    state.called = true;
+    $("callTimer").textContent = "00:00";
+    if(callTick) clearInterval(callTick);
+    callTick = setInterval(function(){
+      var s = Math.floor((Date.now() - callStart)/1000);
+      $("callTimer").textContent = pad(Math.floor(s/60)) + ":" + pad(s%60);
+    }, 250);
+  }
+
+  function pad(n){ return (n<10?"0":"") + n; }
+
+  function finish(){
+    state.phase = "done";
+    if(tickId){ clearInterval(tickId); tickId = null; }
+    if(callTick){ clearInterval(callTick); callTick = null; }
+    stopRing();
+    keepAwake(false);
+    var s = callStart ? Math.floor((Date.now() - callStart)/1000) : 0;
+    $("doneLabel").textContent = state.called ? "통화 시간" : "안 받고 탈출";
+    $("doneTime").textContent = pad(Math.floor(s/60)) + ":" + pad(s%60);
+    show("done");
+  }
+
+  /* ── 바인딩 ───────────────────────────────────── */
+  $("reserve").addEventListener("click", function(){
+    initAudio();                 // ← 여기서 오디오 잠금 해제
+    if(ac && ac.state === "suspended"){ try{ ac.resume(); }catch(e){} }
+    reserve();
+  });
+  $("cancelBtn").addEventListener("click", cancel);
+  $("acceptBtn").addEventListener("click", accept);
+  $("declineBtn").addEventListener("click", finish);
+  $("hangupBtn").addEventListener("click", finish);
+  $("againBtn").addEventListener("click", function(){ state.phase="idle"; show("setup"); });
+  $("previewRing").addEventListener("click", function(){
+    if(ringing){ stopRing(); return; }
+    if(!initAudio()){ return; }
+    var was = state.phase;
+    state.phase = "preview";
+    ringing = true;
+    ringGain = ac.createGain();
+    ringGain.gain.value = 1;
+    ringGain.connect(master);
+    ringCycle();
+    setTimeout(function(){
+      ringGain && (ringGain.gain.linearRampToValueAtTime(0.0001, ac.currentTime + 0.3));
+      ringing = false;
+      setTimeout(function(){ if(ringGain){ try{ ringGain.disconnect(); }catch(e){} ringGain = null; } }, 500);
+      state.phase = was;
+    }, 2300);
+  });
+  $("fullscreenBtn").addEventListener("click", function(){
+    var el = document.documentElement;
+    var fn = el.requestFullscreen || el.webkitRequestFullscreen;
+    if(fn){ try{ fn.call(el); }catch(e){} }
+  });
+  [].slice.call(document.querySelectorAll(".tg")).forEach(function(b){
+    b.addEventListener("click", function(){ b.classList.toggle("on"); });
+  });
+  window.addEventListener("keydown", function(e){
+    if(e.key === "Escape"){
+      if(state.phase === "waiting" || state.phase === "ringing"){ cancel(); }
+      else if(state.phase === "incall"){ finish(); }
+    }
+  });
+  state.phase = "idle";
+  paintPreview();
+})();
+</script>
+</body>
+</html>
