@@ -852,13 +852,29 @@
     S.lastSeq = ev.seq;
     const idx = targets.indexOf(UID);
     if(idx < 0) return;
-    fireAlert(ev.type, idx + 1);
+    if(ev.type === "wrong") fireAlert("wrong", 0, Number(ev.qIndex || 0));
+    else fireAlert(ev.type, idx + 1);
   }
 
-  function fireAlert(type, rank){
+  function fireAlert(type, rank, qIndex){
     const ov = $("alertOv");
+    const wrong = (type === "wrong");
     const gold = (type === "top3");
     ov.className = "alertov on " + (gold ? "gold" : "red");
+    if(wrong){
+      $("alEmoji").textContent = "❌";
+      $("alBadge").textContent = qIndex ? ("Q" + qIndex + " 오답") : "오답 알림";
+      $("alRank").textContent = "";
+      $("alRank").style.display = "none";
+      $("alName").textContent = (S.me && S.me.name) || "-";
+      $("alPts").textContent = fmt((S.me && S.me.score) || 0);
+      $("alTip").textContent = "탭하면 닫혀요 · 다음 문제에서 만회!";
+      playDespair();
+      clearTimeout(S.alertT);
+      S.alertT = setTimeout(hideAlert, 6200);
+      return;
+    }
+    $("alRank").style.display = "";
     $("alEmoji").textContent = gold ? (rank === 1 ? "🏆" : rank === 2 ? "🥈" : "🥉") : (rank === 1 ? "💀" : "😱");
     $("alBadge").textContent = gold ? (rank + "등") : ("꼴등 " + rank + "등");
     $("alRank").textContent = String(rank);

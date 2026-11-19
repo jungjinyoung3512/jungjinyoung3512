@@ -76,6 +76,9 @@
   .cbtn.last:hover{background:rgba(255,61,127,.18)}
   .cbtn.danger{border-color:rgba(255,61,127,.26);background:rgba(255,61,127,.06);color:#E9A6B9}
   .cbtn.danger:hover{background:rgba(255,61,127,.14)}
+  .cbtn.wrong{border-color:rgba(255,61,127,.46);background:rgba(255,61,127,.14);color:#FFD3DE}
+  .cbtn.wrong:hover{background:rgba(255,61,127,.24);border-color:rgba(255,61,127,.62)}
+  .cbtn.wrong b{font-family:var(--mono);font-size:11px;font-weight:800;color:#FF9DB8;opacity:.9}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
   .prog{height:7px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:2px}
   .prog i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#FFD24A,#FF8A1F);transition:width .3s}
@@ -166,9 +169,12 @@
   .ov{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;padding:32px;
     background:rgba(3,5,8,.78);backdrop-filter:blur(8px)}
   .ov.on{display:flex}
-  .rankcard{width:min(880px,92vw);border-radius:26px;padding:26px 30px 24px;border:1px solid var(--line2);
+  .rankcard{width:min(880px,92vw);max-height:88vh;display:flex;flex-direction:column;border-radius:26px;padding:26px 30px 24px;border:1px solid var(--line2);
     background:linear-gradient(180deg, rgba(24,20,8,.97), rgba(9,11,16,.98));box-shadow:0 40px 90px rgba(0,0,0,.62);
     animation:cardpop .34s cubic-bezier(.2,1.4,.4,1) both}
+  #rankRows{min-height:0;overflow:auto;padding-right:4px}
+  #rankRows::-webkit-scrollbar{width:8px}
+  #rankRows::-webkit-scrollbar-thumb{background:rgba(255,61,127,.34);border-radius:99px}
   .rankcard.bad{border-color:rgba(255,61,127,.4);background:linear-gradient(180deg, rgba(34,9,17,.97), rgba(10,8,12,.98))}
   @keyframes cardpop{0%{transform:translateY(14px) scale(.97);opacity:0}100%{transform:none;opacity:1}}
   .rankcard .rh{display:flex;align-items:center;gap:12px;margin-bottom:16px}
@@ -189,8 +195,20 @@
   .rrow .sc{flex:0 0 auto;font-family:var(--mono);font-size:clamp(24px,2.8vw,36px);font-weight:800;color:#FFD24A;letter-spacing:-0.03em}
   .rankcard.bad .rrow .sc{color:#FF8DA8}
   .rrow .sc small{font-size:13px;font-weight:800;opacity:.8;margin-left:2px}
-  .rnote{margin-top:12px;font-size:12px;font-weight:700;color:#7B8F9C;text-align:center;line-height:1.5}
+  .rnote{margin-top:12px;font-size:12px;font-weight:700;color:#7B8F9C;text-align:center;line-height:1.5;flex:0 0 auto}
   .rankcard .none{text-align:center;font-size:14px;color:#93A7B4;font-weight:700;padding:26px 0}
+  /* 틀린 사람 목록 */
+  .wrow{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:11px;margin-bottom:6px;
+    border:1px solid rgba(255,61,127,.24);background:rgba(255,61,127,.08)}
+  .wrow.blank{border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.035)}
+  .wrow .medal{font-size:18px;flex:0 0 auto;width:24px;text-align:center}
+  .wrow .pos{flex:0 0 auto;font-size:10.5px;font-weight:900;letter-spacing:.04em;color:#FF9DB8;
+    border:1px solid rgba(255,61,127,.4);border-radius:999px;padding:3px 9px;white-space:nowrap}
+  .wrow.blank .pos{color:#A9BCC8;border-color:rgba(255,255,255,.18)}
+  .wrow .nm{flex:1;min-width:0;font-size:16.5px;font-weight:800;color:#FFFDF7;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:-0.01em}
+  .wrow .sc{flex:0 0 auto;font-family:var(--mono);font-size:15px;font-weight:800;color:#FF8DA8;letter-spacing:-0.02em}
+  .wrow.blank .sc{color:#A9BCC8}
 
   /* ───────── 모달 ───────── */
   .modal{position:fixed;inset:0;z-index:75;display:none;align-items:center;justify-content:center;padding:26px;
@@ -274,9 +292,10 @@
         <button class="cbtn rank" id="rankBtn">🏆 현재 순위</button>
         <button class="cbtn last" id="lastBtn">💀 꼴등</button>
       </div>
+      <button class="cbtn wrong" id="wrongBtn">🚨 틀린 사람 <b>W</b></button>
       <button class="cbtn danger" id="clearBtn">🧹 방 비우기</button>
       <div class="prog"><i id="progBar"></i></div>
-      <div class="keys">단축키 · Space 시작/다음 · R 순위 · B 꼴등</div>
+      <div class="keys">단축키 · Space 시작/다음 · R 순위 · B 꼴등 · W 틀린 사람</div>
       <div class="sec-t">참가자 명단</div>
       <div class="plist" id="plist"><div class="empty">아직 입장한 참가자가 없습니다</div></div>
     </aside>
@@ -802,6 +821,78 @@
   }
 
   /* =========================================================
+     지금 문제 틀린 사람 (오답 + 미응답)
+     ========================================================= */
+  function showWrong(){
+    const m = S.meta || {};
+    const qi = Number(m.qIndex || 0);
+    if(!qi || m.state === "idle" || m.state === "ended"){
+      toast("아직 문제가 없어요 · 문제를 시작한 뒤 확인할 수 있어요");
+      return;
+    }
+    if(m.state === "playing"){
+      toast("정답 공개 후 확인할 수 있어요");
+      return;
+    }
+    const all = sortedPlayers();
+    if(!all.length){
+      toast("아직 입장한 참가자가 없습니다");
+      return;
+    }
+    const ansQ = (S.answers && S.answers[qi]) || {};
+    const endAt = Number(m.qEndAt || 0);
+    const wrong = [], blank = [];
+    all.forEach(function(p){
+      const a = ansQ[p.uid];
+      if(a){ if(!a.correct) wrong.push(p); return; }
+      /* 문제가 마감된 뒤에 입장한 사람은 이 문제를 못 본 사람이므로 제외 */
+      if(p.joinedAt && endAt && p.joinedAt > endAt) return;
+      blank.push(p);
+    });
+    const byScore = function(a, b){
+      if(b.score !== a.score) return b.score - a.score;
+      return a.name.localeCompare(b.name, "ko");
+    };
+    wrong.sort(byScore); blank.sort(byScore);
+
+    $("rankTitle").textContent = wrong.length + blank.length ? ("🚨 " + qi + "번 문제 틀린 사람") : ("🎉 " + qi + "번 문제 전원 정답");
+    $("rankSub").textContent = wrong.length + blank.length
+      ? ("틀린 사람 " + (wrong.length + blank.length) + "명 · 오답 " + wrong.length + " · 미응답 " + blank.length)
+      : "이번 문제는 모두 맞혔습니다";
+    $("rankCard").classList.toggle("bad", (wrong.length + blank.length) > 0);
+
+    if(!wrong.length && !blank.length){
+      $("rankRows").innerHTML = '<div class="none">🎉 전원 정답입니다!<br><span style="font-size:12.5px;color:#8FA3B0">청중 폰에는 알림을 보내지 않았습니다</span></div>';
+      $("rankNote").textContent = "다음 문제로 넘어가세요";
+    }else{
+      const row = function(p, isBlank){
+        return '<div class="wrow' + (isBlank ? " blank" : "") + '">' +
+          '<span class="medal">' + (isBlank ? "⏳" : "❌") + '</span>' +
+          '<span class="pos">' + (isBlank ? "미응답" : "오답") + '</span>' +
+          '<span class="nm">' + esc(p.name) + '</span>' +
+          '<span class="sc">' + fmt(p.score) + '</span>' +
+        '</div>';
+      };
+      $("rankRows").innerHTML = wrong.map(function(p){ return row(p, false); }).join("") +
+                                 blank.map(function(p){ return row(p, true); }).join("");
+      $("rankNote").textContent = "틀린 " + (wrong.length + blank.length) + "명의 폰이 붉게 번쩍이고 경고음이 울립니다 · 20초 후 자동으로 닫힙니다";
+    }
+
+    $("rankOv").classList.add("on");
+    clearTimeout(S.hideRankT);
+    S.hideRankT = setTimeout(function(){ $("rankOv").classList.remove("on"); }, 20000);
+
+    if(wrong.length || blank.length){
+      S.root.child("alertEvent").set({
+        type: "wrong",
+        qIndex: qi,
+        seq: Date.now(),
+        targets: wrong.concat(blank).map(function(p){ return p.uid; })
+      });
+    }
+  }
+
+  /* =========================================================
      방 비우기
      ========================================================= */
   function clearRoom(){
@@ -1023,6 +1114,7 @@
   $("nextBtn").addEventListener("click", function(){ unlockAudio(); startNext(); });
   $("rankBtn").addEventListener("click", function(){ unlockAudio(); showRank("top3"); });
   $("lastBtn").addEventListener("click", function(){ unlockAudio(); showRank("bottom3"); });
+  $("wrongBtn").addEventListener("click", function(){ unlockAudio(); showWrong(); });
   $("clearBtn").addEventListener("click", clearRoom);
   $("rankClose").addEventListener("click", function(){ clearTimeout(S.hideRankT); $("rankOv").classList.remove("on"); });
   $("rankOv").addEventListener("click", function(e){ if(e.target === $("rankOv")) $("rankOv").classList.remove("on"); });
@@ -1075,6 +1167,7 @@
     if(e.code === "Space"){ e.preventDefault(); startOrNext(); }
     else if(e.key === "r" || e.key === "R"){ showRank("top3"); }
     else if(e.key === "b" || e.key === "B"){ showRank("bottom3"); }
+    else if(e.key === "w" || e.key === "W"){ showWrong(); }
     else if(e.key === "Escape"){ $("rankOv").classList.remove("on"); }
   });
 
