@@ -126,6 +126,11 @@
   .btn-sound{background:rgba(245,158,11,.12);color:#FCD34D;border:1px solid rgba(245,158,11,.45)}
   .btn-sound:hover{background:rgba(245,158,11,.2)}
   .btn-sound.off{background:rgba(255,255,255,.04);color:#8496AE;border-color:var(--line-strong)}
+  .btn-waitmusic{background:rgba(56,189,248,.12);color:#93C5FD;border:1px solid rgba(56,189,248,.42)}
+  .btn-waitmusic:hover{background:rgba(56,189,248,.2)}
+  .btn-waitmusic.off{background:rgba(255,255,255,.04);color:#8496AE;border-color:var(--line-strong)}
+  .btn-waitmusic.play{animation:wmbreathe 2.8s ease-in-out infinite}
+  @keyframes wmbreathe{0%,100%{opacity:1}50%{opacity:.66}}
   .btn-qr{background:rgba(255,255,255,.05);color:#DCE6F2;border:1px solid var(--line-strong)}
   .btn-qr:hover{background:rgba(255,255,255,.1)}
   .btn-spot{background:linear-gradient(180deg,rgba(252,211,77,.2),rgba(245,158,11,.13));color:#FCD34D;border:1px solid rgba(245,158,11,.45)}
@@ -460,6 +465,7 @@
       <button class="btn btn-ghost" id="gridBtn" type="button">📋 <span class="lbl2">한눈에 보기</span></button>
       <button class="btn btn-clear" id="clearBtn" type="button">🧹 <span class="lbl2">비우기</span></button>
       <button class="btn btn-sound" id="soundBtn" type="button" aria-pressed="true">🔊 <span class="lbl2">소리 ON</span></button>
+      <button class="btn btn-waitmusic" id="waitMusicBtn" type="button" aria-pressed="true" title="작성 대기 중 배경음악 (뮤지컬 서편제 · 살다보면)">🎵 <span class="lbl2">대기 음악 ON</span></button>
       <button class="btn btn-qr" id="qrBtn" type="button">📱 <span class="lbl2">QR 입장</span></button>
     </div>
   </div>
@@ -2854,7 +2860,7 @@ var qrcode = function() {
     revealBtn: $("#revealBtn"), gridBtn: $("#gridBtn"), clearBtn: $("#clearBtn"),
     spotBtn: $("#spotBtn"), spotView: $("#spotView"), spotGrid: $("#spotGrid"),
     spotCount: $("#spotCount"), spotPause: $("#spotPause"), spotNext: $("#spotNext"), spotExit: $("#spotExit"),
-    soundBtn: $("#soundBtn"), qrBtn: $("#qrBtn"),
+    soundBtn: $("#soundBtn"), waitMusicBtn: $("#waitMusicBtn"), qrBtn: $("#qrBtn"),
     arena: $("#arena"), stars: $("#stars"), moon: $("#moon"),
     waitView: $("#waitView"), waitNum: $("#waitNum"), waitNum2: $("#waitNum2"),
     waitEmpty: $("#waitEmpty"), waitTimer: $("#waitTimer"), waitTimerTxt: $("#waitTimerTxt"),
@@ -2875,6 +2881,7 @@ var qrcode = function() {
     revealed: false,
     grid: false,
     sound: true,
+    waitMusic: true,         // 작성 대기 중 BGM(bgm-wait.mp3) 사용 여부
     timerDur: 0,
     timerEnd: 0,
     timerRunning: false,
@@ -3096,6 +3103,144 @@ var qrcode = function() {
     ambienceStop();
   }
 
+  /* ================= 작성 대기 배경음악 (bgm-wait.mp3 · 뮤지컬 서편제 '살다보면') ================= */
+  const WBGM = { src: "./bgm-wait.mp3", el: null, vol: 0.5, want: false, failed: false, fade: null, gesture: false };
+
+  function wbgmEl(){
+    if (WBGM.el) return WBGM.el;
+    let a = null;
+    try { a = new Audio(WBGM.src); } catch (e){ WBGM.failed = true; return null; }
+    a.loop = true;
+    a.preload = "auto";
+    a.volume = 0;
+    a.muted = !S.sound;
+    a.id = "bgmWaitAudio";
+    a.setAttribute("playsinline", "");
+    a.style.display = "none";
+    try { document.body.appendChild(a); } catch (e) {}
+    a.addEventListener("error", () => {
+      WBGM.failed = true;
+      WBGM.want = false;
+      renderWaitMusicBtn();
+    });
+    /* loop 속성 보강: 탭 복귀 등으로 loop가 풀려도 끊김 없이 이어지도록 */
+    a.addEventListener("ended", () => {
+      if (!(WBGM.want && !S.revealed)) return;
+      try { a.currentTime = 0; } catch (e) {}
+      let p = null;
+      try { p = a.play(); } catch (e) { p = null; }
+      if (p && p.catch) p.catch(() => { wbgmArmGesture(); });
+    });
+    /* 타이머·음원이 잠시 멈춰도 되살리기 */
+    a.addEventListener("pause", () => {
+      if (!(WBGM.want && !S.revealed) || WBGM.failed) return;
+      if (a.ended) return;
+      setTimeout(() => {
+        if (!(WBGM.want && !S.revealed) || !a.paused || a.ended) return;
+        let p = null;
+        try { p = a.play(); } catch (e) { p = null; }
+        if (p && p.catch) p.catch(() => { wbgmArmGesture(); });
+      }, 400);
+    });
+    WBGM.el = a;
+    return a;
+  }
+
+  function wbgmFade(target, ms, done){
+    const a = WBGM.el;
+    clearInterval(WBGM.fade); WBGM.fade = null;
+    if (!a){ if (done) done(); return; }
+    if (!ms || ms < 60){
+      try { a.volume = Math.max(0, Math.min(1, target)); } catch (e) {}
+      if (done) done();
+      return;
+    }
+    const from = a.volume || 0;
+    const steps = Math.max(1, Math.round(ms / 60));
+    let i = 0;
+    WBGM.fade = setInterval(() => {
+      i++;
+      const v = from + (target - from) * (i / steps);
+      try { a.volume = Math.max(0, Math.min(1, v)); } catch (e) {}
+      if (i >= steps){ clearInterval(WBGM.fade); WBGM.fade = null; if (done) done(); }
+    }, 60);
+  }
+
+  /* 자동재생이 막힌 경우 다음 터치에서 시작 */
+  function wbgmArmGesture(){
+    if (WBGM.gesture || S.revealed) return;
+    WBGM.gesture = true;
+    const kick = () => {
+      document.removeEventListener("pointerdown", kick, true);
+      document.removeEventListener("keydown", kick, true);
+      WBGM.gesture = false;
+      if (WBGM.want && !S.revealed && S.waitMusic) wbgmStart();
+    };
+    document.addEventListener("pointerdown", kick, true);
+    document.addEventListener("keydown", kick, true);
+  }
+
+  /* 대기 음악 시작 — 잔잔하게 페이드인 */
+  function wbgmStart(){
+    if (S.revealed) return;
+    WBGM.want = true;
+    if (WBGM.failed || !wbgmEl()){ renderWaitMusicBtn(); return; }
+    if (A.playing) ambienceStop();      /* 오르골 폴백과 겹치지 않게 */
+    const a = WBGM.el;
+    a.muted = !S.sound;
+    if (!a.paused && a.volume > 0.01){ renderWaitMusicBtn(); return; }
+    clearInterval(WBGM.fade); WBGM.fade = null;
+    try { a.volume = 0; } catch (e) {}
+    let p = null;
+    try { p = a.play(); } catch (e) { p = null; }
+    if (!p || !p.then){ wbgmFade(WBGM.vol, 1800); renderWaitMusicBtn(); return; }
+    p.then(() => {
+      wbgmFade(WBGM.vol, 1800);
+      renderWaitMusicBtn();
+    }).catch(() => {
+      if (WBGM.failed || a.error){ WBGM.failed = true; WBGM.want = false; renderWaitMusicBtn(); return; }
+      wbgmArmGesture();   /* 자동재생 차단 — 사용자 제스처를 기다림 */
+    });
+  }
+
+  /* 대기 음악 정지 — ms를 주면 그만큼 페이드아웃 후 정지 */
+  function wbgmStop(ms){
+    WBGM.want = false;
+    clearInterval(WBGM.fade); WBGM.fade = null;
+    const a = WBGM.el;
+    if (!a){ renderWaitMusicBtn(); return; }
+    const done = () => {
+      clearInterval(WBGM.fade); WBGM.fade = null;
+      try { a.pause(); a.currentTime = 0; a.volume = 0; } catch (e) {}
+      renderWaitMusicBtn();
+    };
+    if (ms && ms > 0) wbgmFade(0, ms, done);
+    else done();
+    renderWaitMusicBtn();
+  }
+
+  /* QR 입장·작성 타이머 시작 같은 대기 화면 동작에서 자동 재생 */
+  function wbgmAutoStart(){
+    if (S.revealed || !S.waitMusic) return;
+    wbgmStart();
+  }
+
+  function renderWaitMusicBtn(){
+    const b = el.waitMusicBtn;
+    if (!b) return;
+    const on = !!S.waitMusic && !S.revealed;
+    const playing = !!(WBGM.want && !WBGM.failed && !S.revealed);
+    b.classList.toggle("off", !on);
+    b.classList.toggle("play", playing);
+    b.setAttribute("aria-pressed", String(on));
+    b.innerHTML = on
+      ? "🎵 <span class=\"lbl2\">대기 음악 ON</span>"
+      : "🎵 <span class=\"lbl2\">대기 음악 OFF</span>";
+    b.title = WBGM.failed
+      ? "대기 음악을 불러오지 못했습니다 (bgm-wait.mp3 확인)"
+      : (on ? "작성 대기 중 배경음악 · 누르면 끕니다" : "작성 대기 중 배경음악 · 누르면 켭니다");
+  }
+
   function chime(){
     /* 편지 음악이 주인공 — 카드 등장 효과음은 오르골 폴백일 때만 */
     if (!BGM.failed) return;
@@ -3111,6 +3256,8 @@ var qrcode = function() {
     el.soundBtn.innerHTML = on ? "🔊 <span class=\"lbl2\">소리 ON</span>" : "🔇 <span class=\"lbl2\">소리 OFF</span>";
     if (BGM.el) BGM.el.muted = !on;
     if (on && BGM.want && BGM.el && BGM.el.paused && !BGM.failed) bgmStart();
+    if (WBGM.el) WBGM.el.muted = !on;
+    if (on && WBGM.want && !S.revealed && WBGM.el && WBGM.el.paused && !WBGM.failed) wbgmStart();
     if (A.ctx && A.master){
       A.master.gain.cancelScheduledValues(A.ctx.currentTime);
       A.master.gain.setTargetAtTime(on && A.playing ? 0.6 : 0, A.ctx.currentTime, 0.4);
@@ -3118,6 +3265,24 @@ var qrcode = function() {
   }
   el.soundBtn.addEventListener("click", () => {
     setSound(!S.sound);
+  });
+
+  /* 대기 음악 수동 토글 */
+  el.waitMusicBtn.addEventListener("click", () => {
+    if (S.revealed){
+      toast("지금은 공개 중 — 편지 음악이 나오고 있어요. [🧹 비우기] 후 대기 화면에서 조절할 수 있어요");
+      return;
+    }
+    S.waitMusic = !S.waitMusic;
+    if (S.waitMusic){
+      wbgmStart();
+      if (WBGM.failed) toast("대기 음악을 불러오지 못했습니다 — 소리 ON 상태와 네트워크를 확인해 주세요");
+      else toast("대기 음악을 켰습니다 — [🏮 공개하기]를 누르면 편지 음악으로 바뀝니다");
+    } else {
+      wbgmStop(400);
+      toast("대기 음악을 껐습니다 — [📱 QR 입장]·[⏱ 작성 타이머] 때도 재생하지 않습니다");
+    }
+    renderWaitMusicBtn();
   });
 
   /* ================= 카드 ================= */
@@ -3264,7 +3429,8 @@ var qrcode = function() {
     el.moon.classList.add("on");
     el.revealBtn.disabled = true;
     el.revealBtn.textContent = "🏮 공개 중";
-    bgmStart();
+    wbgmStop(900);      /* 대기 음악은 부드럽게 빠지고 */
+    bgmStart();         /* 편지 음악이 이어받는다 */
 
     const list = S.messages.slice().sort((a, b) => (a.ts || 0) - (b.ts || 0));
     if (all){
@@ -3528,6 +3694,7 @@ var qrcode = function() {
   }
 
   function startTimer(){
+    wbgmAutoStart();   /* 대기 중 배경음악 시작 */
     const dur = S.timerDur;
     if (!dur){
       S.timerEnd = 0;
@@ -3617,6 +3784,7 @@ var qrcode = function() {
     renderTimer();
     spotStop();
     bgmStop();
+    wbgmStop(400);
     toggleGrid(false);
     SPOT.done = false;
     SPOT.groups = []; SPOT.gi = 0;
@@ -3645,6 +3813,7 @@ var qrcode = function() {
   }
 
   function openQr(){
+    wbgmAutoStart();   /* 대기 중 배경음악 시작 */
     if (!el.qrBox.childElementCount){
       const svg = qrSvg(MOBILE_URL);
       el.qrBox.innerHTML = svg || '<div style="width:330px;height:330px;display:flex;align-items:center;justify-content:center;color:#8A7A5C;font-size:13px;font-weight:700">QR을 만들 수 없습니다</div>';
@@ -3740,6 +3909,8 @@ var qrcode = function() {
 
   /* ================= 시작 ================= */
   bgmEl();   /* 4.3MB 편지 음악을 미리 받아 둠 — [공개하기] 순간에 바로 시작 */
+  wbgmEl();  /* 대기 음악도 미리 받아 둠 — [QR 입장]·[타이머] 순간에 바로 시작 */
+  renderWaitMusicBtn();
   initFB();
   updateCount();
   toggleGrid(false);
