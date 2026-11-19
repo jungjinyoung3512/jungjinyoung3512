@@ -826,7 +826,7 @@
   function showWrong(){
     const m = S.meta || {};
     const qi = Number(m.qIndex || 0);
-    if(!qi || m.state === "idle" || m.state === "ended"){
+    if(!qi || m.state === "idle"){
       toast("아직 문제가 없어요 · 문제를 시작한 뒤 확인할 수 있어요");
       return;
     }
