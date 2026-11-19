@@ -272,7 +272,7 @@
       </div>
       <div class="preview">
         <span class="dot"></span>
-        <span class="txt">수신 화면 미리보기 · <b id="pvName">엄마 ❤️</b> <i>휴대전화</i></span>
+        <span class="txt">수신 화면 미리보기 · <b id="pvName">엄마 ❤️</b> <i id="pvNum">010-2274-5831</i></span>
       </div>
     </div>
 
@@ -344,7 +344,7 @@
       <div class="top">
         <div class="galaxy-tag" id="galaxyTag" hidden>수신 전화</div>
         <div class="who" id="callName">엄마 ❤️</div>
-        <div class="who-num" id="callNum">010-0000-1234</div>
+        <div class="who-num" id="callNum">010-2274-5831</div>
         <div class="status-line"><span class="pulse"></span><span>수신 전화…</span></div>
         <div class="galaxy-tag" id="galaxyTag2" hidden style="margin-top:14px">밀어서 받기</div>
       </div>
@@ -420,11 +420,11 @@
 
   /* ── 발신자 프리셋 ─────────────────────────────── */
   var CALLERS = {
-    mom:      { name:"엄마 ❤️",     num:"010-0000-1234" },
-    office:   { name:"관리사무소",   num:"02-0000-1234"  },
-    delivery: { name:"택배기사님",   num:"010-0000-5678" },
-    home:     { name:"집 전화",      num:"02-0000-1111"  },
-    boss:     { name:"김팀장님",     num:"010-0000-3333" }
+    mom:      { name:"엄마 ❤️",     num:"010-2274-5831" },
+    office:   { name:"관리사무소",   num:"02-2661-3470"  },
+    delivery: { name:"택배기사님",   num:"010-3382-5590" },
+    home:     { name:"집 전화",      num:"02-955-2180"   },
+    boss:     { name:"김팀장님",     num:"010-4120-7736" }
   };
 
   var state = { key:"mom", name:CALLERS.mom.name, num:CALLERS.mom.num, theme:"iphone", sec:5 };
@@ -448,8 +448,9 @@
       state.key = k;
       if(k==="custom"){
         var n = $("cName").value.trim();
-        state.name = n || "엄마";
-        state.num  = $("cNum").value.trim() || "010-0000-0000";
+        var t = $("cNum").value.trim();
+        if(n){ state.name = n; }
+        state.num = t;                 // 비우면 수신화면에서 번호 줄을 숨김
         if(n){ setTimeout(function(){ $("cName").focus(); }, 60); }
       }else{
         state.name = CALLERS[k].name;
@@ -459,14 +460,18 @@
     });
   });
   $("cName").addEventListener("input", function(){
-    state.name = this.value.trim() || "엄마";
+    state.name = this.value.trim() || state.name;
     paintPreview();
   });
   $("cNum").addEventListener("input", function(){
-    state.num = this.value.trim() || "010-0000-0000";
+    state.num = this.value.trim();
     paintPreview();
   });
-  function paintPreview(){ $("pvName").textContent = state.name; }
+  function paintPreview(){
+    $("pvName").textContent = state.name;
+    $("pvNum").textContent = state.num;
+    $("pvNum").style.display = state.num ? "" : "none";
+  }
 
   /* ── 테마 / 타이머 ─────────────────────────────── */
   [].slice.call(document.querySelectorAll("#themeSeg .seg-btn")).forEach(function(b){
@@ -615,6 +620,7 @@
     $("callName").textContent = state.name;
     $("callName2").textContent = state.name;
     $("callNum").textContent = state.num;
+    $("callNum").style.display = state.num ? "" : "none";
     $("doneName").textContent = state.name;
     $("wSec").textContent = state.sec >= 60 ? "1분" : state.sec + "초";
     $("wNum").textContent = state.sec >= 60 ? "60" : state.sec;
