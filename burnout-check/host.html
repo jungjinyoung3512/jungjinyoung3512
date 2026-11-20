@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#05070C">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🔋</text></svg>">
+<title>진행자 · 번아웃 11문항 실시간 진단 | 강연 크리에이터 · 정진영</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  :root{
+    --bg:#05070C; --panel:#0A1018; --panel2:#0F1720;
+    --line:rgba(120,255,200,.14); --line2:rgba(120,255,200,.30);
+    --mint:#3DFFA8; --aqua:#35E8FF; --rose:#FF3D7F;
+    --safe:#3DFFA8; --care:#FFD666; --warn:#FF9F45; --danger:#FF5A7A;
+    --text:#EAF6F1; --muted:#8FA3B0; --dim:#5A6C78;
+    --sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,"Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR",Georgia,serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  html,body{margin:0;height:100%;background:#030507;color:var(--text);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;letter-spacing:-0.012em;word-break:keep-all;overflow:hidden}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(100% 46% at 50% -12%, rgba(61,255,168,.13) 0%, rgba(61,255,168,0) 62%),
+      radial-gradient(80% 40% at 88% 108%, rgba(53,232,255,.09) 0%, rgba(53,232,255,0) 70%);
+    transition:background .6s}
+  body.revealed::before{background:
+      radial-gradient(105% 52% at 50% -10%, rgba(53,232,255,.16) 0%, rgba(53,232,255,0) 62%),
+      radial-gradient(80% 46% at 88% 110%, rgba(61,255,168,.14) 0%, rgba(61,255,168,0) 72%)}
+
+  .host{position:relative;z-index:1;height:100vh;height:100dvh;display:flex;flex-direction:column}
+
+  /* ---------- 상단 ---------- */
+  .hbar{flex:0 0 auto;display:flex;align-items:center;gap:16px;padding:12px 26px 10px;border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg, rgba(8,13,19,.94), rgba(5,8,12,.62));backdrop-filter:blur(6px)}
+  .brand{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .brand b{font-size:17.5px;font-weight:900;letter-spacing:-0.03em;display:flex;align-items:center;gap:7px;color:#F4FFFB;
+    text-shadow:0 0 22px rgba(61,255,168,.30);white-space:nowrap}
+  .brand span{font-size:11px;font-weight:700;color:var(--mint);letter-spacing:.03em}
+  .hspacer{flex:1}
+  .chip{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:800;color:#B9CBD6;
+    padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.035);white-space:nowrap}
+  .chip.room{font-family:var(--mono);letter-spacing:.12em;color:#CFFCE8;border-color:rgba(61,255,168,.28);background:rgba(61,255,168,.07)}
+  .chip i{width:7px;height:7px;border-radius:50%;background:var(--dim);transition:.3s}
+  .chip.on i{background:var(--mint);box-shadow:0 0 9px var(--mint)}
+  .snd{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;color:#DDF7EC;cursor:pointer;
+    padding:8px 14px;border-radius:999px;border:1px solid rgba(61,255,168,.30);background:rgba(61,255,168,.09);
+    transition:.2s;user-select:none}
+  .snd:hover{background:rgba(61,255,168,.16)}
+  .snd.muted{color:#93A4AE;border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.04)}
+
+  /* 컨트롤 줄 */
+  .cbar{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:10px 26px;border-bottom:1px solid rgba(255,255,255,.055);
+    background:rgba(6,10,15,.55)}
+  .cbtn{cursor:pointer;font-family:var(--sans);font-size:14px;font-weight:900;letter-spacing:-0.02em;
+    border-radius:12px;padding:11px 18px;border:1px solid transparent;display:flex;align-items:center;gap:8px;
+    transition:transform .1s, filter .18s, background .2s;user-select:none;white-space:nowrap}
+  .cbtn:active{transform:scale(.985)}
+  .cbtn small{font-size:10px;font-weight:800;opacity:.55;letter-spacing:0}
+  .cbtn.start{background:linear-gradient(135deg,#4BFFB0,#14D97C);color:#04120C;box-shadow:0 8px 22px rgba(24,232,140,.26)}
+  .cbtn.start:hover{filter:brightness(1.06)}
+  .cbtn.gold{background:linear-gradient(135deg,#FFE27A,#FFC12B);color:#241701;box-shadow:0 8px 22px rgba(255,193,43,.22)}
+  .cbtn.gold:hover{filter:brightness(1.05)}
+  .cbtn.ghost{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.13);color:#DCEAF3}
+  .cbtn.ghost:hover{background:rgba(255,255,255,.085)}
+  .cbtn.danger{background:rgba(255,90,122,.09);border-color:rgba(255,90,122,.30);color:#FFC7D2}
+  .cbtn.danger:hover{background:rgba(255,90,122,.18)}
+  .cbtn.armed{background:rgba(255,90,122,.9);border-color:#FF9BAE;color:#2A0309}
+  .cbtn[disabled]{opacity:.34;pointer-events:none}
+  .cbar .hint{margin-left:auto;font-size:11px;font-weight:700;color:#4F616D;display:flex;gap:12px;flex-wrap:wrap}
+  .cbar .hint kbd{font-family:var(--mono);font-size:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+    border-radius:5px;padding:1px 5px;color:#8FA3B0;margin-right:3px}
+
+  /* ---------- 무대 ---------- */
+  main{flex:1 1 auto;min-height:0;position:relative;padding:20px 28px 16px;display:flex;flex-direction:column}
+  .state{display:none;flex-direction:column;flex:1 1 auto;min-height:0;animation:fade .4s ease both}
+  .state.on{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  /* ---- 공개 전 ---- */
+  .waitwrap{flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-evenly;gap:18px;min-height:0}
+  .counterzone{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .counterzone .lbl{font-size:11.5px;font-weight:900;letter-spacing:.18em;color:var(--dim)}
+  .counter{display:flex;align-items:flex-end;gap:14px;justify-content:center}
+  .counter .num{font-family:var(--sans);font-weight:900;font-size:clamp(88px,11vw,164px);line-height:.84;letter-spacing:-0.06em;
+    color:#F6FFFB;text-shadow:0 0 60px rgba(61,255,168,.42);font-variant-numeric:tabular-nums}
+  .counter .unit{font-size:clamp(18px,1.8vw,28px);font-weight:900;color:#A9F5D6;padding-bottom:12px;letter-spacing:-0.02em}
+  .counter.zero .num{color:#7E96A2;text-shadow:none}
+  .livehint{display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;font-weight:800;color:var(--muted)}
+  .livehint .pulse{width:9px;height:9px;border-radius:50%;background:var(--mint);animation:bl 1.3s infinite;box-shadow:0 0 12px var(--mint)}
+  @keyframes bl{0%,100%{opacity:1}50%{opacity:.2}}
+
+  .lockrow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .lock{position:relative;overflow:hidden;border-radius:15px;padding:15px 14px;border:1px solid rgba(255,255,255,.09);
+    background:rgba(255,255,255,.025);display:flex;flex-direction:column;gap:5px}
+  .lock::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg, transparent 25%, rgba(255,255,255,.07) 45%, transparent 68%);
+    transform:translateX(-100%);animation:shimmer 2.6s infinite}
+  @keyframes shimmer{to{transform:translateX(100%)}}
+  .lock .lt{font-size:13px;font-weight:900;color:#93A8B3;letter-spacing:-0.01em}
+  .lock .lv{font-size:22px;font-weight:900;color:#5B6E7A;font-variant-numeric:tabular-nums}
+  .locknote{text-align:center;font-size:12.5px;font-weight:800;color:#6D808C}
+  .locknote b{color:#9FD9C1}
+
+  /* ---- 공개 후 ---- */
+  .rhead{display:flex;align-items:center;gap:12px;flex:0 0 auto;padding-bottom:12px}
+  .tag{font-size:10.5px;font-weight:900;letter-spacing:.16em;padding:6px 11px;border-radius:999px;
+    border:1px solid rgba(53,232,255,.34);background:rgba(53,232,255,.10);color:#8FE9FF}
+  .rhead .title{font-size:clamp(17px,1.6vw,30px);font-weight:900;letter-spacing:-0.03em;color:#F2FFFB}
+  .rhead .tot{margin-left:auto;font-size:12.5px;font-weight:800;color:var(--muted)}
+  .rhead .tot b{color:#EAFBF4;font-variant-numeric:tabular-nums;font-size:14px}
+
+  .graderow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;flex:0 0 auto}
+  .gcard{position:relative;border-radius:16px;padding:13px 14px 12px;border:1px solid var(--gc-line,rgba(255,255,255,.12));
+    background:var(--gc-fill,rgba(255,255,255,.03));overflow:hidden;
+    animation:gpop .55s cubic-bezier(.2,1.2,.4,1) both}
+  .gcard:nth-child(2){animation-delay:.08s}
+  .gcard:nth-child(3){animation-delay:.16s}
+  .gcard:nth-child(4){animation-delay:.24s}
+  @keyframes gpop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+  .gcard .g1{display:flex;align-items:center;gap:7px;font-size:clamp(13px,1.05vw,19px);font-weight:900;color:#EAFBF4;letter-spacing:-0.02em}
+  .gcard .g1 em{font-style:normal;font-size:clamp(17px,1.35vw,26px);line-height:1}
+  .gcard .g2{display:flex;align-items:flex-end;gap:5px;margin-top:6px}
+  .gcard .g2 b{font-size:clamp(28px,3.1vw,64px);font-weight:900;letter-spacing:-0.05em;line-height:.95;
+    color:var(--gc,#fff);font-variant-numeric:tabular-nums}
+  .gcard .g2 span{font-size:clamp(12px,.95vw,17px);font-weight:800;color:#A9BDC8;padding-bottom:2px}
+  .gcard .g3{margin-top:5px;font-size:clamp(11px,.92vw,16px);font-weight:800;color:#8FA3B0;letter-spacing:-0.01em}
+  .gcard .gbar{margin-top:9px;height:6px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+  .gcard .gbar i{display:block;height:100%;width:0;border-radius:4px;background:var(--gc,#fff);
+    transition:width 1.3s cubic-bezier(.16,.9,.2,1)}
+
+  .stack{margin-top:14px;height:clamp(16px,1.5vh,32px);border-radius:9px;overflow:hidden;display:flex;
+    border:1px solid rgba(255,255,255,.10);flex:0 0 auto;background:rgba(255,255,255,.03)}
+  .stack i{height:100%;width:0;transition:width 1.35s cubic-bezier(.16,.9,.2,1)}
+  .stackzero{display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:800;color:#4F616D}
+
+  .top3{margin-top:16px;flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:10px}
+  .top3 .th{display:flex;align-items:center;gap:9px;flex:0 0 auto;flex-wrap:wrap}
+  .top3 .th b{font-size:clamp(14px,1.05vw,19px);font-weight:900;letter-spacing:-0.02em;color:#F2FFFB}
+  .top3 .th span{font-size:clamp(11px,.86vw,15px);font-weight:800;color:var(--dim)}
+  #topRows{display:flex;flex-direction:column;gap:10px}
+  .trow{display:grid;grid-template-columns:clamp(34px,2.4vw,46px) clamp(86px,6.6vw,124px) minmax(0,1fr) clamp(108px,8vw,160px);
+    gap:12px;align-items:center;padding:clamp(9px,1.25vh,20px) 14px;border-radius:12px;
+    background:rgba(255,255,255,.028);border:1px solid rgba(255,255,255,.07);animation:tpop .5s ease both}
+  .trow:nth-child(2){animation-delay:.10s}
+  .trow:nth-child(3){animation-delay:.20s}
+  .trow:nth-child(4){animation-delay:.30s}
+  @keyframes tpop{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+  .trow .rk{font-size:clamp(15px,1.15vw,21px);font-weight:900;color:#04120C;background:linear-gradient(135deg,#4BFFB0,#19DD82);
+    width:clamp(26px,2vw,34px);height:clamp(26px,2vw,34px);border-radius:8px;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+  .trow .cat{font-size:clamp(10px,.78vw,13px);font-weight:900;letter-spacing:-0.01em;padding:5px 7px;border-radius:6px;text-align:center;
+    border:1px solid currentColor;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .trow .cat.c0{color:#35E8FF;background:rgba(53,232,255,.07)}
+  .trow .cat.c1{color:#FFB03A;background:rgba(255,176,58,.07)}
+  .trow .cat.c2{color:#C79BFF;background:rgba(199,155,255,.07)}
+  .trow .qt{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:6px}
+  .trow .qt p{flex:0 0 auto;margin:0;font-size:clamp(13.5px,1.1vw,24px);line-height:1.35;font-weight:800;color:#E7F6F0;letter-spacing:-0.02em;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .trow .qt .bar{flex:0 0 auto;height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
+  .trow .qt .bar i{display:block;height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,#35E8FF,#3DFFA8);
+    transition:width 1.1s cubic-bezier(.16,.9,.2,1)}
+  .trow .cnt{text-align:right;font-size:clamp(12px,.88vw,15px);font-weight:800;color:#9FB6C2;white-space:nowrap}
+  .trow .cnt b{font-size:clamp(15.5px,1.25vw,23px);font-weight:900;color:#EAFBF4;font-variant-numeric:tabular-nums;margin-right:3px}
+  .empty3{flex:1 1 auto;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#5A6C78}
+
+  /* 강연 포인트 */
+  .insight{flex:0 0 auto;display:flex;align-items:center;gap:10px;margin-top:12px;padding:11px 16px;border-radius:12px;
+    background:linear-gradient(100deg, rgba(255,159,69,.10), rgba(255,90,122,.07));border:1px solid rgba(255,159,69,.26)}
+  .insight .ic{font-size:clamp(15px,1.2vw,20px);line-height:1}
+  .insight p{margin:0;font-size:clamp(11.5px,1vw,21px);font-weight:800;color:#F0DCCB;letter-spacing:-0.01em;line-height:1.5}
+  .insight p b{color:#FFC98F;font-variant-numeric:tabular-nums}
+
+  /* ---------- 출처 박스 ---------- */
+  .src{margin-top:12px;flex:0 0 auto;border-radius:12px;padding:10px 14px;
+    background:rgba(53,232,255,.05);border:1px solid rgba(53,232,255,.24)}
+  .src .st{display:flex;align-items:center;gap:7px;font-size:clamp(10.5px,.8vw,13px);font-weight:900;letter-spacing:.08em;color:#8FE9FF;margin-bottom:4px}
+  .src p{margin:0;font-size:clamp(11px,.88vw,18px);line-height:1.55;color:#A8C4CE;letter-spacing:-0.005em}
+  .src p b{color:#D6F4FF;font-weight:800}
+  .src p em{font-style:normal;color:#7FA8B4}
+
+  .bottombar{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:10px;
+    padding-top:9px;border-top:1px solid rgba(255,255,255,.06);font-size:10.5px;color:#4F616D;font-weight:700}
+
+  /* ---------- QR 모달 ---------- */
+  .modal{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;
+    background:rgba(2,4,7,.86);backdrop-filter:blur(6px);padding:32px}
+  .modal.on{display:flex}
+  .msheet{width:min(880px,92vw);border-radius:24px;border:1px solid rgba(61,255,168,.26);
+    background:linear-gradient(165deg, rgba(14,22,31,.98), rgba(6,10,15,.98));padding:26px 30px;
+    display:flex;gap:30px;align-items:center;box-shadow:0 30px 80px rgba(0,0,0,.7)}
+  .msheet .qwrap2{flex:0 0 auto;background:#fff;border-radius:18px;padding:14px}
+  .msheet .qwrap2 img{display:block;width:clamp(280px,22vw,380px);height:clamp(280px,22vw,380px)}
+  .msheet .mrow{display:flex;align-items:center;gap:12px;margin-top:16px}
+  .msheet .qinfo{flex:1 1 auto;min-width:0}
+  .msheet .qinfo .kick{font-size:11.5px;font-weight:900;letter-spacing:.16em;color:var(--mint)}
+  .msheet .qinfo h2{margin:8px 0 6px;font-family:var(--serif);font-size:30px;font-weight:800;letter-spacing:-0.03em;color:#F7FFFC}
+  .msheet .qinfo p{margin:0;font-size:13.5px;line-height:1.65;color:var(--muted)}
+  .msheet .qinfo .url{margin-top:14px;font-family:var(--mono);font-size:11.5px;color:#8FE9FF;word-break:break-all;
+    padding:10px 12px;border-radius:10px;background:rgba(53,232,255,.06);border:1px solid rgba(53,232,255,.2)}
+  .msheet .qinfo .roomno{display:inline-flex;gap:8px;align-items:center;font-family:var(--mono);
+    font-size:12px;color:#CFFCE8;padding:7px 13px;border-radius:999px;background:rgba(61,255,168,.08);
+    border:1px solid rgba(61,255,168,.24);letter-spacing:.12em}
+  .mclose{cursor:pointer;font-family:var(--sans);font-size:13px;font-weight:900;color:#04120C;
+    background:linear-gradient(135deg,#4BFFB0,#14D97C);border:0;border-radius:11px;padding:11px 20px}
+
+  .toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,16px);z-index:50;
+    background:rgba(10,18,26,.97);border:1px solid var(--line2);color:#EAFFF7;padding:11px 20px;border-radius:12px;
+    font-size:13px;font-weight:800;opacity:0;pointer-events:none;transition:.24s;box-shadow:0 16px 40px rgba(0,0,0,.6)}
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+
+  /* 연출 오버레이 */
+  .roll{position:fixed;inset:0;z-index:45;display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;
+    background:radial-gradient(60% 60% at 50% 45%, rgba(53,232,255,.14), rgba(3,5,8,.94))}
+  .roll.on{display:flex}
+  .roll .rr{font-size:clamp(30px,3.6vw,54px);font-weight:900;letter-spacing:-0.03em;color:#8FE9FF;
+    animation:thump .6s ease-in-out infinite;text-shadow:0 0 60px rgba(53,232,255,.55)}
+  @keyframes thump{0%,100%{transform:scale(1)}35%{transform:scale(1.05)}}
+  .roll .rs{font-size:13.5px;font-weight:800;color:#7FA8B4}
+
+  @media (max-width:1100px){
+    .graderow{grid-template-columns:repeat(2,1fr)}
+    .lockrow{grid-template-columns:repeat(2,1fr)}
+    .trow{grid-template-columns:30px 74px minmax(0,1fr) 92px}
+  }
+  @media (max-height:720px){
+    .main{padding-top:14px}
+    .src p{font-size:10.2px}
+    .stack{margin-top:10px}
+    .top3{margin-top:12px}
+  }
+</style>
+</head>
+<body>
+<div class="host">
+  <header class="hbar">
+    <div class="brand">
+      <b>🔋 번아웃 11문항 실시간 진단</b>
+      <span>강연 크리에이터 · 정진영</span>
+    </div>
+    <div class="hspacer"></div>
+    <div class="chip room" id="roomChip">ROOM JY11</div>
+    <div class="chip" id="netChip"><i></i><span id="netTxt">연결 중</span></div>
+    <div class="snd" id="btnSound">🔊 소리 ON</div>
+  </header>
+
+  <div class="cbar">
+    <button class="cbtn start" id="btnReset" type="button">▶ 새로 시작 <small>RESET</small></button>
+    <button class="cbtn gold" id="btnReveal" type="button">🏆 결과보기 <small>R</small></button>
+    <button class="cbtn danger" id="btnClear" type="button">🧹 참가자 비우기</button>
+    <button class="cbtn ghost" id="btnQR" type="button">📱 QR 입장</button>
+    <div class="hint">
+      <span><kbd>R</kbd>결과보기</span>
+      <span><kbd>ESC</kbd>닫기</span>
+    </div>
+  </div>
+
+  <main>
+    <!-- 공개 전 -->
+    <section class="state on" id="stWait">
+      <div class="waitwrap">
+        <div class="counterzone">
+          <div class="lbl">실시간 참여 현황</div>
+          <div class="counter zero" id="counter">
+            <div class="num" id="countNum">0</div>
+            <div class="unit">명 참여 완료</div>
+          </div>
+          <div class="livehint"><span class="pulse"></span>집계 중 · 결과는 잠겨 있습니다 🔒</div>
+        </div>
+        <div class="lockrow">
+          <div class="lock"><div class="lt">🟢 안전</div><div class="lv">? 명</div></div>
+          <div class="lock"><div class="lt">🟡 주의</div><div class="lv">? 명</div></div>
+          <div class="lock"><div class="lt">🟠 경고</div><div class="lv">? 명</div></div>
+          <div class="lock"><div class="lt">🔴 위험</div><div class="lv">? 명</div></div>
+        </div>
+        <div class="locknote">청중이 11문항을 마치는 대로 숫자가 올라갑니다 · <b>[🏆 결과보기]</b>를 누르면 이 화면이 결과로 바뀝니다</div>
+      </div>
+    </section>
+
+    <!-- 공개 후 -->
+    <section class="state" id="stReveal">
+      <div class="rhead">
+        <div class="tag" id="phaseTag">결과 공개</div>
+        <div class="title">오늘 강연장 번아웃 신호</div>
+        <div class="tot">총 <b id="totNum">0</b>명 참여 · 1인당 평균 <b id="avgNum">0.0</b>개 체크</div>
+      </div>
+
+      <div class="graderow" id="graderow">
+        <div class="gcard" data-g="0">
+          <div class="g1"><em>🟢</em>안전</div>
+          <div class="g2"><b>0</b><span>명</span></div>
+          <div class="g3">0% · 마음 배터리 양호</div>
+          <div class="gbar"><i></i></div>
+        </div>
+        <div class="gcard" data-g="1">
+          <div class="g1"><em>🟡</em>주의</div>
+          <div class="g2"><b>0</b><span>명</span></div>
+          <div class="g3">0% · 방전 초기 신호</div>
+          <div class="gbar"><i></i></div>
+        </div>
+        <div class="gcard" data-g="2">
+          <div class="g1"><em>🟠</em>경고</div>
+          <div class="g2"><b>0</b><span>명</span></div>
+          <div class="g3">0% · 적극적인 리셋 필요</div>
+          <div class="gbar"><i></i></div>
+        </div>
+        <div class="gcard" data-g="3">
+          <div class="g1"><em>🔴</em>위험</div>
+          <div class="g2"><b>0</b><span>명</span></div>
+          <div class="g3">0% · 즉시 멈춤·전문 케어</div>
+          <div class="gbar"><i></i></div>
+        </div>
+      </div>
+
+      <div class="stack" id="stack">
+        <i data-g="0"></i><i data-g="1"></i><i data-g="2"></i><i data-g="3"></i>
+      </div>
+
+      <div class="top3">
+        <div class="th"><b>가장 많이 체크된 번아웃 신호 TOP 3</b><span>우리 강연장에서 가장 많이 ‘그렇다’가 나온 문항</span></div>
+        <div id="topRows"></div>
+        <div class="insight" id="insight">
+          <div class="ic">💡</div>
+          <p id="insightTxt">—</p>
+        </div>
+      </div>
+
+      <div class="src">
+        <div class="st">📚 출처 및 근거</div>
+        <p>본 자가점검은 국제 표준 번아웃 척도인 <b>MBI(Maslach Burnout Inventory)</b>와 <b>CBI(코펜하겐 번아웃 척도 · Kristensen et al., 2005 / 한국어 타당화 CBI-K)</b>의 3대 핵심 영역(에너지 고갈 · 냉소 및 대인 소진 · 성취감 저하)을 강연 현장용으로 재구성했습니다. <em>※ 의학적 진단이 아닌 자가점검 참고용</em></p>
+      </div>
+
+      <div class="bottombar">
+        <div>🔋 번아웃 11문항 실시간 진단 · 강연 크리에이터 · 정진영</div>
+        <div>익명 집계 · 개인별 점수는 표시되지 않습니다</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- QR 모달 -->
+<div class="modal" id="qrModal">
+  <div class="msheet">
+    <div class="qwrap2"><img id="qrImg" alt="청중 참여 QR 코드"></div>
+    <div class="qinfo">
+      <div class="kick">11문항 · 1분 · 익명</div>
+      <h2>폰으로 참여해 주세요</h2>
+      <p>카메라로 QR을 스캔하면 바로 시작됩니다.<br>이름 입력 없이 11문항에 예 / 아니오로 답해 주세요.</p>
+      <div class="url">jungjinyoung3512.github.io/jungjinyoung3512/burnout-check/</div>
+      <div class="mrow">
+        <div class="roomno">ROOM JY11</div>
+        <button class="mclose" id="qrClose" type="button">닫기 ✕</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="roll" id="roll"><div class="rr">결과 집계 중…</div><div class="rs">잠시만 기다려 주세요</div></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+  var QR_SRC = "data:image/png;base64,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";
+</script>
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+
+  const ROOM = "JY11";
+  const ROOM_PATH = "rooms/burnout-check/" + ROOM;
+  const AUDIENCE_URL = "https://jungjinyoung3512.github.io/jungjinyoung3512/burnout-check/";
+
+  const FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "977342156141",
+    appId: "1:977342156141:web:f9842fcc67a819ce621e64"
+  };
+
+  const CATS = ["에너지 고갈", "냉소 · 대인 소진", "성취감 저하"];
+  const QUESTIONS = [
+    { c:0, t:"아침에 눈을 뜨면 출근이나 하루 시작 자체가 막막하게 느껴진다" },
+    { c:0, t:"퇴근 후에도 머릿속에서 일 생각이 완전히 꺼지지 않는다" },
+    { c:0, t:"충분히 자고 쉬어도 피로가 풀리지 않고 몸이 무겁다" },
+    { c:0, t:"사소한 일에도 예전보다 쉽게 짜증이 나거나 예민해진다" },
+    { c:1, t:"함께 일하는 사람이나 민원인·고객을 상대하는 게 큰 부담이다" },
+    { c:1, t:"“내가 지금 이걸 왜 하고 있지?” 하는 회의감이 자주 든다" },
+    { c:1, t:"사람들과 대화할 때 진심보다 기계적으로 반응하게 된다" },
+    { c:1, t:"주변에서 힘들어 보여도 공감하거나 챙길 여유가 없다" },
+    { c:2, t:"열심히 해도 달라지는 게 없다는 무력감을 느낀다" },
+    { c:2, t:"예전에는 즐겁거나 보람찼던 일이 요즘은 아무 감흥이 없다" },
+    { c:2, t:"이대로 가다간 곧 방전될 것 같다는 위기감이 든다" }
+  ];
+  const GRADES = [
+    { emo:"🟢", name:"안전", color:"#3DFFA8", desc:"마음 배터리 양호" },
+    { emo:"🟡", name:"주의", color:"#FFD666", desc:"방전 초기 신호" },
+    { emo:"🟠", name:"경고", color:"#FF9F45", desc:"적극적인 리셋 필요" },
+    { emo:"🔴", name:"위험", color:"#FF5A7A", desc:"즉시 멈춤·전문 케어" }
+  ];
+  function gradeOf(n){ return n <= 2 ? 0 : n <= 5 ? 1 : n <= 8 ? 2 : 3; }
+  function hexA(hex, a){
+    const h = hex.replace("#","");
+    return "rgba(" + parseInt(h.slice(0,2),16) + "," + parseInt(h.slice(2,4),16) + "," + parseInt(h.slice(4,6),16) + "," + a + ")";
+  }
+
+  const S = { phase:"collect", responses:{}, total:0, rendered:false, revealing:false };
+
+  /* ================= 사운드 (진행자 노트북 전용) ================= */
+  const Sound = {
+    ctx:null, master:null, on:true,
+    iface(){
+      if(!this.ctx){
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if(!AC) return null;
+        this.ctx = new AC();
+        this.master = this.ctx.createGain();
+        this.master.gain.value = this.on ? 0.9 : 0;
+        this.master.connect(this.ctx.destination);
+      }
+      if(this.ctx.state === "suspended") this.ctx.resume().catch(()=>{});
+      return this.ctx;
+    },
+    setOn(v){
+      this.on = v;
+      if(this.master) this.master.gain.value = v ? 0.9 : 0;
+    },
+    tone(t, freq, dur, type, amp){
+      const ctx = this.ctx, o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = type || "sine"; o.frequency.setValueAtTime(freq, t);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(amp, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(this.master);
+      o.start(t); o.stop(t + dur + 0.05);
+    },
+    noiseBuf(){
+      if(this._nb) return this._nb;
+      const ctx = this.ctx, len = Math.floor(ctx.sampleRate * 0.12);
+      const b = ctx.createBuffer(1, len, ctx.sampleRate), d = b.getChannelData(0);
+      for(let i=0;i<len;i++) d[i] = Math.random()*2-1;
+      this._nb = b; return b;
+    },
+    tick(){
+      if(!this.on) return;
+      if(!this.iface()) return;
+      const t = this.ctx.currentTime + 0.01;
+      this.tone(t, 880, 0.09, "sine", 0.045);
+    },
+    drumroll(dur){
+      if(!this.on || !this.iface()) return this.ctx ? this.ctx.currentTime : 0;
+      const ctx = this.ctx, t0 = ctx.currentTime + 0.04;
+      let t = t0;
+      while(t < t0 + dur){
+        const prog = Math.min(1, (t - t0) / dur);
+        const src = ctx.createBufferSource(); src.buffer = this.noiseBuf();
+        const bp = ctx.createBiquadFilter(); bp.type = "bandpass";
+        bp.frequency.value = 1000 + 1500 * prog; bp.Q.value = 0.9;
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.08 + 0.30 * prog, t);
+        g.gain.exponentialRampToValueAtTime(0.0008, t + 0.055);
+        src.connect(bp); bp.connect(g); g.connect(this.master);
+        src.start(t); src.stop(t + 0.07);
+        t += 0.064 - 0.036 * prog;
+      }
+      return t0 + dur;
+    },
+    fanfare(at){
+      if(!this.on || !this.iface()) return;
+      const ctx = this.ctx;
+      const t0 = Math.max(at || ctx.currentTime + 0.02, ctx.currentTime + 0.02);
+      [523.25, 659.25, 783.99, 1046.5].forEach((f,i) => this.tone(t0 + i*0.10, f, 0.40, "triangle", 0.20));
+      [523.25, 659.25, 783.99, 1046.5].forEach(f => this.tone(t0 + 0.44, f, 1.5, "triangle", 0.10));
+      const src = ctx.createBufferSource(); src.buffer = this.noiseBuf();
+      const hp = ctx.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 3800;
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t0 + 0.42);
+      g.gain.exponentialRampToValueAtTime(0.14, t0 + 0.46);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.7);
+      src.connect(hp); hp.connect(g); g.connect(this.master);
+      src.start(t0 + 0.42); src.stop(t0 + 1.8);
+    }
+  };
+
+  /* ================= Firebase ================= */
+  let db = null, roomRef = null;
+
+  function setNet(ok, label){
+    $("netChip").classList.toggle("on", !!ok);
+    $("netTxt").textContent = label || (ok ? "실시간 연결" : "연결 중");
+  }
+  function initFB(){
+    if(typeof firebase === "undefined" || !firebase.initializeApp){ setNet(false, "연결 실패"); return; }
+    try{
+      firebase.initializeApp(FB_CONFIG);
+      db = firebase.database();
+      db.ref(".info/connected").on("value", s => {
+        const on = !!s.val();
+        setNet(on, on ? "실시간 연결" : "연결 중…");
+      });
+      roomRef = db.ref(ROOM_PATH);
+      roomRef.on("value", snap => onRoom(snap.val() || {}));
+      roomRef.child("meta").once("value").then(s => {
+        const m = s.val();
+        if(!m || !m.rid){ roomRef.child("meta").set({ phase:"collect", rid:newRid(), ts:Date.now() }).catch(()=>{}); }
+      }).catch(()=>{});
+    }catch(e){ setNet(false, "연결 실패"); }
+  }
+  function newRid(){ return "r" + Date.now().toString(36); }
+  function pub(obj){ if(roomRef) roomRef.child("meta").update(obj); }
+
+  /* ================= 집계 ================= */
+  function tally(){
+    const v = S.responses || {};
+    const keys = Object.keys(v);
+    const grade = [0,0,0,0];
+    const qcnt = new Array(11).fill(0);
+    let sum = 0;
+    keys.forEach(k => {
+      const rec = v[k] || {};
+      const bits = String(rec.a || "");
+      let n = 0;
+      for(let i=0;i<11;i++){ if(bits.charAt(i) === "1"){ n++; qcnt[i]++; } }
+      sum += n;
+      grade[gradeOf(n)]++;
+    });
+    const total = keys.length;
+    return { total, grade, qcnt, avg: total ? sum / total : 0 };
+  }
+  function pcts(grade, total){
+    if(!total) return [0,0,0,0];
+    const raw = grade.map(c => c / total * 100);
+    const base = raw.map(x => Math.floor(x));
+    let rest = 100 - base.reduce((a,b) => a+b, 0);
+    const order = raw.map((x,i) => ({ i, f: x - Math.floor(x) })).sort((a,b) => b.f - a.f);
+    for(let k=0; k<order.length && rest > 0; k++){ base[order[k].i]++; rest--; }
+    return base;
+  }
+
+  /* ================= 렌더 ================= */
+  function onRoom(data){
+    const meta = data.meta || {};
+    S.responses = data.responses || {};
+    S.phase = meta.phase === "revealed" ? "revealed" : "collect";
+    S.total = Object.keys(S.responses).length;
+
+    $("countNum").textContent = S.total;
+    $("counter").classList.toggle("zero", S.total === 0);
+
+    if(S.phase === "revealed"){
+      document.body.classList.add("revealed");
+      $("stWait").classList.remove("on");
+      $("stReveal").classList.add("on");
+      paint(false);
+    }else{
+      document.body.classList.remove("revealed");
+      $("stReveal").classList.remove("on");
+      $("stWait").classList.add("on");
+      $("btnReveal").disabled = false;
+      S.rendered = false;
+    }
+  }
+
+  function paint(animate){
+    const t = tally();
+    const p = pcts(t.grade, t.total);
+    $("totNum").textContent = t.total;
+    $("avgNum").textContent = (Math.round(t.avg * 10) / 10).toFixed(1);
+
+    document.querySelectorAll(".gcard").forEach(card => {
+      const g = Number(card.dataset.g), G = GRADES[g];
+      card.style.setProperty("--gc", G.color);
+      card.style.setProperty("--gc-line", G.color + "55");
+      card.style.setProperty("--gc-fill", "linear-gradient(160deg, " + hexA(G.color, .13) + ", rgba(255,255,255,.025) 75%)");
+      card.querySelector(".g2 b").textContent = t.grade[g];
+      card.querySelector(".g3").textContent = p[g] + "% · " + G.desc;
+      const bar = card.querySelector(".gbar i");
+      if(animate){ bar.style.transition = "none"; bar.style.width = "0%"; void bar.offsetWidth; bar.style.transition = ""; }
+      requestAnimationFrame(() => { bar.style.width = Math.min(100, t.grade[g] ? Math.max(2, p[g]) : 0) + "%"; });
+    });
+
+    document.querySelectorAll("#stack i").forEach(el => {
+      const g = Number(el.dataset.g);
+      el.style.background = GRADES[g].color;
+      if(animate){ el.style.transition = "none"; el.style.width = "0%"; void el.offsetWidth; el.style.transition = ""; }
+      requestAnimationFrame(() => { el.style.width = p[g] + "%"; });
+    });
+
+    /* TOP 3 */
+    const order = t.qcnt.map((c,i) => ({ i, c })).sort((a,b) => b.c - a.c || a.i - b.i).slice(0,3);
+    const wrap = $("topRows");
+    wrap.innerHTML = "";
+    if(t.total === 0){
+      wrap.innerHTML = '<div class="empty3">아직 응답이 없습니다 · 청중이 제출하면 결과가 나타납니다</div>';
+      $("insightTxt").textContent = "참여자가 없어 아직 강연 포인트를 계산할 수 없습니다";
+      return;
+    }
+    const risky = t.grade[2] + t.grade[3];
+    const riskyPct = Math.round(risky / t.total * 100);
+    $("insightTxt").innerHTML = "🟠 경고 · 🔴 위험에 해당하는 사람이 <b>" + risky + "명 (" + riskyPct + "%)</b>입니다. " +
+      "번아웃은 의지의 문제가 아니라 <b>회복 설계</b>의 문제입니다.";
+    order.forEach((o, k) => {
+      const q = QUESTIONS[o.i];
+      const pct = Math.round(o.c / t.total * 100);
+      const row = document.createElement("div");
+      row.className = "trow";
+      row.innerHTML =
+        '<div class="rk">' + (k+1) + '</div>' +
+        '<div class="cat c' + q.c + '">' + CATS[q.c] + '</div>' +
+        '<div class="qt"><p>' + q.t + '</p><div class="bar"><i></i></div></div>' +
+        '<div class="cnt"><b>' + o.c + '</b>명 · ' + pct + '%</div>';
+      wrap.appendChild(row);
+      const bar = row.querySelector(".bar i");
+      if(animate){ bar.style.transition = "none"; bar.style.width = "0%"; void bar.offsetWidth; bar.style.transition = ""; }
+      requestAnimationFrame(() => { bar.style.width = Math.max(2, pct) + "%"; });
+    });
+  }
+
+  /* ================= 액션 ================= */
+  function reveal(){
+    if(S.revealing) return;
+    if(S.total === 0){ toast("아직 참여자가 없습니다 · QR로 입장 안내를 먼저 해 주세요"); return; }
+    if(!roomRef){ toast("연결을 기다리는 중입니다"); return; }
+    S.revealing = true;
+    Sound.iface();
+    $("roll").classList.add("on");
+    const end = Sound.drumroll(1.25);
+    setTimeout(() => {
+      $("roll").classList.remove("on");
+      pub({ phase:"revealed", ts:Date.now() });
+      S.revealing = false;
+      Sound.fanfare(end);
+      paint(true);
+    }, 1300);
+  }
+
+  function reset(){
+    if(!roomRef){ toast("연결을 기다리는 중입니다"); return; }
+    if(!confirm("새로 시작합니다.\n지금까지 쌓인 참가자 응답이 모두 지워집니다.\n\n계속할까요?")) return;
+    const rid = newRid();
+    roomRef.child("responses").remove()
+      .then(() => roomRef.child("meta").set({ phase:"collect", rid:rid, ts:Date.now() }))
+      .then(() => { toast("새로 시작했습니다 · 청중은 다시 11문항에 참여할 수 있습니다"); })
+      .catch(() => toast("초기화 실패 · 잠시 후 다시 시도해 주세요"));
+  }
+
+  let clearArmed = false, clearTimer = null;
+  function clearResponses(){
+    if(!roomRef){ toast("연결을 기다리는 중입니다"); return; }
+    const btn = $("btnClear");
+    if(!clearArmed){
+      clearArmed = true;
+      btn.classList.add("armed");
+      btn.textContent = "⚠️ 한 번 더 누르면 비웁니다";
+      clearTimeout(clearTimer);
+      clearTimer = setTimeout(() => {
+        clearArmed = false;
+        btn.classList.remove("armed");
+        btn.innerHTML = "🧹 참가자 비우기";
+      }, 3200);
+      return;
+    }
+    clearArmed = false;
+    clearTimeout(clearTimer);
+    btn.classList.remove("armed");
+    btn.innerHTML = "🧹 참가자 비우기";
+    roomRef.child("responses").remove()
+      .then(() => roomRef.child("meta").update({ phase:"collect", ts:Date.now() }))
+      .then(() => toast("참가자를 비웠습니다 · 같은 문항으로 다시 받을 수 있습니다"))
+      .catch(() => toast("비우기 실패 · 잠시 후 다시 시도해 주세요"));
+  }
+
+  let toastH = null;
+  function toast(msg){
+    const t = $("toast"); t.textContent = msg; t.classList.add("on");
+    clearTimeout(toastH); toastH = setTimeout(() => t.classList.remove("on"), 2800);
+  }
+
+  $("btnReveal").addEventListener("click", reveal);
+  $("btnReset").addEventListener("click", reset);
+  $("btnClear").addEventListener("click", clearResponses);
+  $("btnQR").addEventListener("click", () => $("qrModal").classList.add("on"));
+  $("qrClose").addEventListener("click", () => $("qrModal").classList.remove("on"));
+  $("qrModal").addEventListener("click", e => { if(e.target === $("qrModal")) $("qrModal").classList.remove("on"); });
+
+  $("btnSound").addEventListener("click", () => {
+    const on = !Sound.on;
+    Sound.setOn(on);
+    $("btnSound").classList.toggle("muted", !on);
+    $("btnSound").textContent = on ? "🔊 소리 ON" : "🔇 음소거";
+    if(on) Sound.iface();
+    toast(on ? "소리 켜짐" : "음소거");
+  });
+
+  document.addEventListener("keydown", e => {
+    if(e.key === "Escape"){ $("qrModal").classList.remove("on"); return; }
+    if(e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    const k = e.key.toLowerCase();
+    if(k === "r") reveal();
+  });
+
+  /* QR */
+  $("qrImg").src = QR_SRC;
+  $("roomChip").textContent = "ROOM " + ROOM;
+
+  /* 새 응답 알림음 (공개 전) */
+  let lastCount = 0;
+  setInterval(() => {
+    if(S.phase === "collect" && S.total > lastCount && lastCount > 0) Sound.tick();
+    lastCount = S.total;
+  }, 900);
+
+  /* 첫 페인트 */
+  $("stWait").classList.add("on");
+  initFB();
+})();
+</script>
+</body>
+</html>

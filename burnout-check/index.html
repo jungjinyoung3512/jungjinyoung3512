@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#05070C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🔋</text></svg>">
+<title>번아웃 11문항 자가점검 | 강연 크리에이터 · 정진영</title>
+<meta name="description" content="강연 시작 전 1분 자가점검 — 11문항으로 보는 오늘의 마음 배터리 (익명)">
+<meta property="og:title" content="번아웃 11문항 자가점검">
+<meta property="og:description" content="11문항 · 1분 · 익명 — 오늘 나의 마음 배터리 잔량">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --bg:#05070C; --panel:#0B1119; --panel2:#101A24;
+    --line:rgba(120,255,200,.16); --line2:rgba(120,255,200,.30);
+    --mint:#3DFFA8; --aqua:#35E8FF; --rose:#FF3D7F;
+    --text:#EAF6F1; --muted:#8FA3B0; --dim:#5C6E7A;
+    --sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR",Georgia,serif;
+  }
+  html{-webkit-text-size-adjust:100%;background:#030507}
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;overscroll-behavior:none}
+  body{
+    background:var(--bg);color:var(--text);font-family:var(--sans);
+    word-break:keep-all;-webkit-font-smoothing:antialiased;
+    line-height:1.45;letter-spacing:-0.01em;
+    -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(115% 46% at 50% -10%, rgba(61,255,168,.15) 0%, rgba(61,255,168,0) 62%),
+      radial-gradient(90% 40% at 50% 108%, rgba(53,232,255,.10) 0%, rgba(53,232,255,0) 70%);
+    transition:background .6s ease;
+  }
+  body.done::before{
+    background:
+      radial-gradient(115% 46% at 50% -10%, rgba(61,255,168,.24) 0%, rgba(61,255,168,0) 62%),
+      radial-gradient(90% 44% at 50% 108%, rgba(53,232,255,.16) 0%, rgba(53,232,255,0) 70%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.30;
+    background:repeating-linear-gradient(180deg, rgba(120,255,200,.05) 0 1px, rgba(0,0,0,0) 1px 4px);
+    animation:scan 8s linear infinite;
+  }
+  @keyframes scan{from{background-position-y:0}to{background-position-y:400px}}
+
+  .app{
+    position:relative;z-index:2;width:100%;max-width:440px;margin:0 auto;
+    height:100vh;height:100dvh;display:flex;flex-direction:column;
+    padding:calc(env(safe-area-inset-top,0px) + 12px) 18px calc(env(safe-area-inset-bottom,0px) + 12px);
+  }
+
+  .top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex:0 0 auto}
+  .brand{display:flex;flex-direction:column;gap:4px;min-width:0}
+  .brand .name{
+    font-size:14.5px;font-weight:800;letter-spacing:-0.02em;color:#F2FFFA;
+    display:flex;align-items:center;gap:6px;white-space:nowrap;
+    text-shadow:0 0 18px rgba(61,255,168,.35);
+  }
+  .brand .creator{font-size:11px;font-weight:600;color:var(--mint);letter-spacing:.01em;opacity:.92}
+  .net{
+    display:flex;align-items:center;gap:6px;flex:0 0 auto;
+    font-size:10.5px;font-weight:700;color:var(--muted);
+    padding:5px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.03);white-space:nowrap;
+  }
+  .net i{width:6px;height:6px;border-radius:50%;background:var(--dim);display:block;transition:.3s}
+  .net.on{color:#BFFFE2;border-color:rgba(61,255,168,.34);background:rgba(61,255,168,.09)}
+  .net.on i{background:var(--mint);box-shadow:0 0 8px var(--mint)}
+
+  .stage{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;padding:6px 0}
+  .view{display:none;flex-direction:column;gap:14px;animation:fade .34s ease both}
+  .view.on{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* ---------- 시작 화면 ---------- */
+  .herocard{
+    position:relative;border-radius:22px;padding:26px 20px 22px;text-align:center;
+    background:linear-gradient(165deg, rgba(16,26,36,.96), rgba(8,13,20,.96));
+    border:1px solid var(--line);
+    box-shadow:0 18px 46px rgba(0,0,0,.55), 0 0 42px rgba(61,255,168,.07);
+  }
+  .batt{position:relative;width:92px;height:92px;margin:0 auto 14px;display:grid;place-items:center}
+  .batt .ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(61,255,168,.45);animation:ring 2.6s ease-out infinite}
+  .batt .ring:nth-child(2){animation-delay:.9s}
+  @keyframes ring{0%{transform:scale(.6);opacity:.85}100%{transform:scale(1.35);opacity:0}}
+  .batt .core{font-size:42px;filter:drop-shadow(0 0 18px rgba(61,255,168,.55))}
+  .hero-t{font-family:var(--serif);font-size:23px;font-weight:800;letter-spacing:-0.03em;color:#F7FFFC;line-height:1.35}
+  .hero-t em{font-style:normal;color:var(--mint)}
+  .hero-s{font-size:13px;color:var(--muted);line-height:1.65;margin-top:8px}
+  .chips{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+  .chips span{
+    font-size:11.5px;font-weight:800;color:#CFFCE8;padding:6px 11px;border-radius:999px;
+    background:rgba(61,255,168,.08);border:1px solid rgba(61,255,168,.22);
+  }
+  .chips span b{color:var(--mint);font-weight:900}
+
+  .btn{
+    width:100%;border:0;cursor:pointer;font-family:var(--sans);border-radius:16px;
+    padding:17px 18px;font-size:17px;font-weight:900;letter-spacing:-0.02em;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:transform .1s, filter .2s, background .2s;user-select:none;
+  }
+  .btn:active{transform:scale(.98)}
+  .btn.primary{background:linear-gradient(135deg,#4BFFB0,#14D97C);color:#04120C;box-shadow:0 12px 30px rgba(24,232,140,.30)}
+  .btn.primary:hover{filter:brightness(1.05)}
+  .btn.ghost{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.13);color:#DCEAF3;font-size:14px;padding:13px 16px}
+  .btn[disabled]{opacity:.4;pointer-events:none}
+
+  /* ---------- 문항 화면 ---------- */
+  #vQuiz.on{flex:1 1 auto;justify-content:flex-start;padding-top:2px;padding-bottom:2px}
+  #vQuiz .qcard{margin-top:auto}
+  #vQuiz .answers{margin-top:auto}
+  #vQuiz .back{flex:0 0 auto}
+  .prog{display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
+  .prog .row{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;font-weight:800;color:var(--muted)}
+  .prog .row b{font-size:12.5px;color:#DFFBF0;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+  .segs{display:flex;gap:4px}
+  .segs i{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.09);transition:.28s}
+  .segs i.on{background:linear-gradient(90deg,#4BFFB0,#22E88C);box-shadow:0 0 10px rgba(61,255,168,.45)}
+  .segs i.cur{background:rgba(61,255,168,.35)}
+
+  .qcard{
+    position:relative;border-radius:22px;padding:24px 20px;min-height:clamp(186px,27vh,300px);
+    display:flex;flex-direction:column;gap:12px;justify-content:center;
+    background:linear-gradient(165deg, rgba(16,26,36,.96), rgba(8,13,20,.96));
+    border:1px solid var(--line);
+    box-shadow:0 18px 46px rgba(0,0,0,.5), 0 0 42px rgba(61,255,168,.06);
+  }
+  .qcat{
+    align-self:flex-start;display:inline-flex;align-items:center;gap:6px;
+    font-size:10.5px;font-weight:900;letter-spacing:.06em;
+    padding:5px 10px;border-radius:999px;border:1px solid currentColor;opacity:.95;
+  }
+  .qcat.c0{color:#35E8FF;background:rgba(53,232,255,.08)}
+  .qcat.c1{color:#FFB03A;background:rgba(255,176,58,.08)}
+  .qcat.c2{color:#C79BFF;background:rgba(199,155,255,.08)}
+  .qtext{
+    font-family:var(--serif);font-weight:700;font-size:clamp(19px,5.4vw,23px);
+    line-height:1.45;letter-spacing:-0.015em;color:#F7FFFC;
+    text-shadow:0 0 30px rgba(61,255,168,.14);
+  }
+  .qsub{font-size:11.5px;color:var(--dim);font-weight:700;letter-spacing:.01em}
+
+  .answers{display:flex;flex-direction:column;gap:10px}
+  .abtn{
+    position:relative;width:100%;border:0;cursor:pointer;font-family:var(--sans);
+    border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:13px;
+    font-weight:900;letter-spacing:-0.02em;text-align:left;
+    transition:transform .12s ease, filter .2s ease, box-shadow .2s ease;
+  }
+  .abtn .mark{width:26px;height:26px;flex:0 0 auto;position:relative;display:block}
+  .abtn .mark.o{border:3.5px solid currentColor;border-radius:50%}
+  .abtn .mark.x::before,.abtn .mark.x::after{
+    content:"";position:absolute;left:50%;top:50%;width:26px;height:3.5px;
+    background:currentColor;border-radius:2px;transform:translate(-50%,-50%) rotate(45deg);
+  }
+  .abtn .mark.x::after{transform:translate(-50%,-50%) rotate(-45deg)}
+  .abtn .lab{display:flex;flex-direction:column;gap:1px;min-width:0}
+  .abtn .lab b{font-size:18px;font-weight:900}
+  .abtn .lab span{font-size:10.5px;font-weight:800;letter-spacing:.1em;opacity:.6}
+  .abtn.yes{background:linear-gradient(135deg,#4BFFB0,#22E88C 60%,#12D07A);color:#04110C;box-shadow:0 12px 30px rgba(24,232,140,.28)}
+  .abtn.no{background:rgba(255,255,255,.05);border:1px solid rgba(255,90,122,.30);color:#FFC7D2}
+  .abtn.no .lab b{color:#FFD9E1}
+  .abtn:active{transform:scale(.977);filter:brightness(1.06)}
+
+  .back{
+    align-self:center;margin-top:2px;background:none;border:0;cursor:pointer;
+    font-family:var(--sans);font-size:12.5px;font-weight:800;color:var(--dim);
+    padding:6px 12px;border-radius:999px;
+  }
+  .back:active{background:rgba(255,255,255,.05)}
+
+  /* ---------- 확인(제출) 화면 ---------- */
+  .confirmbox{
+    display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;
+    padding:24px 18px;border-radius:22px;
+    background:radial-gradient(120% 100% at 50% 0%, rgba(61,255,168,.10), rgba(6,10,15,.72));
+    border:1px solid var(--line);
+  }
+  .mini-check{
+    width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:30px;font-weight:900;
+    color:#4BFFB0;background:radial-gradient(circle at 50% 40%, rgba(61,255,168,.24), rgba(61,255,168,.04));
+    border:1px solid rgba(61,255,168,.48);box-shadow:0 0 34px rgba(61,255,168,.24);
+  }
+  .confirm-t{font-size:17.5px;font-weight:900;color:#EAFBF4;letter-spacing:-0.02em}
+  .confirm-s{font-size:12.5px;color:var(--muted);line-height:1.6}
+  .confirm-s b{color:#CFFCE8}
+
+  /* ---------- 제출 완료 대기 ---------- */
+  .waitbox{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:6px 2px}
+  .check{
+    position:relative;width:88px;height:88px;border-radius:50%;display:grid;place-items:center;
+    background:radial-gradient(circle at 50% 40%, rgba(61,255,168,.26), rgba(61,255,168,.05));
+    border:1px solid rgba(61,255,168,.55);
+    box-shadow:0 0 46px rgba(61,255,168,.30), 0 0 0 8px rgba(61,255,168,.05);
+    animation:pop .5s cubic-bezier(.2,1.5,.4,1) both;
+  }
+  .check::before{content:"";width:22px;height:40px;margin-top:-5px;
+    border-right:5.5px solid #4BFFB0;border-bottom:5.5px solid #4BFFB0;border-radius:2px;
+    transform:rotate(42deg);filter:drop-shadow(0 0 12px rgba(61,255,168,.8))}
+  @keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+  .wait-t{font-size:21px;font-weight:900;letter-spacing:-0.03em;color:#F4FFFB}
+  .wait-s{font-size:14px;color:#B7CBD5;line-height:1.75;max-width:300px}
+  .wait-s b{color:#D6FFEE}
+  .frontnote{
+    display:inline-flex;align-items:center;gap:8px;margin-top:4px;
+    font-size:12px;font-weight:800;color:var(--mint);
+    padding:9px 15px;border-radius:999px;
+    background:rgba(61,255,168,.08);border:1px solid rgba(61,255,168,.24);
+  }
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.22}}
+  .frontnote .dot{width:7px;height:7px;border-radius:50%;background:var(--mint);animation:blink 1.6s infinite}
+  .dots{display:flex;gap:6px;margin-top:2px}
+  .dots i{width:7px;height:7px;border-radius:50%;background:rgba(61,255,168,.55);animation:jump 1.2s infinite}
+  .dots i:nth-child(2){animation-delay:.15s}
+  .dots i:nth-child(3){animation-delay:.3s}
+  @keyframes jump{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-6px);opacity:1}}
+
+  /* ---------- 하단 고지 ---------- */
+  .foot{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:5px;padding-top:6px}
+  .note{
+    font-size:9.5px;line-height:1.55;color:#5F7580;text-align:center;letter-spacing:-0.005em;
+  }
+  .note b{color:#7E96A2;font-weight:800}
+  .roomline{font-size:9px;font-weight:700;color:#41525C;letter-spacing:.14em}
+
+  .toast{
+    position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);transform:translate(-50%,14px);
+    background:rgba(10,18,26,.97);border:1px solid var(--line2);color:#E9FFF6;
+    padding:10px 16px;border-radius:12px;font-size:12.5px;font-weight:700;
+    opacity:0;pointer-events:none;transition:.25s;z-index:20;box-shadow:0 12px 30px rgba(0,0,0,.55);
+    max-width:86%;text-align:center;
+  }
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+  @media (max-height:700px){
+    .qcard{min-height:158px;padding:17px 17px}
+    .hero-t{font-size:21px}
+    .batt{width:72px;height:72px;margin-bottom:10px}
+    .batt .core{font-size:34px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <div class="name">🔋 번아웃 11문항 자가점검</div>
+      <div class="creator">강연 크리에이터 · 정진영</div>
+    </div>
+    <div class="net" id="net"><i></i><span id="netTxt">연결 중</span></div>
+  </header>
+
+  <main class="stage">
+    <!-- 시작 -->
+    <section class="view on" id="vIntro">
+      <div class="herocard">
+        <div class="batt">
+          <span class="ring"></span><span class="ring"></span>
+          <span class="core">🔋</span>
+        </div>
+        <div class="hero-t">오늘 내 마음 배터리는<br><em>몇 %</em> 남아 있을까요?</div>
+        <div class="hero-s">11문항에 예 / 아니오로 답하면<br>앞 스크린에서 오늘 강연장의 결과가 공개됩니다</div>
+        <div class="chips">
+          <span><b>11</b>문항</span>
+          <span><b>1</b>분</span>
+          <span><b>익명</b> · 이름 없음</span>
+        </div>
+      </div>
+      <button class="btn primary" id="btnStart" type="button">점검 시작하기 ›</button>
+      <div class="note">※ 본 점검은 <b>의학적 진단이 아닌</b> 강연용 자가점검입니다.<br>개인 점수는 화면에 표시되지 않으며 전체 결과만 공개됩니다.</div>
+    </section>
+
+    <!-- 문항 -->
+    <section class="view" id="vQuiz">
+      <div class="prog">
+        <div class="row"><span id="catName">에너지 고갈</span><b id="qCount">01 / 11</b></div>
+        <div class="segs" id="segs"></div>
+      </div>
+      <div class="qcard">
+        <div class="qcat c0" id="qCat">에너지 고갈</div>
+        <div class="qtext" id="qText">—</div>
+        <div class="qsub">최근 2주를 떠올리며, 가장 가까운 쪽으로 답해 주세요</div>
+      </div>
+      <div class="answers">
+        <button class="abtn yes" id="btnYes" type="button">
+          <span class="mark o" aria-hidden="true"></span>
+          <span class="lab"><b>그렇다</b><span>YES · 내 이야기다</span></span>
+        </button>
+        <button class="abtn no" id="btnNo" type="button">
+          <span class="mark x" aria-hidden="true"></span>
+          <span class="lab"><b>아니다</b><span>NO · 아직 괜찮다</span></span>
+        </button>
+      </div>
+      <button class="back" id="btnBack" type="button">‹ 이전 문항</button>
+    </section>
+
+    <!-- 제출 확인 -->
+    <section class="view" id="vConfirm">
+      <div class="confirmbox">
+        <div class="mini-check">✓</div>
+        <div class="confirm-t">11문항 점검을 마쳤습니다</div>
+        <div class="confirm-s">지금 제출하면 <b>수정할 수 없습니다</b>.<br>결과는 진행자가 앞 화면에서 공개합니다.</div>
+      </div>
+      <button class="btn primary" id="btnSubmit" type="button">제출하기</button>
+      <button class="btn ghost" id="btnAgain" type="button">‹ 다시 점검하기</button>
+    </section>
+
+    <!-- 제출 완료 · 대기 -->
+    <section class="view" id="vWait">
+      <div class="waitbox">
+        <div class="check" aria-hidden="true"></div>
+        <div class="wait-t">제출 완료!</div>
+        <div class="wait-s">잠시 후 <b>앞 스크린</b>에서<br>전체 결과를 확인해 주세요.</div>
+        <div class="frontnote"><span class="dot"></span>고개를 들어 앞 화면을 봐 주세요</div>
+        <div class="dots"><i></i><i></i><i></i></div>
+      </div>
+      <div class="note">이름·개인 점수는 저장·표시되지 않습니다 · <b>익명 집계</b></div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="note">※ 의학적 진단이 아닌 강연용 자가점검 (MBI·CBI 표준 척도 핵심 재구성)</div>
+    <div class="roomline">BURNOUT CHECK · JY11</div>
+  </footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+
+  const ROOM = "JY11";
+  const ROOM_PATH = "rooms/burnout-check/" + ROOM;
+
+  const FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "977342156141",
+    appId: "1:977342156141:web:f9842fcc67a819ce621e64"
+  };
+
+  /* ---------- 11문항 ---------- */
+  const CATS = [
+    { name:"에너지 고갈", cls:"c0" },
+    { name:"냉소 · 대인 소진", cls:"c1" },
+    { name:"성취감 저하", cls:"c2" }
+  ];
+  const QUESTIONS = [
+    { c:0, t:"아침에 눈을 뜨면 출근이나 하루 시작 자체가 막막하게 느껴진다" },
+    { c:0, t:"퇴근 후에도 머릿속에서 일 생각이 완전히 꺼지지 않는다" },
+    { c:0, t:"충분히 자고 쉬어도 피로가 풀리지 않고 몸이 무겁다" },
+    { c:0, t:"사소한 일에도 예전보다 쉽게 짜증이 나거나 예민해진다" },
+    { c:1, t:"함께 일하는 사람이나 민원인·고객을 상대하는 게 큰 부담이다" },
+    { c:1, t:"“내가 지금 이걸 왜 하고 있지?” 하는 회의감이 자주 든다" },
+    { c:1, t:"사람들과 대화할 때 진심보다 기계적으로 반응하게 된다" },
+    { c:1, t:"주변에서 힘들어 보여도 공감하거나 챙길 여유가 없다" },
+    { c:2, t:"열심히 해도 달라지는 게 없다는 무력감을 느낀다" },
+    { c:2, t:"예전에는 즐겁거나 보람찼던 일이 요즘은 아무 감흥이 없다" },
+    { c:2, t:"이대로 가다간 곧 방전될 것 같다는 위기감이 든다" }
+  ];
+
+  /* ---------- 익명 식별자 (기기에만 저장) ---------- */
+  let UID = "";
+  try{
+    UID = localStorage.getItem("bc_uid") || "";
+    if(!UID){
+      UID = "u" + Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4);
+      localStorage.setItem("bc_uid", UID);
+    }
+  }catch(e){ UID = "u" + Math.random().toString(36).slice(2,12); }
+
+  /* ---------- 상태 ---------- */
+  let db = null, roomRef = null, live = false;
+  let answers = new Array(11).fill(null);   // true / false / null
+  let step = -1;                            // -1 시작 · 0~10 문항 · 11 확인
+  let submitted = false;
+  let myData = null;
+  let busy = false;
+
+  const views = { intro:$("vIntro"), quiz:$("vQuiz"), confirm:$("vConfirm"), wait:$("vWait") };
+  let shown = "intro";
+
+  function show(name){
+    if(shown === name) return;
+    Object.keys(views).forEach(k => views[k].classList.toggle("on", k === name));
+    shown = name;
+  }
+  function toast(msg){
+    const t = $("toast"); t.textContent = msg; t.classList.add("on");
+    clearTimeout(toast._h); toast._h = setTimeout(() => t.classList.remove("on"), 2400);
+  }
+  function setNet(ok, label){
+    $("net").classList.toggle("on", !!ok);
+    $("netTxt").textContent = label || (ok ? "실시간 연결" : "연결 중");
+  }
+
+  (function buildSegs(){
+    const wrap = $("segs");
+    for(let i=0;i<11;i++) wrap.appendChild(document.createElement("i"));
+  })();
+
+  /* ---------- 화면 그리기 ---------- */
+  function renderQuiz(){
+    if(step < 0 || step > 10){ show("intro"); return; }
+    const q = QUESTIONS[step], cat = CATS[q.c];
+    $("qCat").textContent = cat.name;
+    $("qCat").className = "qcat " + cat.cls;
+    $("catName").textContent = cat.name;
+    $("qText").textContent = q.t;
+    $("qCount").textContent = String(step + 1).padStart(2,"0") + " / 11";
+    const segs = $("segs").children;
+    for(let i=0;i<11;i++){
+      segs[i].className = answers[i] !== null ? "on" : (i === step ? "cur" : "");
+    }
+    $("btnBack").style.visibility = step === 0 ? "hidden" : "visible";
+    show("quiz");
+  }
+
+  function renderConfirm(){
+    show("confirm");
+  }
+
+  function renderWait(){
+    document.body.classList.add("done");
+    show("wait");
+  }
+
+  /* ---------- Firebase ---------- */
+  function initFB(){
+    if(typeof firebase === "undefined" || !firebase.initializeApp){
+      setNet(false, "연결 실패");
+      return;
+    }
+    try{
+      firebase.initializeApp(FB_CONFIG);
+      db = firebase.database();
+      db.ref(".info/connected").on("value", s => {
+        live = !!s.val();
+        setNet(live, live ? "실시간 연결" : "연결 중");
+      });
+      roomRef = db.ref(ROOM_PATH);
+      roomRef.on("value", snap => onRoom(snap.val() || {}));
+    }catch(e){
+      setNet(false, "연결 실패");
+    }
+  }
+
+  function onRoom(data){
+    const responses = data.responses || {};
+    myData = responses[UID] || null;
+
+    if(myData){                     /* 이미 제출함 → 대기 화면만 */
+      submitted = true;
+      step = 11;
+      renderWait();
+      return;
+    }
+    if(submitted){                  /* 진행자가 비운 경우 → 다시 참여 가능 */
+      submitted = false;
+      step = -1;
+      answers = new Array(11).fill(null);
+      document.body.classList.remove("done");
+      show("intro");
+      return;
+    }
+    if(step >= 0 && step <= 10) renderQuiz();
+    else if(step === 11) renderConfirm();
+    else show("intro");
+  }
+
+  /* ---------- 액션 ---------- */
+  function answer(v){
+    if(busy) return;
+    if(step < 0 || step > 10) return;
+    answers[step] = v;
+    if(navigator.vibrate) navigator.vibrate(12);
+    if(step < 10){ step++; renderQuiz(); }
+    else { step = 11; renderConfirm(); }
+  }
+  function back(){
+    if(step <= 0) return;
+    step = step - 1;
+    renderQuiz();
+  }
+  function submit(){
+    if(busy) return;
+    if(answers.some(v => v === null)){ toast("아직 답하지 않은 문항이 있습니다"); return; }
+    if(!roomRef){ toast("연결을 기다리는 중입니다 · 잠시 후 다시 눌러 주세요"); return; }
+    busy = true;
+    $("btnSubmit").disabled = true;
+    const bits = answers.map(v => v ? "1" : "0").join("");
+    const score = bits.split("").filter(c => c === "1").length;
+    roomRef.child("responses/" + UID).set({ a: bits, s: score, ts: Date.now() })
+      .then(() => { busy = false; $("btnSubmit").disabled = false; submitted = true; step = 11; renderWait(); })
+      .catch(() => {
+        busy = false; $("btnSubmit").disabled = false;
+        toast("전송 실패 · 잠시 후 다시 눌러 주세요");
+      });
+  }
+
+  $("btnStart").addEventListener("click", () => { step = 0; answers = new Array(11).fill(null); renderQuiz(); });
+  $("btnYes").addEventListener("click", () => answer(true));
+  $("btnNo").addEventListener("click", () => answer(false));
+  $("btnBack").addEventListener("click", back);
+  $("btnAgain").addEventListener("click", () => { step = 0; renderQuiz(); });
+  $("btnSubmit").addEventListener("click", submit);
+
+  initFB();
+})();
+</script>
+</body>
+</html>
