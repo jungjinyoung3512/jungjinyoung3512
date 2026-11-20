@@ -491,7 +491,7 @@
 
             <!-- 인터랙티브 탭 버튼 3개 -->
             <div class="reveal mt-12 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 max-w-3xl mx-auto" role="tablist">
-                <button type="button" onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn active-tab flex-1 px-6 py-4 rounded-2xl font-bold text-sm sm:text-base transition-all duration-300 shadow-md bg-navy-900 text-white border-2 border-navy-900 cursor-pointer">
+                <button type="button" onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn active-tab flex-1 px-6 py-4 rounded-2xl font-bold text-sm sm:text-base transition-all duration-300 shadow-md bg-navy-900 text-white hover:text-white border-2 border-navy-900 cursor-pointer">
                     <span class="block text-xs text-amber-400 font-semibold mb-0.5">PROGRAM 01</span>
                     AI 감성소통
                 </button>
@@ -1343,8 +1343,8 @@
 
             // 모든 탭 버튼 비활성 스타일 적용
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-navy-900', 'text-white', 'border-navy-900', 'shadow-md');
-                btn.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+                btn.classList.remove('bg-navy-900', 'text-white', 'hover:text-white', 'border-navy-900', 'shadow-md');
+                btn.classList.add('bg-white', 'text-slate-600', 'hover:text-navy-900', 'border-slate-200');
                 const subSpan = btn.querySelector('span');
                 if (subSpan) {
                     subSpan.classList.remove('text-amber-400');
@@ -1362,8 +1362,8 @@
             // 선택된 탭 버튼 활성 스타일 적용
             const activeBtn = document.getElementById('btn-' + tabId);
             if (activeBtn) {
-                activeBtn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
-                activeBtn.classList.add('bg-navy-900', 'text-white', 'border-navy-900', 'shadow-md');
+                activeBtn.classList.remove('bg-white', 'text-slate-600', 'hover:text-navy-900', 'border-slate-200');
+                activeBtn.classList.add('bg-navy-900', 'text-white', 'hover:text-white', 'border-navy-900', 'shadow-md');
                 const activeSubSpan = activeBtn.querySelector('span');
                 if (activeSubSpan) {
                     activeSubSpan.classList.remove('text-amber-600');
