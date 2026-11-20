@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>정진영 | 강연 크리에이터 · AI 융합 교육 컨설턴트</title>
+    <title>정진영 | 소통·소진(번아웃) 강연 · 데이터로 남기는 강연 크리에이터</title>
 
     <!-- Open Graph / 카카오톡·SNS 링크 미리보기 -->
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="정진영 | 강연 크리에이터">
+    <meta property="og:site_name" content="정진영 | 소통·소진 강연 · 강연 크리에이터">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:url" content="https://jungjinyoung3512.github.io/jungjinyoung3512/">
-    <meta property="og:title" content="정진영 | 강연 크리에이터 · AI 융합 교육 컨설턴트">
-    <meta property="og:description" content="전 KBS 공채 개그맨 정진영. 웃음과 통찰로 조직의 소통·소진 문제를 푸는 AI 감성 소통 &amp; 힐링 강연. 기업·공공기관 특강 문의 010-8544-7009">
+    <meta property="og:title" content="정진영 | 소통·소진(번아웃) 강연 · 데이터로 남기는 강연 크리에이터">
+    <meta property="og:description" content="강연 전 익명 설문으로 조직의 소진 지점을 읽고, 현장 진단으로 한 문장을 만들고, 강연 후에는 결과 보고서까지 남깁니다. 2026.11 현장 만족도 4.70/5.00(응답 61명). 전 KBS 공채 개그맨, 강연 크리에이터 정진영. 특강 문의 010-8544-7009">
     <meta property="og:image" content="https://jungjinyoung3512.github.io/jungjinyoung3512/og-image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:image:alt" content="정진영 강연 크리에이터 — 차디찬 AI 기술에 가장 뜨거운 사람의 온기를 입힙니다">
+    <meta property="og:image:alt" content="정진영 강연 크리에이터 — 웃음으로 열고, 데이터로 남기는 소통·소진 강연">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="정진영 | 강연 크리에이터 · AI 융합 교육 컨설턴트">
-    <meta name="twitter:description" content="전 KBS 공채 개그맨 정진영. 웃음과 통찰로 조직의 소통·소진 문제를 푸는 AI 감성 소통 &amp; 힐링 강연. 기업·공공기관 특강 문의 010-8544-7009">
+    <meta name="twitter:title" content="정진영 | 소통·소진(번아웃) 강연 · 데이터로 남기는 강연 크리에이터">
+    <meta name="twitter:description" content="강연 전 익명 설문으로 조직의 소진 지점을 읽고, 현장 진단으로 한 문장을 만들고, 강연 후에는 결과 보고서까지 남깁니다. 2026.11 현장 만족도 4.70/5.00(응답 61명). 전 KBS 공채 개그맨, 강연 크리에이터 정진영. 특강 문의 010-8544-7009">
     <meta name="twitter:image" content="https://jungjinyoung3512.github.io/jungjinyoung3512/og-image.jpg">
-    <meta name="twitter:image:alt" content="정진영 강연 크리에이터 — 차디찬 AI 기술에 가장 뜨거운 사람의 온기를 입힙니다">
+    <meta name="twitter:image:alt" content="정진영 강연 크리에이터 — 웃음으로 열고, 데이터로 남기는 소통·소진 강연">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -70,6 +70,11 @@
             color: #0F172A;
             overflow-x: hidden;
         }
+        /* 한글 어절 단위 줄바꿈 — 단어 중간에서 끊기지 않도록 */
+        body {
+            word-break: keep-all;
+            overflow-wrap: anywhere;
+        }
         .font-editorial {
             font-family: 'Noto Serif KR', serif;
         }
@@ -116,8 +121,9 @@
                 </a>
 
                 <!-- 우측 데스크탑 메뉴 -->
-                <nav class="hidden md:flex items-center space-x-8">
+                <nav class="hidden md:flex items-center space-x-6">
                     <a href="#why" class="text-slate-300 hover:text-white text-sm font-medium transition">WHY 정진영</a>
+                    <a href="#data" class="text-slate-300 hover:text-white text-sm font-medium transition">데이터로 남는 강연</a>
                     <a href="#curriculum" class="text-slate-300 hover:text-white text-sm font-medium transition">강의 커리큘럼</a>
                     <a href="#archive" class="text-slate-300 hover:text-white text-sm font-medium transition">영상 & 강연 후기</a>
                     <a href="#books" class="text-slate-300 hover:text-white text-sm font-medium transition">저서 & 칼럼</a>
@@ -136,6 +142,7 @@
         <!-- 모바일 드롭다운 메뉴 -->
         <div id="mobileMenu" class="hidden md:hidden bg-navy-900 border-b border-white/10 px-4 pt-2 pb-6 space-y-2">
             <a href="#why" class="mobile-link block px-4 py-3 rounded-xl text-slate-200 hover:bg-white/5 font-medium">WHY 정진영</a>
+            <a href="#data" class="mobile-link block px-4 py-3 rounded-xl text-slate-200 hover:bg-white/5 font-medium">데이터로 남는 강연</a>
             <a href="#curriculum" class="mobile-link block px-4 py-3 rounded-xl text-slate-200 hover:bg-white/5 font-medium">강의 커리큘럼</a>
             <a href="#archive" class="mobile-link block px-4 py-3 rounded-xl text-slate-200 hover:bg-white/5 font-medium">영상 & 강연 후기</a>
             <a href="#books" class="mobile-link block px-4 py-3 rounded-xl text-slate-200 hover:bg-white/5 font-medium">저서 & 칼럼</a>
@@ -156,20 +163,21 @@
                     <!-- 상단 뱃지 -->
                     <div class="inline-flex items-center justify-center px-4 py-2 rounded-full bg-white/5 border border-amber-500/30 text-amber-400 text-xs sm:text-sm font-medium tracking-wide">
                         <span class="w-2 h-2 rounded-full bg-amber-500 mr-2.5 animate-pulse"></span>
-                        전 KBS 공채 개그맨 × AI 융합 교육 컨설턴트 × 강연 크리에이터
+                        전 KBS 공채 개그맨 × 소통·소진 강연 × 강연 크리에이터
                     </div>
 
                     <!-- 메인 헤드라인(H1) -->
                     <h1 class="font-editorial text-3xl sm:text-5xl lg:text-[54px] font-bold leading-[1.25] tracking-tight text-white">
-                        “차디찬 AI 기술에<br>
-                        가장 뜨거운 <span class="text-amber-500">사람의 온기</span>를<br class="sm:hidden">
-                        입힙니다.”
+                        웃음으로 열고,<br>
+                        <span class="text-amber-500">데이터로 남기는</span><br class="sm:hidden">
+                        소통·소진 강연
                     </h1>
 
                     <!-- 서브 카피 -->
                     <p class="text-slate-300 text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl mx-auto font-light">
-                        KBS 공채 개그맨 출신 강연 크리에이터 <strong class="text-white font-semibold">정진영</strong>의<br class="hidden sm:inline">
-                        웃음과 통찰이 살아있는 AI 감성 소통 &amp; 조직 힐링 솔루션
+                        강연 전 익명 설문으로 조직이 어디서 지치는지 먼저 읽고,<br class="hidden sm:inline">
+                        현장에서는 참여 도구로 직접 진단합니다.<br class="hidden sm:inline">
+                        강연 후에는 <strong class="text-white font-semibold">결과 보고서</strong>를 남깁니다. KBS 공채 개그맨 출신, 강연 크리에이터 <strong class="text-white font-semibold">정진영</strong>.
                     </p>
 
                     <!-- CTA 버튼 2개 -->
@@ -184,20 +192,23 @@
                         </a>
                     </div>
 
-                    <!-- 핵심 신뢰 지표 요약 -->
-                    <div class="grid grid-cols-3 gap-6 sm:gap-12 pt-8 border-t border-white/10 w-full max-w-xl mx-auto text-center">
-                        <div>
-                            <p class="text-amber-500 font-bold text-xl sm:text-2xl">KBS 공채</p>
-                            <p class="text-slate-400 text-xs sm:text-sm mt-0.5">검증된 무대 장악력</p>
+                    <!-- 핵심 신뢰 지표 요약 (2026.11 실측값으로 교체) -->
+                    <div class="pt-8 border-t border-white/10 w-full max-w-2xl mx-auto">
+                        <div class="grid grid-cols-3 gap-4 sm:gap-8 text-center">
+                            <div>
+                                <p class="text-amber-500 font-bold text-lg sm:text-2xl tracking-tight">4.70/5.00</p>
+                                <p class="text-slate-400 text-[11px] sm:text-sm mt-1">현장 만족도 · 응답 61명</p>
+                            </div>
+                            <div>
+                                <p class="text-amber-500 font-bold text-lg sm:text-2xl tracking-tight">93.4%</p>
+                                <p class="text-slate-400 text-[11px] sm:text-sm mt-1">4점 이상 응답 비율</p>
+                            </div>
+                            <div>
+                                <p class="text-amber-500 font-bold text-lg sm:text-2xl tracking-tight">130건</p>
+                                <p class="text-slate-400 text-[11px] sm:text-sm mt-1">누적 익명 응답 · 도구 16종</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="text-amber-500 font-bold text-xl sm:text-2xl">98.7%</p>
-                            <p class="text-slate-400 text-xs sm:text-sm mt-0.5">기관·기업 교육 만족도</p>
-                        </div>
-                        <div>
-                            <p class="text-amber-500 font-bold text-xl sm:text-2xl">AI × 인문학</p>
-                            <p class="text-slate-400 text-xs sm:text-sm mt-0.5">독보적 융합 커리큘럼</p>
-                        </div>
+                        <p class="text-center text-slate-500 text-[11px] sm:text-xs mt-4 leading-relaxed">2026년 11월 대전특수교육원 · 제주 119특수대응단 두 현장 실시간 설문 실측</p>
                     </div>
                 </div>
 
@@ -229,7 +240,7 @@
                                     <i class="fa-solid fa-play text-2xl ml-1"></i>
                                 </div>
                                 <p class="mt-4 font-editorial text-lg sm:text-xl font-bold text-white">강연 하이라이트 미리보기</p>
-                                <p class="text-slate-300 text-xs sm:text-sm mt-1">웃음으로 열고 AI와 인문학으로 채우는 강연 현장</p>
+                                <p class="text-slate-300 text-xs sm:text-sm mt-1">웃음으로 열고 데이터로 남기는 강연 현장</p>
                             </div>
 
                             <div class="relative z-10 flex items-center justify-between text-xs text-slate-300 border-t border-white/10 pt-3">
@@ -357,7 +368,7 @@
                 <div class="reveal group rounded-3xl bg-ivory-50 p-8 sm:p-10 border border-slate-200/80 hover:border-amber-600/50 hover:bg-white hover:shadow-xl transition duration-300">
                     <div class="flex items-center justify-between mb-8">
                         <span class="font-editorial text-4xl font-black text-amber-600/30 group-hover:text-amber-600 transition">02</span>
-                        <span class="px-3.5 py-1.5 rounded-full bg-amber-600 text-white text-xs font-semibold">AI 융합 감성 소통</span>
+                        <span class="px-3.5 py-1.5 rounded-full bg-amber-600 text-white text-xs font-semibold">소통·소진 리스크 관리</span>
                     </div>
                     <h3 class="font-editorial text-2xl font-bold text-navy-900 mb-4">기술을 넘어선 공감</h3>
                     <p class="text-slate-600 leading-relaxed text-base">
@@ -388,13 +399,90 @@
         </div>
     </section>
 
+    <!-- 4-1. Section: 데이터로 남는 강연 (강연 전 → 현장 → 강연 후 72시간 → 다음 회차) -->
+    <section id="data" class="py-20 lg:py-28 bg-white border-y border-slate-200/70">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto reveal">
+                <span class="text-amber-600 font-bold text-xs sm:text-sm tracking-widest uppercase">DATA-DRIVEN LECTURE</span>
+                <h2 class="font-editorial text-2xl sm:text-4xl font-bold text-navy-900 mt-3 leading-snug">
+                    “강연이 끝나면,<br class="hidden sm:inline"> 담당자 책상에 문서가 남습니다.”
+                </h2>
+                <p class="text-slate-600 mt-4 text-base sm:text-lg leading-relaxed">
+                    웃음으로 끝나는 강연은 다음 해에 기억나지 않습니다. 그래서 강연 전·중·후를 <strong class="text-navy-900">숫자와 문서</strong>로 남깁니다.<br class="hidden sm:inline">
+                    결재를 올리는 담당자에게 필요한 건 감동 후기가 아니라 근거입니다.
+                </p>
+            </div>
+
+            <div class="reveal grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-7 mt-14">
+                <div class="bg-ivory-50 rounded-3xl p-7 border border-slate-200/80 flex flex-col">
+                    <span class="text-amber-600 font-bold text-xs tracking-widest">STEP 01 · 강연 전</span>
+                    <h3 class="font-editorial text-xl font-bold text-navy-900 mt-2">익명 QR 설문으로 먼저 듣기</h3>
+                    <p class="text-slate-600 text-sm mt-3 leading-relaxed flex-1">
+                        조직이 어디서 지치는지 강연 전에 먼저 묻습니다. 2026년 11월 두 현장에서 69명이 답했고, 1위는 ‘후배·팀원과의 소통’ 32.4%였습니다.
+                    </p>
+                    <p class="text-xs text-navy-800 font-semibold mt-5 pt-4 border-t border-slate-200"><i class="fa-solid fa-file-lines text-amber-600 mr-1.5"></i>남는 것 · 사전 진단 집계</p>
+                </div>
+
+                <div class="bg-ivory-50 rounded-3xl p-7 border border-slate-200/80 flex flex-col">
+                    <span class="text-amber-600 font-bold text-xs tracking-widest">STEP 02 · 강연 중</span>
+                    <h3 class="font-editorial text-xl font-bold text-navy-900 mt-2">그 숫자를 무대에 그대로</h3>
+                    <p class="text-slate-600 text-sm mt-3 leading-relaxed flex-1">
+                        첫 20분에 그 집계를 띄웁니다. ‘나만 그런 게 아니구나’가 확인되는 순간 방어가 풀리고, 참여 도구 16종으로 각자 자기 조직의 숫자를 직접 확인합니다.
+                    </p>
+                    <p class="text-xs text-navy-800 font-semibold mt-5 pt-4 border-t border-slate-200"><i class="fa-solid fa-chart-simple text-amber-600 mr-1.5"></i>남는 것 · 실시간 집계 화면</p>
+                </div>
+
+                <div class="bg-ivory-50 rounded-3xl p-7 border border-slate-200/80 flex flex-col">
+                    <span class="text-amber-600 font-bold text-xs tracking-widest">STEP 03 · 강연 후 72시간</span>
+                    <h3 class="font-editorial text-xl font-bold text-navy-900 mt-2">결과 보고서 발송</h3>
+                    <p class="text-slate-600 text-sm mt-3 leading-relaxed flex-1">
+                        참여 인원, 만족도 평균, 4점 이상 비율, 후속 희망 주제를 담은 보고서를 담당자께 보냅니다. 지금까지 두 번 모두 평균 4.7점이었습니다.
+                    </p>
+                    <p class="text-xs text-navy-800 font-semibold mt-5 pt-4 border-t border-slate-200"><i class="fa-solid fa-file-arrow-down text-amber-600 mr-1.5"></i>남는 것 · 결과 보고서</p>
+                </div>
+
+                <div class="bg-navy-900 rounded-3xl p-7 border border-navy-800 flex flex-col text-white">
+                    <span class="text-amber-500 font-bold text-xs tracking-widest">STEP 04 · 다음 회차</span>
+                    <h3 class="font-editorial text-xl font-bold mt-2">보고서가 다음 제안서가 됩니다</h3>
+                    <p class="text-slate-300 text-sm mt-3 leading-relaxed flex-1">
+                        후속 희망 1위(번아웃 탈출·멘탈 리셋 42.6%)가 다음 강연의 커리큘럼이 됩니다. 다음 해 예산을 잡을 때 근거가 이미 손에 있습니다.
+                    </p>
+                    <p class="text-xs text-amber-400 font-semibold mt-5 pt-4 border-t border-white/10"><i class="fa-solid fa-arrow-right-long mr-1.5"></i>남는 것 · 다음 회차 커리큘럼</p>
+                </div>
+            </div>
+
+            <!-- 실측 지표 스트립 -->
+            <div class="reveal mt-10 rounded-3xl bg-navy-950 border border-white/10 px-6 sm:px-10 py-8">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 text-center text-white">
+                    <div>
+                        <p class="font-editorial text-2xl sm:text-3xl font-bold text-amber-500">4.70<span class="text-base sm:text-lg text-slate-400 font-sans">/5.00</span></p>
+                        <p class="text-slate-400 text-xs mt-1">현장 만족도 평균 (응답 61명)</p>
+                    </div>
+                    <div>
+                        <p class="font-editorial text-2xl sm:text-3xl font-bold text-amber-500">93.4<span class="text-base sm:text-lg text-slate-400 font-sans">%</span></p>
+                        <p class="text-slate-400 text-xs mt-1">4점 이상 응답 비율</p>
+                    </div>
+                    <div>
+                        <p class="font-editorial text-2xl sm:text-3xl font-bold text-amber-500">130<span class="text-base sm:text-lg text-slate-400 font-sans">건</span></p>
+                        <p class="text-slate-400 text-xs mt-1">누적 익명 응답 (사전 69 + 사후 61)</p>
+                    </div>
+                    <div>
+                        <p class="font-editorial text-2xl sm:text-3xl font-bold text-amber-500">16<span class="text-base sm:text-lg text-slate-400 font-sans">종</span></p>
+                        <p class="text-slate-400 text-xs mt-1">강연장에서 운영 중인 참여 도구</p>
+                    </div>
+                </div>
+                <p class="text-center text-slate-500 text-[11px] sm:text-xs mt-6">2026년 11월 16일 대전특수교육원 · 11월 19일 제주 119특수대응단 실시간 설문 기준. 응답은 전부 익명이며 이름·소속을 받지 않습니다.</p>
+            </div>
+        </div>
+    </section>
+
     <!-- 5. Section 3: 대표 강의 커리큘럼 (인터랙티브 탭 UI 구현) -->
     <section id="curriculum" class="py-20 lg:py-28 bg-ivory-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto reveal">
                 <span class="text-amber-600 font-bold text-xs sm:text-sm tracking-widest uppercase">SIGNATURE CURRICULUM</span>
                 <h2 class="font-editorial text-2xl sm:text-4xl font-bold text-navy-900 mt-3">
-                    조직의 목적과 대상에 최적화된<br class="sm:hidden"> 3대 대표 강의 솔루션
+                    조직의 목적과 대상에 최적화된<br class="hidden sm:inline"> 3대 대표 강의 솔루션
                 </h2>
                 <p class="text-slate-600 mt-4 text-base sm:text-lg">
                     교육 시간(90분 특강 ~ 4시간 워크숍) 및 기관 특성에 맞추어 커리큘럼 커스터마이징이 가능합니다.
@@ -405,11 +493,11 @@
             <div class="reveal mt-12 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 max-w-3xl mx-auto" role="tablist">
                 <button type="button" onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn active-tab flex-1 px-6 py-4 rounded-2xl font-bold text-sm sm:text-base transition-all duration-300 shadow-md bg-navy-900 text-white border-2 border-navy-900 cursor-pointer">
                     <span class="block text-xs text-amber-400 font-semibold mb-0.5">PROGRAM 01</span>
-                    AI 시대 감성 소통
+                    소통·소진 리스크 관리
                 </button>
                 <button type="button" onclick="switchTab('tab2')" id="btn-tab2" class="tab-btn flex-1 px-6 py-4 rounded-2xl font-bold text-sm sm:text-base transition-all duration-300 bg-white text-slate-600 hover:text-navy-900 border-2 border-slate-200 cursor-pointer">
                     <span class="block text-xs text-amber-600 font-semibold mb-0.5">PROGRAM 02</span>
-                    스트레스 힐링 토크쇼
+                    번아웃 탈출 · 멘탈 리셋
                 </button>
                 <button type="button" onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn flex-1 px-6 py-4 rounded-2xl font-bold text-sm sm:text-base transition-all duration-300 bg-white text-slate-600 hover:text-navy-900 border-2 border-slate-200 cursor-pointer">
                     <span class="block text-xs text-amber-600 font-semibold mb-0.5">PROGRAM 03</span>
@@ -420,7 +508,7 @@
             <!-- 탭 콘텐츠 패널 컨테이너 -->
             <div class="reveal mt-8 bg-white rounded-3xl border border-slate-200/90 shadow-xl p-6 sm:p-10 lg:p-12">
                 
-                <!-- [탭 1] AI 시대 감성 소통 -->
+                <!-- [탭 1] 소통·소진 리스크 관리 (AI 감성 소통) -->
                 <div id="content-tab1" class="tab-panel block">
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
                         <div class="lg:col-span-5 space-y-5">
@@ -428,7 +516,8 @@
                                 <i class="fa-solid fa-users mr-2"></i> 권장 대상: 전 직원, 중간관리자, 민원 담당자
                             </div>
                             <h3 class="font-editorial text-2xl sm:text-3xl font-bold text-navy-900">
-                                AI 시대 감성 소통
+                                소통·소진 리스크 관리
+                                <span class="block font-sans text-base font-medium text-slate-500 mt-1">AI 감성 소통 · 2시간 실습형</span>
                             </h3>
                             <blockquote class="p-5 rounded-2xl bg-navy-900 text-white font-editorial text-lg leading-relaxed border-l-4 border-amber-500">
                                 “프롬프트보다 중요한 것은<br>‘마음의 질문’입니다.”
@@ -437,7 +526,7 @@
                                 AI 기술이 발전할수록 조직 내 진짜 경쟁력은 ‘사람의 마음을 읽는 공감 능력’에 있습니다. 생성형 AI를 소통의 통역사로 활용하여 세대 갈등과 민원 응대의 스트레스를 유쾌하게 풀어내는 실습형 과정입니다.
                             </p>
                             <div class="pt-2">
-                                <button onclick="selectProgramAndScroll('AI 시대 감성 소통')" class="inline-flex items-center px-6 py-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold transition cursor-pointer">
+                                <button onclick="selectProgramAndScroll('소통·소진 리스크 관리')" class="inline-flex items-center px-6 py-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold transition cursor-pointer">
                                     이 과정으로 강의 문의하기 <i class="fa-solid fa-arrow-right ml-2"></i>
                                 </button>
                             </div>
@@ -473,7 +562,7 @@
                     </div>
                 </div>
 
-                <!-- [탭 2] 스트레스 힐링 토크쇼 -->
+                <!-- [탭 2] 번아웃 탈출 · 멘탈 리셋 토크쇼 -->
                 <div id="content-tab2" class="tab-panel hidden">
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
                         <div class="lg:col-span-5 space-y-5">
@@ -481,7 +570,7 @@
                                 <i class="fa-solid fa-heart-pulse mr-2"></i> 권장 대상: 감정노동자, 사회복지사, 번아웃 부서
                             </div>
                             <h3 class="font-editorial text-2xl sm:text-3xl font-bold text-navy-900">
-                                스트레스 힐링 토크쇼
+                                번아웃 탈출 · 멘탈 리셋 토크쇼
                             </h3>
                             <blockquote class="p-5 rounded-2xl bg-navy-900 text-white font-editorial text-lg leading-relaxed border-l-4 border-amber-500">
                                 “억지 위로 대신,<br>유쾌한 해방감을 선물합니다.”
@@ -490,7 +579,7 @@
                                 타인을 돌보고 응대하느라 정작 자신의 마음은 돌보지 못한 구성원들을 위한 고품격 힐링 콘서트형 특강입니다. 시원한 웃음으로 감정적 체증을 씻어내고, 내면의 단단한 회복탄력성을 채웁니다.
                             </p>
                             <div class="pt-2">
-                                <button onclick="selectProgramAndScroll('스트레스 힐링 토크쇼')" class="inline-flex items-center px-6 py-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold transition cursor-pointer">
+                                <button onclick="selectProgramAndScroll('번아웃 탈출·멘탈 리셋 토크쇼')" class="inline-flex items-center px-6 py-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-sm font-semibold transition cursor-pointer">
                                     이 과정으로 강의 문의하기 <i class="fa-solid fa-arrow-right ml-2"></i>
                                 </button>
                             </div>
@@ -696,7 +785,7 @@
 
                     <div class="mt-6 pt-5 border-t border-white/10 text-xs text-slate-400 flex items-center justify-between">
                         <span>재출강 및 타 부서 추천 의뢰 다수</span>
-                        <span class="text-amber-400 font-semibold">만족도 98.7%</span>
+                        <span class="text-amber-400 font-semibold">2026.11 현장 만족도 4.70/5.00 (응답 61명)</span>
                     </div>
                 </div>
 
@@ -1072,8 +1161,8 @@
                             </label>
                             <select id="programSelect" name="programSelect" required
                                 class="w-full px-4 py-3.5 rounded-xl bg-white border border-slate-300 text-navy-900 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:border-transparent transition">
-                                <option value="AI 시대 감성 소통">01. AI 시대 감성 소통</option>
-                                <option value="스트레스 힐링 토크쇼">02. 스트레스 힐링 토크쇼</option>
+                                <option value="소통·소진 리스크 관리">01. 소통·소진 리스크 관리 (AI 감성 소통)</option>
+                                <option value="번아웃 탈출·멘탈 리셋 토크쇼">02. 번아웃 탈출 · 멘탈 리셋 토크쇼</option>
                                 <option value="AI 창의력 팀빌딩">03. AI 창의력 팀빌딩</option>
                                 <option value="기관 맞춤형 융합 과정">04. 기관 맞춤형 융합 과정 (상담 후 결정)</option>
                             </select>
@@ -1111,10 +1200,11 @@
                 <div>
                     <div class="flex items-center space-x-2.5">
                         <span class="w-7 h-7 rounded-lg bg-amber-600 flex items-center justify-center text-white font-editorial font-bold text-base">정</span>
-                        <span class="text-white font-bold text-lg">교육 아티스트 정진영</span>
+                        <span class="text-white font-bold text-lg">강연 크리에이터 정진영</span>
                     </div>
                     <p class="text-sm text-slate-400 mt-3 leading-relaxed">
-                        전 KBS 공채 개그맨 · AI 융합 교육 컨설턴트 · 강연 크리에이터<br>
+                        전 KBS 공채 개그맨 · 강연 크리에이터 · 소통·소진(번아웃) 강연<br>
+                        강연 전 익명 설문 → 현장 참여 진단 → 사후 결과 보고서<br>
                         기업·관공서·지자체 출강 및 교육 프로그램 기획·협업 문의 | 직통: 010-8544-7009 | star1010245@naver.com
                     </p>
                 </div>
@@ -1135,8 +1225,8 @@
             </div>
 
             <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-                <p>&copy; 2026 교육 컨설턴트 정진영 (Jung Jin-Young). All rights reserved.</p>
-                <p>AI 감성 소통 · 스트레스 힐링 토크쇼 · AI 창의력 팀빌딩 전문</p>
+                <p>&copy; 2026 강연 크리에이터 정진영 (Jung Jin-Young). All rights reserved.</p>
+                <p>소통·소진 리스크 관리 · 번아웃 탈출 멘탈 리셋 · AI 창의력 팀빌딩</p>
             </div>
         </div>
     </footer>
@@ -1407,7 +1497,7 @@
   <div class="page cover">
     <div>
       <span class="badge">2026 OFFICIAL PORTFOLIO</span>
-      <p style="color:#F59E0B; font-size:18px; font-weight:600; margin-top:28px;">교육 아티스트 · 강연 크리에이터</p>
+      <p style="color:#F59E0B; font-size:18px; font-weight:600; margin-top:28px;">소통·소진 강연 · 강연 크리에이터</p>
       <h1 class="serif">JUNG<br>JINYOUNG<br><span style="color:#F59E0B; font-size:34px;">Portfolio 2026</span></h1>
     </div>
     <div style="border-top:1px solid rgba(255,255,255,0.15); padding-top:20px; display:flex; justify-content:space-between; align-items:flex-end;">
@@ -1458,17 +1548,17 @@
     <div style="display:flex; flex-direction:column; gap:16px;">
       <div class="card">
         <span class="tag">PROCESS 01 · 소통은 건강하신가요?</span>
-        <h3 style="margin-top:8px;">AI 커뮤니케이션 리스크 대응 과정 (AI 시대 감성 소통)</h3>
+        <h3 style="margin-top:8px;">소통·소진 리스크 관리 (AI 감성 소통)</h3>
         <p style="font-size:13.5px; color:#475569;">보고·지시·피드백 과정에서 발생하는 의사결정 오류와 커뮤니케이션 병목을 AI 기반 사고 프레임과 유머 화법으로 개선하는 과정</p>
       </div>
       <div class="card">
         <span class="tag">PROCESS 02 · 쉬었다 가세요...</span>
-        <h3 style="margin-top:8px;">AI 기반 조직 소진·이직 리스크 관리 (스트레스 힐링 토크쇼)</h3>
+        <h3 style="margin-top:8px;">번아웃 탈출 · 멘탈 리셋 토크쇼</h3>
         <p style="font-size:13.5px; color:#475569;">팀장, 중간관리자와 구성원의 감정 소진을 AI 스트레스 훈련과 관객 참여형 힐링 토크로 진단·관리하여 이직 가능성과 조직 갈등 비용을 낮추는 교육 과정</p>
       </div>
       <div class="card">
         <span class="tag">PROCESS 03 · 다함께 다시 새롭게!</span>
-        <h3 style="margin-top:8px;">성과개선 팀빌딩 아이데이션 (AI 창의력 팀빌딩)</h3>
+        <h3 style="margin-top:8px;">AI 창의력 팀빌딩 (성과개선 아이데이션)</h3>
         <p style="font-size:13.5px; color:#475569;">AI 시대 창의력 역량 강화와 개인의 성장, 팀워크의 재정립을 생성형 AI 콘텐츠 제작 실습으로 새롭게 구축하는 팀빌딩 과정</p>
       </div>
     </div>
