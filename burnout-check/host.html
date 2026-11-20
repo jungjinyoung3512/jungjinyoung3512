@@ -83,7 +83,7 @@
   @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
   /* ---- 공개 전 ---- */
-  .waitwrap{flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-evenly;gap:18px;min-height:0}
+  .waitwrap{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:clamp(16px,3.2vh,40px);min-height:0}
   .counterzone{display:flex;flex-direction:column;align-items:center;gap:6px}
   .counterzone .lbl{font-size:11.5px;font-weight:900;letter-spacing:.18em;color:var(--dim)}
   .counter{display:flex;align-items:flex-end;gap:14px;justify-content:center}
@@ -105,6 +105,16 @@
   .lock .lv{font-size:22px;font-weight:900;color:#5B6E7A;font-variant-numeric:tabular-nums}
   .locknote{text-align:center;font-size:12.5px;font-weight:800;color:#6D808C}
   .locknote b{color:#9FD9C1}
+
+  .joincard{flex:0 0 auto;align-self:center;display:flex;align-items:center;gap:18px;
+    padding:14px 22px 14px 14px;border-radius:18px;border:1px solid rgba(61,255,168,.22);
+    background:linear-gradient(100deg, rgba(61,255,168,.07), rgba(53,232,255,.04));max-width:min(760px,90%)}
+  .joincard .qmini{flex:0 0 auto;background:#fff;border-radius:12px;padding:8px}
+  .joincard .qmini img{display:block;width:clamp(96px,8vw,128px);height:clamp(96px,8vw,128px)}
+  .joincard .jtx{display:flex;flex-direction:column;gap:4px;min-width:0}
+  .joincard .jtx b{font-size:clamp(14px,1.1vw,18px);font-weight:900;color:#EAFBF4;letter-spacing:-0.02em}
+  .joincard .jtx span{font-size:clamp(11.5px,.9vw,15px);font-weight:700;color:#9FB6C2;line-height:1.5}
+  .joincard .jtx code{font-family:var(--mono);font-size:clamp(10.5px,.8vw,13px);color:#7EE9C3;letter-spacing:.02em;word-break:break-all}
 
   /* ---- 공개 후 ---- */
   .rhead{display:flex;align-items:center;gap:12px;flex:0 0 auto;padding-bottom:12px}
@@ -275,6 +285,14 @@
           <div class="lock"><div class="lt">🟡 주의</div><div class="lv">? 명</div></div>
           <div class="lock"><div class="lt">🟠 경고</div><div class="lv">? 명</div></div>
           <div class="lock"><div class="lt">🔴 위험</div><div class="lv">? 명</div></div>
+        </div>
+        <div class="joincard">
+          <div class="qmini"><img id="qrMini" alt="청중 참여 QR"></div>
+          <div class="jtx">
+            <b>📱 폰으로 참여 — 카메라로 QR을 스캔하세요</b>
+            <span>11문항 · 1분 · 익명 (이름 입력 없음) · <b style="color:#CFFCE8">ROOM JY11</b></span>
+            <code>jungjinyoung3512.github.io/jungjinyoung3512/burnout-check/</code>
+          </div>
         </div>
         <div class="locknote">청중이 11문항을 마치는 대로 숫자가 올라갑니다 · <b>[🏆 결과보기]</b>를 누르면 이 화면이 결과로 바뀝니다</div>
       </div>
@@ -708,6 +726,7 @@
 
   /* QR */
   $("qrImg").src = QR_SRC;
+  $("qrMini").src = QR_SRC;
   $("roomChip").textContent = "ROOM " + ROOM;
 
   /* 새 응답 알림음 (공개 전) */
