@@ -218,7 +218,7 @@
 <div class="app">
   <div class="topbar">
     <div class="brand"><span class="b">🎈</span><span class="txt">오늘은 내가 주인공</span></div>
-    <div class="roomchip">방 <b id="roomTag">JY99</b></div>
+    <div class="roomchip">방 <b id="roomTag">JY95</b></div>
   </div>
 
   <div class="views">
@@ -230,7 +230,7 @@
         <p class="esub">포수가 쏘는 풍선을 피해<br><b>끝까지 살아남는 사람</b>이 오늘의 주인공!</p>
         <div class="field">
           <label for="roomInput">방 코드</label>
-          <input class="inp room" id="roomInput" value="JY99" maxlength="8" inputmode="text" autocomplete="off" spellcheck="false">
+          <input class="inp room" id="roomInput" value="JY95" maxlength="8" inputmode="text" autocomplete="off" spellcheck="false">
         </div>
         <div class="field">
           <label for="nameInput">내 이름 (아이디)</label>
@@ -329,7 +329,7 @@
 
   /* ================= 설정 ================= */
   const QS = new URLSearchParams(location.search);
-  const DEFAULT_ROOM = "JY99";
+  const DEFAULT_ROOM = "JY95";
   const normRoom = v => String(v || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
   let ROOM = normRoom(QS.get("room")) || DEFAULT_ROOM;
 
