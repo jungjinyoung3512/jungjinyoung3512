@@ -402,14 +402,14 @@
       this.step = 0;
       this.nextT = now + 0.12;
       clearInterval(this.timer);
-      this.timer = setInterval(function(){ Bgm.pump(); }, 100);
+      this.timer = setInterval(function(){ Bgm.pump(); }, 250);
       this.pump();
     },
     pump: function(){
       var c = audio(); if(!c || !this.playing) return;
       if(this.nextT < c.currentTime - 0.10) this.nextT = c.currentTime + 0.03;
       var guard = 0;
-      while(this.nextT < c.currentTime + 0.50 && guard++ < 64){
+      while(this.nextT < c.currentTime + 1.20 && guard++ < 80){
         var t = this.nextT;
         try{ this.voice(this.step, t); }catch(e){}
         this.step++;
