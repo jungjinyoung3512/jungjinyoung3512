@@ -624,7 +624,8 @@
   }
   function flushScore(){
     if(!db) return;
-    db.ref(BASE + "/players/" + uid).update({ score: myScore, combo: myCombo }).catch(()=>{});
+    // 연결이 끊겨 이름이 빠진 노드가 생기지 않도록 이름을 함께 쓴다
+    db.ref(BASE + "/players/" + uid).update({ name: myName, score: myScore, combo: myCombo }).catch(()=>{});
   }
 
   /* ── 탭 ── */
