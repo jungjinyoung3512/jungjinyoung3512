@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0B1220">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🕵️</text></svg>">
+<title>🕵️‍♂️ 효도·사랑 거짓말 탐지기 | 강연 크리에이터 · 정진영</title>
+<meta name="description" content="손가락 하나로 3초! 부부·가족, 부모·자녀, 직장·동료 사이 당신의 진심을 측정합니다. 강연 크리에이터 · 정진영">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --bg:#0B1220; --bg2:#0F172A; --panel:#141F36; --panel2:#1A2743;
+    --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.18);
+    --amber:#FFC93C; --amber2:#F5A623; --soft:rgba(255,201,60,.14);
+    --mint:#34D399; --rose:#FF5A7F; --amberdeep:#FF9F1C;
+    --text:#F5F8FF; --muted:#A9B8CE; --dim:#6C7C93;
+    --sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR",Georgia,serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  html{-webkit-text-size-adjust:100%;background:#080E19}
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;overscroll-behavior:none}
+  body{
+    background:var(--bg);color:var(--text);font-family:var(--sans);
+    word-break:keep-all;-webkit-font-smoothing:antialiased;line-height:1.4;letter-spacing:-0.01em;
+    -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;position:fixed;inset:0;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(125% 46% at 50% -8%, rgba(255,201,60,.18) 0%, rgba(255,201,60,0) 62%),
+      radial-gradient(90% 40% at 50% 106%, rgba(245,166,35,.10) 0%, rgba(245,166,35,0) 72%);
+    transition:background .5s ease;
+  }
+  body.scan::before{background:
+      radial-gradient(125% 58% at 50% -6%, rgba(255,201,60,.30) 0%, rgba(255,201,60,0) 64%),
+      radial-gradient(92% 50% at 50% 106%, rgba(245,166,35,.18) 0%, rgba(245,166,35,0) 72%)}
+  .app{
+    position:relative;z-index:1;width:100%;max-width:470px;margin:0 auto;
+    height:100vh;height:100dvh;display:flex;flex-direction:column;
+    padding:calc(9px + env(safe-area-inset-top)) 18px calc(10px + env(safe-area-inset-bottom));
+    overflow:hidden;
+  }
+
+  /* ---------- 상단 ---------- */
+  .top{flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:2px}
+  .brand{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px rgba(255,201,60,.9);flex:none}
+  .brand b{color:#E6EDF9;font-weight:800}
+  .roomtag{flex:none;font-size:10.5px;font-weight:900;letter-spacing:.06em;color:#FFD974;background:var(--soft);border:1px solid rgba(255,201,60,.32);padding:4px 9px;border-radius:99px}
+
+  main{flex:1;min-height:0;display:flex;flex-direction:column;position:relative}
+  .view{display:none;flex:1;min-height:0;flex-direction:column}
+  .view.on{display:flex}
+
+  /* ---------- 1. 입장 ---------- */
+  h1.title{
+    flex:none;margin:6px 0 0;font-family:var(--serif);font-weight:900;
+    font-size:27px;line-height:1.2;letter-spacing:-0.045em;color:#FFFDF6;
+  }
+  h1.title .hl{color:var(--amber)}
+  .lead{flex:none;margin:7px 0 0;font-size:15px;line-height:1.45;color:var(--muted);font-weight:600}
+  .lead b{color:#FFE29A;font-weight:900}
+
+  .modes{flex:none;display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:11px}
+  .mode{
+    appearance:none;cursor:pointer;font-family:inherit;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    padding:9px 4px 8px;border-radius:14px;
+    border:1.5px solid var(--line2);background:linear-gradient(180deg,var(--panel2),var(--panel));
+    color:#CFDAEA;transition:transform .1s,border-color .15s,background .15s,color .15s;
+  }
+  .mode i{font-style:normal;font-size:21px;line-height:1.1}
+  .mode span{font-size:14.5px;font-weight:800;letter-spacing:-0.02em;white-space:nowrap}
+  .mode:active{transform:scale(.97)}
+  .mode.on{
+    border-color:rgba(255,201,60,.85);color:#1B1204;
+    background:linear-gradient(180deg,#FFD976,#F5B429);
+    box-shadow:0 8px 20px -12px rgba(255,201,60,.95);
+  }
+  .mode.on span{color:#231703}
+
+  .namefield{flex:none;margin-top:9px;display:flex;gap:8px;align-items:center}
+  .input{
+    flex:1;width:100%;appearance:none;border:1.5px solid var(--line2);background:#0D1729;color:var(--text);
+    font-family:inherit;font-size:17px;font-weight:700;padding:11px 14px;border-radius:13px;outline:none;
+    -webkit-user-select:text;user-select:text;transition:border-color .15s,box-shadow .15s;
+  }
+  .input::placeholder{color:#6E7F98;font-weight:600;font-size:15.5px}
+  .input:focus{border-color:rgba(255,201,60,.8);box-shadow:0 0 0 3px rgba(255,201,60,.16)}
+
+  /* 지문 버튼 */
+  .scanbtn{
+    flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+    appearance:none;border:0;background:none;padding:0;margin:2px 0 0;cursor:pointer;width:100%;
+    color:inherit;font-family:inherit;touch-action:manipulation;
+  }
+  .finger{
+    position:relative;width:min(37vh,196px);height:min(37vh,196px);flex:none;
+    display:flex;align-items:center;justify-content:center;border-radius:50%;
+    background:radial-gradient(circle at 50% 38%, rgba(255,201,60,.20), rgba(255,201,60,.04) 62%, rgba(255,201,60,0) 72%);
+    transition:transform .12s ease;
+  }
+  .finger::before{
+    content:"";position:absolute;inset:0;border-radius:50%;
+    border:2px solid rgba(255,201,60,.42);
+    box-shadow:0 0 0 10px rgba(255,201,60,.06), 0 0 46px rgba(255,201,60,.20) inset;
+    animation:ringPulse 2.6s ease-in-out infinite;
+  }
+  .finger::after{
+    content:"";position:absolute;inset:14%;border-radius:50%;
+    background:radial-gradient(circle at 50% 45%, rgba(255,201,60,.16), rgba(255,201,60,0) 70%);
+  }
+  @keyframes ringPulse{0%,100%{transform:scale(1);opacity:.92}50%{transform:scale(1.045);opacity:1}}
+  .finger svg{position:relative;z-index:2;width:71%;height:71%;display:block;filter:drop-shadow(0 0 14px rgba(255,201,60,.5))}
+  .scanbtn.pressing .finger{transform:scale(.965)}
+  .presslabel{
+    font-size:25px;font-weight:900;letter-spacing:-0.035em;color:#FFF6DE;
+    text-align:center;line-height:1.25;
+  }
+  .presslabel b{color:var(--amber)}
+  .presssub{font-size:14.5px;font-weight:700;color:#93A6BF;margin-top:-4px;text-align:center;line-height:1.4}
+  .presssub b{color:#CFE0F5}
+
+  .entryfoot{flex:none;display:flex;align-items:center;justify-content:center;gap:6px;
+    font-size:12px;color:#6C7C93;font-weight:600;padding-bottom:2px}
+  .entryfoot .livedot{width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px rgba(52,211,153,.9)}
+
+  /* ---------- 2. 스캔 ---------- */
+  .scanwrap{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 0 10px}
+  .scanhint{font-size:29px;font-weight:900;letter-spacing:-0.04em;color:#FFF8E4;text-align:center;margin:0}
+  .scanhint span{color:var(--amber)}
+  .scansub{font-size:15px;font-weight:700;color:#9FB1C9;margin:6px 0 0;text-align:center}
+
+  .ecg{width:100%;height:96px;margin:10px 0 4px;position:relative;overflow:hidden;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+  .ecg svg{position:absolute;top:0;left:0;height:100%;width:200%;animation:ecgmove 2.4s linear infinite}
+  @keyframes ecgmove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .ecg path{fill:none;stroke:var(--amber);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;
+    filter:drop-shadow(0 0 6px rgba(255,201,60,.85))}
+
+  .countwrap{position:relative;width:min(41vh,214px);height:min(41vh,214px);flex:none;margin-top:2px;
+    display:flex;align-items:center;justify-content:center}
+  .ring{position:absolute;inset:0;transform:rotate(-90deg)}
+  .ring circle{fill:none;stroke-width:5}
+  .ring circle{stroke-width:7}
+  .ring .bgc{stroke:rgba(255,255,255,.09)}
+  .ring .fgc{stroke:var(--amber);stroke-linecap:round;stroke-dasharray:597;stroke-dashoffset:0;
+    filter:drop-shadow(0 0 10px rgba(255,201,60,.8))}
+  .countdisc{position:relative;z-index:3;width:80%;height:80%;border-radius:50%;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    border:2px solid rgba(255,201,60,.42);
+    background:radial-gradient(circle at 50% 38%, rgba(255,201,60,.28), rgba(255,201,60,.07) 58%, rgba(11,18,32,.92) 76%);
+    box-shadow:inset 0 0 46px rgba(255,201,60,.20), 0 0 40px rgba(255,201,60,.16)}
+  .countnum{font-family:var(--sans);font-size:clamp(62px,17vh,96px);font-weight:900;color:#FFF9E8;
+    text-shadow:0 0 28px rgba(255,201,60,.75);line-height:.92}
+  .countdisc small{font-size:13px;font-weight:800;color:#C8B683;letter-spacing:.34em;margin-top:2px;margin-left:.34em}
+
+  /* ---------- 3. 결과 ---------- */
+  .reswrap{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;text-align:center;padding:4px 0 2px}
+  .rescard{
+    width:100%;border-radius:26px;padding:20px 16px 18px;position:relative;overflow:hidden;
+    border:1.5px solid var(--line2);
+    background:linear-gradient(180deg,var(--panel2),#101A2E);
+    box-shadow:0 26px 50px -34px rgba(0,0,0,.95);
+  }
+  .rescard::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:var(--kc,#34D399)}
+  .rescard.pass{--kc:#34D399;box-shadow:0 0 0 1px rgba(52,211,153,.22),0 26px 50px -34px rgba(0,0,0,.95)}
+  .rescard.lie{--kc:#FF5A7F;box-shadow:0 0 0 1px rgba(255,90,127,.24),0 26px 50px -34px rgba(0,0,0,.95)}
+  .rescard.warn{--kc:#FFB020;box-shadow:0 0 0 1px rgba(255,176,32,.24),0 26px 50px -34px rgba(0,0,0,.95)}
+  .who{font-size:14.5px;font-weight:800;color:#93A7BF;letter-spacing:0;margin-bottom:2px}
+  .who b{color:#E3EDFA}
+  .resemoji{font-size:64px;line-height:1.05;margin:2px 0 2px;filter:drop-shadow(0 8px 18px rgba(0,0,0,.5))}
+  .pctline{display:flex;align-items:baseline;justify-content:center;gap:2px;margin:0}
+  .pct{font-size:78px;font-weight:900;letter-spacing:-0.058em;line-height:.92;color:var(--kc)}
+  .pctsign{font-size:34px;font-weight:900;color:var(--kc);opacity:.85}
+  .pctcap{font-size:16px;font-weight:800;color:#B7C8DD;margin:4px 0 0}
+  .restitle{font-family:var(--serif);font-weight:900;font-size:32px;line-height:1.18;color:#FFFFFF;
+    letter-spacing:-0.045em;margin:11px 6px 0;word-break:keep-all}
+  .resline{font-size:19px;font-weight:700;line-height:1.5;color:#D2DFEF;margin:9px 8px 0;word-break:keep-all}
+  .resline b{color:#FFE29A}
+  .stamp{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:5px 11px;border-radius:99px;
+    font-size:11.5px;font-weight:800;color:#94A6BF;border:1px dashed rgba(255,255,255,.20);background:rgba(255,255,255,.03)}
+
+  .again{
+    flex:none;width:100%;margin-top:14px;appearance:none;border:0;cursor:pointer;font-family:inherit;
+    font-size:20px;font-weight:900;letter-spacing:-0.02em;color:#241803;
+    background:linear-gradient(180deg,#FFD976,#F5B429);border-radius:17px;padding:17px;
+    box-shadow:0 14px 30px -16px rgba(255,201,60,.95),0 1px 0 rgba(255,255,255,.35) inset;
+    display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .1s;
+  }
+  .again:active{transform:scale(.985)}
+  .restip{flex:none;font-size:13.5px;font-weight:700;color:#8B9DB5;text-align:center;margin:10px 0 0;line-height:1.4}
+
+  .toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translate(-50%,20px);
+    background:rgba(12,20,34,.96);border:1px solid var(--line2);color:#E8F0FB;font-size:13px;font-weight:700;
+    padding:10px 16px;border-radius:12px;opacity:0;pointer-events:none;transition:.25s;z-index:50;max-width:88vw;text-align:center}
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+
+  /* ---------- 좁은 화면 보정 ---------- */
+  @media (max-height:700px){
+    h1.title{font-size:24px}
+    .lead{font-size:14px;margin-top:5px}
+    .mode{padding:7px 3px 6px}
+    .mode i{font-size:19px}
+    .mode span{font-size:13.5px}
+    .finger{width:min(31vh,168px);height:min(31vh,168px)}
+    .presslabel{font-size:22px}
+    .countwrap{width:min(34vh,180px);height:min(34vh,180px)}
+    .countnum{font-size:62px}
+    .pct{font-size:64px}
+    .restitle{font-size:27px}
+    .resline{font-size:17.5px}
+    .resemoji{font-size:52px}
+    .again{font-size:18.5px;padding:15px}
+  }
+  @media (max-height:620px){
+    .lead{display:none}
+    .entryfoot{display:none}
+    .ecg{height:74px;margin:6px 0 2px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="brand"><span class="dot"></span><b>강연 크리에이터 · 정진영</b></div>
+    <div class="roomtag">ROOM JY55</div>
+  </div>
+
+  <main>
+    <!-- ================= 1. 입장 ================= -->
+    <section class="view on" id="vEntry">
+      <h1 class="title">🕵️‍♂️ 효도·사랑 <span class="hl">거짓말 탐지기</span></h1>
+      <p class="lead">손가락 하나면 끝, <b>3초</b>면 진심이 나옵니다</p>
+
+      <div class="modes" role="tablist" aria-label="측정 모드">
+        <button class="mode on" type="button" data-mode="couple" role="tab" aria-selected="true"><i>💑</i><span>부부·가족</span></button>
+        <button class="mode" type="button" data-mode="parent" role="tab" aria-selected="false"><i>👵</i><span>부모·자녀</span></button>
+        <button class="mode" type="button" data-mode="work" role="tab" aria-selected="false"><i>🤝</i><span>직장·동료</span></button>
+      </div>
+
+      <div class="namefield">
+        <input class="input" id="nameInput" type="text" maxlength="12" autocomplete="off" autocapitalize="off"
+               spellcheck="false" enterkeyhint="done" placeholder="이름·별명 (안 써도 됩니다)">
+      </div>
+
+      <button class="scanbtn" id="scanBtn" type="button" aria-label="지문 스캔 시작">
+        <span class="finger" id="fingerMain"></span>
+        <span class="presslabel">여기를 <b>3초간</b> 꾹 누르세요</span>
+        <span class="presssub">한 번만 톡 눌러도 <b>3초 자동 측정</b></span>
+      </button>
+
+      <div class="entryfoot"><span class="livedot"></span><span id="netTxt">준비 완료 · 전원 켜짐</span></div>
+    </section>
+
+    <!-- ================= 2. 스캔 ================= -->
+    <section class="view" id="vScan">
+      <div class="scanwrap">
+        <p class="scanhint">진심 측정 <span>중...</span></p>
+        <p class="scansub">손가락을 떼지 말고 잠시만요</p>
+        <div class="ecg" id="ecg"></div>
+        <div class="countwrap">
+          <svg class="ring" viewBox="0 0 200 200" aria-hidden="true">
+            <circle class="bgc" cx="100" cy="100" r="95"></circle>
+            <circle class="fgc" id="ringFg" cx="100" cy="100" r="95"></circle>
+          </svg>
+          <div class="countdisc">
+            <span class="countnum" id="countNum">3</span>
+            <small>초</small>
+          </div>
+        </div>
+        <p class="scansub" style="margin-top:12px">딴생각은 잠시 내려놓으세요</p>
+      </div>
+    </section>
+
+    <!-- ================= 3. 결과 ================= -->
+    <section class="view" id="vResult">
+      <div class="reswrap">
+        <div class="rescard pass" id="resCard">
+          <div class="who" id="resWho">부부·가족 검사</div>
+          <div class="resemoji" id="resEmoji">💚</div>
+          <div class="pctline"><span class="pct" id="resPct">99</span><span class="pctsign">%</span></div>
+          <div class="pctcap" id="resCap">진심 지수</div>
+          <h2 class="restitle" id="resTitle">천사표!</h2>
+          <p class="resline" id="resLine">오늘 저녁 반찬 투정 면제</p>
+          <div class="stamp">🕵️‍♂️ 탐지 완료 · 강연 크리에이터 · 정진영</div>
+        </div>
+        <button class="again" id="againBtn" type="button">🔄 다시 측정하기</button>
+        <p class="restip">옆 사람과 결과를 바꿔 보세요 😆</p>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+
+  const ROOM = "JY55";
+  const ROOM_PATH = "rooms/lie-detector/" + ROOM;
+
+  const FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "977342156141",
+    appId: "1:977342156141:web:f9842fcc67a819ce621e64"
+  };
+
+  /* ---------------- 지문 아이콘 ---------------- */
+  const FINGER_SVG =
+    '<svg viewBox="0 0 100 100" fill="none" stroke="#FFC93C" stroke-linecap="round" stroke-width="3.4">' +
+      '<path d="M50 12c-15 0-27 12-27 27v13"/>' +
+      '<path d="M77 52V39c0-15-12-27-27-27"/>' +
+      '<path d="M58 25c10 4 17 14 17 25v13"/>' +
+      '<path d="M32 70V39c0-10 8-18 18-18s18 8 18 18v18"/>' +
+      '<path d="M41 74V41c0-5 4-9 9-9s9 4 9 9v14"/>' +
+      '<path d="M50 50v22"/>' +
+      '<path d="M23 62c0 6 2 12 5 17"/>' +
+      '<path d="M72 66c0 7-3 13-7 18"/>' +
+      '<path d="M60 76c1 4 0 8-2 11"/>' +
+      '<path d="M37 82c1 3 2 5 4 7"/>' +
+    '</svg>';
+  $("fingerMain").innerHTML = FINGER_SVG;
+
+  /* ---------------- 심박 파형 ---------------- */
+  (function buildECG(){
+    const SEG = "h16 l5 -7 l5 7 h9 l4 -34 l6 56 l4 -22 h8 l5 -4 l0 4 h18";
+    const W = 80, N = 8;
+    let d = "";
+    for(let i=0;i<N;i++) d += "M" + (i * W) + " 50 " + SEG + " ";
+    $("ecg").innerHTML = '<svg viewBox="0 0 ' + (W*N) + ' 100" preserveAspectRatio="none"><path d="' + d + '"/></svg>';
+  })();
+
+  /* ---------------- 결과 문구 ---------------- */
+  const MODES = {
+    couple: { label: "부부·가족" },
+    parent: { label: "부모·자녀" },
+    work:   { label: "직장·동료" }
+  };
+
+  const RESULTS = {
+    couple: [
+      { k:"pass", pct:99, e:"💚", t:"천사표!", l:"오늘 저녁 반찬 투정 면제. 마음껏 드세요." },
+      { k:"pass", pct:100, e:"👑", t:"효도·사랑 만렙", l:"가족에게 당장 이 화면을 보여주세요!" },
+      { k:"pass", pct:96, e:"😇", t:"숨길 게 없는 사람", l:"이 사람 앞에서는 거짓말이 안 됩니다." },
+      { k:"pass", pct:88, e:"🕵️", t:"완벽한데 하나", l:"사랑은 진심, 다만 기념일은 가끔 잊으심." },
+      { k:"pass", pct:93, e:"💍", t:"한결같은 진심", l:"오늘도 잔소리는 사랑의 다른 이름이었습니다." },
+      { k:"warn", pct:48, e:"⚠️", t:"동공 지진 감지", l:"겉으론 웃고 속으론 계산 중! 뭐가 아쉬우셨죠?" },
+      { k:"warn", pct:63, e:"🤔", t:"애매한 진심", l:"\"괜찮아\"라고 했지만, 오늘은 왠지 괜찮지 않음." },
+      { k:"lie", pct:12, e:"🚨", t:"삐빅! 거짓말 경보", l:"방금 딴생각하셨죠? 오늘 설거지 당첨!" },
+      { k:"lie", pct:7,  e:"🚨", t:"삐빅! 딴생각 감지", l:"\"내가 언제 그랬어?\" 방금 하신 말, 다시 들어보세요." }
+    ],
+    parent: [
+      { k:"pass", pct:100, e:"👑", t:"효도 만렙", l:"부모님 앞에서 꼬리 흔드는 강아지상 1위!" },
+      { k:"pass", pct:97, e:"💚", t:"진짜 보고 싶었음", l:"\"보고 싶어요\" 진짜였습니다. 오늘 한 번 더 말해보세요." },
+      { k:"pass", pct:93, e:"😇", t:"엄마·아빠 찬스", l:"용돈 얘기만 빼면 진심 100%입니다." },
+      { k:"pass", pct:89, e:"🍚", t:"밥은 먹었니?", l:"잔소리는 진심, 다만 목소리가 조금 큽니다." },
+      { k:"pass", pct:86, e:"🕵️", t:"숨은 효자·효녀", l:"말은 툭툭, 속은 따뜻. 들켰습니다." },
+      { k:"warn", pct:46, e:"⚠️", t:"동공 지진 감지", l:"\"다 잘 먹고 다녀요\" — 사실은 컵라면입니다." },
+      { k:"warn", pct:62, e:"🤔", t:"애매한 진심", l:"\"이번 주에 갈게\" — 지난주에도 하신 말씀." },
+      { k:"lie", pct:9,  e:"🚨", t:"삐빅! 거짓말 경보", l:"\"휴대폰 안 보고 있어요\" — 화면에 다 보입니다." },
+      { k:"lie", pct:14, e:"🚨", t:"삐빅! 숙제 미완료", l:"\"숙제 다 했어요\" — 탐지기에 다 걸렸습니다." }
+    ],
+    work: [
+      { k:"pass", pct:100, e:"👑", t:"진심 만렙", l:"\"그거 제가 하겠습니다\" — 진심이었습니다." },
+      { k:"pass", pct:98, e:"💚", t:"믿음직한 동료", l:"이 사람은 회의에서 딴말 안 합니다." },
+      { k:"pass", pct:92, e:"😇", t:"워라밸 수호자", l:"칭찬은 진심, 다만 조금 늦게 하십니다." },
+      { k:"pass", pct:87, e:"☕", t:"커피 심부름 장인", l:"말은 무뚝뚝, 챙김은 확실합니다." },
+      { k:"pass", pct:84, e:"🕵️", t:"숨은 실세", l:"\"몰라요\" 하시면서 다 알고 계십니다." },
+      { k:"warn", pct:49, e:"⚠️", t:"동공 지진 감지", l:"\"좋아요!\" 하셨지만 왼손이 부들부들." },
+      { k:"warn", pct:58, e:"🤔", t:"애매한 진심", l:"\"퇴근하고 연락드릴게요\" — 오늘도 안 옵니다." },
+      { k:"lie", pct:8,  e:"🚨", t:"삐빅! 거짓말 경보", l:"\"저는 괜찮습니다\" — 야근 냄새 100%." },
+      { k:"lie", pct:11, e:"🚨", t:"삐빅! 회의 시간 거짓말", l:"\"회의 10분이면 끝나요\" — 거짓말 탐지 성공." }
+    ]
+  };
+
+  /* ---------------- 상태 ---------------- */
+  let mode = "couple";
+  let scanning = false;
+  let db = null, roomRef = null, live = false;
+  let uiTimer = null, cdTimer = null;
+
+  function toast(msg){
+    const t = $("toast"); t.textContent = msg; t.classList.add("on");
+    clearTimeout(toast._h); toast._h = setTimeout(()=>t.classList.remove("on"), 2200);
+  }
+  function show(id){
+    ["vEntry","vScan","vResult"].forEach(k => $(k).classList.toggle("on", k === id));
+  }
+  function vibrate(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} }
+
+  /* ---------------- Firebase (실패해도 스캔은 100% 동작) ---------------- */
+  function initFB(){
+    if(typeof firebase === "undefined" || !firebase.initializeApp){
+      $("netTxt").textContent = "오프라인 모드 · 측정은 그대로";
+      return;
+    }
+    try{
+      firebase.initializeApp(FB_CONFIG);
+      db = firebase.database();
+      db.ref(".info/connected").on("value", s => {
+        live = !!s.val();
+        $("netTxt").textContent = live ? "진행자 화면과 연결됨" : "오프라인 모드 · 측정은 그대로";
+      });
+      roomRef = db.ref(ROOM_PATH);
+    }catch(e){
+      db = null; roomRef = null;
+      $("netTxt").textContent = "오프라인 모드 · 측정은 그대로";
+    }
+  }
+  function sendResult(res){
+    if(!roomRef) return;
+    try{
+      const rec = {
+        n: ($("nameInput").value || "").trim().slice(0, 12),
+        m: mode,
+        k: res.k,
+        pct: res.pct,
+        e: res.e,
+        t: res.t,
+        l: res.l,
+        ts: Date.now()
+      };
+      roomRef.child("scans").push(rec).catch(()=>{ /* 연결 실패는 무시 */ });
+    }catch(e){ /* 무시 */ }
+  }
+
+  /* ---------------- 모드 선택 ---------------- */
+  document.querySelectorAll(".mode").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if(scanning) return;
+      mode = btn.dataset.mode;
+      document.querySelectorAll(".mode").forEach(b => {
+        const on = b === btn;
+        b.classList.toggle("on", on);
+        b.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      vibrate(8);
+    });
+  });
+
+  /* ---------------- 스캔 ---------------- */
+  function pickResult(){
+    const list = RESULTS[mode];
+    const rnd = () => {
+      try{
+        const a = new Uint32Array(1); crypto.getRandomValues(a);
+        return a[0] / 4294967296;
+      }catch(e){ return Math.random(); }
+    };
+    // 통과 48% · 경고 22% · 거짓말 30%
+    const r = rnd();
+    const kind = r < 0.48 ? "pass" : (r < 0.70 ? "warn" : "lie");
+    let pool = list.filter(x => x.k === kind);
+    if(!pool.length) pool = list;
+    return pool[Math.floor(rnd() * pool.length) % pool.length];
+  }
+
+  function startScan(){
+    if(scanning) return;
+    scanning = true;
+    document.body.classList.add("scan");
+    $("scanBtn").classList.add("pressing");
+    vibrate(18);
+
+    show("vScan");
+    $("countNum").textContent = "3";
+    const ring = $("ringFg");
+    ring.style.transition = "none";
+    ring.style.strokeDashoffset = "0";
+    // 진행 링 (3초)
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        ring.style.transition = "stroke-dashoffset 3s linear";
+        ring.style.strokeDashoffset = "597";
+      });
+    });
+
+    let left = 3;
+    clearInterval(cdTimer);
+    cdTimer = setInterval(() => {
+      left--;
+      if(left > 0) $("countNum").textContent = String(left);
+    }, 1000);
+
+    clearTimeout(uiTimer);
+    uiTimer = setTimeout(finishScan, 3000);
+  }
+
+  function finishScan(){
+    clearInterval(cdTimer);
+    const res = pickResult();
+
+    // 결과 카드 채우기
+    const card = $("resCard");
+    card.className = "rescard " + res.k;
+    const name = ($("nameInput").value || "").trim();
+    $("resWho").innerHTML = (name ? "<b>" + escapeHtml(name) + "</b> 님의 " : "") + MODES[mode].label + " 검사";
+    $("resEmoji").textContent = res.e;
+    $("resPct").textContent = String(res.pct);
+    $("resCap").textContent = "진심 지수";
+    $("resTitle").textContent = res.t;
+    $("resLine").textContent = res.l;
+
+    show("vResult");
+    document.body.classList.remove("scan");
+    $("scanBtn").classList.remove("pressing");
+    scanning = false;
+    vibrate(res.k === "lie" ? [40,70,40] : [30,50,30,50,60]);
+
+    sendResult(res);
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+  }
+
+  $("scanBtn").addEventListener("click", startScan);
+  $("scanBtn").addEventListener("pointerdown", () => { $("scanBtn").classList.add("pressing"); });
+  ["pointerup","pointercancel","pointerleave"].forEach(ev =>
+    $("scanBtn").addEventListener(ev, () => { if(!scanning) $("scanBtn").classList.remove("pressing"); })
+  );
+  $("scanBtn").addEventListener("keydown", e => { if(e.key === "Enter" || e.key === " ") startScan(); });
+
+  $("againBtn").addEventListener("click", () => {
+    if(scanning) return;
+    show("vEntry");
+    vibrate(10);
+    setTimeout(()=>{ $("scanBtn").scrollIntoView({ block:"nearest" }); }, 30);
+  });
+
+  $("nameInput").addEventListener("keydown", e => {
+    if(e.key === "Enter"){ e.preventDefault(); $("nameInput").blur(); }
+  });
+
+  initFB();
+})();
+</script>
+</body>
+</html>
