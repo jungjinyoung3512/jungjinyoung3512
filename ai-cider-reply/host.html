@@ -110,6 +110,10 @@
     background:linear-gradient(90deg,var(--amber),var(--devil));transition:width .55s cubic-bezier(.2,.9,.2,1)}
   .rank .ct{flex:none;font-family:var(--mono);font-size:clamp(16px,1.5vw,26px);font-weight:800;color:#FFD98E;min-width:3.2em;text-align:right}
   .rank .ct em{font-style:normal;font-size:.58em;color:var(--dim);margin-left:3px}
+  .guide{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:20px}
+  .guide .g1{font-size:clamp(30px,3.4vw,54px);line-height:1}
+  .guide .g2{font-size:clamp(16px,1.55vw,26px);font-weight:900;letter-spacing:-0.03em;color:#D9E5F3;line-height:1.45}
+  .guide .g3{font-size:clamp(11px,.95vw,15px);font-weight:700;color:#6C7F95;letter-spacing:-0.01em}
 
   /* 유형 비율 */
   .stack{margin-top:14px;height:clamp(26px,2.2vw,40px);border-radius:10px;overflow:hidden;display:flex;background:rgba(255,255,255,.05);flex:none}
@@ -323,7 +327,12 @@
     ranked = ranked.filter(function(r){ return r.n > 0; }).slice(0, 3);
     var maxN = ranked.length ? ranked[0].n : 1;
     var rows = "";
-    for(var i=0;i<3;i++){
+    if(!ranked.length){
+      $("top3").innerHTML = '<div class="guide"><div class="g1">📈</div>' +
+        '<div class="g2">청중이 QR로 입장해<br>상황을 고르면 여기에 쌓입니다</div>' +
+        '<div class="g3">직장·상사 / 진상·고객 / 가족·부부 · 각 5가지 상황</div></div>';
+    } else {
+      for(var i=0;i<3;i++){
       var r = ranked[i];
       var cls = "rank" + (i===1?" r2":"") + (i===2?" r3":"") + (r ? "" : " empty");
       rows += '<div class="' + cls + '">' +
@@ -333,6 +342,7 @@
         '<div class="ct">' + (r ? r.n : 0) + '<em>회</em></div></div>';
     }
     $("top3").innerHTML = rows;
+    }
 
     var cp = num(stats.copies.polite), cs = num(stats.copies.savage), ch = num(stats.copies.shield);
     var sum = cp + cs + ch;
