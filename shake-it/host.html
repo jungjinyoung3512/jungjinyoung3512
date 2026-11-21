@@ -238,7 +238,7 @@
   <div class="bar">
     <div class="brandline"><span class="dot"></span><b>흔들어주세요!</b> · 강연 크리에이터 · 정진영</div>
     <div class="right">
-      <div class="pill">방 코드 <b id="roomTag">JY88</b></div>
+      <div class="pill">방 코드 <b id="roomTag">JY85</b></div>
       <div class="pill count">참가자 <b><span id="headCount">0</span> / 80</b>명</div>
       <div class="pill tm">남은 시간 <b id="headTimer">36초</b></div>
       <div class="pill" id="netPill"><span class="live"></span><span id="netTxt">연결 중</span></div>
@@ -263,7 +263,7 @@
         <h1>📱 흔들어주세요!</h1>
         <p>36초 동안 가장 많이 흔든 사람이 우승!</p>
         <div class="qr-frame"><img id="idleQr" alt="입장 QR"></div>
-        <div class="idle-room">방 코드<b id="idleRoom">JY88</b></div>
+        <div class="idle-room">방 코드<b id="idleRoom">JY85</b></div>
         <div class="idle-meta">정원 80명 · 제한시간 36초</div>
         <div class="idle-url" id="idleUrl"></div>
         <div class="idle-guide">
@@ -322,7 +322,7 @@
     <h3>📱 QR로 입장</h3>
     <p>청중이 카메라로 스캔하면 바로 입장 화면이 열립니다</p>
     <div class="qr-frame"><img id="modalQr" alt="입장 QR"></div>
-    <div class="roomline">방 코드<b id="modalRoom">JY88</b></div>
+    <div class="roomline">방 코드<b id="modalRoom">JY85</b></div>
     <div class="url" id="modalUrl"></div>
     <button class="btn close" id="btnQrClose" type="button">닫기</button>
   </div>
@@ -339,7 +339,7 @@
 
   /* ================= 설정 ================= */
   const QS = new URLSearchParams(location.search);
-  const DEFAULT_ROOM = "JY88";
+  const DEFAULT_ROOM = "JY85";
   let ROOM = String(QS.get("room") || DEFAULT_ROOM).toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8) || DEFAULT_ROOM;
 
   const CAP = 80;
