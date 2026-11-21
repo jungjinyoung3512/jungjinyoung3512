@@ -184,6 +184,7 @@
 
   <div class="cbar">
     <button class="cbtn ghost" id="btnSnd">🔊 소리 ON <small>M</small></button>
+    <button class="cbtn ghost" id="btnBgm">🎵 BGM ON <small>B</small></button>
     <button class="cbtn danger" id="btnClear">🧹 기록 비우기 <small>R</small></button>
     <button class="cbtn gold" id="btnQr">📱 QR 크게 보기 <small>Q</small></button>
     <div class="hint">청중 입장 <b>jungjinyoung3512.github.io/jungjinyoung3512/ai-cider-reply/</b></div>
@@ -316,7 +317,121 @@
       o.start(t0); o.stop(t0 + 0.19);
     });
   }
-  window.addEventListener("pointerdown", function(){ audio(); }, { once:true });
+  window.addEventListener("pointerdown", function(){ audio(); if(soundOn) Bgm.start(); }, { once:true });
+
+  /* ---------- BGM (진행자 노트북 전용 · 사이다 그루브 루프) ---------- */
+  var Bgm = {
+    enabled:true, playing:false, g:null, timer:null, nextT:0, step:0, voices:0, buf:null, bpm:114, loop:64,
+    spb: function(){ return 60 / this.bpm / 4; },
+    ctxState: function(){ return ctx ? ctx.state : "none"; },
+    out: function(){
+      var c = audio(); if(!c) return null;
+      if(!this.g){
+        var gn = c.createGain(); gn.gain.value = 0.0001;
+        var lp = c.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 5200; lp.Q.value = 0.4;
+        gn.connect(lp); lp.connect(c.destination);
+        this.g = gn;
+      }
+      return this.g;
+    },
+    noiseBuf: function(c){
+      if(this.buf) return this.buf;
+      var n = Math.floor(c.sampleRate * 0.35), b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0);
+      for(var i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+      this.buf = b; return b;
+    },
+    tone: function(t, freq, dur, type, amp, glide){
+      var c = audio(); if(!c || !this.g) return;
+      var o = c.createOscillator(), gn = c.createGain();
+      o.type = type || "sine";
+      o.frequency.setValueAtTime(freq, t);
+      if(glide) o.frequency.exponentialRampToValueAtTime(Math.max(30, glide), t + dur * 0.82);
+      var atk = Math.min(0.06, dur * 0.3);
+      gn.gain.setValueAtTime(0.0001, t);
+      gn.gain.exponentialRampToValueAtTime(Math.max(0.0002, amp), t + atk);
+      gn.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(gn); gn.connect(this.g);
+      o.start(t); o.stop(t + dur + 0.05);
+      this.voices++;
+    },
+    noise: function(t, dur, amp, hz, q){
+      var c = audio(); if(!c || !this.g) return;
+      var src = c.createBufferSource(); src.buffer = this.noiseBuf(c);
+      var f = c.createBiquadFilter(); f.type = "bandpass"; f.frequency.value = hz; f.Q.value = q || 1.0;
+      var gn = c.createGain();
+      gn.gain.setValueAtTime(0.0001, t);
+      gn.gain.exponentialRampToValueAtTime(Math.max(0.0002, amp), t + 0.008);
+      gn.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      src.connect(f); f.connect(gn); gn.connect(this.g);
+      src.start(t); src.stop(t + dur + 0.02);
+      this.voices++;
+    },
+    /* 펑키 베이스라인 + 밝은 마림바 리프 */
+    voice: function(step, t){
+      var s = step % this.loop, k = s % 16, bar = Math.floor(s / 16) % 4;
+      var ROOT = [87.31, 73.42, 98.00, 65.41]; // F2 · D2 · G2 · C2
+      var r = ROOT[bar];
+      // 베이스
+      if(k === 0)  this.tone(t, r, 0.20, "triangle", 0.090);
+      if(k === 3)  this.tone(t, r * 2, 0.12, "triangle", 0.058);
+      if(k === 6)  this.tone(t, r, 0.16, "triangle", 0.068);
+      if(k === 8)  this.tone(t, r * 1.4983, 0.12, "triangle", 0.052);
+      if(k === 11) this.tone(t, r * 2, 0.10, "triangle", 0.046);
+      if(k === 14) this.tone(t, r, 0.20, "triangle", 0.056);
+      // 가벼운 킥
+      if(k === 0 || k === 10) this.tone(t, 108, 0.16, "sine", 0.095, 52);
+      // 마림바·플럭 리프 (C 펜타토닉)
+      var MEL = { 1:523.25, 2:783.99, 5:659.25, 7:783.99, 9:587.33, 11:880.00, 13:659.25, 15:1046.50 };
+      var m = MEL[k];
+      if(m){ this.tone(t, m, 0.26, "sine", 0.026); this.tone(t, m * 2, 0.10, "sine", 0.007); }
+      // 하이햇 · 스네어
+      if(k % 2 === 1) this.noise(t, 0.045, 0.016, 9000, 0.9);
+      if(k === 4 || k === 12) this.noise(t, 0.10, 0.028, 1900, 1.0);
+    },
+    start: function(){
+      if(!this.enabled || !soundOn) return;
+      var c = audio(); if(!c) return;
+      if(!this.out()) return;
+      if(c.state === "suspended") c.resume();
+      if(this.playing) return;
+      this.playing = true;
+      var now = c.currentTime, gn = this.g.gain;
+      gn.cancelScheduledValues(now);
+      gn.setValueAtTime(Math.max(0.0001, gn.value), now);
+      gn.exponentialRampToValueAtTime(0.85, now + 1.0);
+      this.step = 0;
+      this.nextT = now + 0.12;
+      clearInterval(this.timer);
+      this.timer = setInterval(function(){ Bgm.pump(); }, 100);
+      this.pump();
+    },
+    pump: function(){
+      var c = audio(); if(!c || !this.playing) return;
+      if(this.nextT < c.currentTime - 0.10) this.nextT = c.currentTime + 0.03;
+      var guard = 0;
+      while(this.nextT < c.currentTime + 0.50 && guard++ < 64){
+        var t = this.nextT;
+        try{ this.voice(this.step, t); }catch(e){}
+        this.step++;
+        this.nextT = t + this.spb();
+      }
+    },
+    stop: function(){
+      this.playing = false;
+      clearInterval(this.timer); this.timer = null;
+      var c = ctx, dead = this.g;
+      if(!dead || !c) return;
+      this.g = null;
+      var now = c.currentTime;
+      try{
+        dead.gain.cancelScheduledValues(now);
+        dead.gain.setValueAtTime(Math.max(0.0001, dead.gain.value), now);
+        dead.gain.exponentialRampToValueAtTime(0.0001, now + 0.20);
+      }catch(e){}
+      setTimeout(function(){ try{ dead.disconnect(); }catch(e){} }, 380);
+    }
+  };
+  window.__bgm = Bgm; // 동작 검증용
 
   /* ---------- 렌더 ---------- */
   function num(v){ return (typeof v === "number" && isFinite(v)) ? v : 0; }
@@ -422,7 +537,14 @@
     soundOn = !soundOn;
     this.classList.toggle("muted", !soundOn);
     this.innerHTML = soundOn ? "🔊 소리 ON <small>M</small>" : "🔇 음소거 <small>M</small>";
-    if(soundOn){ audio(); beep("savage"); }
+    if(soundOn){ audio(); Bgm.start(); beep("savage"); } else { Bgm.stop(); }
+  });
+
+  $("btnBgm").addEventListener("click", function(){
+    Bgm.enabled = !Bgm.enabled;
+    if(Bgm.enabled){ audio(); Bgm.start(); } else { Bgm.stop(); }
+    this.classList.toggle("muted", !Bgm.enabled);
+    this.innerHTML = Bgm.enabled ? "🎵 BGM ON <small>B</small>" : "🎵 BGM OFF <small>B</small>";
   });
 
   $("btnClear").addEventListener("click", function(){
@@ -455,6 +577,7 @@
     var k = (e.key || "").toLowerCase();
     if(k === "escape"){ qrToggle(false); return; }
     if(k === "m"){ $("btnSnd").click(); }
+    if(k === "b"){ $("btnBgm").click(); }
     if(k === "q"){ $("btnQr").click(); }
     if(k === "r"){ $("btnClear").click(); }
   });
