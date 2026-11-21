@@ -246,8 +246,8 @@
     padding:12px 14px;border-radius:14px;border:1px solid var(--line);
     background:linear-gradient(180deg,rgba(245,158,11,.14),rgba(245,158,11,.05));margin-bottom:11px;
   }
-  .revsum .big{font-size:26px;font-weight:900;letter-spacing:-1px}
-  .revsum .big em{font-size:12px;font-style:normal;color:var(--mute);font-weight:800;margin-left:4px}
+  .revsum .big{font-size:26px;font-weight:900;letter-spacing:-1px;display:flex;flex-direction:column;line-height:1.15}
+  .revsum .big em{font-size:11.5px;font-style:normal;color:var(--mute);font-weight:800;margin:-2px 0 0;letter-spacing:0}
   .revsum .split{width:1px;height:26px;background:rgba(148,163,184,.25)}
   .revsum .sub{font-size:11.5px;color:var(--mute);line-height:1.5}
   .revsum .sub b{color:#FFF}
@@ -1269,9 +1269,14 @@
       xmen = s.val() || {};
     }, err=>console.error(err));
 
+    let lastRevealAt = 0;
     db.ref(BASE + "/reveal").on("value", s=>{
       reveal = normReveal(s.val() || null);
       renderAll();
+      if(reveal && reveal.at && reveal.at !== lastRevealAt){
+        lastRevealAt = reveal.at;
+        setTimeout(()=>{ const el = $("pReveal"); if(el) el.scrollIntoView({behavior:"smooth", block:"start"}); }, 120);
+      }
     }, err=>console.error(err));
   }
 

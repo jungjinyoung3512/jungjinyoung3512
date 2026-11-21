@@ -423,11 +423,11 @@
   <section class="scr" id="scrReveal">
     <div class="verdict" id="verdictBox">
       <span class="em" id="vEmoji">🕵️‍♂️</span>
-      <div class="vlabel">우리 조 X맨의 정체</div>
+      <div class="vlabel" id="vLabel">우리 조 X맨의 정체</div>
       <h2 id="vTitle">검거 성공!</h2>
       <p class="who">X맨은 <b id="vName">—</b> 님이었습니다</p>
       <div class="vstats">
-        <div class="vstat"><small>우리 조 최다 득표</small><b id="vTop">—</b></div>
+        <div class="vstat"><small id="vTopLabel">우리 조 최다 득표</small><b id="vTop">—</b></div>
         <div class="vstat"><small>내 표</small><b id="vMine">—</b></div>
       </div>
     </div>
@@ -746,11 +746,12 @@
   }
 
   function paintVote(){
-    const list = teamPlayers().filter(p=>p.uid !== uid);
+    const all = teamPlayers();
+    const list = all.filter(p=>p.uid !== uid);
     const box = $("vlist");
-    const voted = list.filter(p=>p.vote).length;
+    const voted = all.filter(p=>p.vote).length;
     const scope = isGlobal() ? "전체" : "우리 조";
-    $("voteCnt").textContent = `${scope} ${voted}/${list.length}명 투표`;
+    $("voteCnt").textContent = `${scope} ${voted}/${all.length}명 투표`;
 
     const search = $("vsearch");
     if(list.length > 12){
@@ -809,10 +810,10 @@
   function paintVoted(){
     const t = players[me.vote];
     $("votedName").textContent = t ? t.name : "—";
-    const list = teamPlayers().filter(p=>p.uid !== uid);
-    const voted = list.filter(p=>p.vote).length;
+    const all = teamPlayers();
+    const voted = all.filter(p=>p.vote).length;
     const scope = isGlobal() ? "전체" : "우리 조";
-    $("votedCount").textContent = `${scope} ${voted}/${list.length}명 투표`;
+    $("votedCount").textContent = `${scope} ${voted}/${all.length}명 투표`;
   }
 
   $("btnRevote").addEventListener("click", ()=>{
@@ -832,6 +833,8 @@
     if(g){
       const names = rt && Array.isArray(rt.xmanNames) && rt.xmanNames.length ? rt.xmanNames : (rt && rt.xmanName ? [rt.xmanName] : ["?"]);
       const caught = !!(rt && rt.caught);
+      $("vLabel").textContent = "전체 X맨의 정체";
+      $("vTopLabel").textContent = "최다 득표";
       $("vEmoji").textContent = caught ? "🎯" : "😈";
       $("vTitle").textContent = caught ? "검거 성공!" : "X맨 검거 실패";
       $("vTitle").className = caught ? "caught" : "escaped";
@@ -851,9 +854,9 @@
       }
 
       let msg = caught
-        ? `전체에서 <b>${esc(names.join(", "))}</b> 님을 정확히 짚었습니다! 표를 모아 진짜 X맨을 찾아냈어요.`
+        ? `표가 모여 <b>${esc(names.join(", "))}</b> 님을 정확히 짚었습니다!`
         : `이번 X맨은 <b>${esc(names.join(", "))}</b> 님이었습니다. 표는 다른 사람에게 몰렸네요 — 다음 판엔 잡아봅시다!`;
-      const total = reveal && reveal.okCount != null ? `전체 ${reveal.okCount}명 중 ${reveal.caughtCount || 0}명 검거 · ` : "";
+      const total = `X맨 ${names.length}명 중 ${rt && rt.caughtCount != null ? rt.caughtCount : 0}명이 최다 득표 · `;
       $("vMsg").innerHTML = msg + `<span class="mine">${total}내 표: ${esc($("vMine").textContent)}</span>`;
       return;
     }
@@ -861,6 +864,8 @@
     const xname = rt ? (rt.xmanName || "?") : "?";
     const caught = !!(rt && rt.caught);
     const onlyOne = !!(rt && rt.solo);
+    $("vLabel").textContent = "우리 조 X맨의 정체";
+    $("vTopLabel").textContent = "우리 조 최다 득표";
 
     $("vName").textContent = xname;
     $("vName").style.fontSize = "";
@@ -890,7 +895,14 @@
       $("vMine").className = hit ? "ok" : "bad";
     }
 
-    const total = reveal && reveal.okCount != null ? `전체 ${reveal.okCount}조 검거 성공` : "";
+    let teamTotal = 0, okCnt = 0;
+    if(reveal && reveal.teams){
+      Object.keys(reveal.teams).forEach(k=>{
+        const r = reveal.teams[k];
+        if(r && !r.solo){ teamTotal++; if(r.caught) okCnt++; }
+      });
+    }
+    const total = teamTotal ? `전체 ${teamTotal}개 조 중 ${okCnt}개 조 검거` : "";
     let msg = "";
     if(caught) msg = `우리 조는 <b>${esc(xname)}</b> 님을 정확히 짚었습니다! 표를 모아 진짜 X맨을 찾아냈어요.`;
     else msg = `우리 조 X맨은 <b>${esc(xname)}</b> 님이었습니다. 표는 다른 사람에게 몰렸네요 — 다음 판엔 잡아봅시다!`;
