@@ -206,6 +206,25 @@
   .rbtn.ghost{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14);color:#D6E1EE}
   .sharehint{text-align:center;font-size:10.5px;font-weight:700;color:#4E5E73;line-height:1.5}
 
+  /* ---------- 결과 이미지 모달 ---------- */
+  .imgmodal{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;padding:18px;
+    background:rgba(2,4,9,.93);backdrop-filter:blur(6px)}
+  .imgmodal.on{display:flex}
+  .imsheet{width:100%;max-width:430px;max-height:100%;display:flex;flex-direction:column;gap:10px;
+    border-radius:20px;border:1px solid var(--line2);background:linear-gradient(168deg,#0E1A2E,#070D19);padding:14px}
+  .imsheet .imhead{display:flex;align-items:center;justify-content:space-between;gap:8px;
+    font-size:11px;font-weight:900;letter-spacing:.14em;color:var(--amber)}
+  .imsheet .imhead span{color:#5D6D82;letter-spacing:0;font-weight:800;font-size:10.5px}
+  .imsheet img{width:100%;min-height:0;object-fit:contain;border-radius:12px;background:#050A16;display:block}
+  .imsheet .imhint{margin:0;text-align:center;font-size:11.5px;font-weight:700;color:#93A2B8;line-height:1.55}
+  .imsheet .imhint b{color:#FFE3A8}
+  .imsheet .imbtns{display:flex;gap:8px}
+  .imsheet .imbtns a,.imsheet .imbtns button{flex:1 1 0;cursor:pointer;text-decoration:none;text-align:center;
+    font-family:var(--sans);font-size:13px;font-weight:900;border-radius:12px;padding:13px 8px;border:1px solid transparent;
+    display:flex;align-items:center;justify-content:center;gap:6px}
+  .imsheet .imbtns a{background:linear-gradient(135deg,#FFE08A,#FFB01F);color:#2A1600}
+  .imsheet .imbtns button{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14);color:#D6E1EE}
+
   .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);z-index:60;
     background:rgba(12,20,34,.97);border:1px solid var(--line2);color:#FFF4DC;padding:10px 17px;border-radius:12px;
     font-size:12.5px;font-weight:800;opacity:0;pointer-events:none;transition:.24s;box-shadow:0 14px 34px rgba(0,0,0,.6);max-width:86vw;text-align:center}
@@ -326,6 +345,17 @@
   </main>
 
   <div class="foot">빅데이터 말투 관상 · 강연 크리에이터 · 정진영</div>
+</div>
+<div class="imgmodal" id="imgModal">
+  <div class="imsheet">
+    <div class="imhead">📸 결과 카드 <span>1080 × 1350</span></div>
+    <img id="imgOut" alt="말투 관상 결과 카드">
+    <p class="imhint">아이폰은 이미지를 <b>길게 눌러 '사진에 저장'</b><br>PC는 아래 <b>저장</b> 버튼을 눌러주세요</p>
+    <div class="imbtns">
+      <a id="imgDl" href="#" download="말투관상.png">⬇ 저장</a>
+      <button id="imgClose" type="button">닫기</button>
+    </div>
+  </div>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -723,13 +753,13 @@
 
     try{
       const url = c.toDataURL("image/png");
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "말투관상_" + t.name.replace(/\s/g, "") + ".png";
-      document.body.appendChild(a); a.click(); a.remove();
-      toast("결과 이미지를 저장했습니다 · 사진첩에서 확인하세요");
+      const fname = "말투관상_" + t.name.replace(/\s/g, "") + ".png";
+      $("imgOut").src = url;
+      $("imgDl").href = url;
+      $("imgDl").setAttribute("download", fname);
+      $("imgModal").classList.add("on");
     }catch(e){
-      toast("이 브라우저에서는 저장이 막혔습니다 · 화면을 캡처해 주세요");
+      toast("이미지를 만들지 못했습니다 · 화면을 캡처해 주세요");
     }
   }
 
@@ -766,6 +796,8 @@
     renderQ();
   });
   $("btnSave").addEventListener("click", saveImage);
+  $("imgClose").addEventListener("click", () => $("imgModal").classList.remove("on"));
+  $("imgModal").addEventListener("click", e => { if(e.target === $("imgModal")) $("imgModal").classList.remove("on"); });
 
   let toastH = null;
   function toast(msg){
