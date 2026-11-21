@@ -78,17 +78,17 @@
   .panel .ph .cnt b{color:#FFE9BC;font-variant-numeric:tabular-nums;font-size:clamp(14px,1.1vw,20px)}
 
   /* 유형 분포 */
-  .dgrid{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:clamp(5px,.7vh,12px) 20px;
-    padding:clamp(10px,1.4vh,18px) 18px 12px;overflow:hidden;align-content:start}
-  .trow{display:grid;grid-template-columns:clamp(22px,1.7vw,30px) minmax(0,1fr) auto;grid-template-rows:auto auto;
-    column-gap:8px;row-gap:3px;align-items:center;padding:clamp(4px,.6vh,9px) 0;animation:rowin .5s ease both}
+  .dgrid{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(6,minmax(0,1fr));
+    gap:clamp(2px,.35vh,8px) 26px;padding:clamp(10px,1.6vh,22px) 20px clamp(10px,1.6vh,20px);overflow:hidden;align-content:stretch}
+  .trow{display:grid;grid-template-columns:clamp(24px,1.9vw,34px) minmax(0,1fr) auto;grid-template-rows:auto auto;
+    column-gap:10px;row-gap:6px;align-items:center;align-content:center;padding:0;animation:rowin .5s ease both}
   @keyframes rowin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  .trow .te{grid-row:1 / span 2;font-size:clamp(16px,1.3vw,24px);line-height:1;text-align:center;filter:drop-shadow(0 0 10px rgba(255,160,20,.3))}
-  .trow .tn{font-size:clamp(11.5px,.95vw,18px);font-weight:800;color:#E7EEF8;letter-spacing:-0.02em;
+  .trow .te{grid-row:1 / span 2;font-size:clamp(18px,1.55vw,29px);line-height:1;text-align:center;filter:drop-shadow(0 0 10px rgba(255,160,20,.3))}
+  .trow .tn{font-size:clamp(13px,1.12vw,21px);font-weight:800;color:#E7EEF8;letter-spacing:-0.02em;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .trow .tc{font-size:clamp(11px,.9vw,17px);font-weight:900;color:#FFE9BC;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .trow .tc{font-size:clamp(12px,1vw,19px);font-weight:900;color:#FFE9BC;font-variant-numeric:tabular-nums;white-space:nowrap}
   .trow .tc small{font-size:.72em;font-weight:800;color:#7E8DA3;margin-left:2px}
-  .trow .tb{grid-column:2 / span 2;height:clamp(4px,.55vh,7px);border-radius:4px;background:rgba(255,255,255,.075);overflow:hidden}
+  .trow .tb{grid-column:2 / span 2;height:clamp(6px,.9vh,10px);border-radius:4px;background:rgba(255,255,255,.075);overflow:hidden}
   .trow .tb i{display:block;height:100%;width:0;border-radius:4px;
     background:linear-gradient(90deg,rgba(255,194,74,.55),var(--amber));transition:width .9s cubic-bezier(.16,.9,.2,1)}
   .trow.zero{opacity:.42}
@@ -119,11 +119,11 @@
     background:rgba(255,255,255,.028);border:1px solid rgba(255,255,255,.065);animation:fin .45s ease both}
   @keyframes fin{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
   .fitem.mint{border-color:rgba(75,232,168,.30);background:rgba(75,232,168,.06)}
-  .fitem .fe{font-size:clamp(15px,1.2vw,22px);line-height:1.1}
+  .fitem .fe{font-size:clamp(17px,1.35vw,25px);line-height:1.1}
   .fitem .ft{min-width:0}
-  .fitem .fn{display:flex;align-items:baseline;gap:6px;font-size:clamp(11px,.9vw,16px);font-weight:900;color:#F2F7FD;letter-spacing:-0.02em}
+  .fitem .fn{display:flex;align-items:baseline;gap:6px;font-size:clamp(12px,.98vw,18px);font-weight:900;color:#F2F7FD;letter-spacing:-0.02em}
   .fitem .fn small{font-size:.78em;font-weight:800;color:#7E8DA3}
-  .fitem .fp{margin-top:2px;font-size:clamp(10px,.8vw,14px);font-weight:700;color:#A7B9CB;line-height:1.45;
+  .fitem .fp{margin-top:3px;font-size:clamp(11px,.86vw,15.5px);font-weight:700;color:#A7B9CB;line-height:1.45;
     display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .fempty{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
     color:#6E8095;font-size:clamp(12px,.95vw,17px);font-weight:800;text-align:center;padding:20px}
@@ -278,17 +278,17 @@
 
   const TYPES = [
     { id:"fox", emo:"🦊", name:"겉웃속칼 여우형", punch:"당신의 'ㅎㅎ'는 동의가 아니라 보류입니다. 그 미소, 상대도 지금 계산 중입니다." },
-    { id:"robot", emo:"🤖", name:"AI보다 차가운 로봇형", punch:"답장은 틀린 곳이 없는데 따뜻한 곳도 없습니다." },
-    { id:"bomb", emo:"💣", name:"시한폭탄 참을인형", punch:"화를 참는 게 아니라 3년 할부로 적립 중입니다." },
-    { id:"ghost", emo:"👻", name:"평화주의 유령형", punch:"당신이 사라진 자리에 남는 건 갈등이 아니라 서운함입니다." },
-    { id:"actor", emo:"🎭", name:"프로 가면 연기자형", punch:"모두가 편한 자리에서 유일하게 불편한 사람이 당신입니다." },
-    { id:"turtle", emo:"🐢", name:"무소식 거북형", punch:"당신의 3시간은 상대에겐 인내심 테스트입니다." },
-    { id:"hedgehog", emo:"🦔", name:"삐침 많은 고슴도치형", punch:"당신의 '네.'에는 마침표가 아니라 칼날이 있습니다." },
-    { id:"captain", emo:"📢", name:"잔소리 총대 반장형", punch:"맞는 말이라는 이유로 100%를 다 말하고 있지는 않나요." },
-    { id:"festival", emo:"🌪️", name:"감정 롤러코스터 예능형", punch:"진짜 아플 때 그 신호가 웃음에 묻힙니다." },
-    { id:"ice", emo:"🧊", name:"한 글자 절약형", punch:"답장은 늘 정답인데 대화는 늘 끝납니다." },
-    { id:"puppy", emo:"🐶", name:"애교 만렙 강아지형", punch:"애교로 다 넘겼지만 하고 싶은 말은 한 번도 못 꺼냈습니다." },
-    { id:"spy", emo:"🕵️", name:"눈팅 탐정 관찰자형", punch:"단톡방 CCTV입니다. 다 보지만 아무도 당신 생각은 모릅니다." }
+    { id:"robot", emo:"🤖", name:"AI보다 차가운 로봇형", punch:"당신의 답장은 틀린 곳이 없는데 따뜻한 곳도 없습니다. 마침표 하나를 'ㅎ'로 바꿔보세요." },
+    { id:"bomb", emo:"💣", name:"시한폭탄 참을인형", punch:"당신은 화를 참는 게 아니라 3년 할부로 적립 중입니다. 이자는 언젠가 장문 한 방으로 청구됩니다." },
+    { id:"ghost", emo:"👻", name:"평화주의 유령형", punch:"당신이 사라진 자리에 남는 건 갈등이 아니라 서운함입니다. 그리고 그 서운함도 결국 당신 몫입니다." },
+    { id:"actor", emo:"🎭", name:"프로 가면 연기자형", punch:"모두가 편한 자리에서 유일하게 불편한 사람이 당신입니다. 가면 벗을 방 하나는 남겨두세요." },
+    { id:"turtle", emo:"🐢", name:"무소식 거북형", punch:"당신의 '나중에 답해야지'는 상대에게 '읽씹'입니다. 알림을 끄는 대신 한 글자라도 먼저 보내세요." },
+    { id:"hedgehog", emo:"🦔", name:"삐침 많은 고슴도치형", punch:"당신의 '네.'에는 마침표가 아니라 칼날이 있습니다. 상태를 말로 설명하는 편이 훨씬 싸게 끝납니다." },
+    { id:"captain", emo:"📢", name:"잔소리 총대 반장형", punch:"당신의 잔소리는 90%가 맞는 말입니다. 문제는 맞는 말이라는 이유로 100%를 다 말한다는 것." },
+    { id:"festival", emo:"🌪️", name:"감정 롤러코스터 예능형", punch:"당신의 '완전 웃겨'는 오늘 이미 다섯 번입니다. 진짜 아플 때 그 신호가 웃음에 묻힙니다." },
+    { id:"ice", emo:"🧊", name:"한 글자 절약형", punch:"당신의 답장은 늘 정답인데 대화는 늘 끝납니다. 마침표 뒤에 괄호 하나만 열어두세요." },
+    { id:"puppy", emo:"🐶", name:"애교 만렙 강아지형", punch:"당신은 애교로 다 넘겼지만, 하고 싶은 말은 한 번도 못 꺼냈습니다. 오늘 한 번은 이모티콘 없이." },
+    { id:"spy", emo:"🕵️", name:"눈팅 탐정 관찰자형", punch:"당신은 단톡방 CCTV입니다. 다 보고 있지만 아무도 당신 생각은 모릅니다. 한 번은 말로 남기세요." }
   ];
   const TYPE_BY_ID = {};
   TYPES.forEach(t => TYPE_BY_ID[t.id] = t);
