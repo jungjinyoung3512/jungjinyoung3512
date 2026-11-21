@@ -245,6 +245,13 @@
     .ring{width:160px;height:160px}
     .ring .num b{font-size:44px}
   }
+
+  /* ── 탈출 완료 화면 채널 CTA 4종 ── */
+  .follows{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .follows .fbtn{padding:13px 8px;font-size:12.5px;font-weight:800;line-height:1.2;text-align:center}
+  .follows .fbtn.hot{background:linear-gradient(135deg,#FFE49A,#FFD24A 60%,#FFB01F);color:#141005;
+    box-shadow:0 10px 26px rgba(255,210,74,.22)}
+  .follows .fbtn.book{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.26)}
 </style>
 </head>
 <body>
@@ -400,13 +407,21 @@
     <p class="done-sub">이제 자리에서 조용히 일어나면 됩니다.<br />다음 회식엔 이 앱 하나면 충분해요.</p>
     <div class="done-meta"><span id="doneLabel">통화 시간</span> <b id="doneTime">00:07</b> · <span id="doneName">엄마 ❤️</span></div>    <p class="follow-label">만든 사람의 진짜 이야기는 여기서</p>
     <div class="follows">
-      <a class="fbtn ig" href="https://www.instagram.com/_j_jin0/" target="_blank" rel="noopener">
+      <a class="fbtn ig" href="https://www.instagram.com/_j_jin0/" target="_blank" rel="noopener noreferrer">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.06 1.8.25 2.2.42.6.23 1 .5 1.4.9.4.4.7.8.9 1.4.17.4.36 1 .42 2.2.06 1.3.07 1.7.07 4.9s0 3.6-.07 4.9c-.06 1.2-.25 1.8-.42 2.2-.23.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.17-1 .36-2.2.42-1.3.06-1.7.07-4.9.07s-3.6 0-4.9-.07c-1.2-.06-1.8-.25-2.2-.42-.6-.23-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.17-.4-.36-1-.42-2.2C2.21 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.06-1.2.25-1.8.42-2.2.23-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.17 1-.36 2.2-.42C8.4 2.21 8.8 2.2 12 2.2zm0 3.3a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zm0 10.7a4.2 4.2 0 1 1 0-8.4 4.2 4.2 0 0 1 0 8.4zm6.8-11a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg>
         인스타그램 팔로우
       </a>
-      <a class="fbtn th" href="https://www.threads.com/@_j_jin0" target="_blank" rel="noopener">
+      <a class="fbtn th" href="https://www.threads.com/@_j_jin0" target="_blank" rel="noopener noreferrer">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.5 2C7 2 3.6 5.9 3.6 12s3.4 10 8.9 10c4.4 0 7.3-2.3 7.3-5.5 0-2.9-2.1-4.7-5.3-4.9-.4-1.9-1.6-3-3.5-3-1.6 0-2.9.9-3.3 2.2l1.8.6c.2-.7.8-1.1 1.5-1.1.9 0 1.4.5 1.5 1.5-2.9.1-4.7 1.4-4.7 3.6 0 1.9 1.6 3.2 3.8 3.2 2 0 3.4-.9 4-2.3.4.5.6 1.1.6 1.9 0 2.1-1.8 3.6-4.6 3.6-4.2 0-6.9-3-6.9-7.8S7.6 4.2 12.4 4.2c3.4 0 5.6 1.4 6.6 3.9l1.8-.8C19.4 4.1 16.5 2 12.5 2zm-.6 12.5c-1.2 0-2.1-.6-2.1-1.5 0-1 1-1.6 2.9-1.7.1 2-.4 3.2-.8 3.2z"/></svg>
         스레드 팔로우
+      </a>
+      <a class="fbtn hot" href="https://jungjinyoung3512.github.io/jungjinyoung3512/#contact" target="_blank" rel="noopener noreferrer">
+        <span aria-hidden="true">🌙</span>
+        1월 리셋밤
+      </a>
+      <a class="fbtn book" href="https://kmong.com/gig/536319" target="_blank" rel="noopener noreferrer">
+        <span aria-hidden="true">📘</span>
+        책 보러가기
       </a>
     </div>
     <button class="again" id="againBtn">📞 다시 예약하기</button>
