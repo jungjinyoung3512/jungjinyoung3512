@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0F172A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="robots" content="noindex, nofollow">
+<title>진행자 원클릭 컨트롤 허브 (예비) | 강연 크리에이터 · 정진영</title>
+<meta name="description" content="강연 코스별 진행자·청중 화면과 청중 주소를 원클릭으로 여는 진행자 전용 컨트롤 허브 — 강연 크리에이터 · 정진영">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root{
+    --bg:#0B1120; --bg2:#0F172A; --card:#141F38; --card2:#1A2746;
+    --line:rgba(245,158,11,.18); --line2:rgba(148,163,184,.16);
+    --amber:#F59E0B; --amber-d:#D97706; --amber-l:#FCD34D;
+    --ink:#F8FAFC; --mute:#94A3B8; --mute2:#64748B;
+    --ok:#34D399; --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(1100px 520px at 12% -12%, rgba(245,158,11,.13), transparent 62%),
+      radial-gradient(900px 460px at 92% 4%, rgba(59,130,246,.10), transparent 60%),
+      var(--bg);
+    color:var(--ink);
+    font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    padding-bottom:calc(28px + env(safe-area-inset-bottom));
+  }
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit}
+
+  /* ── header ── */
+  .top{
+    position:sticky;top:0;z-index:30;
+    display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding:12px clamp(14px,3vw,34px);
+    background:rgba(11,17,32,.82);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line2);
+  }
+  .brand{display:flex;align-items:center;gap:10px;min-width:0}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 4px rgba(245,158,11,.16);flex:none}
+  .brand b{display:block;font-size:14px;letter-spacing:-.2px;white-space:nowrap}
+  .brand small{display:block;font-size:9.5px;letter-spacing:.22em;color:var(--mute2);margin-top:1px}
+  .top-right{display:flex;align-items:center;gap:10px;flex:none}
+  .kbd-hint{font-size:11.5px;color:var(--mute2);display:flex;align-items:center;gap:4px}
+  kbd{display:inline-block;min-width:17px;text-align:center;padding:1px 4px;border-radius:5px;border:1px solid var(--line2);background:#152039;font-size:10.5px;color:var(--mute);font-family:ui-monospace,Menlo,monospace}
+  .home{font-size:12px;color:var(--mute);border:1px solid var(--line2);padding:6px 11px;border-radius:999px;transition:.15s}
+  .home:hover{color:var(--ink);border-color:var(--line)}
+
+  main{max-width:1240px;margin:0 auto;padding:clamp(18px,3vw,34px) clamp(14px,3vw,34px) 0}
+
+  /* ── hero ── */
+  .hero{margin-bottom:18px}
+  .hero h1{
+    margin:0 0 8px;font-size:clamp(22px,3.1vw,34px);line-height:1.22;letter-spacing:-.9px;font-weight:800;
+  }
+  .pre{
+    display:inline-block;vertical-align:middle;margin-left:8px;
+    font-size:11.5px;font-weight:700;letter-spacing:.06em;padding:4px 9px;border-radius:7px;
+    color:#0B1120;background:linear-gradient(135deg,var(--amber-l),var(--amber));
+    transform:translateY(-2px);
+  }
+  .hero p{margin:0;color:var(--mute);font-size:clamp(13px,1.35vw,15px);line-height:1.65;max-width:820px}
+  .hero p b{color:var(--amber-l);font-weight:700}
+  .checks{
+    display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;
+  }
+  .checks span{
+    font-size:11.5px;color:var(--mute);background:rgba(20,31,56,.9);
+    border:1px solid var(--line2);border-radius:999px;padding:5px 10px;
+  }
+  .checks span b{color:var(--ink);font-weight:600}
+
+  /* ── tabs ── */
+  .tabs{
+    display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;
+    margin:18px 0 16px;
+  }
+  .tab{
+    display:flex;align-items:center;gap:9px;text-align:left;cursor:pointer;
+    padding:12px 13px;border-radius:14px;
+    background:rgba(20,31,56,.72);border:1px solid var(--line2);color:var(--ink);
+    transition:transform .15s,border-color .15s,background .15s,box-shadow .15s;
+    position:relative;overflow:hidden;
+  }
+  .tab:hover{border-color:rgba(245,158,11,.35);transform:translateY(-1px)}
+  .tab .kbd{
+    position:absolute;top:7px;right:8px;font-size:9.5px;color:var(--mute2);
+    border:1px solid var(--line2);border-radius:4px;padding:0 4px;min-width:0;
+  }
+  .tabico{font-size:19px;line-height:1;flex:none}
+  .tabtxt{min-width:0}
+  .tabtxt b{display:block;font-size:13.2px;font-weight:700;letter-spacing:-.2px;line-height:1.3}
+  .tabtxt small{display:block;font-size:10.5px;color:var(--mute2);margin-top:2px}
+  .tab.on{
+    background:linear-gradient(135deg,rgba(245,158,11,.97),rgba(217,119,6,.97));
+    border-color:transparent;color:#0B1120;
+    box-shadow:0 10px 26px -12px rgba(245,158,11,.85);
+  }
+  .tab.on .tabtxt small,.tab.on .kbd{color:rgba(11,17,32,.62);border-color:rgba(11,17,32,.2)}
+
+  /* ── panel ── */
+  .panel{display:none}
+  .panel.on{display:block;animation:fade .22s ease-out}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  .panel-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:4px 0 12px}
+  .panel-head h2{margin:0;font-size:clamp(15.5px,1.7vw,19px);font-weight:800;letter-spacing:-.4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .pico{font-size:1.15em}
+  .tag{font-size:10.5px;font-weight:700;color:var(--amber-l);background:rgba(245,158,11,.11);border:1px solid var(--line);border-radius:6px;padding:3px 7px}
+  .panel-sub{margin:4px 0 0;font-size:12px;color:var(--mute2)}
+  .openall{
+    cursor:pointer;font-size:12px;font-weight:700;color:var(--amber-l);
+    background:rgba(245,158,11,.09);border:1px solid var(--line);border-radius:10px;
+    padding:8px 12px;transition:.15s;white-space:nowrap;
+  }
+  .openall:hover{background:rgba(245,158,11,.18)}
+
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+
+  .card{
+    background:linear-gradient(160deg,var(--card),var(--card2));
+    border:1px solid var(--line2);border-radius:var(--radius);
+    padding:15px 15px 14px;display:flex;flex-direction:column;gap:11px;
+    box-shadow:0 18px 40px -30px #000;transition:border-color .15s,transform .15s;
+  }
+  .card:hover{border-color:rgba(245,158,11,.3);transform:translateY(-1px)}
+  .card-head{display:flex;gap:11px;align-items:flex-start}
+  .ico{
+    flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:21px;
+    background:linear-gradient(140deg,rgba(245,158,11,.2),rgba(245,158,11,.06));
+    border:1px solid var(--line);
+  }
+  .names{min-width:0}
+  .names h3{margin:0;font-size:16.5px;font-weight:800;letter-spacing:-.3px;line-height:1.3}
+  .desc{margin:5px 0 0;font-size:12px;line-height:1.55;color:var(--mute)}
+
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{
+    font-size:10.8px;font-weight:600;letter-spacing:-.1px;padding:4px 8px;border-radius:6px;
+    background:rgba(11,17,32,.55);border:1px solid var(--line2);color:var(--mute);white-space:nowrap;
+  }
+  .chip.code{color:var(--amber-l);border-color:rgba(245,158,11,.32);background:rgba(245,158,11,.08);letter-spacing:.02em}
+  .chip.code b{font-family:ui-monospace,Menlo,monospace;font-weight:800;letter-spacing:.04em}
+  .chip.ghost{color:var(--mute2)}
+  .chip.cap{color:#BFDBFE;border-color:rgba(96,165,250,.22);background:rgba(59,130,246,.08)}
+  .chip.clear{color:#FDE68A;border-color:rgba(245,158,11,.22);background:rgba(245,158,11,.07)}
+
+  .actions{display:grid;grid-template-columns:1fr 1fr auto;gap:7px;margin-top:auto}
+  .btn{
+    display:flex;align-items:center;justify-content:center;gap:5px;
+    font-size:12.8px;font-weight:700;letter-spacing:-.2px;
+    padding:10px 10px;border-radius:10px;cursor:pointer;border:1px solid transparent;
+    transition:.15s;white-space:nowrap;
+  }
+  .btn.primary{background:linear-gradient(135deg,var(--amber-l),var(--amber));color:#0B1120;box-shadow:0 8px 20px -14px rgba(245,158,11,.9)}
+  .btn.primary:hover{filter:brightness(1.06)}
+  .btn.second{background:rgba(11,17,32,.5);border-color:var(--line2);color:var(--ink)}
+  .btn.second:hover{border-color:rgba(245,158,11,.4);background:rgba(11,17,32,.75)}
+  .btn.copy{background:transparent;border-color:var(--line2);color:var(--mute);font-weight:600;padding:10px 11px}
+  .btn.copy:hover{color:var(--ink);border-color:var(--line)}
+  .btn.copy.done{color:#052E1E;background:var(--ok);border-color:transparent}
+  .btn:active{transform:scale(.985)}
+
+  /* ── all list ── */
+  .all{margin:22px 0 0;border:1px solid var(--line2);border-radius:16px;background:rgba(15,23,42,.72);overflow:hidden}
+  .all summary{
+    cursor:pointer;list-style:none;padding:15px 16px;display:flex;align-items:center;gap:9px;
+    font-size:13.5px;font-weight:700;letter-spacing:-.2px;
+  }
+  .all summary::-webkit-details-marker{display:none}
+  .all summary:hover{background:rgba(245,158,11,.05)}
+  .all summary .cnt{font-size:11px;font-weight:600;color:var(--mute2);border:1px solid var(--line2);border-radius:999px;padding:2px 8px}
+  .all summary .arw{margin-left:auto;color:var(--mute2);transition:transform .18s;font-size:12px}
+  .all[open] summary .arw{transform:rotate(180deg)}
+  .allbody{padding:4px 10px 14px}
+  .allgroup{font-size:11px;letter-spacing:.14em;color:var(--mute2);font-weight:700;margin:12px 6px 7px}
+  .rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 14px}
+  .row{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:8px;font-size:12.3px}
+  .row:hover{background:rgba(255,255,255,.035)}
+  .num{width:15px;text-align:right;font-size:10.5px;color:var(--mute2);font-family:ui-monospace,Menlo,monospace;flex:none}
+  .rowico{width:17px;text-align:center;flex:none}
+  .rowname{color:#E2E8F0;font-weight:600;letter-spacing:-.2px}
+  .mini-code{font-size:9.8px;font-family:ui-monospace,Menlo,monospace;color:var(--amber-l);background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.22);border-radius:4px;padding:1px 4px;flex:none}
+  .mini-code.none{color:var(--mute2);background:rgba(255,255,255,.03);border-color:var(--line2);font-family:inherit}
+  .rowlinks{margin-left:auto;display:flex;gap:8px;flex:none}
+  .rowlinks a{font-size:11px;color:var(--mute);border-bottom:1px solid transparent;padding-bottom:1px}
+  .rowlinks a:hover{color:var(--amber-l);border-bottom-color:rgba(245,158,11,.5)}
+
+  .note{margin:18px 0 0;padding:13px 15px;border-radius:14px;border:1px dashed rgba(148,163,184,.22);background:rgba(15,23,42,.5);font-size:11.8px;line-height:1.75;color:var(--mute2)}
+  .note b{color:var(--mute)}
+  footer{max-width:1240px;margin:0 auto;padding:20px clamp(14px,3vw,34px) 0;font-size:11px;color:var(--mute2);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+  .toast{
+    position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translate(-50%,18px);
+    background:#F8FAFC;color:#0B1120;font-size:12.5px;font-weight:700;padding:10px 16px;border-radius:999px;
+    box-shadow:0 16px 40px -16px rgba(0,0,0,.9);opacity:0;pointer-events:none;transition:.22s;z-index:80;max-width:88vw;text-align:center;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  @media (max-width:900px){
+    .tabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .grid{grid-template-columns:1fr}
+    .rows{grid-template-columns:1fr}
+  }
+  @media (max-width:560px){
+    .top{padding:10px 14px}
+    .kbd-hint{display:none}
+    .brand b{font-size:12.5px}
+    .tabs{grid-template-columns:1fr 1fr;gap:7px}
+    .tab{padding:10px;gap:7px}
+    .tab .kbd{display:none}
+    .tabico{fontSize:17px}
+    .tabtxt b{font-size:12.2px}
+    .tabtxt small{font-size:9.8px}
+    .actions{grid-template-columns:1fr 1fr;gap:6px}
+    .btn.copy{grid-column:1 / -1}
+    .panel-head{align-items:flex-start}
+    .openall{width:100%;text-align:center}
+  }
+  @media print{body{background:#fff;color:#000} .tabs,.actions,.openall{display:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <span class="dot"></span>
+    <div><b>강연 크리에이터 · 정진영</b><small>PRESENTER CONTROL HUB</small></div>
+  </div>
+  <div class="top-right">
+    <span class="kbd-hint">코스 전환 <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd></span>
+    <a class="home" href="../">홈페이지</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>🎛️ 진행자 원클릭 컨트롤 허브 <span class="pre">예비</span></h1>
+    <p>코스 하나만 고르면 오늘 쓸 앱 4개가 <b>한 화면</b>에. 진행자 화면·청중 화면·청중 주소 복사까지 <b>원클릭</b>으로 끝냅니다.</p>
+    <div class="checks">
+      <span>1. 진행자 화면 먼저 열고 <b>[🔊 소리 ON]</b></span>
+      <span>2. 방 코드 확인 · <b>[🧹 비우기]</b>로 지난 기록 삭제</span>
+      <span>3. <b>[📋 주소 복사]</b>로 QR·링크 배포</span>
+      <span>4. 결과는 진행자가 누를 때 공개</span>
+    </div>
+  </section>
+
+  <nav class="tabs" role="tablist" aria-label="강연 코스">
+<button class="tab on" id="tab-c1" data-course="c1" type="button" role="tab" aria-selected="true"><span class="kbd">1</span><span class="tabico">🏢</span><span class="tabtxt"><b>기업·공공기관 소통 &amp; AI 특강</b><small>추천 4종</small></span></button>
+<button class="tab" id="tab-c2" data-course="c2" type="button" role="tab" aria-selected="false"><span class="kbd">2</span><span class="tabico">👨‍👩‍👧‍👦</span><span class="tabtxt"><b>어르신·학부모·가족 강연</b><small>큰 글씨·공감 4종</small></span></button>
+<button class="tab" id="tab-c3" data-course="c3" type="button" role="tab" aria-selected="false"><span class="kbd">3</span><span class="tabico">🔥</span><span class="tabtxt"><b>도파민·아이스브레이킹</b><small>분위기 폭발 4종</small></span></button>
+<button class="tab" id="tab-c4" data-course="c4" type="button" role="tab" aria-selected="false"><span class="kbd">4</span><span class="tabico">🌙</span><span class="tabtxt"><b>리셋밤·소규모 깊은 대화</b><small>힐링·여운 4종</small></span></button>
+  </nav>
+
+
+      <section class="panel on" id="panel-c1" data-course="c1" aria-labelledby="tab-c1">
+        <div class="panel-head">
+          <div>
+            <h2><span class="pico">🏢</span>기업·공공기관 소통 &amp; AI 특강 <span class="tag">추천 4종</span></h2>
+            <p class="panel-sub">소통 진단 → AI 사이다 → AI 방어전 → 마음편지 피날레</p>
+          </div>
+          <button class="openall" type="button" data-hosts="https://jungjinyoung3512.github.io/jungjinyoung3512/ai-cider-reply/host.html|https://jungjinyoung3512.github.io/jungjinyoung3512/ai-boss-defense/host.html|https://jungjinyoung3512.github.io/jungjinyoung3512/thank-wall/host.html">📂 진행자 화면 4개 한 번에 열기</button>
+        </div>
+        <div class="grid">
+        <article class="card" data-path="color-talk">
+          <div class="card-head">
+            <span class="ico">🎨</span>
+            <div class="names">
+              <h3>12색 소통</h3>
+              <p class="desc">12가지 색으로 보는 나의 소통 본색 — 결과 화면에서만 타입 공개</p>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip ghost">방 코드 없음</span>
+            <span class="chip cap">👥 인원 무제한</span>
+            <span class="chip clear">단독 앱 · 방 코드 없음</span>
+          </div>
+          <div class="actions">
+          <a class="btn primary" href="https://jungjinyoung3512.github.io/jungjinyoung3512/color-talk/" target="_blank" rel="noopener" data-open="host">🎙️ 본 화면 열기</a>
+          <a class="btn second" href="https://jungjinyoung3512.github.io/jungjinyoung3512/color-talk/" target="_blank" rel="noopener" data-open="aud">📱 같은 화면</a>
+            <button class="btn copy" type="button" data-url="https://jungjinyoung3512.github.io/jungjinyoung3512/color-talk/">📋 주소 복사</button>
+          </div>
+        </article>
+
+        <article class="card" data-path="ai-cider-reply">
+          <div class="card-head">
+            <span class="ico">😈</span>
+            <div class="names">
+              <h3>AI 합법적 멕이기 번역기</h3>
+              <p class="desc">상황 고르면 0.5초 만에 사이다 답장 3종 (정중·멕이기·방어막) · 진행자 화면에 인기 상황 TOP3</p>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip code">방 코드 <b>JY27</b></span>
+            <span class="chip cap">👥 90~96명 권장</span>
+            <span class="chip clear">🧹 강연 전 비우기 체크</span>
+          </div>
+          <div class="actions">
+          <a class="btn primary" href="https://jungjinyoung3512.github.io/jungjinyoung3512/ai-cider-reply/host.html" target="_blank" rel="noopener" data-open="host">🎙️ 진행자 화면</a>
+          <a class="btn second" href="https://jungjinyoung3512.github.io/jungjinyoung3512/ai-cider-reply/" target="_blank" rel="noopener" data-open="aud">📱 청중 화면</a>
+            <button class="btn copy" type="button" data-url="https://jungjinyoung3512.github.io/jungjinyoung3512/ai-cider-reply/">📋 주소 복사</button>
+          </div>
+        </article>
+
+        <article class="card" data-path="ai-boss-defense">
+          <div class="card-head">
+            <span class="ico">🎭</span>
+            <div class="names">
+              <h3>AI 까다로운 상대 방어전</h3>
+              <p class="desc">상사·사춘기 자녀·배우자와 3라운드 — 청중 선택으로 AI 혈압 게이지 배틀</p>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip code">방 코드 <b>JY30</b></span>
+            <span class="chip cap">👥 90~96명 권장</span>
+            <span class="chip clear">🧹 강연 전 비우기 체크</span>
+          </div>
+          <div class="actions">
+          <a class="btn primary" href="https://jungjinyoung3512.github.io/jungjinyoung3512/ai-boss-defense/host.html" target="_blank" rel="noopener" data-open="host">🎙️ 진행자 화면</a>
+          <a class="btn second" href="https://jungjinyoung3512.github.io/jungjinyoung3512/ai-boss-defense/" target="_blank" rel="noopener" data-open="aud">📱 청중 화면</a>
+            <button class="btn copy" type="button" data-url="https://jungjinyoung3512.github.io/jungjinyoung3512/ai-boss-defense/">📋 주소 복사</button>
+          </div>
+        </article>
+
+        <article class="card" data-path="thank-wall">
+          <div class="card-head">
+            <span class="ico">🏮</span>
+            <div class="names">
+              <h3>마음편지 피날레</h3>
+              <p class="desc">익명 한 줄이 전광판으로 — 강연 마지막 여운 (제주 실사용 최고 반응)</p>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip code">방 코드 <b>JY77</b></span>
+            <span class="chip cap">👥 인원 무제한</span>
+            <span class="chip clear">🧹 강연 전 비우기 체크</span>
+          </div>
+          <div class="actions">
+          <a class="btn primary" href="https://jungjinyoung3512.github.io/jungjinyoung3512/thank-wall/host.html" target="_blank" rel="noopener" data-open="host">🎙️ 진행자 화면</a>
+          <a class="btn second" href="https://jungjinyoung3512.github.io/jungjinyoung3512/thank-wall/" target="_blank" rel="noopener" data-open="aud">📱 청중 화면</a>
+            <button class="btn copy" type="button" data-url="https://jungjinyoung3512.github.io/jungjinyoung3512/thank-wall/">📋 주소 복사</button>
+          </div>
+        </article>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-c2" data-course="c2" aria-labelledby="tab-c2">
+        <div class="panel-head">
+          <div>
+            <h2><span class="pico">👨‍👩‍👧‍👦</span>어르신·학부모·가족 강연 <span class="tag">큰 글씨·공감 4종</span></h2>
+            <p class="panel-sub">큼직한 버튼·큰 글씨 → 웃음 → 익명 속마음 → 마음편지</p>
+          </div>
+          <button class="openall" type="button" data-hosts="https://jungjinyoung3512.github.io/jungjinyoung3512/lie-detector/host.html|https://jungjinyoung3512.github.io/jungjinyoung3512/black-heart/host.html|https://jungjinyoung3512.github.io/jungjinyoung3512/nunchi-zero/host.html|https://jungjinyoung3512.github.io/jungjinyoung3512/thank-wall/host.html">📂 진행자 화면 4개 한 번에 열기</button>
+        </div>
+        <div class="grid">
+        <article class="card" data-path="lie-detector">
+          <div class="card-head">
+            <span class="ico">🕵️</span>
+            <div class="names">
+              <h3>효도·사랑 거짓말 탐지기</h3>
+              <p class="desc">큰 글씨 지문 3초 스캔 — 💚 천사표 / 🚨 삐빅! 부부·부모자녀·직장 3모드</p>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip code">방 코드 <b>JY55</b></span>
+            <span class="chip cap">👥 90~96명 권장</span>
+            <span class="chip clear">🧹 강연 전 비우기 체크</span>
+          </div>
+          <div class="actions">
+          <a class="btn primary" href="https://jungjinyoung3512.github.io/jungjinyoung3512/lie-detector/host.html" target="_blank" rel="noopener" data-open="host">🎙️ 진행자 화면</a>
+          <a class="btn second" href="https://jungjinyoung3512.github.io/jungjinyoung3512/lie-detector/" target="_blank" rel="noopener" data-open="aud">📱 청중 화면</a>
+            <button class="btn copy" type="button" data-url="https://jungjinyoung3512.github.io/jungjinyoung3512/lie-detector/">📋 주소 복사</button>
+          </div>
+        </article>
+
+        <article class="card" data-path="black-heart">
+          <div class="card-head">
+            <span class="ico">🖤</span>
+            <div class="names">
+              <h3>익명 흑심 투시경</h3>
+              <p class="desc">익명 O/X 투표 — 개인 기록 0%, 질문 8개 프리셋 ✏️ 수정·추가 가능</p>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip code">방 코드 <b>JY99</b></span>
+            <span class="chip cap">👥 90~96명 권장</span>
+            <span class="chip clear">🧹 강연 전 비우기 체크</span>
+          </div>
+          <div class="actions">
+          <a class="btn primary" href="https://jungjinyoung3512.github.io/jungjinyoung3512/black-heart/host.html" target="_blank" rel="noopener" data-open="host">🎙️ 진행자 화면</a>
+          <a class="btn second" href="https://jungjinyoung3512.github.io/jungjinyoung3512/black-heart/" target="_blank" rel="noopener" data-open="aud">📱 청중 화면</a>
+            <button class="btn copy" type="button" data-url="https://jungjinyoung3512.github.io/jungjinyoung3512/black-heart/">📋 주소 복사</button>
+          </div>
+        </article>
+
+        <article class="card" data-path="nunchi-zero">
+          <div class="card-head">
+            <span class="ico">🤫</span>
+            <div class="names">
+              <h3>눈치제로</h3>
+              <p class="desc">1~66번 중 가장 많이 눌린 번호 — 26초 제한, 1~5위 클릭별 공개</p>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip code">방 코드 <b>JY66</b></span>
+            <span class="chip cap">👥 96명 정원</span>
+            <span class="chip clear">🧹 강연 전 비우기 체크</span>
+          </div>
+          <div class="actions">
+          <a class="btn primary" href="https://jungjinyoung3512.github.io/jungjinyoung3512/nunchi-zero/host.html" target="_blank" rel="noopener" data-open="host">🎙️ 진행자 화면</a>
+          <a class="btn second" href="https://jungjinyoung3512.github.io/jungjinyoung3512/nunchi-zero/" target="_blank" rel="noopener" data-open="aud">📱 청중 화면</a>
+            <button class="btn copy" type="button" data-url="https://jungjinyoung3512.github.io/jungjinyoung3512/nunchi-zero/">📋 주소 복사</button>
+          </div>
+        </article>
+
+        <article class="card" data-path="thank-wall">
+          <div class="card-head">
+            <span class="ico">🏮</span>
+            <div class="names">
+              <h3>마음편지 피날레</h3>
+              <p class="desc">익명 한 줄이 전광판으로 — 가족 강연 마무리용</p>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip code">방 코드 <b>JY77</b></span>
+            <span class="chip cap">👥 인원 무제한</span>
+            <span class="chip clear">🧹 강연 전 비우기 체크</span>
+          </div>
+          <div class="actions">
+          <a class="btn primary" href="https://jungjinyoung3512.github.io/jungjinyoung3512/thank-wall/host.html" target="_blank" rel="noopener" data-open="host">🎙️ 진행자 화면</a>
+          <a class="btn second" href="https://jungjinyoung3512.github.io/jungjinyoung3512/thank-wall/" target="_blank" rel="noopener" data-open="aud">📱 청중 화면</a>
+            <button class="btn copy" type="button" data-url="https://jungjinyoung3512.github.io/jungjinyoung3512/thank-wall/">📋 주소 복사</button>
+          </div>
+        </article>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-c3" data-course="c3" aria-labelledby="tab-c3">
+        <div class="panel-head">
+          <div>
+            <h2><span class="pico">🔥</span>도파민·아이스브레이킹 <span class="tag">분위기 폭발 4종</span></h2>
+            <p class="panel-sub">몸으로 달리고 → 팀으로 이어달리고 → 골든벨 → 10초 집중</p>
+          </div>
+          <button class="openall" type="button" data-hosts="https://jungjinyoung3512.github.io/jungjinyoung3512/run-100m/host.html|https://jungjinyoung3512.github.io/jungjinyoung3512/relay-800m/host.html|https://jungjinyoung3512.github.io/jungjinyoung3512/golden-bell/host.html|https://jungjinyoung3512.github.io/jungjinyoung3512/catch-10/host.html">📂 진행자 화면 4개 한 번에 열기</button>
+        </div>
+        <div class="grid">
+        <article class="card" data-path="run-100m">
+          <div class="card-head">
+            <span class="ico">🏃</span>
+            <div class="names">
+              <h3>100m 달리기</h3>
+              <p class="desc">터치 연타로 100m 질주 — 무지개 트랙·캐릭터 전광판</p>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip code">방 코드 <b>JY100</b></span>
+            <span class="chip cap">👥 90~96명 권장</span>
+            <span class="chip clear">🧹 강연 전 비우기 체크</span>
+          </div>
+          <div class="actions">
+          <a class="btn primary" href="https://jungjinyoung3512.github.io/jungjinyoung3512/run-100m/host.html" target="_blank" rel="noopener" data-open="host">🎙️ 진행자 화면</a>
+          <a class="btn second" href="https://jungjinyoung3512.github.io/jungjinyoung3512/run-100m/" target="_blank" rel="noopener" data-open="aud">📱 청중 화면</a>
+            <button class="btn copy" type="button" data-url="https://jungjinyoung3512.github.io/jungjinyoung3512/run-100m/">📋 주소 복사</button>
+          </div>
+        </article>
+
+        <article class="card" data-path="relay-800m">
+          <div class="card-head">
+            <span class="ico">🏅</span>
+            <div class="names">
+              <h3>800m 릴레이 계주</h3>
+              <p class="desc">8명이 1팀, 바통을 이어 800m — 팀별 솔드아웃·비우기</p>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip code">방 코드 <b>JY400</b></span>
+            <span class="chip cap">👥 20팀 × 8명 자리</span>
+            <span class="chip clear">🧹 강연 전 비우기 체크</span>
+          </div>
+          <div class="actions">
+          <a class="btn primary" href="https://jungjinyoung3512.github.io/jungjinyoung3512/relay-800m/host.html" target="_blank" rel="noopener" data-open="host">🎙️ 진행자 화면</a>
+          <a class="btn second" href="https://jungjinyoung3512.github.io/jungjinyoung3512/relay-800m/" target="_blank" rel="noopener" data-open="aud">📱 청중 화면</a>
+            <button class="btn copy" type="button" data-url="https://jungjinyoung3512.github.io/jungjinyoung3512/relay-800m/">📋 주소 복사</button>
+          </div>
+        </article>
+
+        <article class="card" data-path="golden-bell">
+          <div class="card-head">
+            <span class="ico">🔔</span>
+            <div class="names">
+              <h3>도전 골든벨</h3>
+              <p class="desc">20문제(1~10번 1점·11~20번 2점) — 1~3등 황금빛, 꼴등 붉은 벨</p>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip code">방 코드 <b>JY20</b></span>
+            <span class="chip cap">👥 96명 정원</span>
+            <span class="chip clear">🧹 강연 전 비우기 체크</span>
+          </div>
+          <div class="actions">
+          <a class="btn primary" href="https://jungjinyoung3512.github.io/jungjinyoung3512/golden-bell/host.html" target="_blank" rel="noopener" data-open="host">🎙️ 진행자 화면</a>
+          <a class="btn second" href="https://jungjinyoung3512.github.io/jungjinyoung3512/golden-bell/" target="_blank" rel="noopener" data-open="aud">📱 청중 화면</a>
+            <button class="btn copy" type="button" data-url="https://jungjinyoung3512.github.io/jungjinyoung3512/golden-bell/">📋 주소 복사</button>
+          </div>
+        </article>
+
+        <article class="card" data-path="catch-10">
+          <div class="card-head">
+            <span class="ico">⏱️</span>
+            <div class="names">
+              <h3>10초를 잡아라</h3>
+              <p class="desc">1~20조 선점 잠금 — 10초를 정확히 잡는 순간의 짜릿함</p>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip code">방 코드 <b>JY10</b></span>
+            <span class="chip cap">👥 20조 · 20명</span>
+            <span class="chip clear">🧹 강연 전 비우기 체크</span>
+          </div>
+          <div class="actions">
+          <a class="btn primary" href="https://jungjinyoung3512.github.io/jungjinyoung3512/catch-10/host.html" target="_blank" rel="noopener" data-open="host">🎙️ 진행자 화면</a>
+          <a class="btn second" href="https://jungjinyoung3512.github.io/jungjinyoung3512/catch-10/" target="_blank" rel="noopener" data-open="aud">📱 청중 화면</a>
+            <button class="btn copy" type="button" data-url="https://jungjinyoung3512.github.io/jungjinyoung3512/catch-10/">📋 주소 복사</button>
+          </div>
+        </article>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-c4" data-course="c4" aria-labelledby="tab-c4">
+        <div class="panel-head">
+          <div>
+            <h2><span class="pico">🌙</span>리셋밤·소규모 깊은 대화 <span class="tag">힐링·여운 4종</span></h2>
+            <p class="panel-sub">질문 → 웃음 → 진단 → 탈출 연출로 밤을 정리</p>
+          </div>
+          <button class="openall" type="button" data-hosts="https://jungjinyoung3512.github.io/jungjinyoung3512/harmless-questions/host.html|https://jungjinyoung3512.github.io/jungjinyoung3512/ai-talk-face/host.html|https://jungjinyoung3512.github.io/jungjinyoung3512/burnout-check/host.html">📂 진행자 화면 4개 한 번에 열기</button>
+        </div>
+        <div class="grid">
+        <article class="card" data-path="harmless-questions">
+          <div class="card-head">
+            <span class="ico">📖</span>
+            <div class="names">
+              <h3>25가지 무해한 질문들</h3>
+              <p class="desc">책의 25가지 질문 + AI 예측 — 실제 BGM 7곡, 조용한 깊은 대화</p>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip code">방 코드 <b>JY25</b></span>
+            <span class="chip cap">👥 90~96명 권장</span>
+            <span class="chip clear">🧹 강연 전 비우기 체크</span>
+          </div>
+          <div class="actions">
+          <a class="btn primary" href="https://jungjinyoung3512.github.io/jungjinyoung3512/harmless-questions/host.html" target="_blank" rel="noopener" data-open="host">🎙️ 진행자 화면</a>
+          <a class="btn second" href="https://jungjinyoung3512.github.io/jungjinyoung3512/harmless-questions/" target="_blank" rel="noopener" data-open="aud">📱 청중 화면</a>
+            <button class="btn copy" type="button" data-url="https://jungjinyoung3512.github.io/jungjinyoung3512/harmless-questions/">📋 주소 복사</button>
+          </div>
+        </article>
+
+        <article class="card" data-path="ai-talk-face">
+          <div class="card-head">
+            <span class="ico">🔮</span>
+            <div class="names">
+              <h3>AI 카톡·말투 관상가</h3>
+              <p class="desc">4문항이면 가면지수·꼰대력·생존율 — 결과 카드 저장·공유</p>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip code">방 코드 <b>JY28</b></span>
+            <span class="chip cap">👥 100명 이하 권장</span>
+            <span class="chip clear">🧹 강연 전 비우기 체크</span>
+          </div>
+          <div class="actions">
+          <a class="btn primary" href="https://jungjinyoung3512.github.io/jungjinyoung3512/ai-talk-face/host.html" target="_blank" rel="noopener" data-open="host">🎙️ 진행자 화면</a>
+          <a class="btn second" href="https://jungjinyoung3512.github.io/jungjinyoung3512/ai-talk-face/" target="_blank" rel="noopener" data-open="aud">📱 청중 화면</a>
+            <button class="btn copy" type="button" data-url="https://jungjinyoung3512.github.io/jungjinyoung3512/ai-talk-face/">📋 주소 복사</button>
+          </div>
+        </article>
+
+        <article class="card" data-path="burnout-check">
+          <div class="card-head">
+            <span class="ico">🔥</span>
+            <div class="names">
+              <h3>번아웃 11문항 진단</h3>
+              <p class="desc">11문항 1분 익명 진단 — 마음 배터리 잔량, 진행자 화면에 위험군 비율</p>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip code">방 코드 <b>JY11</b></span>
+            <span class="chip cap">👥 90~96명 권장</span>
+            <span class="chip clear">🧹 강연 전 비우기 체크</span>
+          </div>
+          <div class="actions">
+          <a class="btn primary" href="https://jungjinyoung3512.github.io/jungjinyoung3512/burnout-check/host.html" target="_blank" rel="noopener" data-open="host">🎙️ 진행자 화면</a>
+          <a class="btn second" href="https://jungjinyoung3512.github.io/jungjinyoung3512/burnout-check/" target="_blank" rel="noopener" data-open="aud">📱 청중 화면</a>
+            <button class="btn copy" type="button" data-url="https://jungjinyoung3512.github.io/jungjinyoung3512/burnout-check/">📋 주소 복사</button>
+          </div>
+        </article>
+
+        <article class="card" data-path="escape-call">
+          <div class="card-head">
+            <span class="ico">📞</span>
+            <div class="names">
+              <h3>합법적 자리 탈출기</h3>
+              <p class="desc">5초~1분 예약 가짜 긴급전화 — 회식·야근 탈출 연출</p>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip ghost">방 코드 없음</span>
+            <span class="chip cap">👥 인원 무제한</span>
+            <span class="chip clear">단독 앱 · 방 코드 없음</span>
+          </div>
+          <div class="actions">
+          <a class="btn primary" href="https://jungjinyoung3512.github.io/jungjinyoung3512/escape-call/" target="_blank" rel="noopener" data-open="host">🎙️ 본 화면 열기</a>
+          <a class="btn second" href="https://jungjinyoung3512.github.io/jungjinyoung3512/escape-call/" target="_blank" rel="noopener" data-open="aud">📱 같은 화면</a>
+            <button class="btn copy" type="button" data-url="https://jungjinyoung3512.github.io/jungjinyoung3512/escape-call/">📋 주소 복사</button>
+          </div>
+        </article>
+        </div>
+      </section>
+
+  <details class="all">
+    <summary>📚 전체 24종 빠른 링크 <span class="cnt">강연장 앱 21 + 설문 3</span><span class="arw">▼</span></summary>
+    <div class="allbody">
+      <div class="allgroup">강연장 앱 · 체험 21종</div>
+      <div class="rows">
+<div class="row"><span class="num">1</span><span class="rowico">🎨</span>
+      <span class="rowname">12색 소통</span><span class="mini-code none">단독</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/color-talk/" target="_blank" rel="noopener">열기</a></span></div>
+<div class="row"><span class="num">2</span><span class="rowico">😈</span>
+      <span class="rowname">AI 합법적 멕이기 번역기</span><span class="mini-code">JY27</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/ai-cider-reply/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/ai-cider-reply/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">3</span><span class="rowico">🎭</span>
+      <span class="rowname">AI 까다로운 상대 방어전</span><span class="mini-code">JY30</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/ai-boss-defense/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/ai-boss-defense/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">4</span><span class="rowico">🏮</span>
+      <span class="rowname">마음편지</span><span class="mini-code">JY77</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/thank-wall/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/thank-wall/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">5</span><span class="rowico">🕵️</span>
+      <span class="rowname">효도·사랑 거짓말 탐지기</span><span class="mini-code">JY55</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/lie-detector/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/lie-detector/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">6</span><span class="rowico">🖤</span>
+      <span class="rowname">익명 흑심 투시경</span><span class="mini-code">JY99</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/black-heart/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/black-heart/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">7</span><span class="rowico">🤫</span>
+      <span class="rowname">눈치제로</span><span class="mini-code">JY66</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/nunchi-zero/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/nunchi-zero/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">8</span><span class="rowico">🏃</span>
+      <span class="rowname">100m 달리기</span><span class="mini-code">JY100</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/run-100m/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/run-100m/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">9</span><span class="rowico">🏅</span>
+      <span class="rowname">800m 릴레이 계주</span><span class="mini-code">JY400</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/relay-800m/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/relay-800m/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">10</span><span class="rowico">🔔</span>
+      <span class="rowname">도전 골든벨</span><span class="mini-code">JY20</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/golden-bell/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/golden-bell/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">11</span><span class="rowico">⏱️</span>
+      <span class="rowname">10초를 잡아라</span><span class="mini-code">JY10</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/catch-10/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/catch-10/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">12</span><span class="rowico">📖</span>
+      <span class="rowname">25가지 무해한 질문들</span><span class="mini-code">JY25</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/harmless-questions/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/harmless-questions/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">13</span><span class="rowico">🔮</span>
+      <span class="rowname">AI 카톡·말투 관상가</span><span class="mini-code">JY28</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/ai-talk-face/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/ai-talk-face/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">14</span><span class="rowico">🔥</span>
+      <span class="rowname">번아웃 11문항 진단</span><span class="mini-code">JY11</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/burnout-check/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/burnout-check/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">15</span><span class="rowico">📞</span>
+      <span class="rowname">합법적 자리 탈출기</span><span class="mini-code none">단독</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/escape-call/" target="_blank" rel="noopener">열기</a></span></div>
+<div class="row"><span class="num">16</span><span class="rowico">🐒</span>
+      <span class="rowname">절묘한 타이밍(원숭이)</span><span class="mini-code">JY80</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/monkey-timing/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/monkey-timing/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">17</span><span class="rowico">🔥</span>
+      <span class="rowname">지문아 사라져라!</span><span class="mini-code">JY36</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/erase-print/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/erase-print/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">18</span><span class="rowico">📳</span>
+      <span class="rowname">흔들어주세요!</span><span class="mini-code">JY88</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/shake-it/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/shake-it/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">19</span><span class="rowico">🎈</span>
+      <span class="rowname">오늘은 내가 주인공</span><span class="mini-code">JY99</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/hero-balloon/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/hero-balloon/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">20</span><span class="rowico">🧮</span>
+      <span class="rowname">구구단왕</span><span class="mini-code">JY29</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/gugudan/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/gugudan/" target="_blank" rel="noopener">청중</a></span></div>
+<div class="row"><span class="num">21</span><span class="rowico">🤐</span>
+      <span class="rowname">금기어 해독기</span><span class="mini-code">JY88</span><span class="rowlinks"><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/forbidden-word/host.html" target="_blank" rel="noopener">진행자</a><a href="https://jungjinyoung3512.github.io/jungjinyoung3512/forbidden-word/" target="_blank" rel="noopener">청중</a></span></div>
+      </div>
+      <div class="allgroup">설문 3종 · 구글 폼</div>
+      <div class="rows">
+<div class="row"><span class="num">22</span><span class="rowico">📝</span>
+      <span class="rowname">사전 설문 · 감성지능소통 (소통 강연용)</span><span class="mini-code none">설문</span>
+      <span class="rowlinks"><a href="https://docs.google.com/forms/d/e/1FAIpQLScveKgfy430WAMrjzKC4rzp2cerU_nt6K5IW_hi2v8zcMdxxA/viewform" target="_blank" rel="noopener">설문 열기</a></span></div>
+<div class="row"><span class="num">23</span><span class="rowico">📝</span>
+      <span class="rowname">사전 설문 · 스트레스 힐링 토크쇼용</span><span class="mini-code none">설문</span>
+      <span class="rowlinks"><a href="https://docs.google.com/forms/d/e/1FAIpQLSfchVSPx-WxdHiAnLSi-KvX2KQ8g0DoN88Q09TjOfTSB3EFNg/viewform" target="_blank" rel="noopener">설문 열기</a><a href="https://docs.google.com/spreadsheets/d/1Uh8CJ5RQn8FOIJKRu4Itz6fM4pUweEAYiaErbGzCVjs/edit" target="_blank" rel="noopener">시트</a></span></div>
+<div class="row"><span class="num">24</span><span class="rowico">🎓</span>
+      <span class="rowname">엔딩 설문 · 오늘 강연 어떠셨나요? (전 강연 공통)</span><span class="mini-code none">설문</span>
+      <span class="rowlinks"><a href="https://docs.google.com/forms/d/e/1FAIpQLSdeKX2ZpfgKSwG9Lt5HwBcZUx-xLzFB2AhXCuX3mzKhZR9k_A/viewform" target="_blank" rel="noopener">설문 열기</a><a href="https://docs.google.com/spreadsheets/d/1OxOu3dJ8UVbQ1ZuF2jBTnlw5DZpRM6nTfa3WdTBH5Hc/edit" target="_blank" rel="noopener">시트</a></span></div>
+      </div>
+    </div>
+  </details>
+
+  <p class="note">
+    <b>읽어두실 3가지</b> — ① 실시간 앱은 무료 서버(Firebase) 동시접속 <b>100명</b> 한도라 <b>90~96명</b>까지 권장합니다(그 이상은 조별 대표전·유료 전환 필요).
+    ② 단독 앱(12색 소통·자리 탈출기)은 서버를 쓰지 않아 <b>인원 무제한</b>이고 방을 비울 필요도 없습니다.
+    ③ 새 강연 전에는 반드시 진행자 화면에서 <b>[🧹 비우기]</b>를 눌러 지난 강연 기록을 지워 주세요(마음편지 JY77은 11/19 제주 메시지 50건이 남아 있습니다).
+  </p>
+</main>
+
+<footer>
+  <span>강연 크리에이터 · 정진영 — 진행자 원클릭 컨트롤 허브 (예비 v1)</span>
+  <span>문의 010-8544-7009</span>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+  var toastEl = document.getElementById('toast');
+  var toastTimer = null;
+
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 2200);
+  }
+
+  function show(id, push){
+    var hit = false;
+    tabs.forEach(function(t){
+      var on = t.getAttribute('data-course') === id;
+      t.classList.toggle('on', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      if(on) hit = true;
+    });
+    if(!hit) return;
+    panels.forEach(function(p){
+      p.classList.toggle('on', p.getAttribute('data-course') === id);
+    });
+    if(push !== false){
+      try{ history.replaceState(null, '', '#' + id); }catch(e){}
+    }
+  }
+
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){ show(t.getAttribute('data-course')); });
+  });
+
+  var fromHash = (location.hash || '').replace('#','');
+  if(fromHash) show(fromHash, false);
+
+  document.addEventListener('keydown', function(e){
+    if(e.metaKey || e.ctrlKey || e.altKey) return;
+    var tag = (e.target && e.target.tagName || '').toLowerCase();
+    if(tag === 'input' || tag === 'textarea') return;
+    var map = {'1':'c1','2':'c2','3':'c3','4':'c4'};
+    var id = map[e.key];
+    if(id) { show(id); }
+  });
+
+  /* 주소 복사 */
+  function legacyCopy(text){
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly','');
+    ta.style.position = 'fixed';
+    ta.style.top = '-1000px';
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    var ok = false;
+    try{ ok = document.execCommand('copy'); }catch(e){ ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  Array.prototype.slice.call(document.querySelectorAll('.btn.copy')).forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var url = btn.getAttribute('data-url');
+      var done = function(ok){
+        if(ok){
+          var old = btn.textContent;
+          btn.classList.add('done');
+          btn.textContent = '✅ 복사됨';
+          toast('청중 주소가 복사됐어요 — ' + url);
+          setTimeout(function(){ btn.classList.remove('done'); btn.textContent = old; }, 1600);
+        } else {
+          toast('복사가 막혔어요. 주소를 직접 선택해 주세요: ' + url);
+        }
+      };
+      if(navigator.clipboard && window.isSecureContext){
+        navigator.clipboard.writeText(url).then(function(){ done(true); }, function(){ done(legacyCopy(url)); });
+      } else {
+        done(legacyCopy(url));
+      }
+    });
+  });
+
+  /* 코스 진행자 화면 한 번에 열기 */
+  Array.prototype.slice.call(document.querySelectorAll('.openall')).forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var hosts = (btn.getAttribute('data-hosts') || '').split('|').filter(Boolean);
+      if(!hosts.length) return;
+      var blocked = 0;
+      hosts.forEach(function(u, i){
+        setTimeout(function(){
+          var w = window.open(u, '_blank');
+          if(!w) { blocked++; }
+          if(i === hosts.length - 1 && blocked){
+            toast('팝업이 차단됐어요 — 주소창 오른쪽에서 팝업 허용 후 다시 눌러 주세요');
+          }
+        }, i * 260);
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
