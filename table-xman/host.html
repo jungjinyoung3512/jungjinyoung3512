@@ -246,8 +246,9 @@
     padding:12px 14px;border-radius:14px;border:1px solid var(--line);
     background:linear-gradient(180deg,rgba(245,158,11,.14),rgba(245,158,11,.05));margin-bottom:11px;
   }
-  .revsum .big{font-size:26px;font-weight:900;letter-spacing:-1px;display:flex;flex-direction:column;line-height:1.15}
-  .revsum .big em{font-size:11.5px;font-style:normal;color:var(--mute);font-weight:800;margin:-2px 0 0;letter-spacing:0}
+  .revsum .big{font-size:26px;font-weight:900;letter-spacing:-1px;line-height:1.15}
+  .revsum .big em{font-size:11.5px;font-style:normal;color:var(--mute);font-weight:800;margin-left:4px;letter-spacing:0}
+  .revsum .big em.st{display:block;margin:2px 0 0}
   .revsum .split{width:1px;height:26px;background:rgba(148,163,184,.25)}
   .revsum .sub{font-size:11.5px;color:var(--mute);line-height:1.5}
   .revsum .sub b{color:#FFF}
@@ -881,7 +882,7 @@
       $("revBody").innerHTML = `
         <div class="revsum">
           <span style="font-size:24px">${caught ? "🎯" : "😈"}</span>
-          <div class="big">${caught ? "검거 성공" : "검거 실패"}<em>전체 모드 · X맨 ${names.length}명</em></div>
+          <div class="big">${caught ? "검거 성공" : "검거 실패"}<em class="st">전체 모드 · X맨 ${names.length}명</em></div>
           <div class="split"></div>
           <div class="sub">최다 득표 <b>${esc(g.topName || "—")}</b>${g.topVotes ? ` (${g.topVotes}표)` : ""}<br>
           X맨 <b>${esc(names.join(", ") || "—")}</b> · 최다 득표에 든 X맨 <b>${g.caughtCount || 0}명</b></div>

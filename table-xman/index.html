@@ -742,7 +742,7 @@
     const q = String(me.mission || "");
     const el = $("qText");
     if(el && el.textContent !== '"' + q + '"'){
-      el.innerHTML = '"' + esc(q) + '"<span class="mark">?</span>';
+      el.innerHTML = '"' + esc(q) + '<span class="mark">?</span>"';
     }
   }
 
@@ -854,9 +854,13 @@
         $("vMine").className = hit ? "ok" : "bad";
       }
 
+      const topNm = (rt && rt.topName) ? rt.topName : "";
       let msg = caught
-        ? `표가 모여 <b>${esc(names.join(", "))}</b> 님을 정확히 짚었습니다!`
+        ? `표가 모여 <b>${esc(topNm)}</b> 님을 X맨으로 지목했습니다!`
         : `이번 X맨은 <b>${esc(names.join(", "))}</b> 님이었습니다. 표는 다른 사람에게 몰렸네요 — 다음 판엔 잡아봅시다!`;
+      if(caught && names.length > 1 && (rt.caughtCount || 0) < names.length){
+        msg += ` <span style="color:var(--mute)">(${names.length}명 중 ${rt.caughtCount || 0}명만 잡혔습니다)</span>`;
+      }
       const total = `X맨 ${names.length}명 중 ${rt && rt.caughtCount != null ? rt.caughtCount : 0}명이 최다 득표 · `;
       $("vMsg").innerHTML = msg + `<span class="mine">${total}내 표: ${esc($("vMine").textContent)}</span>`;
       return;
