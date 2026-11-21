@@ -861,8 +861,9 @@
       if(caught && names.length > 1 && (rt.caughtCount || 0) < names.length){
         msg += ` <span style="color:var(--mute)">(${names.length}명 중 ${rt.caughtCount || 0}명만 잡혔습니다)</span>`;
       }
-      const total = `X맨 ${names.length}명 중 ${rt && rt.caughtCount != null ? rt.caughtCount : 0}명이 최다 득표 · `;
-      $("vMsg").innerHTML = msg + `<span class="mine">${total}내 표: ${esc($("vMine").textContent)}</span>`;
+      const xc = rt && rt.caughtCount != null ? rt.caughtCount : 0;
+      const total = `X맨 ${names.length}명 중 ${xc}명이 최다 득표`;
+      $("vMsg").innerHTML = msg + `<span class="mine">${total}</span>`;
       return;
     }
 
@@ -907,11 +908,11 @@
         if(r && !r.solo){ teamTotal++; if(r.caught) okCnt++; }
       });
     }
-    const total = teamTotal ? `전체 ${teamTotal}개 조 중 ${okCnt}개 조 검거` : "";
+    const total = teamTotal > 1 ? `전체 ${teamTotal}개 조 중 ${okCnt}개 조 검거` : "";
     let msg = "";
     if(caught) msg = `우리 조는 <b>${esc(xname)}</b> 님을 정확히 짚었습니다! 표를 모아 진짜 X맨을 찾아냈어요.`;
     else msg = `우리 조 X맨은 <b>${esc(xname)}</b> 님이었습니다. 표는 다른 사람에게 몰렸네요 — 다음 판엔 잡아봅시다!`;
-    $("vMsg").innerHTML = msg + `<span class="mine">${total ? total + " · " : ""}내 표: ${esc($("vMine").textContent)}</span>`;
+    $("vMsg").innerHTML = msg + (total ? `<span class="mine">${total}</span>` : "");
   }
 
   /* ── 시작 ── */
