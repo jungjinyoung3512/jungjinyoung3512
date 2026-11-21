@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050A16">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🔮</text></svg>">
+<title>진행자 · AI 카톡·말투 관상가 | 강연 크리에이터 · 정진영</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  :root{
+    --bg:#050A16; --panel:#0A1424; --panel2:#0E1A2C;
+    --line:rgba(255,194,74,.14); --line2:rgba(255,194,74,.32);
+    --amber:#FFC24A; --amber2:#FF9E1B; --aqua:#5FE3FF; --violet:#A98BFF;
+    --rose:#FF5C7A; --mint:#4BE8A8;
+    --text:#F2F0E6; --muted:#93A2B8; --dim:#56677C;
+    --sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,"Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR",Georgia,serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  html,body{margin:0;height:100%;background:#03060D;color:var(--text);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;letter-spacing:-0.014em;word-break:keep-all;overflow:hidden}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(100% 46% at 50% -12%, rgba(255,194,74,.15) 0%, rgba(255,194,74,0) 60%),
+      radial-gradient(82% 40% at 90% 108%, rgba(95,227,255,.09) 0%, rgba(95,227,255,0) 70%)}
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.22;
+    background:repeating-linear-gradient(180deg, rgba(255,194,74,.05) 0 1px, rgba(0,0,0,0) 1px 4px)}
+
+  .host{position:relative;z-index:1;height:100vh;height:100dvh;display:flex;flex-direction:column}
+
+  /* ---------- 헤더 ---------- */
+  .hbar{flex:0 0 auto;display:flex;align-items:center;gap:15px;padding:12px 26px 10px;
+    border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(7,13,24,.95),rgba(5,9,16,.6))}
+  .brand{display:flex;flex-direction:column;gap:1px;min-width:0}
+  .brand b{font-size:19px;font-weight:900;letter-spacing:-0.035em;display:flex;align-items:center;gap:7px;
+    color:#FFF8E8;text-shadow:0 0 22px rgba(255,194,74,.32);white-space:nowrap}
+  .brand span{font-size:11px;font-weight:800;color:var(--amber);letter-spacing:.02em}
+  .hspacer{flex:1 1 auto}
+  .chip{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:800;color:#B9C7D6;
+    padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.035);white-space:nowrap}
+  .chip.room{font-family:var(--mono);letter-spacing:.12em;color:#FFE9BC;border-color:rgba(255,194,74,.30);background:rgba(255,194,74,.08)}
+  .chip i{width:7px;height:7px;border-radius:50%;background:var(--dim);transition:.3s}
+  .chip.on i{background:var(--mint);box-shadow:0 0 9px var(--mint)}
+
+  /* ---------- 컨트롤 ---------- */
+  .cbar{flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:9px 26px;
+    border-bottom:1px solid rgba(255,255,255,.055);background:rgba(6,10,18,.55)}
+  .cbtn{cursor:pointer;font-family:var(--sans);font-size:13.5px;font-weight:900;letter-spacing:-0.02em;
+    border-radius:11px;padding:10px 16px;border:1px solid transparent;display:flex;align-items:center;gap:7px;
+    transition:transform .1s,filter .18s,background .2s;user-select:none;white-space:nowrap}
+  .cbtn:active{transform:scale(.985)}
+  .cbtn.snd{background:linear-gradient(135deg,#FFE08A,#FFB01F);color:#2A1600;box-shadow:0 8px 20px rgba(255,160,20,.22)}
+  .cbtn.snd.muted{background:rgba(255,255,255,.06);color:#93A4AE;border-color:rgba(255,255,255,.13);box-shadow:none}
+  .cbtn.gold{background:rgba(255,194,74,.10);border-color:rgba(255,194,74,.34);color:#FFE9BC}
+  .cbtn.gold:hover{background:rgba(255,194,74,.18)}
+  .cbtn.ghost{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.13);color:#DCEAF3}
+  .cbtn.ghost:hover{background:rgba(255,255,255,.085)}
+  .cbtn.danger{background:rgba(255,92,122,.09);border-color:rgba(255,92,122,.30);color:#FFC7D2}
+  .cbtn.danger:hover{background:rgba(255,92,122,.18)}
+  .cbtn.armed{background:rgba(255,92,122,.92);border-color:#FF9BAE;color:#2A0309}
+  .cbar .hint{margin-left:auto;font-size:11px;font-weight:700;color:#4F6172;display:flex;gap:14px;flex-wrap:wrap}
+  .cbar .hint kbd{font-family:var(--mono);font-size:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+    border-radius:5px;padding:1px 5px;color:#8FA3B0;margin-right:3px}
+
+  /* ---------- 무대 ---------- */
+  main{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1.52fr 1fr;gap:16px;padding:16px 26px 14px}
+  .panel{min-height:0;border-radius:18px;border:1px solid rgba(255,255,255,.075);
+    background:linear-gradient(168deg,rgba(13,24,40,.92),rgba(6,11,20,.92));display:flex;flex-direction:column;overflow:hidden}
+  .panel .ph{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:14px 18px 11px;border-bottom:1px solid rgba(255,255,255,.06)}
+  .panel .ph b{font-size:clamp(14px,1.02vw,19px);font-weight:900;letter-spacing:-0.03em;color:#FFF8E8}
+  .panel .ph em{font-style:normal;font-size:clamp(13px,1vw,18px)}
+  .panel .ph .cnt{margin-left:auto;font-size:clamp(11px,.86vw,15px);font-weight:800;color:var(--muted)}
+  .panel .ph .cnt b{color:#FFE9BC;font-variant-numeric:tabular-nums;font-size:clamp(14px,1.1vw,20px)}
+
+  /* 유형 분포 */
+  .dgrid{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:clamp(5px,.7vh,12px) 20px;
+    padding:clamp(10px,1.4vh,18px) 18px 12px;overflow:hidden;align-content:start}
+  .trow{display:grid;grid-template-columns:clamp(22px,1.7vw,30px) minmax(0,1fr) auto;grid-template-rows:auto auto;
+    column-gap:8px;row-gap:3px;align-items:center;padding:clamp(4px,.6vh,9px) 0;animation:rowin .5s ease both}
+  @keyframes rowin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .trow .te{grid-row:1 / span 2;font-size:clamp(16px,1.3vw,24px);line-height:1;text-align:center;filter:drop-shadow(0 0 10px rgba(255,160,20,.3))}
+  .trow .tn{font-size:clamp(11.5px,.95vw,18px);font-weight:800;color:#E7EEF8;letter-spacing:-0.02em;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .trow .tc{font-size:clamp(11px,.9vw,17px);font-weight:900;color:#FFE9BC;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .trow .tc small{font-size:.72em;font-weight:800;color:#7E8DA3;margin-left:2px}
+  .trow .tb{grid-column:2 / span 2;height:clamp(4px,.55vh,7px);border-radius:4px;background:rgba(255,255,255,.075);overflow:hidden}
+  .trow .tb i{display:block;height:100%;width:0;border-radius:4px;
+    background:linear-gradient(90deg,rgba(255,194,74,.55),var(--amber));transition:width .9s cubic-bezier(.16,.9,.2,1)}
+  .trow.zero{opacity:.42}
+  .trow.zero .tb i{background:rgba(255,255,255,.25)}
+  .dempty{grid-column:1 / -1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+    text-align:center;color:#6E8095;font-size:clamp(13px,1vw,18px);font-weight:800;padding:24px}
+  .dempty .big{font-size:clamp(30px,2.6vw,46px);opacity:.55}
+
+  /* 오른쪽 */
+  .rcol{min-height:0;display:flex;flex-direction:column;gap:12px}
+  .avgbox{flex:0 0 auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .avg{position:relative;border-radius:16px;padding:clamp(11px,1.4vh,17px) clamp(12px,1vw,17px);overflow:hidden;
+    border:1px solid rgba(255,255,255,.09);background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.015))}
+  .avg .al{display:flex;align-items:center;gap:6px;font-size:clamp(10.5px,.82vw,14px);font-weight:900;color:#A9BACB;letter-spacing:-0.01em}
+  .avg .av{display:flex;align-items:flex-end;gap:3px;margin-top:5px}
+  .avg .av b{font-size:clamp(30px,2.9vw,54px);font-weight:900;letter-spacing:-0.05em;line-height:.92;
+    color:var(--ac,#FFC24A);font-variant-numeric:tabular-nums;text-shadow:0 0 30px rgba(255,160,20,.25)}
+  .avg .av span{font-size:clamp(11px,.86vw,15px);font-weight:900;color:#8FA0B3;padding-bottom:3px}
+  .avg .ab{margin-top:8px;height:clamp(4px,.5vh,6px);border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+  .avg .ab i{display:block;height:100%;width:0;border-radius:4px;background:var(--ac,#FFC24A);transition:width 1s cubic-bezier(.16,.9,.2,1)}
+  .avg .an{margin-top:6px;font-size:clamp(9.5px,.74vw,12.5px);font-weight:800;color:#6C7E92;letter-spacing:-0.01em}
+
+  .feedpanel{flex:1 1 auto}
+  .feed{flex:1 1 auto;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:clamp(5px,.75vh,10px);
+    padding:clamp(9px,1.2vh,15px) 16px}
+  .fitem{flex:0 0 auto;display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px;align-items:start;
+    padding:clamp(6px,.9vh,11px) clamp(9px,.8vw,13px);border-radius:11px;
+    background:rgba(255,255,255,.028);border:1px solid rgba(255,255,255,.065);animation:fin .45s ease both}
+  @keyframes fin{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+  .fitem.mint{border-color:rgba(75,232,168,.30);background:rgba(75,232,168,.06)}
+  .fitem .fe{font-size:clamp(15px,1.2vw,22px);line-height:1.1}
+  .fitem .ft{min-width:0}
+  .fitem .fn{display:flex;align-items:baseline;gap:6px;font-size:clamp(11px,.9vw,16px);font-weight:900;color:#F2F7FD;letter-spacing:-0.02em}
+  .fitem .fn small{font-size:.78em;font-weight:800;color:#7E8DA3}
+  .fitem .fp{margin-top:2px;font-size:clamp(10px,.8vw,14px);font-weight:700;color:#A7B9CB;line-height:1.45;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .fempty{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+    color:#6E8095;font-size:clamp(12px,.95vw,17px);font-weight:800;text-align:center;padding:20px}
+
+  .bottombar{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding:0 26px 10px;font-size:10.5px;font-weight:700;color:#4A5A6E}
+  .bottombar .rt{display:flex;gap:14px;flex-wrap:wrap}
+  .bottombar b{color:#7E8DA3}
+
+  /* ---------- QR 모달 ---------- */
+  .modal{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;
+    background:rgba(2,4,8,.90);backdrop-filter:blur(7px);padding:32px}
+  .modal.on{display:flex}
+  .msheet{width:min(1100px,94vw);border-radius:26px;border:1px solid var(--line2);
+    background:linear-gradient(165deg,rgba(14,26,44,.99),rgba(5,9,16,.99));padding:34px 40px;
+    display:flex;gap:44px;align-items:center;box-shadow:0 30px 90px rgba(0,0,0,.75)}
+  .msheet .qwrap2{flex:0 0 auto;background:#fff;border-radius:22px;padding:18px}
+  .msheet .qwrap2 img{display:block;width:clamp(300px,30vh,470px);height:clamp(300px,30vh,470px)}
+  .msheet .qinfo{flex:1 1 auto;min-width:0}
+  .msheet .kick{font-size:12px;font-weight:900;letter-spacing:.18em;color:var(--amber)}
+  .msheet h2{margin:10px 0 10px;font-family:var(--serif);font-size:clamp(28px,3vw,44px);font-weight:900;letter-spacing:-0.04em;color:#FFF8E8}
+  .msheet p{margin:0;font-size:15px;line-height:1.7;color:var(--muted);font-weight:700}
+  .msheet .url{margin-top:18px;font-family:var(--mono);font-size:13px;color:#FFE9BC;word-break:break-all;
+    padding:12px 14px;border-radius:11px;background:rgba(255,194,74,.07);border:1px solid rgba(255,194,74,.22)}
+  .msheet .mrow{display:flex;align-items:center;gap:12px;margin-top:18px;flex-wrap:wrap}
+  .msheet .roomno{display:inline-flex;gap:8px;align-items:center;font-family:var(--mono);font-size:13px;color:#FFE9BC;
+    padding:8px 14px;border-radius:999px;background:rgba(255,194,74,.09);border:1px solid rgba(255,194,74,.26);letter-spacing:.12em}
+  .mclose{cursor:pointer;font-family:var(--sans);font-size:14px;font-weight:900;color:#2A1600;
+    background:linear-gradient(135deg,#FFE08A,#FFB01F);border:0;border-radius:12px;padding:12px 22px}
+
+  .toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,16px);z-index:50;
+    background:rgba(10,20,34,.97);border:1px solid var(--line2);color:#FFF4DC;padding:11px 20px;border-radius:12px;
+    font-size:13px;font-weight:800;opacity:0;pointer-events:none;transition:.24s;box-shadow:0 16px 40px rgba(0,0,0,.6)}
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+
+  @media (max-width:1200px){
+    main{grid-template-columns:1fr;grid-template-rows:1.3fr 1fr}
+    .dgrid{grid-template-columns:1fr 1fr}
+    .avgbox{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+<div class="host">
+  <header class="hbar">
+    <div class="brand">
+      <b>🔮 AI 카톡·말투 관상가</b>
+      <span>강연 크리에이터 · 정진영</span>
+    </div>
+    <div class="hspacer"></div>
+    <div class="chip room" id="roomChip">ROOM JY28</div>
+    <div class="chip" id="netChip"><i></i><span id="netTxt">연결 중</span></div>
+  </header>
+
+  <div class="cbar">
+    <button class="cbtn snd" id="btnSound" type="button">🔊 소리 ON</button>
+    <button class="cbtn danger" id="btnClear" type="button">🧹 기록 비우기</button>
+    <button class="cbtn gold" id="btnQR" type="button">📱 QR 크게 보기</button>
+    <div class="hint">
+      <span><kbd>Q</kbd>QR</span>
+      <span><kbd>ESC</kbd>닫기</span>
+      <span>청중 폰은 무음 · 이 화면 소리만</span>
+    </div>
+  </div>
+
+  <main>
+    <!-- 유형 분포 -->
+    <section class="panel">
+      <div class="ph">
+        <em>📊</em>
+        <b>오늘 강연장 말투 관상 분포</b>
+        <div class="cnt">총 <b id="totNum">0</b>명 진단</div>
+      </div>
+      <div class="dgrid" id="dgrid"></div>
+    </section>
+
+    <!-- 오른쪽 -->
+    <div class="rcol">
+      <div class="avgbox">
+        <div class="avg" style="--ac:#FFB01F">
+          <div class="al">🎭 평균 사회적 가면지수</div>
+          <div class="av"><b id="avgMask">0</b><span>%</span></div>
+          <div class="ab"><i id="barMask"></i></div>
+          <div class="an" id="noteMask">참여자 대기 중</div>
+        </div>
+        <div class="avg" style="--ac:#FF5C7A">
+          <div class="al">👴 평균 은근한 꼰대력</div>
+          <div class="av"><b id="avgKkon">0</b><span>%</span></div>
+          <div class="ab"><i id="barKkon"></i></div>
+          <div class="an" id="noteKkon">참여자 대기 중</div>
+        </div>
+      </div>
+
+      <section class="panel feedpanel">
+        <div class="ph">
+          <em>💉</em>
+          <b>최근 진단된 팩폭 피드</b>
+          <div class="cnt">최신 <b id="feedNum">0</b>건</div>
+        </div>
+        <div class="feed" id="feed"></div>
+      </section>
+    </div>
+  </main>
+
+  <div class="bottombar">
+    <div>🔮 AI 카톡·말투 관상가 · 강연 크리에이터 · 정진영</div>
+    <div class="rt">
+      <span>유형 <b>12종</b></span>
+      <span>다시 하면 <b>같은 사람 집계 1건</b>으로 갱신</span>
+      <span>청중 <b>100명 이하</b> 권장</span>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="qrModal">
+  <div class="msheet">
+    <div class="qwrap2"><img id="qrImg" alt="청중 참여 QR 코드"></div>
+    <div class="qinfo">
+      <div class="kick">4문항 · 15초 · 익명</div>
+      <h2>폰으로 말투 관상 보기</h2>
+      <p>카메라로 QR을 스캔하면 바로 시작됩니다.<br>닉네임은 선택, 결과 카드는 저장해서 가져갈 수 있습니다.<br><b style="color:#FFE9BC">청중 폰은 무음으로 진행됩니다.</b></p>
+      <div class="url">https://jungjinyoung3512.github.io/jungjinyoung3512/ai-talk-face/</div>
+      <div class="mrow">
+        <div class="roomno">ROOM JY28</div>
+        <button class="mclose" id="qrClose" type="button">닫기 ✕</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const ROOM = "JY28";
+  const ROOM_PATH = "rooms/ai-talk-face/" + ROOM;
+  const QR_SRC = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAApAAAAKQCAIAAACn190HAAAOo0lEQVR4nO3dMZLkSgFFUZpoD5tFsP/FsAhsbOFiNZHxK+l3v86xJ6pVOSrdkPW+nuf5CwCw7a+/fQEAwP8m2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABDwffsP/O3v/7j9J17l3//659G/v33+t6/H9/3s5586vZ7b1r7v7f/f2zyfP+v2/683bAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAi4vod9am0v9ra37dHW94bX9q3Xvu9tb/u+azyff5c3bAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAiY28M+tbZX+ra92FNv25M+tXY9dWvPh/r9eWrt/Ovn6Q0bAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAvJ72Pzs9p702r7v7e97am0PeE19n3jtfuPPzRs2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABNjD/pNb29+9fT1v29u+rb5XfdvtPfi1vXl+lzdsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACMjvYdt//Vl9v3nt+tfO59Taea5dzynPn585n8/yhg0AAYINAAGCDQABgg0AAYINAAGCDQABgg0AAYINAAGCDQABgg0AAYINAAGCDQABgg0AAYINAAGCDQABc3vYa3u3dafneXuf2Of/7uffVj+ftc9fs3a/vY03bAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAj4ep7nt6+BIWt7t2/bh76tfj6u/2dr9xuf5Q0bAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAq7vYZ/uv97ec13b061b29+t32+395Xftt+8dj+ccv6f/fzbbp+nN2wACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIuL6HfWpt3/S2tT3a29a+b33/uH6e9e9729r9eWrtPE+tnb83bAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAj4/u0L+KPs737W2v7r26yd/9r1nLr9+7r9/Fm7/rXPv22tF96wASBAsAEgQLABIECwASBAsAEgQLABIECwASBAsAEgQLABIECwASBAsAEgQLABIECwASBAsAEgQLABIODreZ6rf6C+51q3dv5r+9+31ffa+dnt/6+13+9t9eeDPWwAQLABoECwASBAsAEgQLABIECwASBAsAEgQLABIECwASBAsAEgQLABIECwASBAsAEgQLABIECwASDg+h72KfuvP7t9/fZoP+tt/79r579m7fzr17P2e7GHDQAINgAUCDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABOT3sOt7q3X1/ey3qd/Pa/vNp9Z+L/Xv+7bnvzdsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACPi+/Qfetv96am0v9ra16zlV32tf+/xT9f3mU2vnv+b2913bz/aGDQABgg0AAYINAAGCDQABgg0AAYINAAGCDQABgg0AAYINAAGCDQABgg0AAYINAAGCDQABgg0AAYINAAFfz/Nc/QNr+6xr+7Jre8a3rZ3nbWv3/6m18zzl9/KztefP2u9l7X7whg0AAYINAAGCDQABgg0AAYINAAGCDQABgg0AAYINAAGCDQABgg0AAYINAAGCDQABgg0AAYINAAGCDQAB1/ewT63tv95mr/dna3u6ruez3nb9a9buz1P15+cpb9gAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQ8P3bF/D/trafensPuH799b3eU2v3w9r+9G31/ea158Op+vXf5g0bAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAq7vYa/tv55a2wOu7+PWr3/teurW9s7X/n/Xnp9rz+fb1u4Hb9gAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQcH0P+237ymv7qWvXv3Y+a9ezZu38627/Xm6f59v+v9Z4wwaAAMEGgADBBoAAwQaAAMEGgADBBoAAwQaAAMEGgADBBoAAwQaAAMEGgADBBoAAwQaAAMEGgADBBoCAr+d5rv6BtX3lU2vXc2rt+t+2n33b2/a53Q/8t7fd/96wASBAsAEgQLABIECwASBAsAEgQLABIECwASBAsAEgQLABIECwASBAsAEgQLABIECwASBAsAEgQLABIOD79h+o7x+fWrue+h75qbXrqd8Pt63tVa/9f61dz6m150/9PL1hA0CAYANAgGADQIBgA0CAYANAgGADQIBgA0CAYANAgGADQIBgA0CAYANAgGADQIBgA0CAYANAgGADQMD1PWx7qD+7ff1r33fN2v737c9f+335vp9V3ztfe56vXY83bAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAj4ep7nt6+Bi9b2XNes7QefWtsbXjvPtfu5vv9dt/Z7OeUNGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAK+b/+BtT3RNWvnYy/5s25/37XzPHX7/ln7fdWfb/XrX7sfTnnDBoAAwQaAAMEGgADBBoAAwQaAAMEGgADBBoAAwQaAAMEGgADBBoAAwQaAAMEGgADBBoAAwQaAAMEGgIDre9i31fdN63vSp25/37XPP7W2z712PmvWfo+n519//tz+vmu8YQNAgGADQIBgA0CAYANAgGADQIBgA0CAYANAgGADQIBgA0CAYANAgGADQIBgA0CAYANAgGADQIBgA0DA3B722v5uff/1VH0vee3/621u3w/1PeNTa/vu9fO//Xy4fT7esAEgQLABIECwASBAsAEgQLABIECwASBAsAEgQLABIECwASBAsAEgQLABIECwASBAsAEgQLABIECwASDg63meq3/g9j7r2h7zbfU917ftVb/tfnvb77d+/afWnj9rzxN72ACAYANAgWADQIBgA0CAYANAgGADQIBgA0CAYANAgGADQIBgA0CAYANAgGADQIBgA0CAYANAgGADQMD3b1/A/9vafuqptb3Yt50nv+tt+9z13xef5Q0bAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAq7vYd/ei7Vn/Fn1PeC1vfC186mr71vftnb9a/fn2vmc8oYNAAGCDQABgg0AAYINAAGCDQABgg0AAYINAAGCDQABgg0AAYINAAGCDQABgg0AAYINAAGCDQABgg0AAdf3sNf2UOvqe66n1vbU1+7ntX3o2+dTv/613299L3xtb/729XjDBoAAwQaAAMEGgADBBoAAwQaAAMEGgADBBoAAwQaAAMEGgADBBoAAwQaAAMEGgADBBoAAwQaAAMEGgIDre9in1vZWb1vbVz61thdbv566tf3ptX3rtfvhbc/bU2vn4w0bAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAub2sE/Zl/1da993bZ947XzsT//u59+2dj1rbt8Pt3nDBoAAwQaAAMEGgADBBoAAwQaAAMEGgADBBoAAwQaAAMEGgADBBoAAwQaAAMEGgADBBoAAwQaAAMEGgID8HjYta/vEt/du1/aJ1/Z96/+/t63tc6+d59ueJ96wASBAsAEgQLABIECwASBAsAEgQLABIECwASBAsAEgQLABIECwASBAsAEgQLABIECwASBAsAEgQLABIMAe9p/c7f3Xtb3Y+r51/frr1u7n29but/p53uYNGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAAIEGwACBBsAAgQbAALye9j2Uz/r9n72qbX95rV98TW3z+dtn89n1X9f3rABIECwASBAsAEgQLABIECwASBAsAEgQLABIECwASBAsAEgQLABIECwASBAsAEgQLABIECwASBAsAEg4Ot5nqt/oL4/umZtr/pt+77O83et7U+vPd88Hz5r7X7zhg0AAYINAAGCDQABgg0AAYINAAGCDQABgg0AAYINAAGCDQABgg0AAYINAAGCDQABgg0AAYINAAGCDQAB1/ewAYA/zhs2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAQINgAECDYABAg2AAT8B+Rlu0ogmPRvAAAAAElFTkSuQmCC";
+
+  const FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "977342156141",
+    appId: "1:977342156141:web:f9842fcc67a819ce621e64"
+  };
+
+  const TYPES = [
+    { id:"fox", emo:"🦊", name:"겉웃속칼 여우형", punch:"당신의 'ㅎㅎ'는 동의가 아니라 보류입니다. 그 미소, 상대도 지금 계산 중입니다." },
+    { id:"robot", emo:"🤖", name:"AI보다 차가운 로봇형", punch:"답장은 틀린 곳이 없는데 따뜻한 곳도 없습니다." },
+    { id:"bomb", emo:"💣", name:"시한폭탄 참을인형", punch:"화를 참는 게 아니라 3년 할부로 적립 중입니다." },
+    { id:"ghost", emo:"👻", name:"평화주의 유령형", punch:"당신이 사라진 자리에 남는 건 갈등이 아니라 서운함입니다." },
+    { id:"actor", emo:"🎭", name:"프로 가면 연기자형", punch:"모두가 편한 자리에서 유일하게 불편한 사람이 당신입니다." },
+    { id:"turtle", emo:"🐢", name:"무소식 거북형", punch:"당신의 3시간은 상대에겐 인내심 테스트입니다." },
+    { id:"hedgehog", emo:"🦔", name:"삐침 많은 고슴도치형", punch:"당신의 '네.'에는 마침표가 아니라 칼날이 있습니다." },
+    { id:"captain", emo:"📢", name:"잔소리 총대 반장형", punch:"맞는 말이라는 이유로 100%를 다 말하고 있지는 않나요." },
+    { id:"festival", emo:"🌪️", name:"감정 롤러코스터 예능형", punch:"진짜 아플 때 그 신호가 웃음에 묻힙니다." },
+    { id:"ice", emo:"🧊", name:"한 글자 절약형", punch:"답장은 늘 정답인데 대화는 늘 끝납니다." },
+    { id:"puppy", emo:"🐶", name:"애교 만렙 강아지형", punch:"애교로 다 넘겼지만 하고 싶은 말은 한 번도 못 꺼냈습니다." },
+    { id:"spy", emo:"🕵️", name:"눈팅 탐정 관찰자형", punch:"단톡방 CCTV입니다. 다 보지만 아무도 당신 생각은 모릅니다." }
+  ];
+  const TYPE_BY_ID = {};
+  TYPES.forEach(t => TYPE_BY_ID[t.id] = t);
+
+  const S = { counts:{}, total:0, sumMask:0, sumKkon:0, feed:[], feedKeys:[] };
+  TYPES.forEach(t => S.counts[t.id] = 0);
+
+  /* ================= 사운드 (진행자 노트북 전용) ================= */
+  const Sound = {
+    ctx:null, master:null, on:true,
+    iface(){
+      if(!this.ctx){
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if(!AC) return null;
+        this.ctx = new AC();
+        this.master = this.ctx.createGain();
+        this.master.gain.value = this.on ? 0.85 : 0;
+        this.master.connect(this.ctx.destination);
+      }
+      if(this.ctx.state === "suspended") this.ctx.resume().catch(()=>{});
+      return this.ctx;
+    },
+    setOn(v){ this.on = v; if(this.master) this.master.gain.value = v ? 0.85 : 0; },
+    tone(t, freq, dur, type, amp){
+      const ctx = this.ctx, o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = type || "sine"; o.frequency.setValueAtTime(freq, t);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(amp, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(this.master);
+      o.start(t); o.stop(t + dur + 0.05);
+    },
+    tick(){
+      if(!this.on || !this.iface()) return;
+      const t = this.ctx.currentTime + 0.01;
+      this.tone(t, 1180, 0.10, "triangle", 0.055);
+      this.tone(t + 0.06, 1560, 0.12, "sine", 0.040);
+    },
+    scan(){
+      if(!this.on || !this.iface()) return;
+      const ctx = this.ctx, t0 = ctx.currentTime + 0.02;
+      [420, 560, 740, 980].forEach((f, i) => this.tone(t0 + i * 0.055, f, 0.16, "sine", 0.045));
+    }
+  };
+
+  /* ================= Firebase ================= */
+  let db = null, roomRef = null;
+  function setNet(ok, label){
+    $("netChip").classList.toggle("on", !!ok);
+    $("netTxt").textContent = label || (ok ? "실시간 연결" : "연결 중");
+  }
+  function initFB(){
+    if(typeof firebase === "undefined" || !firebase.initializeApp){ setNet(false, "연결 실패"); return; }
+    try{
+      firebase.initializeApp(FB_CONFIG);
+      db = firebase.database();
+      db.ref(".info/connected").on("value", s => {
+        const on = !!s.val();
+        setNet(on, on ? "실시간 연결" : "연결 중…");
+      });
+      roomRef = db.ref(ROOM_PATH);
+      roomRef.on("value", snap => onRoom(snap.val() || {}));
+    }catch(e){ setNet(false, "연결 실패"); }
+  }
+
+  /* ================= 집계 ================= */
+  let lastTotal = 0, firstPaint = true;
+  function onRoom(data){
+    const resp = data.responses || {};
+    const keys = Object.keys(resp);
+    TYPES.forEach(t => S.counts[t.id] = 0);
+    let sumMask = 0, sumKkon = 0, n = 0;
+    const items = [];
+    keys.forEach(k => {
+      const r = resp[k] || {};
+      if(r.type && S.counts[r.type] !== undefined) S.counts[r.type]++;
+      if(typeof r.mask === "number") sumMask += r.mask;
+      if(typeof r.kkondae === "number") sumKkon += r.kkondae;
+      n++;
+      items.push({ key:k, nick:r.nick || "", type:r.type, mask:r.mask, kkondae:r.kkondae, ts:r.ts || 0 });
+    });
+    S.total = n; S.sumMask = sumMask; S.sumKkon = sumKkon;
+    items.sort((a, b) => (b.ts || 0) - (a.ts || 0));
+
+    $("totNum").textContent = n;
+    renderDist();
+    renderAvg();
+    renderFeed(items.slice(0, 6));
+
+    if(!firstPaint && n > lastTotal){
+      const latest = items[0];
+      if(latest && S.feedKeys[0] !== latest.key) { /* tick handled below */ }
+      Sound.tick();
+    }
+    S.feedKeys = items.slice(0, 6).map(i => i.key);
+    lastTotal = n;
+    firstPaint = false;
+  }
+
+  function renderDist(){
+    const grid = $("dgrid");
+    const max = Math.max(1, ...TYPES.map(t => S.counts[t.id]));
+    if(S.total === 0){
+      grid.innerHTML = '<div class="dempty"><div class="big">🔮</div><div>아직 진단이 없습니다<br>청중이 QR로 참여하면 유형이 하나씩 쌓입니다</div></div>';
+      return;
+    }
+    const sorted = TYPES.slice().sort((a, b) => S.counts[b.id] - S.counts[a.id] || TYPES.indexOf(a) - TYPES.indexOf(b));
+    grid.innerHTML = "";
+    sorted.forEach(t => {
+      const c = S.counts[t.id];
+      const pct = S.total ? Math.round(c / S.total * 100) : 0;
+      const row = document.createElement("div");
+      row.className = "trow" + (c ? "" : " zero");
+      row.innerHTML =
+        '<div class="te">' + t.emo + '</div>' +
+        '<div class="tn">' + t.name + '</div>' +
+        '<div class="tc">' + c + '<small>명 · ' + pct + '%</small></div>' +
+        '<div class="tb"><i style="width:' + (c ? Math.max(4, c / max * 100) : 0) + '%"></i></div>';
+      grid.appendChild(row);
+    });
+  }
+
+  function avg(a){ return S.total ? Math.round(a / S.total) : 0; }
+  function renderAvg(){
+    const m = avg(S.sumMask), k = avg(S.sumKkon);
+    $("avgMask").textContent = m;
+    $("avgKkon").textContent = k;
+    $("barMask").style.width = m + "%";
+    $("barKkon").style.width = k + "%";
+    $("noteMask").textContent = S.total ? (m >= 75 ? "가면 착용률 상위권 · 겉과 속의 온도차" : m >= 55 ? "평균보다 살짝 두꺼운 가면" : "가면이 얇은 편 · 속이 다 보임") : "참여자 대기 중";
+    $("noteKkon").textContent = S.total ? (k >= 65 ? "조언이 잔소리로 도착하는 중" : k >= 45 ? "적당한 챙김 · 가끔 잔소리" : "꼰대력 낮음 · 눈치 빠른 편") : "참여자 대기 중";
+  }
+
+  function renderFeed(items){
+    const feed = $("feed");
+    $("feedNum").textContent = items.length;
+    if(!items.length){
+      feed.innerHTML = '<div class="fempty"><div style="font-size:clamp(24px,2vw,34px);opacity:.5">💉</div><div>진단이 들어오면 팩폭이 여기에 쌓입니다</div></div>';
+      return;
+    }
+    const prev = S.feedKeys || [];
+    feed.innerHTML = "";
+    items.forEach((it, i) => {
+      const t = TYPE_BY_ID[it.type];
+      if(!t) return;
+      const el = document.createElement("div");
+      el.className = "fitem" + (i === 0 && prev.length && prev[0] !== it.key ? " mint" : "");
+      el.style.animationDelay = (i * 0.05) + "s";
+      el.innerHTML =
+        '<div class="fe">' + t.emo + '</div>' +
+        '<div class="ft"><div class="fn">' + t.name +
+        '<small>' + (it.nick ? escapeHtml(it.nick) : "익명") + '</small></div>' +
+        '<div class="fp">' + escapeHtml(t.punch) + '</div></div>';
+      feed.appendChild(el);
+    });
+  }
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+
+  /* ================= 액션 ================= */
+  let clearArmed = false, clearTimer = null;
+  function clearAll(){
+    if(!roomRef){ toast("연결을 기다리는 중입니다"); return; }
+    const btn = $("btnClear");
+    if(!clearArmed){
+      clearArmed = true;
+      btn.classList.add("armed");
+      btn.textContent = "⚠️ 한 번 더 누르면 비웁니다";
+      clearTimeout(clearTimer);
+      clearTimer = setTimeout(() => {
+        clearArmed = false; btn.classList.remove("armed"); btn.textContent = "🧹 기록 비우기";
+      }, 3500);
+      return;
+    }
+    clearArmed = false; clearTimeout(clearTimer);
+    btn.classList.remove("armed"); btn.textContent = "🧹 기록 비우기";
+    roomRef.child("responses").remove()
+      .then(() => toast("기록을 비웠습니다 · 청중은 다시 진단할 수 있습니다"))
+      .catch(() => toast("비우기 실패 · 잠시 후 다시 시도해 주세요"));
+  }
+
+  let toastH = null;
+  function toast(msg){
+    const t = $("toast"); t.textContent = msg; t.classList.add("on");
+    clearTimeout(toastH); toastH = setTimeout(() => t.classList.remove("on"), 2800);
+  }
+
+  $("btnSound").addEventListener("click", () => {
+    const on = !Sound.on;
+    Sound.setOn(on);
+    $("btnSound").classList.toggle("muted", !on);
+    $("btnSound").textContent = on ? "🔊 소리 ON" : "🔇 소리 OFF";
+    if(on) Sound.iface();
+    toast(on ? "소리 켜짐 · 새 진단마다 알림음" : "소리 꺼짐");
+  });
+  $("btnClear").addEventListener("click", clearAll);
+  $("btnQR").addEventListener("click", () => $("qrModal").classList.add("on"));
+  $("qrClose").addEventListener("click", () => $("qrModal").classList.remove("on"));
+  $("qrModal").addEventListener("click", e => { if(e.target === $("qrModal")) $("qrModal").classList.remove("on"); });
+
+  document.addEventListener("keydown", e => {
+    if(e.key === "Escape"){ $("qrModal").classList.remove("on"); return; }
+    if(e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    if(e.key.toLowerCase() === "q") $("qrModal").classList.toggle("on");
+  });
+
+  $("qrImg").src = QR_SRC;
+  $("roomChip").textContent = "ROOM " + ROOM;
+  renderDist();
+  renderFeed([]);
+  initFB();
+})();
+</script>
+</body>
+</html>

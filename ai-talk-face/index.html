@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#050A16">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🔮</text></svg>">
+<title>AI 카톡·말투 관상가 | 강연 크리에이터 · 정진영</title>
+<meta name="description" content="15초 빅데이터 말투 관상 — 카톡 습관 4문항으로 보는 나의 말투 관상과 팩폭 처방">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --bg:#050A16; --bg2:#08101F; --panel:#0B1526; --panel2:#101C30;
+    --line:rgba(255,194,74,.16); --line2:rgba(255,194,74,.34);
+    --amber:#FFC24A; --amber2:#FF9E1B; --gold:#FFE6A8;
+    --aqua:#5FE3FF; --violet:#A98BFF; --rose:#FF5C7A; --mint:#4BE8A8;
+    --text:#F2F0E6; --muted:#93A2B8; --dim:#5D6D82;
+    --sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR",Georgia,"Apple SD Gothic Neo",serif;
+  }
+  html{-webkit-text-size-adjust:100%;background:#03060D}
+  html,body{margin:0;padding:0;height:100%;overscroll-behavior:none}
+  body{
+    background:var(--bg);color:var(--text);font-family:var(--sans);
+    word-break:keep-all;-webkit-font-smoothing:antialiased;
+    line-height:1.5;letter-spacing:-0.012em;
+    -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(120% 50% at 50% -12%, rgba(255,194,74,.16) 0%, rgba(255,194,74,0) 62%),
+      radial-gradient(90% 44% at 50% 112%, rgba(95,227,255,.10) 0%, rgba(95,227,255,0) 70%);
+    transition:background .7s ease;
+  }
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.26;
+    background:repeating-linear-gradient(180deg, rgba(255,194,74,.05) 0 1px, rgba(0,0,0,0) 1px 4px);
+  }
+  .app{
+    position:relative;z-index:2;width:100%;max-width:470px;margin:0 auto;
+    height:100vh;height:100dvh;display:flex;flex-direction:column;
+    padding:calc(env(safe-area-inset-top,0px) + 10px) 16px calc(env(safe-area-inset-bottom,0px) + 10px);
+  }
+  /* ---------- header ---------- */
+  .top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex:0 0 auto;padding-bottom:8px}
+  .brand{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .brand .name{font-size:13.5px;font-weight:900;letter-spacing:-0.03em;color:#FFF6E0;white-space:nowrap;
+    text-shadow:0 0 18px rgba(255,194,74,.34)}
+  .brand .creator{font-size:10.5px;font-weight:800;color:var(--amber);letter-spacing:.01em}
+  .net{display:flex;align-items:center;gap:5px;flex:0 0 auto;font-size:10px;font-weight:800;color:var(--muted);
+    padding:5px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.03)}
+  .net i{width:6px;height:6px;border-radius:50%;background:var(--dim);display:block;transition:.3s}
+  .net.on{color:#FFEBC0;border-color:rgba(255,194,74,.34);background:rgba(255,194,74,.10)}
+  .net.on i{background:var(--amber);box-shadow:0 0 8px var(--amber)}
+
+  main{flex:1 1 auto;min-height:0;position:relative;display:flex;flex-direction:column}
+  .scr{display:none;flex-direction:column;flex:1 1 auto;min-height:0;animation:fade .35s ease both}
+  .scr.on{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .foot{flex:0 0 auto;text-align:center;font-size:10px;font-weight:700;color:#4A5A6E;padding-top:8px;letter-spacing:.02em}
+
+  /* ---------- intro ---------- */
+  .intro{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:20px;min-height:0;text-align:center}
+  .orb{position:relative;width:132px;height:132px;margin:0 auto;display:grid;place-items:center}
+  .orb .ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(255,194,74,.36);
+    animation:spin 14s linear infinite}
+  .orb .ring:nth-child(2){inset:12px;border-color:rgba(169,139,255,.34);animation-duration:9s;animation-direction:reverse}
+  .orb .ring:nth-child(3){inset:24px;border-color:rgba(255,194,74,.18);animation-duration:22s}
+  .orb .ring::before{content:"";position:absolute;top:-3px;left:50%;width:6px;height:6px;border-radius:50%;
+    background:var(--amber);box-shadow:0 0 12px var(--amber);transform:translateX(-50%)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .orb .em{font-size:54px;filter:drop-shadow(0 0 22px rgba(255,194,74,.45));animation:pulse 3.2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+  .intro h1{margin:0;font-family:var(--serif);font-size:27px;font-weight:900;letter-spacing:-0.045em;line-height:1.28;color:#FFF8E8}
+  .intro h1 em{font-style:normal;color:var(--amber);text-shadow:0 0 26px rgba(255,194,74,.5)}
+  .intro .sub{margin:8px 0 0;font-size:13px;font-weight:700;color:var(--muted);line-height:1.6}
+  .intro .sub b{color:#FFE3A8}
+  .nickrow{display:flex;flex-direction:column;gap:7px;margin-top:2px}
+  .nickrow label{font-size:11px;font-weight:900;letter-spacing:.06em;color:var(--dim)}
+  .nick{display:flex;align-items:center;gap:8px;padding:0 14px;border-radius:14px;
+    border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04)}
+  .nick input{flex:1 1 auto;min-width:0;border:0;background:transparent;outline:none;
+    font-family:var(--sans);font-size:16px;font-weight:800;color:var(--text);padding:14px 0;letter-spacing:-0.01em}
+  .nick input::placeholder{color:#53637A;font-weight:700}
+  .nick span{font-size:10px;font-weight:800;color:#4E5E73;white-space:nowrap}
+  .bigbtn{
+    width:100%;border:0;cursor:pointer;font-family:var(--sans);font-size:17px;font-weight:900;letter-spacing:-0.02em;
+    color:#2A1600;background:linear-gradient(135deg,#FFE08A,#FFB01F);border-radius:16px;padding:17px 18px;
+    box-shadow:0 12px 30px rgba(255,160,20,.28),inset 0 1px 0 rgba(255,255,255,.5);
+    display:flex;align-items:center;justify-content:center;gap:9px;transition:transform .12s,filter .2s}
+  .bigbtn:active{transform:scale(.985);filter:brightness(.97)}
+  .bigbtn small{font-size:11px;font-weight:800;opacity:.62}
+  .tiny{margin:0;font-size:10.5px;font-weight:700;color:#4E5E73;line-height:1.5}
+
+  /* ---------- question ---------- */
+  .qwrap{flex:1 1 auto;display:flex;flex-direction:column;min-height:0;padding-top:4px}
+  .qhead{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:2px 0 12px}
+  .steps{display:flex;gap:5px;flex:1 1 auto}
+  .steps i{flex:1 1 0;height:4px;border-radius:3px;background:rgba(255,255,255,.10);transition:background .3s,box-shadow .3s}
+  .steps i.done{background:rgba(255,194,74,.55)}
+  .steps i.now{background:linear-gradient(90deg,var(--amber),var(--amber2));box-shadow:0 0 10px rgba(255,194,74,.55)}
+  .qcount{flex:0 0 auto;font-size:11px;font-weight:900;color:var(--amber);letter-spacing:.05em}
+  .qno{font-size:10.5px;font-weight:900;letter-spacing:.16em;color:var(--dim)}
+  .qtitle{font-family:var(--serif);font-size:22px;font-weight:900;letter-spacing:-0.04em;line-height:1.36;color:#FFF8E8;margin:6px 0 4px}
+  .qhint{font-size:12px;font-weight:700;color:var(--muted);margin:0 0 14px}
+  .opts{display:flex;flex-direction:column;gap:9px;flex:1 1 auto;min-height:0;justify-content:center}
+  .opt{
+    display:flex;align-items:center;gap:12px;text-align:left;width:100%;cursor:pointer;
+    font-family:var(--sans);font-size:15.5px;font-weight:800;letter-spacing:-0.02em;color:#EDF2FA;
+    background:linear-gradient(100deg, rgba(255,255,255,.055), rgba(255,255,255,.022));
+    border:1px solid rgba(255,255,255,.10);border-radius:15px;padding:16px 15px;
+    transition:transform .1s,border-color .2s,background .2s;position:relative;overflow:hidden}
+  .opt:active{transform:scale(.99)}
+  .opt .k{flex:0 0 auto;width:26px;height:26px;border-radius:9px;display:grid;place-items:center;
+    font-size:11.5px;font-weight:900;color:var(--amber);background:rgba(255,194,74,.12);border:1px solid rgba(255,194,74,.28)}
+  .opt .t{flex:1 1 auto;min-width:0;line-height:1.35}
+  .opt .t small{display:block;font-size:11.5px;font-weight:700;color:#7E8DA3;margin-top:2px;letter-spacing:-0.005em}
+  .opt.picked{border-color:var(--line2);background:linear-gradient(100deg, rgba(255,194,74,.18), rgba(255,194,74,.05));
+    box-shadow:0 0 0 1px rgba(255,194,74,.25), 0 10px 26px rgba(255,160,20,.14)}
+  .opt.picked .k{background:var(--amber);color:#2A1600;border-color:var(--amber)}
+  .qback{flex:0 0 auto;margin-top:10px;align-self:flex-start;background:none;border:0;cursor:pointer;
+    font-family:var(--sans);font-size:12px;font-weight:800;color:#5D6D82;padding:8px 4px}
+
+  /* ---------- scan ---------- */
+  .scan{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center}
+  .radar{position:relative;width:190px;height:190px;border-radius:50%;
+    border:1px solid rgba(255,194,74,.34);
+    background:radial-gradient(circle at 50% 50%, rgba(255,194,74,.10), rgba(5,10,22,0) 68%);
+    overflow:hidden;box-shadow:0 0 60px rgba(255,160,20,.14) inset}
+  .radar::before,.radar::after{content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,194,74,.16)}
+  .radar::before{inset:30px}
+  .radar::after{inset:62px}
+  .radar .sweep{position:absolute;inset:0;border-radius:50%;
+    background:conic-gradient(from 0deg, rgba(255,194,74,.52), rgba(255,194,74,0) 42%);
+    animation:spin 1.15s linear infinite}
+  .radar .cross{position:absolute;inset:0}
+  .radar .cross::before,.radar .cross::after{content:"";position:absolute;background:rgba(255,194,74,.16)}
+  .radar .cross::before{left:50%;top:0;bottom:0;width:1px}
+  .radar .cross::after{top:50%;left:0;right:0;height:1px}
+  .radar .face{position:absolute;inset:0;display:grid;place-items:center;font-size:44px;
+    filter:drop-shadow(0 0 14px rgba(255,194,74,.55));animation:pulse 1.4s ease-in-out infinite}
+  .scanfx{display:flex;flex-direction:column;gap:8px;align-items:center}
+  .scanfx b{font-size:16.5px;font-weight:900;letter-spacing:-0.03em;color:#FFF4DC}
+  .scanfx .line{font-size:12px;font-weight:800;color:var(--amber);height:18px;letter-spacing:.01em}
+  .scanfx .pct{font-size:11px;font-weight:900;color:var(--dim);letter-spacing:.14em}
+
+  /* ---------- result ---------- */
+  .result{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    display:flex;flex-direction:column;gap:10px;padding-bottom:6px}
+  .rlabel{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:7px;
+    font-size:10px;font-weight:900;letter-spacing:.2em;color:var(--amber);text-transform:uppercase}
+  .rlabel::before,.rlabel::after{content:"";width:24px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,194,74,.6))}
+  .rlabel::after{background:linear-gradient(90deg,rgba(255,194,74,.6),transparent)}
+  .card{position:relative;border-radius:20px;padding:18px 16px 15px;
+    border:1px solid var(--line2);
+    background:linear-gradient(168deg, rgba(18,30,50,.98), rgba(7,13,25,.98));
+    box-shadow:0 20px 50px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.06);
+    overflow:hidden;animation:cardin .55s cubic-bezier(.18,1.1,.3,1) both}
+  @keyframes cardin{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+  .card .glow{position:absolute;top:-90px;left:50%;transform:translateX(-50%);width:260px;height:200px;
+    background:radial-gradient(closest-side, rgba(255,194,74,.28), rgba(255,194,74,0));pointer-events:none}
+  .card .shine{position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(100deg, transparent 30%, rgba(255,255,255,.06) 46%, transparent 62%);
+    transform:translateX(-120%);animation:shine 4.6s ease-in-out 1.2s infinite}
+  @keyframes shine{0%{transform:translateX(-120%)}55%,100%{transform:translateX(120%)}}
+  .who{position:relative;text-align:center;font-size:11.5px;font-weight:800;color:#93A2B8;min-height:16px}
+  .who b{color:#FFE3A8}
+  .bigemo{position:relative;text-align:center;font-size:52px;line-height:1.1;margin:4px 0 2px;
+    filter:drop-shadow(0 0 24px rgba(255,160,20,.45));animation:pop .6s cubic-bezier(.2,1.3,.4,1) both}
+  @keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+  .tname{position:relative;margin:0;text-align:center;font-family:var(--serif);font-size:25px;font-weight:900;
+    letter-spacing:-0.045em;color:#FFF8E8;line-height:1.3}
+  .ttag{position:relative;margin:6px 0 0;text-align:center;font-size:12.5px;font-weight:800;color:var(--amber);line-height:1.5}
+  .gauges{position:relative;display:flex;flex-direction:column;gap:9px;margin-top:16px;
+    padding:13px 13px 12px;border-radius:14px;background:rgba(255,255,255,.032);border:1px solid rgba(255,255,255,.07)}
+  .grow{display:flex;flex-direction:column;gap:5px}
+  .grow .gt{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+  .grow .gt span{font-size:11.5px;font-weight:800;color:#C6D2E2;letter-spacing:-0.01em}
+  .grow .gt b{font-size:14px;font-weight:900;font-variant-numeric:tabular-nums;color:#FFF4DC}
+  .grow .gt b i{font-style:normal;font-size:9.5px;color:#7E8DA3;margin-left:1px}
+  .gbar{height:7px;border-radius:4px;background:rgba(255,255,255,.09);overflow:hidden}
+  .gbar i{display:block;height:100%;width:0;border-radius:4px;transition:width 1.15s cubic-bezier(.16,.9,.2,1)}
+  .punch{position:relative;margin-top:11px;padding:13px 13px 12px;border-radius:14px;
+    background:linear-gradient(100deg, rgba(255,92,122,.13), rgba(255,194,74,.07));
+    border:1px solid rgba(255,92,122,.30)}
+  .punch .pl{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:900;letter-spacing:.14em;color:#FF98AC;margin-bottom:6px}
+  .punch p{margin:0;font-size:14px;line-height:1.62;font-weight:800;color:#FFEDE4;letter-spacing:-0.02em}
+  .desc{position:relative;margin-top:10px;padding:12px 13px;border-radius:14px;
+    background:rgba(95,227,255,.045);border:1px solid rgba(95,227,255,.18)}
+  .desc .dl{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:900;letter-spacing:.14em;color:#8FE0FF;margin-bottom:5px}
+  .desc p{margin:0;font-size:12.5px;line-height:1.66;font-weight:700;color:#B9CBDD;letter-spacing:-0.01em}
+  .rbtns{display:flex;gap:8px;margin-top:4px}
+  .rbtn{flex:1 1 0;cursor:pointer;font-family:var(--sans);font-size:13.5px;font-weight:900;letter-spacing:-0.02em;
+    border-radius:14px;padding:14px 8px;border:1px solid transparent;display:flex;align-items:center;justify-content:center;gap:6px;
+    transition:transform .1s,filter .2s}
+  .rbtn:active{transform:scale(.985)}
+  .rbtn.gold{background:linear-gradient(135deg,#FFE08A,#FFB01F);color:#2A1600;box-shadow:0 10px 24px rgba(255,160,20,.24)}
+  .rbtn.ghost{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14);color:#D6E1EE}
+  .sharehint{text-align:center;font-size:10.5px;font-weight:700;color:#4E5E73;line-height:1.5}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);z-index:60;
+    background:rgba(12,20,34,.97);border:1px solid var(--line2);color:#FFF4DC;padding:10px 17px;border-radius:12px;
+    font-size:12.5px;font-weight:800;opacity:0;pointer-events:none;transition:.24s;box-shadow:0 14px 34px rgba(0,0,0,.6);max-width:86vw;text-align:center}
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+  @media (max-height:700px){
+    .orb{width:104px;height:104px}.orb .em{font-size:42px}
+    .intro h1{font-size:23px}.intro{gap:14px}
+    .qtitle{font-size:19px}.opt{padding:13px 14px;font-size:14.5px}
+    .bigemo{font-size:44px}.tname{font-size:22px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <div class="name">🔮 AI 카톡·말투 관상가</div>
+      <div class="creator">강연 크리에이터 · 정진영</div>
+    </div>
+    <div class="net" id="netChip"><i></i><span id="netTxt">연결 중</span></div>
+  </header>
+
+  <main>
+    <!-- 1. 인트로 -->
+    <section class="scr on" id="scrIntro">
+      <div class="intro">
+        <div class="orb">
+          <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+          <div class="em">🔮</div>
+        </div>
+        <div>
+          <h1>당신의 카톡에는<br><em>관상</em>이 있습니다</h1>
+          <p class="sub">답장 속도·말투·단톡 포지션·화났을 때<br>딱 <b>4문항</b>, <b>15초</b>면 빅데이터가 말투 관상을 봅니다</p>
+        </div>
+        <div class="nickrow">
+          <label for="nick">닉네임 <span style="color:#3E4C5E">(선택 · 결과 카드에만 표시)</span></label>
+          <div class="nick">
+            <input id="nick" type="text" maxlength="10" placeholder="예: 진영" autocomplete="off" enterkeyhint="done">
+            <span>익명 저장</span>
+          </div>
+        </div>
+        <button class="bigbtn" id="btnStart" type="button">🔮 내 말투 관상 보기 <small>4문항</small></button>
+        <p class="tiny">정답은 없습니다 · 편하게 고르세요 · 무음으로 진행됩니다</p>
+      </div>
+    </section>
+
+    <!-- 2. 질문 -->
+    <section class="scr" id="scrQ">
+      <div class="qwrap">
+        <div class="qhead">
+          <div class="steps" id="steps"><i></i><i></i><i></i><i></i></div>
+          <div class="qcount" id="qcount">1 / 4</div>
+        </div>
+        <div class="qno" id="qno">Q1</div>
+        <h2 class="qtitle" id="qtitle">—</h2>
+        <p class="qhint" id="qhint">가장 가까운 걸 하나만 골라주세요</p>
+        <div class="opts" id="opts"></div>
+        <button class="qback" id="btnBack" type="button">← 이전 문항</button>
+      </div>
+    </section>
+
+    <!-- 3. 스캔 -->
+    <section class="scr" id="scrScan">
+      <div class="scan">
+        <div class="radar">
+          <div class="sweep"></div>
+          <div class="cross"></div>
+          <div class="face">🔮</div>
+        </div>
+        <div class="scanfx">
+          <b>빅데이터 말투 관상 분석 중…</b>
+          <div class="line" id="scanLine">카톡 답장 패턴 대조 중…</div>
+          <div class="pct" id="scanPct">SCAN 0%</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 결과 -->
+    <section class="scr" id="scrResult">
+      <div class="result" id="resultWrap">
+        <div class="rlabel">빅데이터 말투 관상 · 결과</div>
+        <div class="card" id="card">
+          <div class="glow"></div><div class="shine"></div>
+          <div class="who" id="who"></div>
+          <div class="bigemo" id="bigemo">🔮</div>
+          <h2 class="tname" id="tname">—</h2>
+          <p class="ttag" id="ttag">—</p>
+          <div class="gauges" id="gauges">
+            <div class="grow" data-g="mask">
+              <div class="gt"><span>🎭 사회적 가면지수</span><b><em class="gv">0</em><i>%</i></b></div>
+              <div class="gbar"><i></i></div>
+            </div>
+            <div class="grow" data-g="kkondae">
+              <div class="gt"><span>👴 은근한 꼰대력</span><b><em class="gv">0</em><i>%</i></b></div>
+              <div class="gbar"><i></i></div>
+            </div>
+            <div class="grow" data-g="surv">
+              <div class="gt"><span>💼 직장/가정 생존율</span><b><em class="gv">0</em><i>%</i></b></div>
+              <div class="gbar"><i></i></div>
+            </div>
+          </div>
+          <div class="punch">
+            <div class="pl">💉 AI 팩폭 처방</div>
+            <p id="punchTxt">—</p>
+          </div>
+          <div class="desc">
+            <div class="dl">🔍 관상 해설</div>
+            <p id="descTxt">—</p>
+          </div>
+        </div>
+        <div class="rbtns">
+          <button class="rbtn ghost" id="btnRetry" type="button">🔄 다시 하기</button>
+          <button class="rbtn gold" id="btnSave" type="button">📸 결과 저장</button>
+        </div>
+        <p class="sharehint">결과 카드 저장 후 단톡방·인스타에 자랑해 보세요 · 무음</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="foot">빅데이터 말투 관상 · 강연 크리에이터 · 정진영</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+
+  const ROOM = "JY28";
+  const ROOM_PATH = "rooms/ai-talk-face/" + ROOM;
+  const FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "977342156141",
+    appId: "1:977342156141:web:f9842fcc67a819ce621e64"
+  };
+
+  /* ============================================================
+     유형 12종
+     ============================================================ */
+  const TYPES = [
+    { id:"fox", emo:"🦊", name:"겉웃속칼 여우형", tag:"웃는 얼굴, 계산기는 이미 돌아갔다",
+      base:{mask:78,kkondae:46,surv:82},
+      desc:"겉으로는 모두에게 맞장구, 속으로는 손익 계산이 끝나 있습니다. 웃는 얼굴로 커피를 들고 다니지만, 그 잔에는 남의 말이 이미 몇 번 걸러 담겼습니다.",
+      punch:"당신의 'ㅎㅎ'는 동의가 아니라 보류입니다. 그 미소, 상대도 지금 계산 중입니다." },
+    { id:"robot", emo:"🤖", name:"AI보다 차가운 로봇형", tag:"감정은 옵션, 정확함은 기본값",
+      base:{mask:62,kkondae:58,surv:74},
+      desc:"답장은 늘 문법에 맞고, 필요한 말만 정확히 나옵니다. 실수는 없는데 이상하게 대화가 마무리됩니다. 정확함이 사람을 조용히 세워두기 때문입니다.",
+      punch:"당신의 답장은 틀린 곳이 없는데 따뜻한 곳도 없습니다. 마침표 하나를 'ㅎ'로 바꿔보세요." },
+    { id:"bomb", emo:"💣", name:"시한폭탄 참을인형", tag:"참을 인 세 번이면 터진다",
+      base:{mask:34,kkondae:52,surv:61},
+      desc:"겉으로는 '괜찮아요'를 반복하다가, 어느 날 상대가 이해 못 할 지점에서 한 번에 터집니다. 그 순간 가장 놀라는 사람은 늘 본인입니다.",
+      punch:"당신은 화를 참는 게 아니라 3년 할부로 적립 중입니다. 이자는 언젠가 장문 한 방으로 청구됩니다." },
+    { id:"ghost", emo:"👻", name:"평화주의 유령형", tag:"사라짐으로 갈등을 이긴다",
+      base:{mask:66,kkondae:28,surv:55},
+      desc:"싸움보다 사라짐을 택합니다. 읽고도 답하지 않는 그 3시간이 당신의 방어막이고, 그 사이 상대의 머릿속에서는 소설이 한 편 쓰입니다.",
+      punch:"당신이 사라진 자리에 남는 건 갈등이 아니라 서운함입니다. 그리고 그 서운함도 결국 당신 몫입니다." },
+    { id:"actor", emo:"🎭", name:"프로 가면 연기자형", tag:"분위기는 내가 살린다, 내 마음은 나중에",
+      base:{mask:88,kkondae:24,surv:70},
+      desc:"어떤 자리에 가도 리액션은 준비되어 있습니다. 덕분에 모두가 편안한데, 정작 당신의 이름표는 잠깐도 내려놓질 못합니다.",
+      punch:"모두가 편한 자리에서 유일하게 불편한 사람이 당신입니다. 가면 벗을 방 하나는 남겨두세요." },
+    { id:"turtle", emo:"🐢", name:"무소식 거북형", tag:"느리지만 반드시 온다",
+      base:{mask:58,kkondae:32,surv:66},
+      desc:"답장은 늦지만 사라지진 않습니다. 당신의 3시간은 당신에겐 여유, 상대에겐 인내심 테스트입니다. 결과가 같아도 체감은 정반대입니다.",
+      punch:"당신의 '나중에 답해야지'는 상대에게 '읽씹'입니다. 알림을 끄는 대신 한 글자라도 먼저 보내세요." },
+    { id:"hedgehog", emo:"🦔", name:"삐침 많은 고슴도치형", tag:"마침표 하나로 온도가 0도",
+      base:{mask:44,kkondae:62,surv:58},
+      desc:"화가 나면 목소리는 낮아지고 문장은 짧아집니다. 온점 하나, 갑자기 정중해진 존댓말 하나로 상대는 이미 눈치를 채고 방어태세에 들어갑니다.",
+      punch:"당신의 '네.'에는 마침표가 아니라 칼날이 있습니다. 상태를 말로 설명하는 편이 훨씬 싸게 끝납니다." },
+    { id:"captain", emo:"📢", name:"잔소리 총대 반장형", tag:"내가 안 하면 아무도 안 한다",
+      base:{mask:30,kkondae:84,surv:76},
+      desc:"모두가 모르는 걸 알아서 미리 챙깁니다. 그런데 그 챙김이 반복되면 애정이 아니라 압박으로 도착합니다. 당신이 옳을수록 방은 조용해집니다.",
+      punch:"당신의 잔소리는 90%가 맞는 말입니다. 문제는 맞는 말이라는 이유로 100%를 다 말한다는 것." },
+    { id:"festival", emo:"🌪️", name:"감정 롤러코스터 예능형", tag:"ㅋㅋ와 ㅠㅠ가 0.5초 간격",
+      base:{mask:40,kkondae:22,surv:88},
+      desc:"감정이 풍부해서 사람을 끌어당기고, 그 진폭에 모두가 적응 중입니다. 단톡방이 조용해지면 당신이 먼저 온도를 올립니다.",
+      punch:"당신의 '완전 웃겨'는 오늘 이미 다섯 번입니다. 진짜 아플 때 그 신호가 웃음에 묻힙니다." },
+    { id:"ice", emo:"🧊", name:"한 글자 절약형", tag:"말은 최소, 감정은 비밀",
+      base:{mask:70,kkondae:54,surv:68},
+      desc:"대화의 90%를 상대가 채우게 만드는 희귀한 재주가 있습니다. 정보는 전달되지만 온도는 전달되지 않아, 상대는 매번 눈치를 봅니다.",
+      punch:"당신의 답장은 늘 정답인데 대화는 늘 끝납니다. 마침표 뒤에 괄호 하나만 열어두세요." },
+    { id:"puppy", emo:"🐶", name:"애교 만렙 강아지형", tag:"이모티콘으로 세상의 어색함을 덮는다",
+      base:{mask:26,kkondae:18,surv:90},
+      desc:"ㅎㅎ와 이모티콘으로 모든 각을 둥글게 만듭니다. 덕분에 다들 편하지만, 정작 당신의 진짜 말은 아직 봉투 안에 들어 있습니다.",
+      punch:"당신은 애교로 다 넘겼지만, 하고 싶은 말은 한 번도 못 꺼냈습니다. 오늘 한 번은 이모티콘 없이." },
+    { id:"spy", emo:"🕵️", name:"눈팅 탐정 관찰자형", tag:"다 보고 있지만 말은 안 한다",
+      base:{mask:74,kkondae:38,surv:63},
+      desc:"단톡방의 모든 맥락을 파악하고 있지만 발언은 하지 않습니다. 정보량은 가장 많고 노출은 가장 적은, 조용한 실세입니다.",
+      punch:"당신은 단톡방 CCTV입니다. 다 보고 있지만 아무도 당신 생각은 모릅니다. 한 번은 말로 남기세요." }
+  ];
+  const TYPE_BY_ID = {};
+  TYPES.forEach(t => TYPE_BY_ID[t.id] = t);
+
+  /* ============================================================
+     문항 4개 · 선택지 가중치
+     ============================================================ */
+  const QUESTIONS = [
+    {
+      q:"카톡 답장, 당신의 기본 속도는?",
+      hint:"가장 자주 그런 쪽으로 골라주세요 · 정답 없음",
+      opts:[
+        { label:"1초 칼답", sub:"알림 보면 손이 먼저 나간다", w:{puppy:3,captain:1,festival:1}, g:{mask:-8,kkondae:4,surv:6} },
+        { label:"읽씹 후 3시간", sub:"읽었고, 생각 중입니다", w:{ghost:3,turtle:2,fox:1}, g:{mask:10,kkondae:6,surv:-4} },
+        { label:"'네.' 한 글자", sub:"답장의 본질만 남긴다", w:{robot:3,ice:2,hedgehog:1}, g:{mask:6,kkondae:2,surv:0} },
+        { label:"이모티콘으로 때우기", sub:"말 대신 표정으로 간다", w:{actor:3,puppy:2,fox:1}, g:{mask:14,kkondae:-6,surv:4} }
+      ]
+    },
+    {
+      q:"당신이 제일 자주 쓰는 말투는?",
+      hint:"손가락이 자동으로 나가는 쪽",
+      opts:[
+        { label:"\"아넵\"", sub:"무난함의 완성", w:{fox:3,actor:2,captain:1}, g:{mask:12,kkondae:2,surv:8} },
+        { label:"\"ㅠㅠ / ㅋㅋㅋ\" 도배", sub:"감정은 양으로 전달", w:{festival:3,puppy:2}, g:{mask:-10,kkondae:-8,surv:2} },
+        { label:"\"확인했습니다.\"", sub:"업무용 인격 가동", w:{robot:3,captain:2,ice:1}, g:{mask:4,kkondae:14,surv:10} },
+        { label:"\"글쎄요…\"", sub:"안전하게 한 발 물러나기", w:{ghost:2,hedgehog:2,fox:2}, g:{mask:8,kkondae:4,surv:-8} }
+      ]
+    },
+    {
+      q:"단톡방에서 당신의 포지션은?",
+      hint:"지금 속한 방을 떠올려 보세요",
+      opts:[
+        { label:"분위기 메이커", sub:"조용해지면 내가 띄운다", w:{festival:3,puppy:2,actor:1}, g:{mask:12,kkondae:-10,surv:12} },
+        { label:"눈팅 유령", sub:"다 읽고, 안 씁니다", w:{ghost:3,spy:2}, g:{mask:6,kkondae:-4,surv:-2} },
+        { label:"잔소리 총대", sub:"내가 안 하면 아무도 안 한다", w:{captain:3,bomb:1}, g:{mask:-6,kkondae:18,surv:6} },
+        { label:"알람 꺼둠", sub:"확인은 나중에 몰아서", w:{turtle:2,ice:2,robot:2}, g:{mask:0,kkondae:-2,surv:-10} }
+      ]
+    },
+    {
+      q:"화가 났을 때 당신의 카톡 스타일은?",
+      hint:"참는 게 아니라 표현하는 방식",
+      opts:[
+        { label:"온점 하나 찍기", sub:"\"네. 알겠습니다.\"", w:{hedgehog:3,bomb:2}, g:{mask:-4,kkondae:6,surv:-6} },
+        { label:"갑자기 존댓말", sub:"예의라는 이름의 경고", w:{fox:2,actor:3,hedgehog:1}, g:{mask:16,kkondae:4,surv:-2} },
+        { label:"읽씹 잠수", sub:"대답 대신 거리두기", w:{ghost:3,turtle:2}, g:{mask:6,kkondae:0,surv:-12} },
+        { label:"장문 폭격", sub:"카톡에 논문을 쓴다", w:{bomb:3,captain:2,festival:1}, g:{mask:-12,kkondae:10,surv:-4} }
+      ]
+    }
+  ];
+
+  const clamp = (n,a,b) => Math.max(a, Math.min(b, n));
+  const picks = [-1,-1,-1,-1];
+  const S = { step:0, result:null, nick:"" };
+
+  /* ============================================================
+     Firebase (실패해도 청중 단독 100% 동작)
+     ============================================================ */
+  let db = null, roomRef = null, cid = null;
+  try{
+    cid = sessionStorage.getItem("atf_cid");
+    if(!cid){ cid = "c" + Date.now().toString(36) + Math.random().toString(36).slice(2,7); sessionStorage.setItem("atf_cid", cid); }
+  }catch(e){ cid = "c" + Date.now().toString(36); }
+
+  function setNet(ok, label){
+    const el = $("netChip");
+    el.classList.toggle("on", !!ok);
+    $("netTxt").textContent = label || (ok ? "실시간 연결" : "단독 모드");
+  }
+  function initFB(){
+    if(typeof firebase === "undefined" || !firebase.initializeApp){ setNet(false, "단독 모드"); return; }
+    try{
+      if(!firebase.apps || !firebase.apps.length) firebase.initializeApp(FB_CONFIG);
+      db = firebase.database();
+      roomRef = db.ref(ROOM_PATH);
+      db.ref(".info/connected").on("value", s => {
+        const on = !!s.val();
+        setNet(on, on ? "실시간 연결" : "연결 중…");
+      });
+    }catch(e){ setNet(false, "단독 모드"); }
+  }
+  function send(){
+    if(!roomRef || !S.result) return;
+    const r = S.result;
+    const payload = {
+      nick: (S.nick || "").slice(0,10),
+      type: r.type.id,
+      mask: r.mask, kkondae: r.kkondae, surv: r.surv,
+      picks: picks.join(""),
+      ts: Date.now()
+    };
+    try{ roomRef.child("responses").child(cid).set(payload).catch(() => {}); }catch(e){}
+  }
+
+  /* ============================================================
+     화면 전환
+     ============================================================ */
+  function show(id){
+    ["scrIntro","scrQ","scrScan","scrResult"].forEach(k => $(k).classList.toggle("on", k === id));
+  }
+
+  /* ---------- 질문 렌더 ---------- */
+  function renderQ(){
+    const i = S.step, Q = QUESTIONS[i];
+    $("qno").textContent = "Q" + (i + 1);
+    $("qcount").textContent = (i + 1) + " / 4";
+    $("qtitle").textContent = Q.q;
+    $("qhint").textContent = Q.hint;
+    const steps = $("steps").children;
+    for(let k = 0; k < steps.length; k++){
+      steps[k].classList.toggle("done", k < i);
+      steps[k].classList.toggle("now", k === i);
+    }
+    const wrap = $("opts");
+    wrap.innerHTML = "";
+    Q.opts.forEach((o, k) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "opt" + (picks[i] === k ? " picked" : "");
+      b.innerHTML = '<span class="k">' + "ABCD".charAt(k) + '</span>' +
+                    '<span class="t">' + o.label + '<small>' + o.sub + '</small></span>';
+      b.addEventListener("click", () => choose(k));
+      wrap.appendChild(b);
+    });
+    $("btnBack").style.visibility = i === 0 ? "hidden" : "visible";
+  }
+
+  function choose(k){
+    const i = S.step;
+    picks[i] = k;
+    const btns = $("opts").querySelectorAll(".opt");
+    btns.forEach((b, n) => b.classList.toggle("picked", n === k));
+    setTimeout(() => {
+      if(S.step === i){
+        if(i < 3){ S.step = i + 1; renderQ(); }
+        else startScan();
+      }
+    }, 230);
+  }
+
+  /* ---------- 진단 ---------- */
+  function diagnose(){
+    const score = {};
+    TYPES.forEach(t => score[t.id] = 0);
+    let dMask = 0, dKkon = 0, dSurv = 0;
+    picks.forEach((k, qi) => {
+      const o = QUESTIONS[qi].opts[k] || QUESTIONS[qi].opts[0];
+      for(const key in o.w) score[key] += o.w[key];
+      dMask += o.g.mask; dKkon += o.g.kkondae; dSurv += o.g.surv;
+    });
+    let best = -1, cands = [];
+    TYPES.forEach(t => {
+      if(score[t.id] > best){ best = score[t.id]; cands = [t.id]; }
+      else if(score[t.id] === best){ cands.push(t.id); }
+    });
+    let h = 0;
+    picks.forEach((k, i) => { h = (h * 5 + (k + 1) * (i * 3 + 7)) % 9973; });
+    const chosen = TYPE_BY_ID[cands[h % cands.length]];
+
+    const jitter = (seed, span) => {
+      let x = seed % 1000;
+      x = (x * 9301 + 49297) % 233280;
+      return Math.round((x / 233280 - 0.5) * span);
+    };
+    const seed = picks[0] * 173 + picks[1] * 71 + picks[2] * 29 + picks[3] * 11;
+    const mask = clamp(chosen.base.mask + dMask + jitter(seed + 13, 8), 8, 99);
+    const kkondae = clamp(chosen.base.kkondae + dKkon + jitter(seed + 41, 8), 3, 99);
+    const surv = clamp(chosen.base.surv + dSurv + jitter(seed + 77, 8), 6, 99);
+    return { type:chosen, mask, kkondae, surv };
+  }
+
+  /* ---------- 스캔 연출 ---------- */
+  const SCAN_LINES = [
+    "카톡 답장 패턴 대조 중…",
+    "단톡방 발언 빈도 스캔…",
+    "온점 · 존댓말 습관 역추적…",
+    "12가지 관상 유형 매칭 중…",
+    "팩폭 문장 생성 중…"
+  ];
+  let scanTimers = [];
+  function startScan(){
+    show("scrScan");
+    const r = diagnose();
+    S.result = r;
+    let pct = 0;
+    $("scanPct").textContent = "SCAN 0%";
+    const t0 = Date.now(), total = 1500;
+    const tick = setInterval(() => {
+      const el = Date.now() - t0;
+      pct = Math.min(100, Math.round(el / total * 100));
+      $("scanPct").textContent = "SCAN " + pct + "%";
+      $("scanLine").textContent = SCAN_LINES[Math.min(SCAN_LINES.length - 1, Math.floor(el / (total / SCAN_LINES.length)))];
+      if(el >= total) clearInterval(tick);
+    }, 40);
+    scanTimers.push(tick);
+    setTimeout(() => { clearInterval(tick); paintResult(); }, total + 60);
+  }
+
+  /* ---------- 결과 렌더 ---------- */
+  function paintResult(){
+    const r = S.result, t = r.type;
+    $("who").innerHTML = S.nick ? ("<b>" + escapeHtml(S.nick) + "</b>님의 말투 관상") : "익명의 말투 관상";
+    $("bigemo").textContent = t.emo;
+    $("tname").textContent = t.name;
+    $("ttag").textContent = t.tag;
+    $("punchTxt").textContent = t.punch;
+    $("descTxt").textContent = t.desc;
+
+    const vals = { mask:r.mask, kkondae:r.kkondae, surv:r.surv };
+    const colors = { mask:"linear-gradient(90deg,#FFD36E,#FF9E1B)", kkondae:"linear-gradient(90deg,#FF8FA6,#FF3D63)", surv:"linear-gradient(90deg,#6EE7FF,#4BE8A8)" };
+    document.querySelectorAll(".grow").forEach(row => {
+      const key = row.dataset.g, v = vals[key];
+      row.querySelector(".gv").textContent = "0";
+      const bar = row.querySelector(".gbar i");
+      bar.style.background = colors[key];
+      bar.style.transition = "none"; bar.style.width = "0%";
+      void bar.offsetWidth; bar.style.transition = "";
+      requestAnimationFrame(() => { bar.style.width = v + "%"; });
+      const s0 = performance.now(), dur = 1150;
+      (function anim(now){
+        const p = Math.min(1, (now - s0) / dur);
+        row.querySelector(".gv").textContent = Math.round(v * (1 - Math.pow(1 - p, 3)));
+        if(p < 1) requestAnimationFrame(anim);
+      })(s0);
+    });
+
+    show("scrResult");
+    $("resultWrap").scrollTop = 0;
+    send();
+  }
+
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+
+  /* ---------- 결과 이미지 저장 (1080x1350) ---------- */
+  function saveImage(){
+    const r = S.result; if(!r) return;
+    const t = r.type;
+    const W = 1080, H = 1350;
+    const c = document.createElement("canvas");
+    c.width = W; c.height = H;
+    const x = c.getContext("2d");
+    const F = (w, s) => (w + " " + s + "px 'Pretendard','Pretendard Variable','Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif");
+
+    const g = x.createLinearGradient(0, 0, W, H);
+    g.addColorStop(0, "#0B1730"); g.addColorStop(.55, "#08101F"); g.addColorStop(1, "#050A16");
+    x.fillStyle = g; x.fillRect(0, 0, W, H);
+    const rg = x.createRadialGradient(W/2, 120, 20, W/2, 120, 760);
+    rg.addColorStop(0, "rgba(255,194,74,.30)"); rg.addColorStop(1, "rgba(255,194,74,0)");
+    x.fillStyle = rg; x.fillRect(0, 0, W, 900);
+
+    x.strokeStyle = "rgba(255,194,74,.35)"; x.lineWidth = 3;
+    roundRect(x, 40, 40, W - 80, H - 80, 40); x.stroke();
+
+    x.textAlign = "center";
+    x.fillStyle = "#FFC24A";
+    x.font = F(700, 30);
+    x.fillText("빅데이터 말투 관상 · 결과", W/2, 128);
+
+    x.font = "120px 'Apple Color Emoji','Noto Color Emoji',sans-serif";
+    x.fillText(t.emo, W/2, 300);
+
+    x.fillStyle = "#FFF8E8";
+    x.font = F(900, 66);
+    x.fillText(t.name, W/2, 400);
+
+    x.fillStyle = "#FFC24A";
+    x.font = F(700, 30);
+    wrapText(x, t.tag, W/2, 452, 880, 44);
+
+    // 게이지
+    const rows = [
+      ["🎭 사회적 가면지수", r.mask, "#FFAE2B"],
+      ["👴 은근한 꼰대력", r.kkondae, "#FF5C7A"],
+      ["💼 직장/가정 생존율", r.surv, "#4BE8A8"]
+    ];
+    let y = 560;
+    rows.forEach(row => {
+      x.textAlign = "left";
+      x.fillStyle = "#D6E1EE"; x.font = F(700, 30);
+      x.fillText(row[0], 110, y);
+      x.textAlign = "right";
+      x.fillStyle = "#FFF8E8"; x.font = F(900, 34);
+      x.fillText(row[1] + "%", W - 110, y);
+      x.fillStyle = "rgba(255,255,255,.12)";
+      roundRect(x, 110, y + 18, W - 220, 16, 8); x.fill();
+      x.fillStyle = row[2];
+      roundRect(x, 110, y + 18, Math.max(24, (W - 220) * row[1] / 100), 16, 8); x.fill();
+      y += 110;
+    });
+
+    // 팩폭 박스
+    y = 900;
+    x.fillStyle = "rgba(255,92,122,.10)";
+    roundRect(x, 80, y - 46, W - 160, 250, 28); x.fill();
+    x.strokeStyle = "rgba(255,92,122,.42)"; x.lineWidth = 2;
+    roundRect(x, 80, y - 46, W - 160, 250, 28); x.stroke();
+    x.textAlign = "left";
+    x.fillStyle = "#FF98AC"; x.font = F(800, 24);
+    x.fillText("💉 AI 팩폭 처방", 112, y + 4);
+    x.fillStyle = "#FFEDE4"; x.font = F(800, 32);
+    wrapText(x, t.punch, 112, y + 62, W - 224, 46, "left");
+
+    // 관상 해설
+    x.fillStyle = "#A9BDD0"; x.font = F(600, 26);
+    wrapText(x, t.desc, 112, 1184, W - 224, 38, "left");
+
+    x.textAlign = "center";
+    x.fillStyle = "rgba(255,194,74,.85)"; x.font = F(800, 26);
+    x.fillText("강연 크리에이터 · 정진영", W/2, 1300 - 34);
+    x.fillStyle = "rgba(146,163,184,.75)"; x.font = F(600, 21);
+    x.fillText("jungjinyoung3512.github.io/jungjinyoung3512/ai-talk-face/", W/2, 1300);
+
+    function roundRect(ctx, rx, ry, rw, rh, rr){
+      ctx.beginPath();
+      ctx.moveTo(rx + rr, ry);
+      ctx.arcTo(rx + rw, ry, rx + rw, ry + rh, rr);
+      ctx.arcTo(rx + rw, ry + rh, rx, ry + rh, rr);
+      ctx.arcTo(rx, ry + rh, rx, ry, rr);
+      ctx.arcTo(rx, ry, rx + rw, ry, rr);
+      ctx.closePath();
+    }
+
+    try{
+      const url = c.toDataURL("image/png");
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "말투관상_" + t.name.replace(/\s/g, "") + ".png";
+      document.body.appendChild(a); a.click(); a.remove();
+      toast("결과 이미지를 저장했습니다 · 사진첩에서 확인하세요");
+    }catch(e){
+      toast("이 브라우저에서는 저장이 막혔습니다 · 화면을 캡처해 주세요");
+    }
+  }
+
+  function wrapText(ctx, text, cx, y, maxW, lh, align){
+    const a = align || "center";
+    ctx.textAlign = a;
+    const chars = String(text).split("");
+    const lines = [];
+    let line = "";
+    chars.forEach(ch => {
+      if(ctx.measureText(line + ch).width > maxW){ lines.push(line); line = ch; }
+      else line += ch;
+    });
+    if(line) lines.push(line);
+    lines.forEach((l, i) => ctx.fillText(l, cx, y + i * lh));
+    ctx.textAlign = "center";
+  }
+
+  /* ---------- 이벤트 ---------- */
+  $("btnStart").addEventListener("click", () => {
+    S.nick = ($("nick").value || "").trim();
+    S.step = 0;
+    show("scrQ");
+    renderQ();
+  });
+  $("btnBack").addEventListener("click", () => {
+    if(S.step > 0){ S.step--; renderQ(); }
+  });
+  $("btnRetry").addEventListener("click", () => {
+    picks[0] = picks[1] = picks[2] = picks[3] = -1;
+    S.result = null;
+    S.step = 0;
+    show("scrQ");
+    renderQ();
+  });
+  $("btnSave").addEventListener("click", saveImage);
+
+  let toastH = null;
+  function toast(msg){
+    const t = $("toast"); t.textContent = msg; t.classList.add("on");
+    clearTimeout(toastH); toastH = setTimeout(() => t.classList.remove("on"), 2600);
+  }
+
+  /* 첫 화면 */
+  show("scrIntro");
+  initFB();
+})();
+</script>
+</body>
+</html>
