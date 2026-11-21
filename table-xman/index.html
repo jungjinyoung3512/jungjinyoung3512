@@ -826,7 +826,7 @@
   function paintReveal(){
     const g = isGlobal();
     const t = myTeam();
-    const rt = g ? (reveal && reveal.global || null) : ((reveal && reveal.teams && reveal.teams[t]) || null);
+    let rt = g ? (reveal && reveal.global || null) : ((reveal && reveal.teams && (reveal.teams[t] || reveal.teams[String(t)])) || null);
     const mine = me.vote ? (players[me.vote] || null) : null;
 
     if(g){

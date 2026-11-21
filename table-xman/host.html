@@ -850,9 +850,23 @@
     }).join("");
   }
 
+  function normReveal(v){
+    if(!v || typeof v !== "object") return null;
+    if(Array.isArray(v.teams)){
+      const m = {};
+      v.teams.forEach((x, i)=>{ if(x) m[String(i)] = x; });
+      v.teams = m;
+    }
+    if(v.global){
+      if(Array.isArray(v.global.xmanUids)) v.global.xmanUids = v.global.xmanUids.filter(Boolean);
+      if(Array.isArray(v.global.xmanNames)) v.global.xmanNames = v.global.xmanNames.filter(Boolean);
+    }
+    return v;
+  }
+
   function rvu(t){
     if(!reveal || !reveal.teams) return null;
-    return reveal.teams[t] || null;
+    return reveal.teams[t] || reveal.teams[String(t)] || null;
   }
 
   function renderReveal(){
@@ -877,7 +891,7 @@
     }
 
     const teams = reveal.teams || {};
-    const keys = Object.keys(teams).map(Number).filter(t=>!teams[t].solo).sort((a,b)=>a-b);
+    const keys = Object.keys(teams).map(Number).filter(t=>teams[t] && !teams[t].solo && t > 0).sort((a,b)=>a-b);
     const ok = keys.filter(t=>teams[t].caught).length;
     const no = keys.length - ok;
     $("revBody").innerHTML = `
@@ -889,7 +903,7 @@
       </div>
       <div class="revgrid">
         ${keys.map(t=>{
-          const r = teams[t];
+          const r = teams[t]; if(!r) return "";
           return `<div class="rcard ${r.caught?"ok":"no"}">
             <div class="r1"><span class="rt">${t}조</span><span class="rx">${r.caught?"검거 성공":"놓침"} ${r.caught?"✓":"✗"}</span></div>
             <div class="rx" style="font-size:13px">🕵️ ${esc(r.xmanName || "?")}</div>
@@ -1108,7 +1122,7 @@
           if(isGlobal()){
             if(data.global.caught) SND.sfxFanfare(); else SND.sfxDoom();
           }else{
-            const keys = Object.keys(data.teams||{}).filter(t=>!data.teams[t].solo);
+            const keys = Object.keys(data.teams||{}).filter(t=>data.teams[t] && !data.teams[t].solo && Number(t) > 0);
             const ok = keys.filter(t=>data.teams[t].caught).length;
             if(ok >= Math.ceil(keys.length/2) && ok > 0) SND.sfxFanfare(); else SND.sfxDoom();
           }
@@ -1256,7 +1270,7 @@
     }, err=>console.error(err));
 
     db.ref(BASE + "/reveal").on("value", s=>{
-      reveal = s.val() || null;
+      reveal = normReveal(s.val() || null);
       renderAll();
     }, err=>console.error(err));
   }
