@@ -242,16 +242,20 @@
   #pReveal{display:none}
   #pReveal.on{display:block}
   .revsum{
-    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
-    padding:12px 14px;border-radius:14px;border:1px solid var(--line);
+    display:block;
+    padding:13px 15px;border-radius:14px;border:1px solid var(--line);
     background:linear-gradient(180deg,rgba(245,158,11,.14),rgba(245,158,11,.05));margin-bottom:11px;
   }
-  .revsum .big{font-size:26px;font-weight:900;letter-spacing:-1px;line-height:1.15}
-  .revsum .big em{font-size:11.5px;font-style:normal;color:var(--mute);font-weight:800;margin-left:4px;letter-spacing:0}
-  .revsum .big em.st{display:block;margin:2px 0 0}
-  .revsum .split{width:1px;height:26px;background:rgba(148,163,184,.25)}
-  .revsum .sub{font-size:11.5px;color:var(--mute);line-height:1.5}
-  .revsum .sub b{color:#FFF}
+  .revsum .rhead{display:flex;align-items:center;gap:12px}
+  .revsum .rem{font-size:26px;line-height:1;flex:0 0 auto}
+  .revsum .rttl{min-width:0;flex:1}
+  .revsum .rttl b{display:block;font-size:25px;font-weight:900;letter-spacing:-1px;line-height:1.2}
+  .revsum .rttl span{display:block;font-size:11.5px;font-weight:800;color:var(--mute);margin-top:2px;letter-spacing:0}
+  .revsum .rbody{
+    margin-top:10px;padding-top:10px;border-top:1px solid rgba(148,163,184,.16);
+    font-size:11.5px;color:var(--mute);line-height:1.65;
+  }
+  .revsum .rbody b{color:#FFF;font-weight:800}
   .revgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:7px}
   .rcard{
     border-radius:12px;border:1px solid var(--line2);background:#101A30;padding:9px 11px;
@@ -881,11 +885,14 @@
       const caught = !!g.caught;
       $("revBody").innerHTML = `
         <div class="revsum">
-          <span style="font-size:24px">${caught ? "🎯" : "😈"}</span>
-          <div class="big">${caught ? "검거 성공" : "검거 실패"}<em class="st">전체 모드 · X맨 ${names.length}명</em></div>
-          <div class="split"></div>
-          <div class="sub">최다 득표 <b>${esc(g.topName || "—")}</b>${g.topVotes ? ` (${g.topVotes}표)` : ""}<br>
-          X맨 <b>${esc(names.join(", ") || "—")}</b> · 최다 득표에 든 X맨 <b>${g.caughtCount || 0}명</b></div>
+          <div class="rhead">
+            <span class="rem">${caught ? "🎯" : "😈"}</span>
+            <div class="rttl">
+              <b>${caught ? "검거 성공" : "검거 실패"}</b>
+              <span>전체 모드 · X맨 ${names.length}명</span>
+            </div>
+          </div>
+          <div class="rbody">최다 득표 <b>${esc(g.topName || "—")}</b>${g.topVotes ? ` (${g.topVotes}표)` : ""} · X맨 <b>${esc(names.join(", ") || "—")}</b> · 최다 득표에 든 X맨 <b>${g.caughtCount || 0}명</b></div>
         </div>
         <div class="gnotice">${esc(state.qA || "")} <span style="color:var(--mute2)">(시민)</span> / ${esc(state.qB || "")} <span style="color:var(--amber-l)">(X맨)</span></div>`;
       return;
@@ -897,10 +904,14 @@
     const no = keys.length - ok;
     $("revBody").innerHTML = `
       <div class="revsum">
-        <span style="font-size:24px">${ok >= no ? "🎯" : "😈"}</span>
-        <div class="big">${ok}조 검거<em>/ ${keys.length}조</em></div>
-        <div class="split"></div>
-        <div class="sub">검거 성공 <b>${ok}조</b> · 실패 <b>${no}조</b><br>${esc(state.qA||"")} <span style="color:var(--mute2)">(시민)</span> / ${esc(state.qB||"")} <span style="color:var(--amber-l)">(X맨)</span></div>
+        <div class="rhead">
+          <span class="rem">${ok >= no ? "🎯" : "😈"}</span>
+          <div class="rttl">
+            <b>${ok}개 조 검거 · ${no}개 조 놓침</b>
+            <span>팀별 모드 · 총 ${keys.length}개 조</span>
+          </div>
+        </div>
+        <div class="rbody">${esc(state.qA||"")} <span style="color:var(--mute2)">(시민)</span> / ${esc(state.qB||"")} <span style="color:var(--amber-l)">(X맨)</span></div>
       </div>
       <div class="revgrid">
         ${keys.map(t=>{
