@@ -398,7 +398,7 @@
       var now = c.currentTime, gn = this.g.gain;
       gn.cancelScheduledValues(now);
       gn.setValueAtTime(Math.max(0.0001, gn.value), now);
-      gn.exponentialRampToValueAtTime(0.85, now + 1.0);
+      gn.exponentialRampToValueAtTime(0.55, now + 1.0);
       this.step = 0;
       this.nextT = now + 0.12;
       clearInterval(this.timer);
