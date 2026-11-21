@@ -479,7 +479,7 @@
       const now = Sound.ctx.currentTime, gn = this.gain.gain;
       gn.cancelScheduledValues(now);
       gn.setValueAtTime(Math.max(0.0001, gn.value), now);
-      gn.exponentialRampToValueAtTime(0.85, now + 1.1);
+      gn.exponentialRampToValueAtTime(0.75, now + 1.1);
       this.step = 0;
       this.nextT = now + 0.12;
       clearInterval(this.timer);
