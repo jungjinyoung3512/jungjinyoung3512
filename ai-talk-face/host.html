@@ -408,7 +408,7 @@
       this.step = 0;
       this.nextT = now + 0.12;
       clearInterval(this.timer);
-      this.timer = setInterval(() => this.pump(), 100);
+      this.timer = setInterval(() => this.pump(), 250);
       this.pump();
     },
     pump(){
@@ -416,7 +416,7 @@
       const ctx = Sound.ctx;
       if(this.nextT < ctx.currentTime - 0.10) this.nextT = ctx.currentTime + 0.03;
       let guard = 0;
-      while(this.nextT < ctx.currentTime + 0.55 && guard++ < 64){
+      while(this.nextT < ctx.currentTime + 1.20 && guard++ < 80){
         const t = this.nextT;
         try{ this.voice(this.step, t); }catch(e){}
         this.step++;
