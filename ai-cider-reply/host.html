@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#06090F">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>😈</text></svg>">
+<title>진행자 · AI 합법적 멕이기 번역기 | 강연 크리에이터 · 정진영</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  :root{
+    --bg:#06090F; --panel:#0C1320; --panel2:#111B2A;
+    --line:rgba(255,194,75,.14); --line2:rgba(255,255,255,.075);
+    --amber:#FFC24B; --amber2:#FF9E2C; --devil:#FF5B4A;
+    --mint:#5CE1B0; --sky:#7CC4FF;
+    --text:#EFF5FC; --muted:#8FA1B7; --dim:#55677D;
+    --sans:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Noto Sans KR",-apple-system,system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  html,body{margin:0;height:100%;background:#04070C;color:var(--text);font-family:var(--sans);
+    letter-spacing:-0.014em;word-break:keep-all;-webkit-font-smoothing:antialiased;overflow:hidden}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(90% 46% at 14% -10%, rgba(255,158,44,.17), rgba(255,158,44,0) 61%),
+      radial-gradient(80% 44% at 92% 6%, rgba(255,91,74,.12), rgba(255,91,74,0) 66%),
+      radial-gradient(100% 52% at 50% 112%, rgba(92,225,176,.07), rgba(92,225,176,0) 72%);}
+  .host{position:relative;z-index:1;height:100vh;height:100dvh;display:flex;flex-direction:column}
+
+  /* ---------- 헤더 ---------- */
+  .hbar{flex:0 0 auto;display:flex;align-items:center;gap:14px;padding:11px 24px 9px;border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(9,14,22,.95),rgba(5,8,13,.6));backdrop-filter:blur(6px)}
+  .brand{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .brand b{font-size:18px;font-weight:900;letter-spacing:-0.035em;display:flex;align-items:center;gap:8px;
+    color:#FFF6E3;text-shadow:0 0 24px rgba(255,158,44,.34);white-space:nowrap}
+  .brand span{font-size:11px;font-weight:800;color:var(--amber);letter-spacing:.05em}
+  .hspacer{flex:1}
+  .chip{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:800;color:#B9CBD6;
+    padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.035);white-space:nowrap}
+  .chip.room{font-family:var(--mono);letter-spacing:.12em;color:#FFE6B8;border-color:rgba(255,194,75,.30);background:rgba(255,194,75,.07)}
+  .chip i{width:7px;height:7px;border-radius:50%;background:var(--dim);transition:.3s}
+  .chip.on i{background:var(--mint);box-shadow:0 0 10px var(--mint)}
+
+  /* ---------- 컨트롤 ---------- */
+  .cbar{flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:9px 24px;border-bottom:1px solid rgba(255,255,255,.055);
+    background:rgba(6,10,16,.5)}
+  .cbtn{cursor:pointer;font-family:var(--sans);font-size:13.5px;font-weight:900;letter-spacing:-0.02em;
+    border-radius:11px;padding:10px 16px;border:1px solid transparent;display:flex;align-items:center;gap:8px;
+    transition:transform .1s,filter .18s,background .2s;user-select:none;white-space:nowrap}
+  .cbtn:active{transform:scale(.985)}
+  .cbtn small{font-size:9.5px;font-weight:800;opacity:.5;letter-spacing:0}
+  .cbtn.gold{background:linear-gradient(135deg,#FFE07A,var(--amber2));color:#241700;box-shadow:0 8px 22px rgba(255,158,44,.22)}
+  .cbtn.gold:hover{filter:brightness(1.05)}
+  .cbtn.ghost{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.13);color:#DCEAF3}
+  .cbtn.ghost:hover{background:rgba(255,255,255,.085)}
+  .cbtn.ghost.muted{color:#87979F;border-color:rgba(255,255,255,.09)}
+  .cbtn.danger{background:rgba(255,90,122,.08);border-color:rgba(255,90,122,.28);color:#FFC7D2}
+  .cbtn.danger:hover{background:rgba(255,90,122,.17)}
+  .cbtn.armed{background:rgba(255,90,122,.92);border-color:#FF9BAE;color:#2A0309}
+  .cbar .hint{margin-left:auto;font-size:11px;font-weight:700;color:#4C5D71;display:flex;align-items:center;gap:6px;
+    min-width:0;overflow:hidden;white-space:nowrap}
+  .cbar .hint b{color:#7D8FA5;font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:0}
+
+  /* ---------- 무대 ---------- */
+  main{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;padding:14px 24px 14px;gap:12px}
+
+  .heroline{flex:0 0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:20px}
+  .heroline h1{margin:0;font-size:clamp(20px,2.2vw,30px);font-weight:900;letter-spacing:-0.04em;line-height:1.2;
+    background:linear-gradient(100deg,#FFF0C8,#FFC24B 44%,#FF8A3D 86%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .heroline p{margin:5px 0 0;font-size:12.5px;font-weight:700;color:var(--muted)}
+  .totals{display:flex;align-items:flex-end;gap:18px;flex:none}
+  .tot{text-align:right}
+  .tot b{display:block;font-size:clamp(30px,3.4vw,46px);font-weight:900;letter-spacing:-0.05em;line-height:1;
+    color:#FFF3D6;text-shadow:0 0 26px rgba(255,158,44,.30);font-variant-numeric:tabular-nums}
+  .tot span{display:block;margin-top:4px;font-size:10.5px;font-weight:800;color:var(--dim);letter-spacing:.1em}
+
+  .grid{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1.12fr .88fr;gap:12px}
+  .panel{min-height:0;display:flex;flex-direction:column;border-radius:16px;padding:14px 16px 12px;
+    background:linear-gradient(160deg,rgba(17,27,42,.94),rgba(9,14,23,.94));border:1px solid var(--line2);
+    box-shadow:0 16px 40px rgba(0,0,0,.34);position:relative;overflow:hidden}
+  .panel::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(255,194,75,.45),transparent)}
+  .phead{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.06)}
+  .phead b{font-size:13px;font-weight:900;letter-spacing:-0.02em;color:#EDF4FC}
+  .phead span{margin-left:auto;font-size:10.5px;font-weight:800;color:var(--dim);letter-spacing:.02em}
+
+  /* TOP3 */
+  .top3{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:10px;padding-top:12px}
+  .rank{flex:1 1 0;min-height:0;display:flex;align-items:center;gap:clamp(12px,1.1vw,20px);padding:clamp(10px,1.1vh,18px) clamp(12px,1vw,18px);border-radius:14px;
+    background:linear-gradient(120deg,rgba(255,194,75,.06),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.06);
+    transition:opacity .3s}
+  .rank.empty{opacity:.34;background:repeating-linear-gradient(135deg,rgba(255,255,255,.02) 0 10px,rgba(255,255,255,.005) 10px 20px)}
+  .rank:nth-child(1){flex:1.5 1 0}
+  .rank:nth-child(1) .lb{font-size:clamp(18px,2.15vw,40px)}
+  .rank:nth-child(1) .ct{font-size:clamp(22px,2.1vw,38px)}
+  .rank:nth-child(1) .bar{height:clamp(9px,1vw,16px)}
+  .rank:nth-child(1) .no{width:clamp(40px,3.5vw,60px);height:clamp(40px,3.5vw,60px);font-size:clamp(18px,1.8vw,28px)}
+  .rank .no{flex:none;width:clamp(34px,2.9vw,48px);height:clamp(34px,2.9vw,48px);border-radius:11px;display:grid;place-items:center;
+    font-size:clamp(16px,1.45vw,23px);font-weight:900;color:#241700;background:linear-gradient(140deg,#FFE07A,#FFB02E);
+    box-shadow:0 6px 18px rgba(255,158,44,.20)}
+  .rank.r2 .no{background:linear-gradient(140deg,#E2ECF7,#AFC3D8);color:#1A2432;box-shadow:none}
+  .rank.r3 .no{background:linear-gradient(140deg,#F0C9A6,#C99A73);color:#2A1B10;box-shadow:none}
+  .rank .body{flex:1;min-width:0}
+  .rank .lb{font-size:clamp(15px,1.62vw,28px);font-weight:900;letter-spacing:-0.035em;color:#F2F7FD;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rank .bar{margin-top:clamp(7px,.9vh,12px);height:clamp(6px,.7vw,11px);border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden}
+  .rank .bar i{display:block;height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,var(--amber),var(--devil));transition:width .55s cubic-bezier(.2,.9,.2,1)}
+  .rank .ct{flex:none;font-family:var(--mono);font-size:clamp(16px,1.5vw,26px);font-weight:800;color:#FFD98E;min-width:3.2em;text-align:right}
+  .rank .ct em{font-style:normal;font-size:.58em;color:var(--dim);margin-left:3px}
+
+  /* 유형 비율 */
+  .stack{margin-top:14px;height:clamp(26px,2.2vw,40px);border-radius:10px;overflow:hidden;display:flex;background:rgba(255,255,255,.05);flex:none}
+  .stack i{display:block;height:100%;transition:width .55s cubic-bezier(.2,.9,.2,1)}
+  .stack .p{background:linear-gradient(180deg,#7CF0C5,#3FCF9C)}
+  .stack .s{background:linear-gradient(180deg,#FFD97A,#FFA82A)}
+  .stack .h{background:linear-gradient(180deg,#9AD4FF,#4FA6EE)}
+  .types{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:10px;padding-top:12px}
+  .ty{flex:1 1 0;min-height:0;display:flex;align-items:center;gap:clamp(11px,1vw,18px);padding:clamp(8px,.9vh,16px) clamp(11px,1vw,16px);border-radius:13px;border:1px solid rgba(255,255,255,.06);
+    background:rgba(255,255,255,.018)}
+  .ty .ic{flex:none;width:clamp(36px,3.1vw,54px);height:clamp(36px,3.1vw,54px);border-radius:11px;display:grid;place-items:center;font-size:clamp(17px,1.5vw,26px)}
+  .ty.p .ic{background:rgba(92,225,176,.13);border:1px solid rgba(92,225,176,.26)}
+  .ty.s .ic{background:rgba(255,194,75,.14);border:1px solid rgba(255,194,75,.28)}
+  .ty.h .ic{background:rgba(124,196,255,.13);border:1px solid rgba(124,196,255,.26)}
+  .ty .nm{flex:1;min-width:0}
+  .ty .nm b{display:block;font-size:clamp(14px,1.45vw,24px);font-weight:900;letter-spacing:-0.03em;color:#EFF5FC}
+  .ty .nm span{display:block;margin-top:3px;font-size:clamp(10px,.85vw,13px);font-weight:700;color:var(--dim)}
+  .ty .pc{flex:none;display:flex;align-items:baseline;justify-content:flex-end;gap:1px}
+  .ty .pc b{display:inline;font-size:clamp(24px,2.9vw,48px);font-weight:900;letter-spacing:-0.05em;line-height:1;font-variant-numeric:tabular-nums}
+  .ty.p .pc b{color:#8DF2CC}
+  .ty.s .pc b{color:#FFD98E}
+  .ty.h .pc b{color:#A8D8FF}
+  .ty .pc em{font-style:normal;font-size:clamp(11px,.85vw,15px);font-weight:800;color:var(--dim);letter-spacing:0}
+
+  /* 하단 */
+  .footrow{flex:0 0 auto;display:flex;align-items:center;gap:10px}
+  .cat{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:#93A5BA;
+    padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07)}
+  .cat b{font-family:var(--mono);font-size:11.5px;color:#E4EDF7}
+  .ticker{margin-left:auto;font-size:11.5px;font-weight:800;color:var(--dim);display:flex;align-items:center;gap:7px;min-width:0}
+  .ticker .dot{width:6px;height:6px;border-radius:50%;background:var(--devil);box-shadow:0 0 9px var(--devil);flex:none;animation:blink 1.6s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+  .ticker span{color:#9FB0C5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* ---------- QR 오버레이 ---------- */
+  .qrov{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;gap:clamp(24px,4vw,64px);
+    background:radial-gradient(70% 60% at 50% 40%,rgba(255,158,44,.16),rgba(4,7,12,.985) 66%),rgba(4,7,12,.99);
+    padding:40px;backdrop-filter:blur(4px)}
+  .qrov.on{display:flex}
+  .qrcard{background:#FFF8EA;border-radius:26px;padding:clamp(14px,1.6vw,24px);box-shadow:0 30px 90px rgba(255,158,44,.24);
+    animation:pop .34s cubic-bezier(.2,1.2,.4,1) both}
+  .qrcard img{display:block;width:min(52vh,420px);height:min(52vh,420px);border-radius:12px}
+  @keyframes pop{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
+  .qrtext{max-width:620px}
+  .qrtext .em{font-size:clamp(30px,3.2vw,44px);line-height:1}
+  .qrtext h2{margin:10px 0 0;font-size:clamp(28px,3.4vw,46px);font-weight:900;letter-spacing:-0.045em;line-height:1.16;
+    background:linear-gradient(100deg,#FFF3D2,#FFC24B 46%,#FF8A3D);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .qrtext p{margin:14px 0 0;font-size:clamp(14px,1.5vw,19px);font-weight:700;color:#CBD8E8}
+  .qrtext p b{color:var(--amber);font-weight:900}
+  .qrtext .url{margin-top:16px;display:inline-block;font-family:var(--mono);font-size:clamp(11px,1.05vw,14px);
+    color:#9FB2C8;padding:9px 14px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+  .qrtext .brandf{margin-top:20px;font-size:12.5px;font-weight:900;letter-spacing:.06em;color:#7D8FA5}
+  .qrov .close{position:absolute;right:26px;top:22px;font-size:12px;font-weight:800;color:#5E7085}
+</style>
+</head>
+<body>
+<div class="host">
+
+  <div class="hbar">
+    <div class="brand">
+      <b>😈 AI 합법적 멕이기 번역기</b>
+      <span>강연 크리에이터 · 정진영</span>
+    </div>
+    <div class="hspacer"></div>
+    <div class="chip room">JY27</div>
+    <div class="chip" id="netChip"><i></i><span id="netTx">연결 중</span></div>
+  </div>
+
+  <div class="cbar">
+    <button class="cbtn ghost" id="btnSnd">🔊 소리 ON <small>M</small></button>
+    <button class="cbtn danger" id="btnClear">🧹 기록 비우기 <small>R</small></button>
+    <button class="cbtn gold" id="btnQr">📱 QR 크게 보기 <small>Q</small></button>
+    <div class="hint">청중 입장 <b>jungjinyoung3512.github.io/jungjinyoung3512/ai-cider-reply/</b></div>
+  </div>
+
+  <main>
+    <div class="heroline">
+      <div>
+        <h1>지금 이 자리에서, 사이다가 만들어지고 있습니다</h1>
+        <p>청중이 상황을 고르고 답장을 복사하면 이 화면에 바로 쌓입니다 · 마음껏 멘트 치세요</p>
+      </div>
+      <div class="totals">
+        <div class="tot"><b id="totCopy">0</b><span>답장 복사</span></div>
+        <div class="tot"><b id="totPick">0</b><span>상황 선택</span></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="panel">
+        <div class="phead"><b>🔥 실시간 인기 상황 TOP 3</b><span>청중이 가장 많이 고른 순간</span></div>
+        <div class="top3" id="top3"></div>
+      </section>
+
+      <section class="panel">
+        <div class="phead"><b>🍋 사이다 답장 유형 비율</b><span>복사 기준</span></div>
+        <div class="stack">
+          <i class="p" id="stP" style="width:0"></i>
+          <i class="s" id="stS" style="width:0"></i>
+          <i class="h" id="stH" style="width:0"></i>
+        </div>
+        <div class="types">
+          <div class="ty p">
+            <div class="ic">🕊️</div>
+            <div class="nm"><b>정중하게 거절</b><span id="dsP">예의 바른 칼거절</span></div>
+            <div class="pc"><b id="pcP">0</b><em>%</em></div>
+          </div>
+          <div class="ty s">
+            <div class="ic">😈</div>
+            <div class="nm"><b>우아하게 멕이기</b><span id="dsS">웃으면서 긁는 한 방</span></div>
+            <div class="pc"><b id="pcS">0</b><em>%</em></div>
+          </div>
+          <div class="ty h">
+            <div class="ic">🛡️</div>
+            <div class="nm"><b>윗선·증거 방어막</b><span id="dsH">기록으로 남기는 안전핀</span></div>
+            <div class="pc"><b id="pcH">0</b><em>%</em></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="footrow">
+      <div class="cat">직장·상사 <b id="cWork">0</b></div>
+      <div class="cat">진상·고객 <b id="cCust">0</b></div>
+      <div class="cat">가족·부부 <b id="cFam">0</b></div>
+      <div class="ticker"><i class="dot"></i><span id="tick">청중이 고르면 여기에 실시간으로 표시됩니다</span></div>
+    </div>
+  </main>
+</div>
+
+<!-- QR -->
+<div class="qrov" id="qrov">
+  <div class="qrcard"><img id="qrimg" alt="청중 입장 QR"></div>
+  <div class="qrtext">
+    <div class="em">😈</div>
+    <h2>AI 합법적<br>멕이기 번역기</h2>
+    <p>폰 카메라로 <b>QR을 찍으면</b> 바로 시작됩니다<br>로그인·설치 없이 3초면 끝</p>
+    <span class="url">jungjinyoung3512.github.io/jungjinyoung3512/ai-cider-reply/</span>
+    <p class="brandf">강연 크리에이터 · 정진영</p>
+  </div>
+  <div class="close">ESC 닫기</div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+(function(){
+  "use strict";
+  var $ = function(id){ return document.getElementById(id); };
+
+  var ROOM_PATH = "rooms/ai-cider-reply/JY27";
+  var FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "977342156141",
+    appId: "1:977342156141:web:f9842fcc67a819ce621e64"
+  };
+  var QR_SRC = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAnYAAAJ2CAIAAABdNliuAAANrklEQVR4nO3dsW0zRxRGUctQ6ApciPuPXYgDxQ6Y0R0YE/Di/W/2nFggl8sVLyb6vt6vn98AgE/7ffoCAOBOEgsACYkFgITEAkBCYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJAQmIBICGxAJCQWABISCwAJCQWABISCwAJiQWAhMQCQEJiASAhsQCQkFgASEgsACQkFgASEgsACYkFgITEAkBCYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJAQmIBICGxAJCQWABISCwAJCQWABISCwAJiQWAhMQCQEJiASAhsQCQkFgASEgsACQkFgASEgsACYkFgITEAkBCYgEgIbEAkJBYAEh8T1/AqT/+/Gv6Ehb495+/D//y/H7Ovua54gkprvPclk80+7+55fk857fuxOx3dM4pFgASEgsACYkFgITEAkBCYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJAQmIBILFmaefclgWGc1uWN4rNk9l3t0f0Wfd9oll+6359TrEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJAQmIBICGxAJCQWABISCwAJCQWABISCwCJC5d2zt23OjJrdj9ni/s+0bnZlaFzW67znN+6KU6xAJCQWABISCwAJCQWABISCwAJiQWAhMQCQEJiASAhsQCQkFgASEgsACQkFgASEgsAiUcv7TzZ+fbFlv2c2S2Rc1uu81zxLG156uD/OcUCQEJiASAhsQCQkFgASEgsACQkFgASEgsACYkFgITEAkBCYgEgIbEAkJBYAEhILAAkLO081OySiR2VKbN3qXhC7ntNbuIUCwAJiQWAhMQCQEJiASAhsQCQkFgASEgsACQkFgASEgsACYkFgITEAkBCYgEgIbEAkHj00s6Tty9mV3HOFd/RfTs/WzaOZp+lJ3vyb90sp1gASEgsACQkFgASEgsACYkFgITEAkBCYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYDEhUs71jxOnN+lYkdl9jXPbfnshSd/9i3cpV+fUywAJCQWABISCwAJiQWAhMQCQEJiASAhsQCQkFgASEgsACQkFgASEgsACYkFgITEAkDi6/36mb4GWG92Eei+TZ7C7HUW3zu/PqdYAEhILAAkJBYAEhILAAmJBYCExAJAQmIBICGxAJCQWABISCwAJCQWABISCwAJiQWAxPf0BZx68pLJrGKfZHZ15MnXed/WzZbX3PILdt+zNMspFgASEgsACYkFgITEAkBCYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJAQmIBILFmaWfWk9dmzj15o+O+J2TLt7llk2eL+/43ZznFAkBCYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJAQmIBICGxAJCQWABISCwAJL7er5/pa/iw+5Y3Zj9RYcud58SW1ab7/jvuc9//u1MsACQkFgASEgsACYkFgITEAkBCYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJA4nv6Ak4V2xdbNjq2bErM2rKwdN+WSPHZt9z52U2ewn2faJZTLAAkJBYAEhILAAmJBYCExAJAQmIBICGxAJCQWABISCwAJCQWABISCwAJiQWAhMQCQOLr/fqZvoYF7tvouG87aPY6Z/dztnxH99nyy3Dfk7zl+XSKBYCExAJAQmIBICGxAJCQWABISCwAJCQWABISCwAJiQWAhMQCQEJiASAhsQCQkFgASKxZ2tmyPlG8+7kt6z2FLZsnhS2rI1uezy3XeW7L7+eWJ/mcUywAJCQWABISCwAJiQWAhMQCQEJiASAhsQCQkFgASEgsACQkFgASEgsACYkFgITEAkBizdLOfZ68fbHls8+++5bXPLdlR2XLd3Ruy2bUuS3PklMsACQkFgASEgsACYkFgITEAkBCYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJAYs3SzuxOxbkt13ludqNjyzLMliWT+566J+8RbflE57Y8n+ecYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJAQmIBICGxAJCQWABISCwAJCQWABLf0xdw6r79nNmNjuI1t6zNbFHcecswn1X8x235RPetihWcYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJAQmIBICGxAJCQWABISCwAJCQWABJf79fP9DV82Ja9l9mNji3LRbO2bMjct+80a8u3WdhynVs4xQJAQmIBICGxAJCQWABISCwAJCQWABISCwAJiQWAhMQCQEJiASAhsQCQkFgASEgsACS+py9g0uw+yezajMWVE1ZHTty3mzT77lsWlgr3/cc5xQJAQmIBICGxAJCQWABISCwAJCQWABISCwAJiQWAhMQCQEJiASAhsQCQkFgASEgsACQevbRzbsuqw7kt20H33flZxf2cXUe5b0Nm9jX5LKdYAEhILAAkJBYAEhILAAmJBYCExAJAQmIBICGxAJCQWABISCwAJCQWABISCwAJiQWAxNf79TN9DWPu26mY3aXZsrhy/u6zT8h9K0NbnhBO3Pd8FpxiASAhsQCQkFgASEgsACQkFgASEgsACYkFgITEAkBCYgEgIbEAkJBYAEhILAAkJBYAEt/TF/B5s4srW17z3Pm7b7nOwpaNo8KTV3G2rM1s+QW7j1MsACQkFgASEgsACYkFgITEAkBCYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJA4sKlncKWHZUtmyez17nl2zz35H2nQvGJtqwhbfm12bLe4xQLAAmJBYCExAJAQmIBICGxAJCQWABISCwAJCQWABISCwAJiQWAhMQCQEJiASAhsQCQWLO0c98Cw5Ov875v037Or292P2f2zm/57PdxigWAhMQCQEJiASAhsQCQkFgASEgsACQkFgASEgsACYkFgITEAkBCYgEgIbEAkJBYAEisWdqZ3am4b5/kvvu55TXPPflZKr6j2c2owpYFmydv8jjFAkBCYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJAQmIBICGxAJCQWABISCwAJL7er5/pazgyu9Xw5L2X+959yxNSvPu5++7SufvuZ+G+VZyCUywAJCQWABISCwAJiQWAhMQCQEJiASAhsQCQkFgASEgsACQkFgASEgsACYkFgITEAkDiwqWdc09exZk1uxBy7r6dn8KWTZ77fkO2ePJvnVMsACQkFgASEgsACYkFgITEAkBCYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJA4nv6Aj5vdoHBnsaUYvNky7e5ZTNqyzNfXOeWhaUty0VbOMUCQEJiASAhsQCQkFgASEgsACQkFgASEgsACYkFgITEAkBCYgEgIbEAkJBYAEhILAAkLlzaObdlKeK+JZNzWxZsOHHfzs/sutR97vutc4oFgITEAkBCYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJAQmIBICGxAJCQWABIrFnaKXYVtmw13LcQct+Oyn3fUWHL916Yvc4t/+/3cYoFgITEAkBCYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJAQmIBICGxAJCQWABIrFnauW91pLBl0aLYUbnvCZndpSnu55bloi2rOLPX+eTv6JxTLAAkJBYAEhILAAmJBYCExAJAQmIBICGxAJCQWABISCwAJCQWABISCwAJiQWAhMQCQGLN0s65LQsM52Y3ZJ68OnL+7nZ+Pmv2fj75P27WfZ/dKRYAEhILAAmJBYCExAJAQmIBICGxAJCQWABISCwAJCQWABISCwAJiQWAhMQCQEJiASBx4dLOOXsaN3nyt7ll6+a+u7Tl3WfN7mXNcooFgITEAkBCYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJAQmIBICGxAJCQWABIPHpphxPFSsbsa56bffdzs/sks9/7rC3PZ2HLL8Msp1gASEgsACQkFgASEgsACYkFgITEAkBCYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCEpZ2H2rJTcd9+TnHnZ3d+Zt23zTL7hGy5S1s4xQJAQmIBICGxAJCQWABISCwAJCQWABISCwAJiQWAhMQCQEJiASAhsQCQkFgASEgsACQevbRjU+JEsdExu3VzrrjOLas4T/6O/DJ81pZnvuAUCwAJiQWAhMQCQEJiASAhsQCQkFgASEgsACQkFgASEgsACYkFgITEAkBCYgEgIbEAkPh6v36mr+HIk7cazj15dWTLE7LlfhZmn7r7FoGKd5913++SUywAJCQWABISCwAJiQWAhMQCQEJiASAhsQCQkFgASEgsACQkFgASEgsACYkFgITEAkBizdIOAOziFAsACYkFgITEAkBCYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJAQmIBICGxAJCQWABISCwAJCQWABISCwAJiQWAhMQCQEJiASAhsQCQkFgASEgsACQkFgASEgsACYkFgITEAkBCYgEgIbEAkJBYAEhILAAkJBYAEhILAAmJBYCExAJAQmIBICGxAJCQWABISCwAJCQWABISCwAJiQWAhMQCQEJiASAhsQCQkFgASEgsACQkFgASEgsACYkFgITEAkBCYgEgIbEAkJBYAEhILAAk/gNfGa/iAIhrYwAAAABJRU5ErkJggg==";
+
+  var SHORT = {
+    w1:"금요일 5시 반 '월요일까지'", w2:"주말 카톡 '잠깐 통화 돼?'", w3:"회식 참석 강요",
+    w4:"'젊으니까' 잡무 떠넘기기", w5:"아이디어 가로채기",
+    c1:"무리한 할인 요구", c2:"담당자 바꿔달라", c3:"개봉 후 환불 요구",
+    c4:"자정·마감 후 문의", c5:"감정적 항의·갑질",
+    f1:"명절 집안일 떠넘기기", f2:"'알아서 해' 결정 떠넘기기", f3:"잔소리·나이 지적",
+    f4:"돈 부탁", f5:"'왜 카톡 안 읽어' 압박", free:"✏️ 직접 입력한 상황"
+  };
+
+  var stats = { situations:{}, copies:{}, cats:{}, copies_total:0, picks_total:0 };
+  var prev = { copies:0, picks:0, types:{}, sids:{} };
+  var soundOn = true, ctx = null;
+  var armed = false, armTimer = null;
+
+  /* ---------- 사운드 (진행자 노트북 전용) ---------- */
+  function audio(){
+    if(!soundOn) return null;
+    try{
+      if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+      if(ctx.state === "suspended") ctx.resume();
+      return ctx;
+    }catch(e){ return null; }
+  }
+  var lastBeep = 0;
+  function beep(kind){
+    var c = audio(); if(!c) return;
+    var now = Date.now();
+    if(now - lastBeep < 90) return;
+    lastBeep = now;
+    var freqs = kind === "polite" ? [880] : kind === "savage" ? [660, 990] : kind === "shield" ? [520, 700] : [440, 660];
+    freqs.forEach(function(f, i){
+      var o = c.createOscillator(), g = c.createGain();
+      o.type = "sine"; o.frequency.value = f;
+      var t0 = c.currentTime + i * 0.085;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.075, t0 + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.17);
+      o.connect(g); g.connect(c.destination);
+      o.start(t0); o.stop(t0 + 0.19);
+    });
+  }
+  window.addEventListener("pointerdown", function(){ audio(); }, { once:true });
+
+  /* ---------- 렌더 ---------- */
+  function num(v){ return (typeof v === "number" && isFinite(v)) ? v : 0; }
+  function render(){
+    var sids = Object.keys(stats.situations);
+    var ranked = sids.map(function(k){ return { id:k, n:num(stats.situations[k]) }; })
+                     .sort(function(a,b){ return b.n - a.n; });
+    ranked = ranked.filter(function(r){ return r.n > 0; }).slice(0, 3);
+    var maxN = ranked.length ? ranked[0].n : 1;
+    var rows = "";
+    for(var i=0;i<3;i++){
+      var r = ranked[i];
+      var cls = "rank" + (i===1?" r2":"") + (i===2?" r3":"") + (r ? "" : " empty");
+      rows += '<div class="' + cls + '">' +
+        '<div class="no">' + (i+1) + '</div>' +
+        '<div class="body"><div class="lb">' + (r ? (SHORT[r.id] || r.id) : "아직 없음") + '</div>' +
+        '<div class="bar"><i style="width:' + (r ? Math.max(6, Math.round(r.n / maxN * 100)) : 0) + '%"></i></div></div>' +
+        '<div class="ct">' + (r ? r.n : 0) + '<em>회</em></div></div>';
+    }
+    $("top3").innerHTML = rows;
+
+    var cp = num(stats.copies.polite), cs = num(stats.copies.savage), ch = num(stats.copies.shield);
+    var sum = cp + cs + ch;
+    function pct(v){ return sum ? Math.round(v / sum * 100) : 0; }
+    $("pcP").textContent = pct(cp);
+    $("pcS").textContent = pct(cs);
+    $("pcH").textContent = pct(ch);
+    $("dsP").textContent = cp + "건 · 예의 바른 칼거절";
+    $("dsS").textContent = cs + "건 · 웃으면서 긁는 한 방";
+    $("dsH").textContent = ch + "건 · 기록으로 남기는 안전핀";
+    var wp = sum ? (cp / sum * 100) : 0, ws = sum ? (cs / sum * 100) : 0, wh = sum ? (ch / sum * 100) : 0;
+    $("stP").style.width = wp + "%";
+    $("stS").style.width = ws + "%";
+    $("stH").style.width = wh + "%";
+
+    var total = num(stats.copies_total) || sum;
+    var picks = num(stats.picks_total) || Object.keys(stats.situations).reduce(function(a,k){ return a + num(stats.situations[k]); }, 0);
+    $("totCopy").textContent = total;
+    $("totPick").textContent = picks;
+
+    $("cWork").textContent = num(stats.cats.work);
+    $("cCust").textContent = num(stats.cats.customer);
+    $("cFam").textContent = num(stats.cats.family);
+
+    /* 소리: 증가 감지 */
+    if(sum > prev.copies){
+      var diff = { polite: cp - num(prev.types.polite), savage: cs - num(prev.types.savage), shield: ch - num(prev.types.shield) };
+      var kind = diff.savage >= diff.polite && diff.savage >= diff.shield ? "savage"
+               : diff.shield >= diff.polite ? "shield" : "polite";
+      if(prev.copies > 0) beep(kind);
+    } else if(picks > prev.picks && prev.picks > 0){
+      beep("pick");
+    }
+    prev.copies = sum; prev.picks = picks;
+    prev.types = { polite:cp, savage:cs, shield:ch };
+  }
+
+  /* ---------- 연결 ---------- */
+  var db = null;
+  function connect(){
+    if(!(window.firebase && firebase.initializeApp)){ offline("Firebase 미로드 · 청중 앱은 정상"); return; }
+    try{
+      firebase.initializeApp(FB_CONFIG);
+      db = firebase.database();
+      db.ref(".info/connected").on("value", function(s){
+        var on = !!(s && s.val());
+        $("netChip").classList.toggle("on", on);
+        $("netTx").textContent = on ? "실시간 연결" : "재연결 중";
+        if(!on) $("tick").textContent = "연결 대기 중 · 청중 앱은 각자 정상 동작합니다";
+      });
+      var base = db.ref(ROOM_PATH);
+      base.on("value", function(snap){
+        var v = snap.val() || {};
+        stats.situations = v.situations || {};
+        stats.copies = v.copies || {};
+        stats.cats = v.cats || {};
+        stats.copies_total = num(v.copies_total) || 0;
+        stats.picks_total = num(v.picks_total) || 0;
+        render();
+        if(v.last && v.last.t){
+          $("tick").textContent = "지금 막 · " + v.last.t;
+        }
+      }, function(err){
+        offline("DB 읽기 실패: " + (err && err.message ? err.message : "권한/네트워크"));
+      });
+    }catch(e){ offline("초기화 실패 · 청중 앱은 정상"); }
+  }
+  function offline(msg){
+    $("netChip").classList.remove("on");
+    $("netTx").textContent = "오프라인";
+    $("tick").textContent = msg || "오프라인";
+    render();
+  }
+
+  /* ---------- 컨트롤 ---------- */
+  $("btnSnd").addEventListener("click", function(){
+    soundOn = !soundOn;
+    this.classList.toggle("muted", !soundOn);
+    this.innerHTML = soundOn ? "🔊 소리 ON <small>M</small>" : "🔇 음소거 <small>M</small>";
+    if(soundOn){ audio(); beep("savage"); }
+  });
+
+  $("btnClear").addEventListener("click", function(){
+    var b = this;
+    if(!armed){
+      armed = true;
+      b.classList.add("armed");
+      b.innerHTML = "정말 비울까요? <small>한 번 더</small>";
+      clearTimeout(armTimer);
+      armTimer = setTimeout(function(){
+        armed = false; b.classList.remove("armed");
+        b.innerHTML = "🧹 기록 비우기 <small>R</small>";
+      }, 4000);
+      return;
+    }
+    armed = false; clearTimeout(armTimer);
+    b.classList.remove("armed");
+    b.innerHTML = "🧹 기록 비우기 <small>R</small>";
+    if(db){
+      try{ db.ref(ROOM_PATH).remove().then(function(){ $("tick").textContent = "기록을 비웠습니다 · 새로 시작하세요"; }); }catch(e){}
+    } else { $("tick").textContent = "오프라인 · 비울 기록이 없습니다"; }
+  });
+
+  function qrToggle(show){
+    $("qrov").classList.toggle("on", show);
+  }
+  $("btnQr").addEventListener("click", function(){ qrToggle(!$("qrov").classList.contains("on")); });
+  $("qrov").addEventListener("click", function(){ qrToggle(false); });
+  document.addEventListener("keydown", function(e){
+    var k = (e.key || "").toLowerCase();
+    if(k === "escape"){ qrToggle(false); return; }
+    if(k === "m"){ $("btnSnd").click(); }
+    if(k === "q"){ $("btnQr").click(); }
+    if(k === "r"){ $("btnClear").click(); }
+  });
+
+  $("qrimg").src = QR_SRC;
+  render();
+  connect();
+})();
+</script>
+</body>
+</html>
