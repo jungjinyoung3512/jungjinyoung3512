@@ -819,12 +819,13 @@
         "players": null,
         "events": null,
         "state": {
-          phase: "lobby", watch: "board", round: 0, left: 0, roundSec: Number(state.roundSec)||45,
-          mode: state.mode || "auto", speed: state.speed || "normal", clearedAt: now
+          phase: "lobby", watch: "board", round: 0, left: 0, roundSec: 45,
+          mode: "auto", speed: "normal", clearedAt: now
         }
       });
       players = {}; events = [];
       state.phase = "lobby"; state.watch = "board"; state.left = 0; state.round = 0; state.startedAt = null;
+      state.mode = "auto"; state.speed = "normal"; state.roundSec = 45;
       SND.setMood("board");
       toast("방을 비웠습니다 · 학생은 다시 입장해 주세요");
       renderAll();
