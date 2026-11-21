@@ -53,6 +53,9 @@
     transition:.2s;user-select:none}
   .snd:hover{background:rgba(61,255,168,.16)}
   .snd.muted{color:#93A4AE;border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.04)}
+  .snd.bgm{color:#FFE7B8;border-color:rgba(245,196,120,.34);background:rgba(245,196,120,.10)}
+  .snd.bgm:hover{background:rgba(245,196,120,.18)}
+  .snd.bgm.muted{color:#93A4AE;border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.04)}
 
   /* 컨트롤 줄 */
   .cbar{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:10px 26px;border-bottom:1px solid rgba(255,255,255,.055);
@@ -255,6 +258,7 @@
     <div class="chip room" id="roomChip">ROOM JY11</div>
     <div class="chip" id="netChip"><i></i><span id="netTxt">연결 중</span></div>
     <div class="snd" id="btnSound">🔊 소리 ON</div>
+    <div class="snd bgm muted" id="btnBgm" title="잔잔한 배경음악 (단축키 B)">🎵 BGM OFF</div>
   </header>
 
   <div class="cbar">
@@ -264,6 +268,7 @@
     <button class="cbtn ghost" id="btnQR" type="button">📱 QR 입장</button>
     <div class="hint">
       <span><kbd>R</kbd>결과보기</span>
+      <span><kbd>B</kbd>BGM</span>
       <span><kbd>ESC</kbd>닫기</span>
     </div>
   </div>
@@ -507,6 +512,125 @@
     }
   };
 
+  /* ================= 배경음악 (BGM) =================
+     지친 마음을 천천히 돌아보는 11문항 진단의 결에 맞춘
+     62~68BPM 로파이/피아노풍 앰비언트 루프 (외부 MP3 없이 Web Audio 합성)
+     · 진행자 노트북에서만 재생, 효과음(Sound)과 독립적으로 켜고 끈다 */
+  const Bgm = {
+    on:false, ctx:null, bus:null, lp:null, timer:null, nextT:0, step:0, bpm:66, target:0.68,
+    /* 4마디 루프: D → Bm7 → Gmaj7 → Asus4 (따뜻하고 낮은 패드) */
+    CHORDS:[
+      [146.83, 185.00, 220.00, 329.63],
+      [123.47, 146.83, 185.00, 293.66],
+      [ 98.00, 123.47, 146.83, 246.94],
+      [110.00, 146.83, 164.81, 220.00]
+    ],
+    /* 드문드문 떨어지는 벨/피아노 톤 (64스텝 = 4마디 루프 안의 위치) */
+    MELODY:[
+      [0,587.33],[3,440.00],[6,493.88],[10,369.99],
+      [16,329.63],[19,440.00],[22,369.99],[26,293.66],
+      [32,493.88],[35,587.33],[38,440.00],[42,369.99],
+      [48,329.63],[51,369.99],[54,293.66],[58,220.00]
+    ],
+    ensure(){
+      if(!this.ctx){
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if(!AC) return null;
+        this.ctx = new AC();
+        this.bus = this.ctx.createGain();
+        this.bus.gain.value = 0;
+        const lp = this.ctx.createBiquadFilter();
+        lp.type = "lowpass"; lp.frequency.value = 2400; lp.Q.value = 0.35;
+        this.lp = lp;
+        lp.connect(this.bus);
+        this.bus.connect(this.ctx.destination);
+      }
+      if(this.ctx.state === "suspended") this.ctx.resume().catch(()=>{});
+      return this.ctx;
+    },
+    pad(t, freqs, dur){
+      const ctx = this.ctx;
+      freqs.forEach((f, k) => {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = k === 0 ? "sine" : "triangle";
+        o.frequency.value = f;
+        o.detune.value = (k % 2 ? 4 : -3);
+        const peak = k === 0 ? 0.070 : 0.040;
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.linearRampToValueAtTime(peak, t + dur * 0.34);
+        g.gain.linearRampToValueAtTime(peak * 0.72, t + dur * 0.72);
+        g.gain.linearRampToValueAtTime(0.0001, t + dur + 0.7);
+        o.connect(g);
+        if(ctx.createStereoPanner){
+          const pn = ctx.createStereoPanner();
+          pn.pan.value = -0.32 + k * 0.21;
+          g.connect(pn); pn.connect(this.lp);
+        } else {
+          g.connect(this.lp);
+        }
+        o.start(t); o.stop(t + dur + 0.9);
+      });
+    },
+    bell(t, freq){
+      const ctx = this.ctx;
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = "sine"; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(0.050, t + 0.07);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 2.7);
+      const o2 = ctx.createOscillator(), g2 = ctx.createGain();
+      o2.type = "sine"; o2.frequency.value = freq * 2;
+      g2.gain.setValueAtTime(0.0001, t);
+      g2.gain.linearRampToValueAtTime(0.014, t + 0.05);
+      g2.gain.exponentialRampToValueAtTime(0.0001, t + 1.5);
+      o.connect(g); g.connect(this.lp);
+      o2.connect(g2); g2.connect(this.lp);
+      o.start(t); o.stop(t + 2.9);
+      o2.start(t); o2.stop(t + 1.7);
+    },
+    paint(t, i){
+      const eighth = 30 / this.bpm;
+      if(i % 16 === 0) this.pad(t, this.CHORDS[(i / 16) % 4], 16 * eighth);
+      for(let m = 0; m < this.MELODY.length; m++){
+        if(this.MELODY[m][0] === i){ this.bell(t, this.MELODY[m][1]); break; }
+      }
+    },
+    sched(){
+      const ctx = this.ctx; if(!ctx) return;
+      const eighth = 30 / this.bpm;
+      if(this.nextT < ctx.currentTime - 0.25) this.nextT = ctx.currentTime + 0.05;
+      while(this.nextT < ctx.currentTime + 1.2){
+        this.paint(this.nextT, this.step % 64);
+        this.nextT += eighth;
+        this.step++;
+      }
+    },
+    start(){
+      if(!this.ensure()){ toast("이 브라우저에서는 배경음악을 켤 수 없습니다"); return false; }
+      this.on = true;
+      this.bus.gain.cancelScheduledValues(this.ctx.currentTime);
+      this.bus.gain.setTargetAtTime(this.target, this.ctx.currentTime, 1.4);
+      this.nextT = this.ctx.currentTime + 0.12;
+      this.step = 0;
+      if(this.timer) clearInterval(this.timer);
+      this.timer = setInterval(() => this.sched(), 250);
+      this.sched();
+      return true;
+    },
+    stop(){
+      this.on = false;
+      if(this.timer){ clearInterval(this.timer); this.timer = null; }
+      if(this.ctx && this.bus){
+        this.bus.gain.cancelScheduledValues(this.ctx.currentTime);
+        this.bus.gain.setTargetAtTime(0, this.ctx.currentTime, 0.45);
+      }
+    },
+    toggle(){
+      if(this.on){ this.stop(); return false; }
+      this.start(); return this.on;
+    }
+  };
+
   /* ================= Firebase ================= */
   let db = null, roomRef = null;
 
@@ -708,6 +832,20 @@
   $("qrClose").addEventListener("click", () => $("qrModal").classList.remove("on"));
   $("qrModal").addEventListener("click", e => { if(e.target === $("qrModal")) $("qrModal").classList.remove("on"); });
 
+  function paintBgmBtn(on){
+    const b = $("btnBgm");
+    b.classList.toggle("muted", !on);
+    b.textContent = on ? "🎵 BGM ON" : "🎵 BGM OFF";
+    document.body.setAttribute("data-bgm", on ? "on" : "off");
+  }
+  paintBgmBtn(false);
+
+  $("btnBgm").addEventListener("click", () => {
+    const on = Bgm.toggle();
+    paintBgmBtn(on);
+    toast(on ? "배경음악 켜짐 · 잔잔한 피아노 (단축키 B)" : "배경음악 꺼짐");
+  });
+
   $("btnSound").addEventListener("click", () => {
     const on = !Sound.on;
     Sound.setOn(on);
@@ -721,6 +859,7 @@
     if(e.key === "Escape"){ $("qrModal").classList.remove("on"); return; }
     if(e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
     const k = e.key.toLowerCase();
+    if(k === "b"){ $("btnBgm").click(); return; }
     if(k === "r") reveal();
   });
 
