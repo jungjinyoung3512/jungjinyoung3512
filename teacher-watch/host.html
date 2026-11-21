@@ -884,7 +884,7 @@
     }
     main.className = cls;
     $("bIcon").textContent = icon;
-    $("bText").textContent = text;
+    $("bText").innerHTML = (text === "칠판 보는 중 — 지금 눌러!") ? "칠판 보는 중<br>— 지금 눌러!" : esc(text);
     $("bSub").textContent = sub;
 
     const sec = Number(state.roundSec) || 45;
