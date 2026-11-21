@@ -736,8 +736,9 @@
             <button class="mini" id="btnFold">👀 접기</button>
           </div>
         </div>`;
-      $("btnFold").onclick = ()=>{ folded = true; paint(true); };
     }
+    const foldBtn = $("btnFold");
+    if(foldBtn) foldBtn.onclick = ()=>{ folded = true; paint(true); };
     const q = String(me.mission || "");
     const el = $("qText");
     if(el && el.textContent !== '"' + q + '"'){
