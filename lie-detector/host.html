@@ -524,6 +524,13 @@
       $("heroTtl").textContent = newest.t;
       $("heroLine").textContent = newest.l;
       $("heroPct").innerHTML = newest.pct + "<small>%</small>";
+    } else {
+      hero.className = "hero";
+      $("heroEm").textContent = "🕵️";
+      $("heroWho").innerHTML = "<b>대기 중</b><em>부부·가족</em>";
+      $("heroTtl").textContent = "첫 스캔을 기다립니다";
+      $("heroLine").textContent = "폰으로 QR을 찍으면 결과가 여기에 뜹니다";
+      $("heroPct").textContent = "–";
     }
 
     // 리스트 (최신순, 최대 6개, 히어로 제외)
@@ -563,7 +570,7 @@
     if(!roomRef){ toast("연결이 없어 비울 수 없습니다"); return; }
     if(!confirm("지금까지 쌓인 스캔 기록을 모두 지웁니다.\n정말 비울까요?")) return;
     roomRef.child("scans").remove()
-      .then(()=>{ known.clear(); primed = false; allRows = []; render([]); toast("기록을 비웠습니다"); })
+      .then(()=>{ known.clear(); allRows = []; render([]); toast("기록을 비웠습니다"); })
       .catch(()=>toast("비우기 실패 — 연결을 확인하세요"));
   });
 
