@@ -213,6 +213,7 @@
 
   <div class="cbar">
     <button class="cbtn" id="btnSound" type="button">🔊 소리 ON</button>
+    <button class="cbtn ghost" id="btnBgm" type="button">🎵 BGM ON</button>
     <button class="cbtn ghost" id="btnClear" type="button">🧹 기록 비우기</button>
     <button class="cbtn ghost" id="btnQR" type="button">📱 QR 크게 보기</button>
     <button class="cbtn danger" id="btnSiren" type="button">🚨 사이렌 테스트</button>
@@ -296,7 +297,7 @@
 </div>
 
 <div class="toast" id="toast"></div>
-<div class="hint">S 소리 · C 비우기 · Q QR · T 사이렌</div>
+<div class="hint">S 소리 · B BGM · C 비우기 · Q QR · T 사이렌</div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
@@ -420,9 +421,102 @@
     }
   };
 
-  // 자동재생 정책: 첫 사용자 동작에서 오디오 열기
+  /* ================= BGM (진행자 노트북 전용 · 합성 루프) ================= */
+  const Bgm = {
+    enabled:true, playing:false, gain:null, timer:null, nextT:0, step:0, voices:0, bpm:86, loop:32,
+    spb(){ return 60 / this.bpm / 4; },
+    get ctxState(){ return Sound.ctx ? Sound.ctx.state : "none"; },
+    out(){
+      if(!Sound.iface()) return null;
+      if(!this.gain){
+        const g = Sound.ctx.createGain();
+        g.gain.value = 0.0001;
+        const lp = Sound.ctx.createBiquadFilter();
+        lp.type = "lowpass"; lp.frequency.value = 4200; lp.Q.value = 0.4;
+        g.connect(lp); lp.connect(Sound.master);
+        this.gain = g;
+      }
+      return this.gain;
+    },
+    tone(t, freq, dur, type, amp, glide){
+      const ctx = Sound.ctx, o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = type || "sine";
+      o.frequency.setValueAtTime(freq, t);
+      if(glide) o.frequency.exponentialRampToValueAtTime(Math.max(30, glide), t + dur * 0.82);
+      const atk = Math.min(0.08, dur * 0.3);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(Math.max(0.0002, amp), t + atk);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(this.gain);
+      o.start(t); o.stop(t + dur + 0.06);
+      this.voices++;
+    },
+    /* 예능 거짓말 탐지기: 두근거리는 심장박동 + 미스터리 신스 펄스 */
+    voice(step, t){
+      const s = step % this.loop, spb = this.spb();
+      // 심장박동 (4스텝 주기 러브-덥)
+      if(s % 4 === 0) this.tone(t, 66, 0.26, "sine", 0.175, 40);
+      if(s % 4 === 1) this.tone(t, 55, 0.20, "sine", 0.095, 36);
+      // 긴장감 있는 신스 펄스 (A단조 아르페지오)
+      const P = { 0:220.00, 6:261.63, 10:329.63, 14:293.66, 18:220.00, 22:261.63, 26:392.00, 30:329.63 };
+      const f = P[s];
+      if(f){
+        this.tone(t, f, 0.60, "triangle", 0.030);
+        this.tone(t + 0.012, f * 2, 0.34, "sine", 0.011);
+      }
+      // 저음 드론
+      if(s === 0) this.tone(t, 55, spb * 32 - 0.25, "sine", 0.038);
+      if(s === 16) this.tone(t, 65.41, spb * 16 - 0.25, "sine", 0.028);
+      // 스파이 서스펜스 하이 틱
+      if(s === 30) this.tone(t, 1567.98, 0.10, "sine", 0.012);
+    },
+    start(){
+      if(!this.enabled || !Sound.on) return;
+      if(!this.out()) return;
+      if(Sound.ctx.state !== "running") Sound.ctx.resume().catch(()=>{});
+      if(this.playing) return;
+      this.playing = true;
+      const now = Sound.ctx.currentTime, gn = this.gain.gain;
+      gn.cancelScheduledValues(now);
+      gn.setValueAtTime(Math.max(0.0001, gn.value), now);
+      gn.exponentialRampToValueAtTime(0.85, now + 1.1);
+      this.step = 0;
+      this.nextT = now + 0.12;
+      clearInterval(this.timer);
+      this.timer = setInterval(() => this.pump(), 100);
+      this.pump();
+    },
+    pump(){
+      if(!this.playing || !Sound.ctx) return;
+      const ctx = Sound.ctx;
+      if(this.nextT < ctx.currentTime - 0.10) this.nextT = ctx.currentTime + 0.03;
+      let guard = 0;
+      while(this.nextT < ctx.currentTime + 0.50 && guard++ < 64){
+        const t = this.nextT;
+        try{ this.voice(this.step, t); }catch(e){}
+        this.step++;
+        this.nextT = t + this.spb();
+      }
+    },
+    stop(){
+      this.playing = false;
+      clearInterval(this.timer); this.timer = null;
+      if(!this.gain || !Sound.ctx) return;
+      const now = Sound.ctx.currentTime, dead = this.gain;
+      this.gain = null;
+      try{
+        dead.gain.cancelScheduledValues(now);
+        dead.gain.setValueAtTime(Math.max(0.0001, dead.gain.value), now);
+        dead.gain.exponentialRampToValueAtTime(0.0001, now + 0.20);
+      }catch(e){}
+      setTimeout(() => { try{ dead.disconnect(); }catch(e){} }, 380);
+    }
+  };
+  window.__bgm = Bgm; // 동작 검증용
+
+  // 자동재생 정책: 첫 사용자 동작에서 오디오를 열고 BGM을 시작
   ["click","touchstart","keydown"].forEach(ev =>
-    window.addEventListener(ev, () => Sound.iface(), { once:true, passive:true })
+    window.addEventListener(ev, () => { Sound.iface(); if(Sound.on) Bgm.start(); }, { once:true, passive:true })
   );
 
   /* ================= Firebase ================= */
@@ -562,8 +656,16 @@
     Sound.iface();
     $("btnSound").textContent = on ? "🔊 소리 ON" : "🔇 소리 OFF";
     $("btnSound").classList.toggle("off", !on);
-    if(on) Sound.pass();
-    toast(on ? "노트북 소리 ON — 스캔마다 효과음이 납니다" : "노트북 소리 OFF");
+    if(on){ Bgm.start(); Sound.pass(); } else { Bgm.stop(); }
+    toast(on ? "노트북 소리 ON — BGM과 효과음이 함께 납니다" : "노트북 소리 OFF — BGM·효과음 정지");
+  });
+
+  $("btnBgm").addEventListener("click", () => {
+    Bgm.enabled = !Bgm.enabled;
+    if(Bgm.enabled){ Sound.iface(); Bgm.start(); } else { Bgm.stop(); }
+    $("btnBgm").textContent = Bgm.enabled ? "🎵 BGM ON" : "🎵 BGM OFF";
+    $("btnBgm").classList.toggle("off", !Bgm.enabled);
+    toast(Bgm.enabled ? "배경음악 ON" : "배경음악만 OFF — 효과음은 그대로 납니다");
   });
 
   $("btnClear").addEventListener("click", () => {
@@ -591,6 +693,7 @@
     const k = e.key.toLowerCase();
     if(k === "escape") $("qrLay").classList.remove("on");
     else if(k === "s") $("btnSound").click();
+    else if(k === "b") $("btnBgm").click();
     else if(k === "c") $("btnClear").click();
     else if(k === "q") $("qrLay").classList.toggle("on");
     else if(k === "t") $("btnSiren").click();
