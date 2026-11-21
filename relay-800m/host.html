@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0F172A">
-<title>800m 릴레이 계주 전광판 | 강사 정진영</title>
+<title>800m 릴레이 계주 전광판 | 강연 크리에이터 · 정진영</title>
 <meta name="description" content="강연장 프로젝터용 800m 릴레이 계주 실황 중계 화면">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,11 +33,12 @@
 
   /* ---------- top ---------- */
   .top{flex:none;display:flex;align-items:center;gap:14px}
-  .brand{display:flex;align-items:center;gap:9px;min-width:0}
+  .brand{display:flex;align-items:center;gap:9px;min-width:0;flex:0 1 auto;overflow:hidden}
   .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 14px rgba(245,158,11,.95);flex:none}
   .brand .t{
-    font-family:var(--serif);font-weight:900;font-size:clamp(18px,2.6vh,27px);letter-spacing:-0.03em;line-height:1.15;
+    font-family:var(--serif);font-weight:900;font-size:clamp(16px,2.2vh,26px);letter-spacing:-0.03em;line-height:1.15;
     background:linear-gradient(180deg,#FFFFFF 0%,#C9D6E8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap;
+    overflow:hidden;text-overflow:ellipsis;min-width:0;
   }
   .brand .t .hl{-webkit-text-fill-color:var(--amber);color:var(--amber)}
   .top-right{margin-left:auto;display:flex;align-items:center;gap:8px;flex:none}
@@ -274,6 +275,7 @@
 
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(10px);z-index:95;background:rgba(15,23,42,.96);border:1px solid rgba(245,158,11,.5);color:#FFF7E6;font-size:13px;font-weight:800;padding:11px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease}
   .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  .brand-foot{flex:none;text-align:center;font-size:clamp(9px,1.25vh,11.5px);font-weight:700;letter-spacing:.08em;color:#5E7089;opacity:.85;margin-top:-2px}
 </style>
 </head>
 <body>
@@ -281,7 +283,7 @@
   <div class="top">
     <div class="brand">
       <span class="dot"></span>
-      <div class="t">강사 정진영 · <span class="hl">800m 릴레이 계주</span></div>
+      <div class="t">강연 크리에이터 · 정진영 · <span class="hl">800m 릴레이 계주</span></div>
     </div>
     <div class="top-right">
       <span id="netTag">연결 중…</span>
@@ -361,6 +363,7 @@
       </div>
     </div>
   </div>
+  <div class="brand-foot">강연 크리에이터 · 정진영</div>
 </div>
 
 <div class="qr-modal" id="qrModal">
