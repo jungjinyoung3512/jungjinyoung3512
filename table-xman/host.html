@@ -1011,7 +1011,7 @@
       const snap = await db.ref(BASE + "/players").once("value");
       const ps = snap.val() || {};
       const all = Object.keys(ps).filter(k=>ps[k]);
-      const upd = { "xmen": null, "reveal": null, "state/phase": "mission", "state/assignedAt": Date.now(), "state/qA": qA, "state/qB": qB };
+      const upd = { "reveal": null, "state/phase": "mission", "state/assignedAt": Date.now(), "state/qA": qA, "state/qB": qB };
       const xmap = {};
 
       if(isGlobal()){
@@ -1045,6 +1045,7 @@
       }
 
       Object.keys(xmap).forEach(id=>{ upd["xmen/"+id] = xmap[id]; });
+      if(Object.keys(xmap).length) await db.ref(BASE + "/xmen").remove();
       await db.ref(BASE).update(upd);
 
       const xn = Object.keys(xmap).length;
