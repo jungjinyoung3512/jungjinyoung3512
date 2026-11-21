@@ -957,8 +957,8 @@
     if(!roomRef){ toast("오프라인 상태입니다 · 네트워크를 확인하세요"); return; }
     if(n > 1 && st.round < n - 1){ toast("먼저 " + (n - 1) + "라운드를 진행하세요"); return; }
     sndCount();
-    /* 이번 라운드 응답만 새로 받는다 */
-    roomRef.child("answers/" + n).remove();
+    /* 이번 라운드부터 다시 받는다 — 뒤 라운드의 옛 응답은 무효 */
+    for(var q = n; q <= 3; q++) roomRef.child("answers/" + q).remove();
     roomRef.update({ round: n, phase: "round" });
     prevCounts = { f:0, d:0, c:0, r:n };
     toast(n + "라운드 시작 · 청중 화면이 열렸습니다");
