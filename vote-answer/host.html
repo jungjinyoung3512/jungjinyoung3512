@@ -1162,7 +1162,7 @@
       var col = COLORS[i % COLORS.length];
       html += '<div class="ccard' + (cands.length === 2 ? " n2" : "") + '" style="'
            +  '--cc-border:' + col[0] + '66;--cc-bg1:' + col[0] + '2E;--cc-bg2:' + col[0] + '10;--cc-glow:' + col[0] + '55;--cc-ink:' + col[0] + '">'
-           +  '<span class="clett">' + (cands.length === 2 ? (i === 0 ? "A" : "B") : ("+" + c.k.replace("t","") + "번")) + '</span>'
+           +  (cands.length === 2 && state.mode === "balance" ? '<span class="clett">' + (i === 0 ? "A" : "B") + '</span>' : '')
            +  '<span class="cname">' + esc(c.label) + '</span>'
            +  (c.tag ? '<span class="ctag">' + esc(c.tag) + '</span>' : '')
            +  '</div>';
