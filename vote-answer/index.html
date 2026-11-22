@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0B0710">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="robots" content="noindex, nofollow">
+<title>🗳️ 당신의 투표가 정답이 된다 | 강연 크리에이터 · 정진영</title>
+<meta name="description" content="무대 위 대표에게 몰표를! 밸런스 게임 실시간 청중 투표 — 강연 크리에이터 · 정진영">
+<meta property="og:title" content="당신의 투표가 정답이 된다">
+<meta property="og:description" content="무대 위 대표에게 한 표 — 실시간 청중 투표">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🗳️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root{
+    --bg:#0B0710; --gold:#FFC94A; --coral:#FF6B5A;
+    --text:#F7F1EA; --muted:#A89A93; --dim:#7A6C68; --ok:#4ADE80;
+    --sans:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;min-width:0}
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;overscroll-behavior:none;background:#070509}
+  body{
+    background:
+      radial-gradient(760px 440px at 50% -12%, rgba(255,201,74,.20), transparent 64%),
+      radial-gradient(700px 400px at 50% 112%, rgba(255,107,90,.10), transparent 66%),
+      var(--bg);
+    color:var(--text);font-family:var(--sans);line-height:1.5;letter-spacing:-.01em;
+    word-break:keep-all;-webkit-font-smoothing:antialiased;
+    user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
+  }
+  button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer;touch-action:manipulation}
+  .wrap{
+    position:relative;width:100%;max-width:480px;margin:0 auto;height:100vh;height:100dvh;
+    display:flex;flex-direction:column;
+    padding:calc(env(safe-area-inset-top,0px) + 10px) 16px calc(env(safe-area-inset-bottom,0px) + 14px);
+  }
+  .top{display:flex;align-items:center;justify-content:space-between;gap:9px;flex:none;padding:4px 2px 10px}
+  .brand{display:flex;align-items:center;gap:9px;min-width:0}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(255,201,74,.15);flex:none}
+  .brand b{display:block;font-size:13px;font-weight:900;letter-spacing:-.35px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:56vw}
+  .brand small{display:block;font-size:8.5px;letter-spacing:.15em;color:var(--dim);margin-top:1px}
+  .chip{
+    display:flex;align-items:center;gap:5px;flex:none;font-size:9.5px;letter-spacing:.05em;
+    color:var(--muted);border:1px solid rgba(255,201,74,.22);background:rgba(255,201,74,.07);
+    padding:5px 9px;border-radius:999px;white-space:nowrap;
+  }
+  .chip b{color:var(--gold);font-weight:900;letter-spacing:.1em}
+  .chip .ld{width:6px;height:6px;border-radius:50%;background:#6B7280}
+  .chip.ok .ld{background:var(--ok);box-shadow:0 0 6px rgba(74,222,128,.85)}
+
+  main{flex:1;display:flex;flex-direction:column;min-height:0}
+  .scr{display:none;flex:1;flex-direction:column;min-height:0;animation:fade .28s ease both}
+  .scr.on{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* 대기 */
+  .wait{justify-content:center;text-align:center;gap:15px;padding-bottom:6px}
+  .waitico{font-size:60px;line-height:1;animation:bob 2.6s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-11px) rotate(5deg)}}
+  .wait h2{margin:0;font-size:22px;font-weight:900;letter-spacing:-.8px;line-height:1.35}
+  .wait p{margin:0;font-size:13px;color:var(--muted);line-height:1.75}
+  .wait p b{color:#FFE0A8}
+  .pulse{display:flex;justify-content:center;gap:6px;margin-top:4px}
+  .pulse i{width:7px;height:7px;border-radius:50%;background:var(--gold);opacity:.3;animation:pl 1.4s infinite}
+  .pulse i:nth-child(2){animation-delay:.2s}.pulse i:nth-child(3){animation-delay:.4s}
+  @keyframes pl{0%,100%{opacity:.2;transform:scale(.85)}50%{opacity:1;transform:scale(1.15)}}
+  .tipbox{
+    margin-top:12px;border:1px solid rgba(255,201,74,.2);background:rgba(255,201,74,.06);
+    border-radius:14px;padding:12px 14px;font-size:11.5px;color:#D8CCC3;line-height:1.7;text-align:left;
+  }
+  .tipbox b{color:#FFE0A8}
+
+  /* 투표 */
+  .vote{gap:10px}
+  .roundchip{
+    align-self:center;display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:900;letter-spacing:.12em;
+    color:var(--gold);border:1px solid rgba(255,201,74,.4);background:rgba(255,201,74,.1);padding:5px 12px;border-radius:999px;flex:none;
+  }
+  .qbox{flex:none;text-align:center;padding:2px 2px 4px}
+  .qbox .qk{font-size:9.5px;font-weight:900;letter-spacing:.16em;color:var(--dim)}
+  .qbox h1{
+    margin:6px 0 0;font-size:clamp(22px,6.2vw,30px);line-height:1.3;font-weight:900;letter-spacing:-.9px;
+    background:linear-gradient(180deg,#FFFFFF 10%,#FFE3A8 96%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .cands{flex:1;display:flex;flex-direction:column;justify-content:center;gap:clamp(9px,1.8vh,16px);min-height:0;overflow-y:auto;padding:4px 2px}
+  .cands[data-n="2"] .cbtn{min-height:clamp(104px,17vh,168px)}
+  .cands[data-n="3"] .cbtn,.cands[data-n="4"] .cbtn{min-height:clamp(84px,13vh,130px)}
+  .cands[data-n="5"] .cbtn,.cands[data-n="6"] .cbtn,.cands[data-n="7"] .cbtn,.cands[data-n="8"] .cbtn{min-height:clamp(56px,9vh,92px);padding:12px 14px;border-radius:16px}
+  .cands[data-n="5"] .cbtn .ct b,.cands[data-n="6"] .cbtn .ct b,.cands[data-n="7"] .cbtn .ct b,.cands[data-n="8"] .cbtn .ct b{font-size:clamp(16px,4.8vw,21px)}
+  .cands[data-n="5"] .cbtn .mark,.cands[data-n="6"] .cbtn .mark,.cands[data-n="7"] .cbtn .mark,.cands[data-n="8"] .cbtn .mark{width:30px;height:30px;font-size:13px;border-radius:9px}
+  .cbtn{
+    position:relative;width:100%;border-radius:20px;padding:20px 18px;min-height:84px;
+    display:flex;align-items:center;gap:14px;text-align:left;overflow:hidden;
+    border:2px solid var(--cb,rgba(255,255,255,.16));
+    background:linear-gradient(150deg,var(--c1,rgba(255,255,255,.1)),var(--c2,rgba(255,255,255,.03)));
+    box-shadow:0 14px 30px -20px rgba(0,0,0,.9), inset 0 0 40px rgba(0,0,0,.18);
+    transition:transform .12s, box-shadow .18s;
+    animation:cpop .32s ease both;
+  }
+  @keyframes cpop{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+  .cbtn:active{transform:scale(.978)}
+  .cbtn .mark{
+    flex:none;width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    font-size:16px;font-weight:900;color:var(--ink,#FFF);background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.2);
+  }
+  .cbtn .ct{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+  .cbtn .ct b{font-size:clamp(23px,6.6vw,31px);font-weight:900;letter-spacing:-.9px;line-height:1.2;color:#FFF;text-shadow:0 4px 18px rgba(0,0,0,.45);word-break:break-word}
+  .cbtn .ct small{font-size:11px;font-weight:900;color:var(--ink,#FFE0A8);opacity:.95}
+  .cbtn .arrow{flex:none;font-size:18px;color:rgba(255,255,255,.55)}
+  .cbtn.tapped{animation:tap .3s ease}
+  @keyframes tap{0%{transform:scale(1)}45%{transform:scale(.95)}100%{transform:scale(1)}}
+  .hintline{flex:none;text-align:center;font-size:10.5px;color:var(--dim);font-weight:700;letter-spacing:.02em}
+
+  /* 완료 */
+  .done{justify-content:center;text-align:center;gap:14px}
+  .doneico{width:94px;height:94px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;
+    font-size:46px;font-weight:900;line-height:1;color:#2A1B02;
+    background:linear-gradient(180deg,#FFE39A,#FFB627);box-shadow:0 20px 44px -18px rgba(255,182,39,.9);
+    animation:okpop .45s cubic-bezier(.2,1.4,.4,1) both}
+  @keyframes okpop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
+  .done h2{margin:0;font-size:25px;font-weight:900;letter-spacing:-1px}
+  .done p{margin:0;font-size:13px;color:var(--muted);line-height:1.75}
+  .mychoice{
+    align-self:center;margin-top:4px;display:inline-flex;flex-direction:column;gap:2px;align-items:center;
+    padding:13px 26px;border-radius:16px;border:1.5px solid var(--cb,rgba(255,201,74,.5));
+    background:linear-gradient(160deg,var(--c1,rgba(255,201,74,.2)),var(--c2,rgba(255,201,74,.06)));
+  }
+  .mychoice small{font-size:9.5px;font-weight:900;letter-spacing:.14em;color:var(--muted)}
+  .mychoice b{font-size:21px;font-weight:900;letter-spacing:-.6px}
+
+  /* 결과 발표 */
+  .closed{justify-content:center;text-align:center;gap:16px;overflow-y:auto}
+  .party{font-size:64px;line-height:1;animation:bob 2.2s ease-in-out infinite}
+  .closed h2{margin:0;font-size:27px;font-weight:900;letter-spacing:-1px;line-height:1.3}
+  .closed p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.8}
+  .closed .screenhint{
+    align-self:center;margin-top:6px;font-size:12.5px;font-weight:900;color:#2A1B02;
+    background:linear-gradient(180deg,#FFE39A,var(--gold));padding:11px 20px;border-radius:999px;
+  }
+  .myagain{font-size:11px;color:var(--dim);font-weight:800}
+
+  .toast{
+    position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);z-index:90;
+    background:rgba(28,20,32,.96);border:1px solid rgba(255,201,74,.35);color:var(--text);
+    padding:11px 17px;border-radius:999px;font-size:12.5px;font-weight:800;
+    opacity:0;pointer-events:none;transition:.25s;box-shadow:0 12px 30px rgba(0,0,0,.5);
+    max-width:84vw;text-align:center;
+  }
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">
+      <span class="dot"></span>
+      <div><b>🗳️ 당신의 투표가 정답이 된다</b><small>강연 크리에이터 · 정진영</small></div>
+    </div>
+    <div class="chip" id="netChip"><i class="ld"></i>ROOM <b>JY33</b></div>
+  </div>
+
+  <main>
+    <!-- 대기 -->
+    <section class="scr on wait" id="scrWait">
+      <div class="waitico">🗳️</div>
+      <h2 id="waitTitle">무대 위 대표들이<br>올라오고 있습니다</h2>
+      <p id="waitSub">잠시만 기다려 주세요!<br>곧 투표가 열립니다.</p>
+      <div class="pulse"><i></i><i></i><i></i></div>
+      <div class="tipbox">
+        <b>이 창을 닫지 마세요.</b> 진행자가 투표를 열면<br>이 화면이 자동으로 바뀝니다.
+      </div>
+    </section>
+
+    <!-- 투표 -->
+    <section class="scr vote" id="scrVote">
+      <span class="roundchip"><span id="roundLabel">ROUND 1</span> · 한 표를 던져 주세요</span>
+      <div class="qbox">
+        <div class="qk">오늘의 질문</div>
+        <h1 id="qText">—</h1>
+      </div>
+      <div class="cands" id="cands"></div>
+      <p class="hintline">1인 1표 · 누르면 바로 투표 완료</p>
+    </section>
+
+    <!-- 완료 -->
+    <section class="scr done" id="scrDone">
+      <div class="doneico">✓</div>
+      <h2>투표 완료!</h2>
+      <p>진행자의 결과 발표를 기다려 주세요.<br>무대 위 전광판이 곧 열립니다.</p>
+      <div class="mychoice" id="myChoice">
+        <small>내가 던진 한 표</small>
+        <b id="myChoiceName">—</b>
+      </div>
+    </section>
+
+    <!-- 결과 발표 -->
+    <section class="scr closed" id="scrClosed">
+      <div class="party">🎉</div>
+      <h2>결과 발표 중!</h2>
+      <p>지금 무대 위 전광판에서<br>득표가 차오르고 있습니다.</p>
+      <span class="screenhint">👀 앞 화면을 봐 주세요</span>
+      <p class="myagain" id="myAgain">내가 던진 한 표도 그 안에 있습니다</p>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+(function(){
+  "use strict";
+  var ROOM = "JY33";
+  var BASE = "rooms/vote-answer/" + ROOM;
+  var FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "977342156141",
+    appId: "1:977342156141:web:f9842fcc67a819ce621e64"
+  };
+  var COLORS = [
+    ["#FF6B5A","#FF9A6B"],["#FFC94A","#FF8A3D"],["#45E0C8","#2BB8FF"],["#A78BFA","#7C6BFF"],
+    ["#5AA8FF","#3D7BFF"],["#FF7BC4","#FF5A9E"],["#4ADE80","#22C55E"],["#FB923C","#F97316"]
+  ];
+
+  function $(id){ return document.getElementById(id); }
+  function esc(s){
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+      return ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" })[c];
+    });
+  }
+
+  /* ── 익명 식별자 (기기별 1개) ── */
+  var UID = "";
+  try{
+    UID = localStorage.getItem("va_uid") || "";
+    if(!UID){
+      UID = "u" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+      localStorage.setItem("va_uid", UID);
+    }
+  }catch(e){ UID = "u" + Math.random().toString(36).slice(2, 14); }
+
+  var myVotes = {};
+  try{ myVotes = JSON.parse(localStorage.getItem("va_myvote") || "{}") || {}; }catch(e){ myVotes = {}; }
+  function saveMy(){ try{ localStorage.setItem("va_myvote", JSON.stringify(myVotes)); }catch(e){} }
+
+  var state = null;
+  var myKey = null;
+  var shown = "";
+  var db = null, live = false;
+
+  function setNet(ok){
+    live = !!ok;
+    var c = $("netChip");
+    c.classList.toggle("ok", live);
+    c.innerHTML = '<i class="ld"></i>ROOM <b>JY33</b>';
+  }
+
+  function toast(msg){
+    var t = $("toast");
+    t.textContent = msg;
+    t.classList.add("on");
+    clearTimeout(toast._h);
+    toast._h = setTimeout(function(){ t.classList.remove("on"); }, 2600);
+  }
+
+  function show(name){
+    if(shown === name) return;
+    ["Wait","Vote","Done","Closed"].forEach(function(k){
+      $("scr" + k).classList.toggle("on", k.toLowerCase() === name);
+    });
+    shown = name;
+  }
+
+  function candByKey(k){
+    var cs = (state && state.cands) || [];
+    for(var i = 0; i < cs.length; i++){ if(cs[i].k === k) return cs[i]; }
+    return null;
+  }
+
+  function render(){
+    if(!state || state.phase === "idle" || !state.phase){
+      $("waitTitle").innerHTML = "무대 위 대표들이<br>올라오고 있습니다";
+      $("waitSub").innerHTML = "잠시만 기다려 주세요!<br>곧 투표가 열립니다.";
+      show("wait");
+      return;
+    }
+    if(state.phase === "vote"){
+      var key = myVotes[state.roundId];
+      if(key && candByKey(key)){
+        myKey = key;
+        renderDone();
+      } else {
+        myKey = null;
+        renderVote();
+      }
+      return;
+    }
+    if(state.phase === "reveal"){
+      var k2 = myVotes[state.roundId];
+      $("myAgain").textContent = (k2 && candByKey(k2))
+        ? "내가 던진 ‘" + candByKey(k2).label + "’ 한 표도 그 안에 있습니다"
+        : "결과는 진행자가 발표합니다";
+      show("closed");
+      return;
+    }
+    show("wait");
+  }
+
+  function renderVote(){
+    var cands = state.cands || [];
+    $("roundLabel").textContent = "ROUND " + (state.roundNo || 1);
+    $("qText").textContent = state.q || "";
+    var box = $("cands");
+    var html = "";
+    cands.forEach(function(c, i){
+      var col = COLORS[i % COLORS.length];
+      html += '<button class="cbtn" type="button" data-k="' + esc(c.k) + '" style="'
+           +   '--cb:' + col[0] + '99;--c1:' + col[0] + '3A;--c2:' + col[0] + '12;--ink:' + col[0] + ';'
+           +   'animation-delay:' + (i * 55) + 'ms">'
+           +   '<span class="mark">' + (cands.length === 2 ? (i === 0 ? "A" : "B") : (i + 1)) + '</span>'
+           +   '<span class="ct"><b>' + esc(c.label) + '</b>' + (c.tag ? '<small>' + esc(c.tag) + '</small>' : '') + '</span>'
+           +   '<span class="arrow">›</span>'
+           + '</button>';
+    });
+    box.setAttribute("data-n", String(cands.length));
+    box.innerHTML = html;
+    show("vote");
+  }
+
+  function renderDone(){
+    var c = candByKey(myKey);
+    if(c){
+      var idx = 0;
+      (state.cands || []).forEach(function(x, i){ if(x.k === myKey) idx = i; });
+      var col = COLORS[idx % COLORS.length];
+      var box = $("myChoice");
+      box.style.setProperty("--cb", col[0] + "88");
+      box.style.setProperty("--c1", col[0] + "33");
+      box.style.setProperty("--c2", col[0] + "0F");
+      $("myChoiceName").textContent = c.label;
+      $("myChoiceName").style.color = col[0];
+    }
+    show("done");
+  }
+
+  function pick(k){
+    if(!state || state.phase !== "vote" || myKey) return;
+    var c = candByKey(k);
+    if(!c) return;
+    myKey = k;
+    myVotes[state.roundId] = k;
+    saveMy();
+    if(navigator.vibrate) { try{ navigator.vibrate(18); }catch(e){} }
+    var btn = document.querySelector('.cbtn[data-k="' + k + '"]');
+    if(btn) btn.classList.add("tapped");
+    renderDone();
+    if(!db){ toast("연결을 기다리는 중이에요 · 잠시 후 다시 눌러 주세요"); return; }
+    db.ref(BASE + "/votes/" + state.roundId + "/" + UID).set(k).catch(function(){
+      myKey = null;
+      delete myVotes[state.roundId];
+      saveMy();
+      render();
+      toast("전송 실패 · 다시 한 번 눌러 주세요");
+    });
+  }
+
+  $("cands").addEventListener("click", function(e){
+    var b = e.target.closest("[data-k]");
+    if(b) pick(b.getAttribute("data-k"));
+  });
+
+  /* 이미 투표한 기록이 서버에 있으면 복원 */
+  function syncMyVote(roundId){
+    if(!db || !roundId) return;
+    if(myVotes[roundId]) return;
+    db.ref(BASE + "/votes/" + roundId + "/" + UID).once("value").then(function(s){
+      var v = s.val();
+      if(v && state && state.roundId === roundId){
+        myVotes[roundId] = v;
+        saveMy();
+        render();
+      }
+    }).catch(function(){});
+  }
+
+  function initFB(){
+    if(typeof firebase === "undefined" || !firebase.initializeApp){
+      setNet(false);
+      toast("실시간 연결에 실패했어요 · 새로고침해 주세요");
+      return;
+    }
+    try{
+      firebase.initializeApp(FB_CONFIG);
+      db = firebase.database();
+      db.ref(".info/connected").on("value", function(s){ setNet(!!s.val()); });
+      db.ref(BASE + "/state").on("value", function(s){
+        var prevRound = state && state.roundId;
+        state = (s.val() && s.val().phase) ? s.val() : null;
+        if(state && state.roundId && state.roundId !== prevRound){
+          /* 새 라운드: 이전 라운드 기록은 남겨두되 현재 라운드만 확인 */
+          myKey = myVotes[state.roundId] || null;
+          syncMyVote(state.roundId);
+        }
+        render();
+      });
+    }catch(e){ setNet(false); }
+  }
+
+  setNet(false);
+  render();
+  initFB();
+})();
+</script>
+</body>
+</html>
