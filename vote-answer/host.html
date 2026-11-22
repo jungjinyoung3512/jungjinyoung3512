@@ -1024,7 +1024,8 @@
 
     var n = activeTeams().length;
     $("selCount").textContent = n;
-    $("btnStart").disabled = n < 2;
+    /* 밸런스 모드는 A/B 두 선택지만 있으면 팀 표 없이도 시작 가능 */
+    $("btnStart").disabled = (draft.mode === "team") ? (n < 2) : false;
   }
 
   function renderTeams(force){
