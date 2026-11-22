@@ -447,6 +447,7 @@
 
   let situations = [];
   let state = { open:false, sidx:0, step:0, reveal:false };
+  let ending = false;
   let votes = {};
   let db = null, live = false, seeded = false, ready = false;
 
@@ -591,6 +592,110 @@
       }
     };
   })();
+
+  /* ══════════ 문제 풀이 BGM · 엔딩 음악 ══════════ */
+  /* 풀이 BGM = Snd.startMusic() : 잔잔한 앰비언트(생성음). 강연 멘트·정답 효과음에 방해되지 않게 은은하게(출력 0.20) */
+  let bgmArmed = true;   /* 첫 조작 전에는 울리지 않는다(브라우저 자동재생 정책) */
+
+  /* 엔딩 음악 = 『마음편지』 결과 공개 음악 '남편에게 쓴 편지' (thank-wall/bgm.mp3 와 같은 음원) */
+  const EndMusic = (function(){
+    const SRC = "./ending.mp3";
+    const VOL = 0.62;
+    let el = null, failed = false, fade = null, want = false;
+    function node(){
+      if(el) return el;
+      if(failed) return null;
+      let a = null;
+      try { a = new Audio(SRC); } catch(e){ failed = true; return null; }
+      a.id = "endMusicAudio";
+      a.loop = true;
+      a.preload = "auto";
+      a.volume = 0;
+      a.setAttribute("playsinline", "");
+      a.style.display = "none";
+      try { document.body.appendChild(a); } catch(e){}
+      a.addEventListener("error", function(){
+        failed = true;
+        toast("엔딩 음악을 불러오지 못했습니다 · 소리를 켠 채 다시 눌러 주세요");
+      });
+      /* loop 속성이 풀려도 끊김 없이 이어지도록 */
+      a.addEventListener("ended", function(){
+        if(!want) return;
+        try { a.currentTime = 0; } catch(e){}
+        const p = a.play();
+        if(p && p.catch) p.catch(function(){ armGesture(); });
+      });
+      el = a;
+      return a;
+    }
+    function fadeTo(target, ms, done){
+      const a = el; if(!a) return;
+      clearInterval(fade); fade = null;
+      const from = a.volume || 0;
+      const steps = Math.max(1, Math.round(ms / 60));
+      let i = 0;
+      fade = setInterval(function(){
+        i++;
+        try { a.volume = Math.max(0, Math.min(1, from + (target - from) * (i / steps))); } catch(e){}
+        if(i >= steps){ clearInterval(fade); fade = null; if(done) done(); }
+      }, 60);
+    }
+    /* 자동재생이 막힌 경우 다음 조작에서 이어서 재생 */
+    function armGesture(){
+      const kick = function(){
+        document.removeEventListener("pointerdown", kick, true);
+        document.removeEventListener("keydown", kick, true);
+        if(want && ending) start(false);
+      };
+      document.addEventListener("pointerdown", kick, true);
+      document.addEventListener("keydown", kick, true);
+    }
+    function start(reset){
+      want = true;
+      if(!Snd.on || !ending) return;
+      const a = node(); if(!a) return;
+      if(reset){ try { a.currentTime = 0; } catch(e){} }
+      let p = null;
+      try { p = a.play(); } catch(e){ p = null; }
+      if(!p || !p.then){ fadeTo(VOL, 2200); return; }
+      p.then(function(){ fadeTo(VOL, 2200); })
+       .catch(function(){ if(failed || a.error) return; armGesture(); });
+    }
+    function pause(ms){
+      want = false;
+      const a = el; if(!a) return;
+      fadeTo(0, (ms === undefined ? 900 : ms), function(){
+        try { a.pause(); } catch(e){}
+      });
+    }
+    return {
+      start: start,
+      pause: pause,
+      stopNow: function(){
+        want = false;
+        const a = el; if(!a) return;
+        clearInterval(fade); fade = null;
+        try { a.pause(); a.currentTime = 0; a.volume = 0; } catch(e){}
+      },
+      get el(){ return el; }
+    };
+  })();
+
+  function bgmOn(){
+    if(!Snd.on || ending) return;
+    bgmArmed = false;
+    Snd.startMusic();
+  }
+  function bgmFirstGesture(e){
+    if(!bgmArmed) return;
+    if(!Snd.on || ending) return;
+    /* 음소거 버튼을 누른 첫 조작에서는 울리지 않게 */
+    const t = e && e.target;
+    if(t && t.closest && t.closest("#btnSound")) return;
+    bgmOn();
+  }
+  document.addEventListener("pointerdown", bgmFirstGesture, true);
+  document.addEventListener("keydown", bgmFirstGesture, true);
 
   /* ══════════ 유틸 ══════════ */
   function toast(msg){
@@ -1022,18 +1127,19 @@
   $("btnCloseQR").addEventListener("click", () => $("qrModal").classList.remove("on"));
 
   /* ══════════ 엔딩 ══════════ */
-  let ending = false;
   function openEnding(){
     if(ending) return;
     ending = true;
     $("endOv").classList.add("on");
-    Snd.startMusic();
+    Snd.stopMusic();        /* 문제 풀이 BGM 페이드아웃 */
+    EndMusic.start(true);   /* 엔딩 음악 = 마음편지 결과 공개 음악('남편에게 쓴 편지') 처음부터 */
   }
   function closeEnding(){
     if(!ending) return;
     ending = false;
     $("endOv").classList.remove("on");
-    Snd.stopMusic();
+    EndMusic.pause(900);    /* 엔딩 음악 페이드아웃 후 정지 */
+    bgmOn();                /* 문제 풀이 BGM 다시 은은하게 */
   }
   $("btnEnding").addEventListener("click", openEnding);
   $("btnCloseEnd").addEventListener("click", closeEnding);
@@ -1049,7 +1155,10 @@
     paintSound();
     if(Snd.on){
       Snd.tick();
-      if(ending) Snd.startMusic();
+      if(ending) EndMusic.start(false);  /* 엔딩 중이면 엔딩 음악 재개 */
+      else bgmOn();                      /* 평소에는 풀이 BGM 재개 */
+    } else {
+      EndMusic.pause(260);               /* 음소거 시 엔딩 음악 즉시 정지 */
     }
   });
 
