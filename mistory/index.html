@@ -116,6 +116,12 @@ h2{font-size:clamp(1.9rem,3.5vw,3rem);line-height:1.38}
 .sec-head.center .lead{margin-left:auto;margin-right:auto;text-align:center}
 
 /* ---------- nav ---------- */
+.nav::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:140px;z-index:-1;
+  background:linear-gradient(180deg,rgba(16,13,11,.72),rgba(16,13,11,.28) 55%,rgba(16,13,11,0));
+  opacity:1;transition:opacity .5s var(--ease);pointer-events:none;
+}
+.nav.scrolled::before{opacity:0}
 .nav{
   position:fixed;inset:0 0 auto 0;z-index:90;
   display:flex;align-items:center;justify-content:space-between;gap:24px;
@@ -164,6 +170,7 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
 
 /* ---------- hero ---------- */
 .hero{position:relative;display:grid;grid-template-columns:1.04fr 1fr;min-height:100svh;background:#141110;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 50% 0 0;background:radial-gradient(120% 90% at 22% 18%,#221D19 0%,#161312 55%,#100E0D 100%);z-index:0;pointer-events:none}
 .hero-visual{position:relative;overflow:hidden;min-height:100svh;order:2}
 .hero-visual>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 42%;transform:scale(1.02);animation:slowzoom 28s var(--ease) forwards}
 @keyframes slowzoom{to{transform:scale(1.1)}}
@@ -176,7 +183,7 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
 .hero-copy{position:relative;z-index:3;display:flex;flex-direction:column;justify-content:center;padding:clamp(110px,15vh,180px) clamp(26px,4.2vw,74px) clamp(46px,7vh,74px);color:var(--cream)}
 .hero-copy .eyebrow{color:var(--gold);opacity:0;animation:fade .9s .2s var(--ease) forwards}
 .hero h1{
-  font-size:clamp(2rem,3.55vw,3.55rem);line-height:1.36;letter-spacing:-.025em;font-weight:300;
+  font-size:clamp(2rem,3.9vw,3.85rem);line-height:1.34;letter-spacing:-.03em;font-weight:300;
   color:#FCFAF6;opacity:0;animation:rise 1.1s .35s var(--ease) forwards;
 }
 .hero h1 em{color:var(--gold);font-style:normal}
@@ -240,8 +247,8 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
 .philo-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(40px,7vw,110px);align-items:start}
 .philo-left{position:sticky;top:118px}
 .philo-quote{
-  font-family:var(--serif);font-size:clamp(1.02rem,1.3vw,1.18rem);line-height:1.9;color:var(--ink-soft);
-  margin:clamp(34px,4vw,52px) 0 0;padding:26px 0 0;border-top:1px solid var(--line);max-width:31ch;
+  font-family:var(--serif);font-size:clamp(1rem,1.2vw,1.14rem);line-height:1.95;color:var(--ink-soft);
+  margin:clamp(34px,4vw,52px) 0 0;padding:26px 0 0;border-top:1px solid var(--line);max-width:32ch;
 }
 .philo-quote span{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.2em;color:var(--taupe);margin-top:16px;text-transform:uppercase}
 .values{display:flex;flex-direction:column}
@@ -254,17 +261,24 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
 
 /* ---------- signature ---------- */
 .sig{background:var(--cream-2)}
-.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.4vw,32px);margin-top:clamp(44px,5vw,68px)}
-.card{background:var(--cream);display:flex;flex-direction:column;overflow:hidden;transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
-.card:hover{transform:translateY(-6px);box-shadow:0 34px 60px -34px rgba(26,23,21,.4)}
-.card .ph{overflow:hidden;aspect-ratio:4/5;background:var(--cream-3)}
-.card .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
-.card:hover .ph img{transform:scale(1.05)}
-.card .body{padding:clamp(22px,2.6vw,32px)}
-.card .kicker{font-size:10px;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin:0 0 14px}
-.card h3{font-size:clamp(1.15rem,1.6vw,1.36rem)}
-.card p{margin:14px 0 0;font-size:.9rem;line-height:1.9;color:var(--ink-soft)}
-.card .tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:20px}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:clamp(44px,5vw,68px);border-top:1px solid var(--line)}
+.card{
+  padding:clamp(28px,3.2vw,42px) clamp(20px,2.4vw,34px) clamp(30px,3.6vw,46px);
+  border-right:1px solid var(--line);border-bottom:1px solid var(--line);
+  display:flex;flex-direction:column;position:relative;transition:background .55s var(--ease);
+}
+.card:first-child{padding-left:0}
+.card:last-child{border-right:0;padding-right:0}
+.card:hover{background:rgba(255,255,255,.55)}
+.card .idx{
+  font-family:var(--serif);font-size:clamp(1.9rem,2.7vw,2.5rem);line-height:1;color:var(--gold);opacity:.5;
+  letter-spacing:.02em;margin:0 0 clamp(18px,2.4vw,30px);transition:opacity .5s var(--ease);
+}
+.card:hover .idx{opacity:.9}
+.card .kicker{font-size:10px;letter-spacing:.3em;color:var(--taupe);text-transform:uppercase;margin:0 0 14px}
+.card h3{font-size:clamp(1.2rem,1.7vw,1.46rem);line-height:1.5}
+.card p{font-size:.9rem;line-height:1.95;color:var(--ink-soft);margin:16px 0 0}
+.card .tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto;padding-top:clamp(20px,2.6vw,30px)}
 .card .tags i{font-style:normal;font-size:11px;color:var(--taupe);border:1px solid var(--line);padding:4px 9px}
 
 .more{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line);margin-top:clamp(34px,4vw,54px)}
@@ -276,12 +290,13 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
 
 /* ---------- device band ---------- */
 .band{background:var(--ink);color:var(--cream);padding:clamp(72px,9vw,130px) 0;position:relative;overflow:hidden}
-.band .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(30px,6vw,90px);align-items:center}
-.band .pics{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.band .grid{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,1fr);gap:clamp(30px,6vw,90px);align-items:center}
+.band .pics{display:grid;grid-template-columns:1.08fr .92fr;gap:12px;align-items:center}
 .band .pics figure{margin:0;overflow:hidden}
-.band .pics img{width:100%;height:100%;object-fit:cover;aspect-ratio:3/4;filter:saturate(.92)}
-.band .pics figure:last-child{align-self:end}
-.band .pics figure:last-child img{aspect-ratio:3/4.6}
+.band .pics figure:first-child{transform:translateY(-22px)}
+.band .pics figure:last-child{transform:translateY(22px)}
+.band .pics img{width:100%;height:100%;object-fit:cover;aspect-ratio:3/4.1;filter:saturate(.92)}
+.band .pics figure:last-child img{aspect-ratio:3/4.5}
 .band h2{color:#FAF7F2}
 .band .lead{color:rgba(250,247,242,.74)}
 .band .eyebrow{color:var(--gold)}
@@ -292,10 +307,10 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
 
 /* ---------- record ---------- */
 .record{background:var(--cream)}
-.record .row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.6vw,34px);margin-top:clamp(40px,5vw,64px)}
+.record .row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.6vw,34px);margin-top:clamp(40px,5vw,64px);align-items:start}
 .record figure{margin:0}
-.record .ph{overflow:hidden;background:var(--cream-3);cursor:zoom-in}
-.record .ph img{width:100%;height:auto;transition:transform 1.2s var(--ease)}
+.record .ph{overflow:hidden;background:var(--cream-2);cursor:zoom-in;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center}
+.record .ph img{width:100%;height:100%;object-fit:contain;padding:8px;transition:transform 1.2s var(--ease)}
 .record .ph:hover img{transform:scale(1.03)}
 .record figcaption{display:flex;justify-content:space-between;gap:12px;margin-top:14px;font-size:11px;letter-spacing:.14em;color:var(--taupe);text-transform:uppercase}
 .record .note{font-size:.78rem;color:var(--taupe);margin-top:clamp(26px,3vw,36px);line-height:1.8}
@@ -306,12 +321,8 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
 .gal-item{overflow:hidden;background:var(--cream-3);cursor:zoom-in;position:relative}
 .gal-item img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease),filter .8s}
 .gal-item:hover img{transform:scale(1.05)}
-.g1{grid-column:span 7;aspect-ratio:4/3.05}
-.g2{grid-column:span 5;aspect-ratio:3/4.06}
-.g3{grid-column:span 4;aspect-ratio:1/1}
-.g4{grid-column:span 4;aspect-ratio:3/4}
-.g5{grid-column:span 4;aspect-ratio:3/4}
-.g6{grid-column:span 12;aspect-ratio:21/9}
+.g1,.g2,.g3{grid-column:span 4;aspect-ratio:3/4}
+.g4,.g5,.g6{grid-column:span 4;aspect-ratio:4/3}
 
 /* ---------- director ---------- */
 .dir{background:var(--cream)}
@@ -412,17 +423,15 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
   .philo-grid,.dir .grid,.visit .grid,.band .grid{grid-template-columns:1fr}
   .philo-left{position:static}
   .dir .portrait{max-width:420px}
-  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .cards .card:last-child{grid-column:span 2}
-  .cards .card:last-child .ph{aspect-ratio:16/9}
+  .cards{grid-template-columns:1fr;border-top:1px solid var(--line)}
+  .card{padding:clamp(26px,6vw,34px) 0;border-right:0}
+  .card:first-child{padding-left:0}
   .more{grid-template-columns:repeat(2,minmax(0,1fr))}
   .quotes{grid-template-columns:1fr 1fr}
   .quotes .q:last-child{grid-column:span 2}
   .visit .photo{position:static}
-  .gal-grid{grid-template-columns:repeat(6,1fr)}
-  .g1,.g2{grid-column:span 3;aspect-ratio:3/4}
-  .g3,.g4,.g5{grid-column:span 2;aspect-ratio:1/1}
-  .g6{grid-column:span 6;aspect-ratio:16/9}
+  .gal-grid{grid-template-columns:1fr 1fr}
+  .g1,.g2,.g3,.g4,.g5,.g6{grid-column:span 1;aspect-ratio:3/4}
 }
 @media (max-width:860px){
   .nav-links,.nav .call{display:none}
@@ -444,9 +453,6 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
   body{padding-bottom:0}
 }
 @media (max-width:620px){
-  .cards{grid-template-columns:1fr}
-  .cards .card:last-child{grid-column:span 1}
-  .cards .card:last-child .ph{aspect-ratio:4/5}
   .more{grid-template-columns:1fr}
   .quotes{grid-template-columns:1fr}
   .quotes .q:last-child{grid-column:span 1}
@@ -533,7 +539,7 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
       <h2 class="reveal" style="--d:.05s">미스토리만의 차이는<br>어디서 오는가</h2>
       <p class="lead reveal" style="--d:.1s">같은 한 시간을 써도 결과가 다른 이유. 오래 쌓인 손의 감각, 아끼지 않고 들인 장비, 그리고 오직 한 사람만을 위해 비워둔 시간입니다.</p>
       <blockquote class="philo-quote reveal" style="--d:.15s">
-        “일반 관리샵과는 차원이 다릅니다. 피부과와 관리의 장점만 잘 합쳐진 곳.”
+        “일반 관리샵과는 차원이 다릅니다. 피부과와 관리의 장점만 합쳐진 곳.”
         <span>방문자 리뷰 중</span>
       </blockquote>
     </div>
@@ -574,31 +580,25 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
 
     <div class="cards">
       <article class="card reveal">
-        <div class="ph"><img src="images/ba-skin.jpg" alt="피부 결 관리 전후 클로즈업" loading="lazy"></div>
-        <div class="body">
-          <p class="kicker">Premium Skin</p>
-          <h3>프리미엄 피부관리</h3>
-          <p>처진 탄력, 벌어진 모공, 팔자와 목의 세로주름, 손댄 자국처럼 남은 잡티와 색소침착. 기기와 앰플을 목적에 맞게 조합해 한 번의 관리로도 손끝에 잡히는 변화를 만듭니다.</p>
-          <div class="tags"><i>탄력</i><i>모공</i><i>팔자·목주름</i><i>잡티·색소</i></div>
-        </div>
+        <p class="idx">01</p>
+        <p class="kicker">Premium Skin</p>
+        <h3>프리미엄 피부관리</h3>
+        <p>처진 탄력, 벌어진 모공, 팔자와 목의 세로주름, 손댄 자국처럼 남은 잡티와 색소침착. 기기와 앰플을 목적에 맞게 조합해 한 번의 관리로도 손끝에 잡히는 변화를 만듭니다.</p>
+        <div class="tags"><i>탄력</i><i>모공</i><i>팔자·목주름</i><i>잡티·색소</i></div>
       </article>
       <article class="card reveal" style="--d:.08s">
-        <div class="ph"><img src="images/care-body.jpg" alt="팔뚝 라인 관리 전후" loading="lazy"></div>
-        <div class="body">
-          <p class="kicker">Body Line</p>
-          <h3>체형관리</h3>
-          <p>얼굴만큼 신경 쓰이는 팔뚝과 복부 라인. 붓기와 탄력을 함께 다루는 체형 관리를 피부 관리와 같은 원리로 진행합니다. 옷맵시가 달라지는 지점까지.</p>
-          <div class="tags"><i>팔뚝</i><i>복부</i><i>라인·탄력</i></div>
-        </div>
+        <p class="idx">02</p>
+        <p class="kicker">Body Line</p>
+        <h3>체형관리</h3>
+        <p>얼굴만큼 신경 쓰이는 팔뚝과 복부 라인. 붓기와 탄력을 함께 다루는 체형 관리를 피부 관리와 같은 원리로 진행합니다. 옷맵시가 달라지는 지점까지.</p>
+        <div class="tags"><i>팔뚝</i><i>복부</i><i>라인·탄력</i></div>
       </article>
       <article class="card reveal" style="--d:.16s">
-        <div class="ph"><img src="images/care-scalp.jpg" alt="두피 케어" loading="lazy"></div>
-        <div class="body">
-          <p class="kicker">Scalp</p>
-          <h3>두피관리</h3>
-          <p>얼굴의 피부는 두피와 이어져 있습니다. 두피타투(SMP) 전문가 과정을 수료한 원장이 두피 상태를 살피고, 모근과 두피 컨디션에 맞춰 관리합니다.</p>
-          <div class="tags"><i>두피 컨디션</i><i>모근</i><i>SMP</i></div>
-        </div>
+        <p class="idx">03</p>
+        <p class="kicker">Scalp</p>
+        <h3>두피관리</h3>
+        <p>얼굴의 피부는 두피와 이어져 있습니다. 두피타투(SMP) 전문가 과정을 수료한 원장이 두피 상태를 살피고, 모근과 두피 컨디션에 맞춰 관리합니다.</p>
+        <div class="tags"><i>두피 컨디션</i><i>모근</i><i>SMP</i></div>
       </article>
     </div>
 
@@ -638,12 +638,12 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
     <div class="sec-head reveal">
       <p class="eyebrow">Real Record</p>
       <h2>말보다, 기록</h2>
-      <p class="lead">미스토리가 매장에서 직접 촬영해 남긴 관리 기록입니다. 개인정보 보호를 위해 눈 부위와 배경은 가림 처리했습니다.</p>
+      <p class="lead">미스토리가 매장에서 직접 기록한 관리 전·후입니다.</p>
     </div>
     <div class="row">
       <figure class="reveal">
-        <div class="ph zoom" data-src="images/care-skin.jpg"><img src="images/care-skin.jpg" alt="피부 톤 관리 전후" loading="lazy"></div>
-        <figcaption><span>피부 톤 · 색소</span><span>Before / After</span></figcaption>
+        <div class="ph zoom" data-src="images/ba-skin.jpg"><img src="images/ba-skin.jpg" alt="피부 결 관리 전후" loading="lazy"></div>
+        <figcaption><span>피부 결 · 모공</span><span>Before / After</span></figcaption>
       </figure>
       <figure class="reveal" style="--d:.08s">
         <div class="ph zoom" data-src="images/ba-body.jpg"><img src="images/ba-body.jpg" alt="복부 라인 관리 전후" loading="lazy"></div>
@@ -654,7 +654,7 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
         <figcaption><span>두피 · 모근</span><span>Before / After</span></figcaption>
       </figure>
     </div>
-    <p class="note reveal">※ 관리 결과는 개인의 피부·두피 상태와 생활 습관에 따라 다르며, 사진은 관리 직후 촬영된 개별 기록입니다.</p>
+          <p class="note reveal">※ 관리 결과는 개인의 피부·두피 상태와 생활 습관에 따라 다르며, 사진은 관리 직후 촬영된 개별 기록입니다.</p>
   </div>
 </section>
 
@@ -667,12 +667,12 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
       <p class="lead">신시가지 네잎클로버 옆, 세븐일레븐 건물 3층. 문을 열면 바로 다른 온도의 공간이 시작됩니다.</p>
     </div>
     <div class="gal-grid">
-      <div class="gal-item g1 zoom reveal" data-src="images/space-03.jpg"><img src="images/space-03.jpg" alt="미스토리 라운지" loading="lazy"></div>
-      <div class="gal-item g2 zoom reveal" data-src="images/space-01.jpg" style="--d:.05s"><img src="images/space-01.jpg" alt="미스토리 입구 복도" loading="lazy"></div>
-      <div class="gal-item g3 zoom reveal" data-src="images/space-05.jpg"><img src="images/space-05.jpg" alt="미스토리 로고와 마이크로젯 기기" loading="lazy"></div>
-      <div class="gal-item g4 zoom reveal" data-src="images/space-02.jpg" style="--d:.05s"><img src="images/space-02.jpg" alt="미스토리 명함" loading="lazy"></div>
+      <div class="gal-item g1 zoom reveal" data-src="images/space-01.jpg"><img src="images/space-01.jpg" alt="미스토리 입구 복도" loading="lazy"></div>
+      <div class="gal-item g2 zoom reveal" data-src="images/space-05.jpg" style="--d:.05s"><img src="images/space-05.jpg" alt="미스토리 로고와 마이크로젯 기기" loading="lazy"></div>
+      <div class="gal-item g3 zoom reveal" data-src="images/space-02.jpg" style="--d:.1s"><img src="images/space-02.jpg" alt="미스토리 명함" loading="lazy"></div>
+      <div class="gal-item g4 zoom reveal" data-src="images/space-03.jpg" style="--d:.05s"><img src="images/space-03.jpg" alt="미스토리 라운지" loading="lazy"></div>
       <div class="gal-item g5 zoom reveal" data-src="images/space-04.jpg" style="--d:.1s"><img src="images/space-04.jpg" alt="미스토리 오픈 기념" loading="lazy"></div>
-      <div class="gal-item g6 zoom reveal" data-src="images/building.jpg"><img src="images/building.jpg" alt="미스토리가 있는 건물 야경" loading="lazy"></div>
+      <div class="gal-item g6 zoom reveal" data-src="images/building.jpg" style="--d:.15s"><img src="images/building.jpg" alt="미스토리가 있는 건물 야경" loading="lazy"></div>
     </div>
   </div>
 </section>
@@ -731,8 +731,8 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
         <div>
           <div class="big">4.9</div>
           <div class="stars">★★★★★</div>
+          <div class="meta" style="margin-top:10px">영수증 인증 리뷰 5건</div>
         </div>
-        <div class="meta">영수증 인증 리뷰 5건</div>
       </div>
     </div>
 
