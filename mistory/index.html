@@ -149,6 +149,10 @@ h2{font-size:clamp(1.9rem,3.5vw,3rem);line-height:1.38}
 .nav, .nav a{color:var(--cream)}
 .nav.scrolled{background:rgba(250,247,242,.93);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom-color:var(--line);padding-top:14px;padding-bottom:14px}
 .nav.scrolled, .nav.scrolled a{color:var(--ink)}
+.nav-links a{text-shadow:0 1px 14px rgba(0,0,0,.55)}
+.nav.scrolled .nav-links a{text-shadow:none}
+.nav .call{text-shadow:0 1px 14px rgba(0,0,0,.45)}
+.nav.scrolled .call{text-shadow:none}
 .nav.scrolled .call{border-color:rgba(26,23,21,.24)}
 .nav.scrolled .call:hover{color:#fff}
 .menu-btn{display:none;width:44px;height:44px;position:relative;margin-left:auto}
@@ -172,7 +176,8 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
 .hero{position:relative;display:grid;grid-template-columns:1.04fr 1fr;min-height:100svh;background:#141110;overflow:hidden}
 .hero::before{content:"";position:absolute;inset:0 50% 0 0;background:radial-gradient(120% 90% at 22% 18%,#221D19 0%,#161312 55%,#100E0D 100%);z-index:0;pointer-events:none}
 .hero-visual{position:relative;overflow:hidden;min-height:100svh;order:2}
-.hero-visual>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 42%;transform:scale(1.02);animation:slowzoom 28s var(--ease) forwards}
+.hero-visual picture{display:contents}
+.hero-visual>img,.hero-visual picture>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 42%;transform:scale(1.02);animation:slowzoom 28s var(--ease) forwards}
 @keyframes slowzoom{to{transform:scale(1.1)}}
 .hero-visual::after{
   content:"";position:absolute;inset:0;
@@ -440,7 +445,8 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
   .nav-links,.nav .call{display:none}
   .menu-btn{display:block}
   .hero{grid-template-columns:1fr;min-height:0}
-  .hero-visual{order:-1;min-height:52svh;height:52svh}
+  .hero::before{display:none}
+  .hero-visual{order:-1;min-height:56svh;height:56svh}
   .hero-copy{padding:clamp(34px,7vw,52px) var(--pad) clamp(40px,9vw,56px)}
   .hero h1{font-size:clamp(1.95rem,7.4vw,2.6rem)}
   .hero-vcap{display:none}
@@ -474,6 +480,9 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
   .foot .brand{grid-column:span 1}
   .record .row{grid-template-columns:1fr}
   .record .row figure:last-child{grid-column:span 1}
+  .record .ph{aspect-ratio:auto;background:transparent;display:block}
+  .record .ph img{padding:0;height:auto;object-fit:initial}
+  .sec{padding:clamp(64px,14vw,88px) 0}
 }
 </style>
 </head>
@@ -521,7 +530,10 @@ body.menu-open .mobile-menu{opacity:1;visibility:visible}
     <div class="scrollhint">Scroll to explore</div>
   </div>
   <div class="hero-visual">
-    <img src="images/hero-sign.jpg" alt="미스토리 3층 간판" fetchpriority="high">
+    <picture>
+      <source media="(max-width:860px)" srcset="images/hero-hall.jpg">
+      <img src="images/hero-sign.jpg" alt="미스토리 3층 간판" fetchpriority="high">
+    </picture>
     <span class="hero-vcap">Jeonju Sinsegaji · 3F</span>
     <figure class="hero-inset">
       <img src="images/hero-hall.jpg" alt="미스토리 내부 복도">
