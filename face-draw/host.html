@@ -1,0 +1,3498 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#05070F">
+<title>🎨 내 얼굴 그리기 대회 · 진행자 | 강연 크리에이터 · 정진영</title>
+<meta name="description" content="내 얼굴 그리기 대회 — 참가자 얼굴이 둥둥 떠다니는 진행자 전광판, AI 베스트 1~3위 발표 화면">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  :root{
+    --bg:#05070F; --bg-2:#0A1122; --bg-3:#101A33;
+    --panel:rgba(18,26,46,.72);
+    --line:rgba(255,255,255,.09); --line-strong:rgba(255,255,255,.17);
+    --amber:#F59E0B; --amber-lt:#FCD34D; --amber-soft:rgba(245,158,11,.13);
+    --text:#F1F5F9; --muted:#9AA9BF; --dim:#6E7F97;
+    --sans:"Pretendard Variable",Pretendard,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR","Noto Serif CJK KR",Georgia,serif;
+  }
+  html,body{margin:0;padding:0;height:100%;background:var(--bg)}
+  body{
+    color:var(--text);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;letter-spacing:-0.01em;
+    -webkit-user-select:none;user-select:none;overflow:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(90% 46% at 50% -12%, rgba(245,158,11,.15) 0%, rgba(245,158,11,0) 62%),
+      radial-gradient(60% 46% at 100% 110%, rgba(139,92,246,.16) 0%, rgba(139,92,246,0) 70%),
+      radial-gradient(50% 40% at 0% 90%, rgba(34,211,238,.12) 0%, rgba(34,211,238,0) 70%),
+      linear-gradient(180deg,#080D1A 0%,#05070F 58%,#04060D 100%);
+  }
+  .stage{
+    position:relative;z-index:1;width:100vw;height:100vh;height:100dvh;
+    display:flex;flex-direction:column;padding:10px 16px 8px;gap:7px;
+  }
+
+  /* ================= 머리글 ================= */
+  .top{flex:none;display:flex;align-items:center;gap:12px}
+  .brand{display:flex;align-items:center;gap:10px;min-width:0}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--amber);box-shadow:0 0 16px rgba(245,158,11,.95);flex:none}
+  .bt{min-width:0;display:flex;flex-direction:column;gap:1px}
+  .bt-k{font-size:11px;font-weight:700;color:#93A3B9;white-space:nowrap}
+  .bt-k b{color:#D9E3EF;font-weight:800}
+  .bt-t{font-family:var(--serif);font-weight:900;font-size:23px;line-height:1.1;letter-spacing:-0.03em;color:#fff;white-space:nowrap}
+  .bt-t .em{color:var(--amber-lt)}
+  .bt-t .emj{font-family:var(--sans);margin-right:5px}
+  .top-r{margin-left:auto;display:flex;align-items:center;gap:8px;flex:none}
+  .pill{
+    display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:#C7D2E1;
+    border:1px solid var(--line-strong);background:rgba(255,255,255,.035);
+    padding:7px 12px;border-radius:12px;white-space:nowrap;
+  }
+  .pill b{color:#fff;font-weight:900;font-variant-numeric:tabular-nums}
+  .pill.room{border-color:rgba(245,158,11,.32);background:var(--amber-soft)}
+  .pill.room b{color:var(--amber-lt);letter-spacing:.09em}
+  .pill.timer{font-variant-numeric:tabular-nums;border-color:rgba(52,211,153,.34);background:rgba(52,211,153,.1);color:#A7F3D0}
+  .pill.timer.big b{font-size:15px}
+  .pill.live .lv{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#FCD34D}
+  .pill.live .lv i{width:6px;height:6px;border-radius:50%;background:#F59E0B;animation:pulse 1.2s infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.28;transform:scale(.72)}}
+  .net{width:7px;height:7px;border-radius:50%;background:#61718A;flex:none;transition:background .2s}
+  .net.on{background:#34D399;box-shadow:0 0 10px rgba(52,211,153,.85)}
+
+  /* ================= 둥둥 전광판 ================= */
+  .skyWrap{position:relative;flex:1;min-height:0;border-radius:20px;overflow:hidden;
+    border:1px solid rgba(255,255,255,.07);
+    background:
+      radial-gradient(70% 60% at 50% 18%, rgba(245,158,11,.09) 0%, rgba(245,158,11,0) 60%),
+      linear-gradient(180deg, rgba(11,18,34,.72), rgba(6,9,18,.86));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05), inset 0 -40px 70px -50px rgba(245,158,11,.5);
+  }
+  .skyWrap::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:
+      radial-gradient(1.4px 1.4px at 8% 18%, rgba(255,255,255,.55) 50%, transparent 51%),
+      radial-gradient(1.2px 1.2px at 72% 12%, rgba(255,255,255,.45) 50%, transparent 51%),
+      radial-gradient(1.6px 1.6px at 88% 62%, rgba(252,211,77,.5) 50%, transparent 51%),
+      radial-gradient(1.2px 1.2px at 22% 78%, rgba(255,255,255,.4) 50%, transparent 51%),
+      radial-gradient(1.3px 1.3px at 46% 38%, rgba(255,255,255,.3) 50%, transparent 51%);
+    opacity:.7;
+  }
+  .sky{position:absolute;inset:0}
+  .bub{position:absolute;left:0;top:0;will-change:transform;cursor:zoom-in}
+  .bin{width:100%;height:100%;position:relative;animation:popIn .5s cubic-bezier(.2,1.5,.4,1) both}
+  @keyframes popIn{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+  .bub img{
+    width:100%;height:100%;object-fit:cover;display:block;border-radius:16px;
+    background:#FFFDF7;border:2px solid rgba(255,255,255,.72);
+    box-shadow:0 18px 34px -18px rgba(0,0,0,.95), 0 0 0 1px rgba(0,0,0,.3);
+    transition:box-shadow .2s ease,border-color .2s ease;
+  }
+  .bub:hover img{border-color:var(--amber-lt);box-shadow:0 20px 40px -16px rgba(245,158,11,.55)}
+  .bub .nm{
+    position:absolute;left:50%;bottom:5px;transform:translateX(-50%);
+    max-width:calc(100% - 12px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    font-size:11.5px;font-weight:800;letter-spacing:-0.02em;color:#1B1204;
+    background:rgba(252,211,77,.94);padding:2px 8px;border-radius:8px;
+    box-shadow:0 3px 10px -3px rgba(0,0,0,.7);
+  }
+  .empty{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:10px;text-align:center;padding:20px;pointer-events:none;
+  }
+  .empty .ee{font-size:52px;filter:drop-shadow(0 0 20px rgba(245,158,11,.6));animation:bob 4s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+  .empty h2{margin:0;font-family:var(--serif);font-size:25px;font-weight:900;letter-spacing:-0.03em;color:#fff}
+  .empty p{margin:0;font-size:13px;font-weight:700;color:#8FA0B6;line-height:1.6;max-width:440px}
+  .empty p b{color:var(--amber-lt)}
+  .empty.off{display:none}
+
+  /* 새 얼굴 도착 토스트 */
+  .arrive{
+    position:absolute;left:50%;bottom:14px;transform:translate(-50%,20px);z-index:6;
+    display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;
+    color:#1B1204;background:linear-gradient(180deg,#FCD34D,#F59E0B);
+    padding:8px 16px;border-radius:99px;opacity:0;transition:opacity .25s ease,transform .25s ease;
+    box-shadow:0 14px 28px -14px rgba(245,158,11,.9);pointer-events:none;white-space:nowrap;
+  }
+  .arrive.on{opacity:1;transform:translate(-50%,0)}
+
+  /* ================= 조작 바 ================= */
+  .bar{
+    flex:none;display:flex;align-items:center;gap:8px;
+    padding:7px;border-radius:16px;border:1px solid var(--line);
+    background:rgba(255,255,255,.025);
+  }
+  .btn{
+    appearance:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:800;letter-spacing:-0.02em;
+    padding:11px 15px;border-radius:12px;border:1px solid var(--line-strong);
+    background:rgba(255,255,255,.055);color:#DCE6F2;
+    display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+    transition:background .15s ease,border-color .15s ease,transform .1s ease;
+  }
+  .btn:hover{background:rgba(255,255,255,.1)}
+  .btn:active{transform:scale(.98)}
+  .btn.go{background:linear-gradient(180deg,#FCD34D,#F59E0B);color:#2A1A02;border-color:transparent;
+    box-shadow:0 14px 30px -16px rgba(245,158,11,.9)}
+  .btn.go:hover{filter:brightness(1.05)}
+  .btn.win{background:linear-gradient(180deg,#8B5CF6,#6D28D9);color:#fff;border-color:transparent;
+    box-shadow:0 14px 30px -16px rgba(139,92,246,.9)}
+  .btn.danger.arm{background:rgba(239,68,68,.22);border-color:rgba(239,68,68,.6);color:#FCA5A5}
+  .btn:disabled{opacity:.35;cursor:default;box-shadow:none}
+  .seg{display:inline-flex;padding:3px;gap:2px;border-radius:11px;background:rgba(0,0,0,.35);border:1px solid var(--line)}
+  .seg button{
+    appearance:none;cursor:pointer;font-family:inherit;font-size:12px;font-weight:800;
+    color:#9FB0C6;background:transparent;border:0;padding:8px 11px;border-radius:9px;
+  }
+  .seg button.on{background:rgba(255,255,255,.12);color:#fff}
+  .bar .sp{flex:1}
+  .kbdhint{font-size:11px;font-weight:700;color:#5D6C80;white-space:nowrap;padding-right:6px}
+  .kbdhint kbd{font-family:inherit;font-size:10.5px;font-weight:800;color:#B7C5D6;background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.14);border-radius:5px;padding:1px 5px;margin-left:3px}
+
+  /* ================= 확대 보기 ================= */
+  .zoom{
+    position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;
+    background:rgba(4,6,12,.9);backdrop-filter:blur(6px);
+  }
+  .zoom.on{display:flex;animation:fadeIn .22s ease both}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .zoom-card{display:flex;flex-direction:column;align-items:center;gap:14px}
+  .zoom-card img{width:min(62vh,62vw);height:min(62vh,62vw);border-radius:24px;background:#FFFDF7;
+    box-shadow:0 0 0 4px rgba(252,211,77,.8), 0 40px 80px -30px rgba(0,0,0,.95)}
+  .zoom-card .zn{font-family:var(--serif);font-size:30px;font-weight:900;color:#fff;letter-spacing:-0.03em}
+  .zoom-card .zs{font-size:12.5px;font-weight:700;color:#8FA0B6}
+  .zoom-hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font-size:12px;font-weight:700;color:#6E7F97}
+
+  /* ================= AI 발표 ================= */
+  .podium{
+    position:fixed;inset:0;z-index:60;display:none;flex-direction:column;
+    background:
+      radial-gradient(70% 50% at 50% 0%, rgba(139,92,246,.28) 0%, rgba(139,92,246,0) 62%),
+      radial-gradient(60% 50% at 50% 100%, rgba(245,158,11,.22) 0%, rgba(245,158,11,0) 64%),
+      linear-gradient(180deg,#0A0A1C 0%,#07060F 60%,#05040B 100%);
+    overflow:hidden;
+  }
+  .podium.on{display:flex;animation:fadeIn .3s ease both}
+  .phead{flex:none;text-align:center;padding:18px 20px 2px}
+  .phead .pk{font-size:13px;font-weight:900;letter-spacing:.28em;color:var(--amber-lt)}
+  .phead h2{margin:7px 0 0;font-family:var(--serif);font-size:34px;font-weight:900;letter-spacing:-0.04em;color:#fff}
+  .phead h2 .em{color:var(--amber-lt)}
+  .phead p{margin:5px 0 0;font-size:13px;font-weight:700;color:#9AA9BF}
+  .prow{flex:1;min-height:0;display:flex;align-items:flex-end;justify-content:center;gap:26px;padding:8px 26px 0;overflow:hidden}
+  .pcol{display:flex;flex-direction:column;align-items:center;min-width:0;opacity:0;transform:translateY(26px)}
+  .pcol.show{animation:rise .6s cubic-bezier(.2,1.2,.4,1) forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+  .pcol .rk{font-size:13px;font-weight:900;letter-spacing:.16em;color:#CBD5E1;margin-bottom:6px}
+  .pcol.p1 .rk{color:#FCD34D;font-size:15px}
+  .pcol .pi{
+    position:relative;border-radius:20px;background:#FFFDF7;overflow:hidden;
+    box-shadow:0 30px 60px -26px rgba(0,0,0,.95), 0 0 0 3px rgba(255,255,255,.5);
+  }
+  .pcol .pi img{display:block;width:100%;height:100%;object-fit:cover}
+  .pcol.p1 .pi{width:min(30vh,248px);height:min(30vh,248px);box-shadow:0 30px 70px -24px rgba(245,158,11,.75), 0 0 0 4px #FCD34D}
+  .pcol.p2 .pi,.pcol.p3 .pi{width:min(23vh,192px);height:min(23vh,192px);box-shadow:0 30px 60px -26px rgba(0,0,0,.95), 0 0 0 3px rgba(203,213,225,.85)}
+  .pcol .crown{position:absolute;right:8px;top:6px;font-size:26px;z-index:2;
+    filter:drop-shadow(0 6px 14px rgba(245,158,11,.8))}
+  .pcol .nm{margin-top:10px;font-family:var(--serif);font-size:21px;font-weight:900;color:#fff;letter-spacing:-0.03em;
+    max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pcol.p1 .nm{font-size:26px}
+  .pcol .tt{font-size:12.5px;font-weight:800;color:#FDE68A;margin-top:2px}
+  .pcol .sc{font-size:12px;font-weight:800;color:#94A3B8;margin-top:3px;font-variant-numeric:tabular-nums}
+  .pcol .cm{
+    margin-top:8px;font-size:12.5px;font-weight:600;color:#C7D2E1;line-height:1.5;text-align:center;
+    max-width:340px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+    padding:9px 13px;border-radius:13px;word-break:keep-all;
+  }
+  .pcol.p1 .cm{max-width:400px;font-size:13.5px;color:#E8EEF7;background:rgba(252,211,77,.09);
+    border-color:rgba(252,211,77,.28)}
+  .pcol .cm b{color:#FDE68A;font-weight:900}
+  .pfoot{flex:none;display:flex;align-items:center;justify-content:center;gap:14px;padding:10px 20px 14px;
+    border-top:1px solid rgba(255,255,255,.07);background:rgba(5,6,14,.6)}
+  .pfoot .note{font-size:11.5px;font-weight:700;color:#5E6C80}
+  .pfoot .btn{padding:10px 16px}
+  .confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+  .confetti i{position:absolute;top:-8vh;width:8px;height:14px;border-radius:2px;opacity:.95;
+    animation:fall linear forwards}
+  @keyframes fall{0%{transform:translateY(-10vh) rotate(0)}100%{transform:translateY(115vh) rotate(720deg)}}
+
+  /* ================= QR ================= */
+  .qr-overlay{
+    position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;
+    background:rgba(3,5,10,.9);backdrop-filter:blur(8px);
+  }
+  .qr-overlay.on{display:flex;animation:fadeIn .25s ease both}
+  .qr-card{
+    position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;
+    background:linear-gradient(180deg,#131C33,#0B1220);border:1px solid rgba(255,255,255,.14);
+    border-radius:26px;padding:26px 30px 22px;box-shadow:0 40px 90px -40px rgba(0,0,0,.95);
+  }
+  .qr-card .qk{font-size:11.5px;font-weight:800;letter-spacing:.2em;color:#93A3B9}
+  .qr-card .qt{font-family:var(--serif);font-size:27px;font-weight:900;color:#fff;letter-spacing:-0.03em}
+  .qr-card .qt .em{color:var(--amber-lt)}
+  .qr-box{background:#FFFDF8;border-radius:18px;padding:14px;margin-top:4px}
+  .qr-box svg{display:block;width:320px;height:320px}
+  .qr-card .qs{font-size:14px;font-weight:800;color:#E8EDF5}
+  .qr-card .qd{margin-top:2px;font-size:12px;font-weight:600;color:#8C9CB2}
+  .qr-card .qr-room{margin-top:6px;font-size:12px;font-weight:800;color:#E9D7B6;
+    border:1px solid rgba(245,158,11,.34);background:rgba(245,158,11,.12);padding:5px 14px;border-radius:99px}
+  .qr-card .qr-room b{color:var(--amber-lt);letter-spacing:.1em}
+  .qr-close{position:absolute;top:12px;right:12px;appearance:none;cursor:pointer;border:0;
+    width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.07);color:#C7D2E1;font-size:15px;font-weight:800}
+  .qr-close:hover{background:#1D2A45}
+  .qr-hint{margin-top:6px;font-size:11px;font-weight:600;color:#556274}
+
+  .toast{
+    position:fixed;left:50%;bottom:74px;transform:translate(-50%,10px);z-index:90;
+    font-size:13px;font-weight:800;color:#2A1A02;background:#FCD34D;padding:11px 20px;border-radius:12px;
+    box-shadow:0 16px 34px -16px rgba(0,0,0,.9);opacity:0;transition:opacity .2s ease,transform .2s ease;
+    pointer-events:none;max-width:80vw;text-align:center;
+  }
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+
+  @media (max-width:1180px){
+    .kbdhint{display:none}
+    .btn{padding:10px 12px;font-size:12px}
+    .bt-t{font-size:20px}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <header class="top">
+    <div class="brand">
+      <span class="dot"></span>
+      <div class="bt">
+        <span class="bt-k">강연 크리에이터 · <b>정진영</b> · 진행자 화면</span>
+        <div class="bt-t"><span class="emj">🎨</span>내 얼굴 <span class="em">그리기 대회</span></div>
+      </div>
+    </div>
+    <div class="top-r">
+      <span class="pill room">방 코드 <b id="roomCode">JY22</b></span>
+      <span class="pill"><b id="cntNum">0</b>명 참가</span>
+      <span class="pill timer" id="timerPill">⏱ <b id="timerNum">--:--</b></span>
+      <span class="pill live"><span class="lv"><i></i>LIVE</span></span>
+      <span class="net" id="netDot" title="실시간 연결"></span>
+    </div>
+  </header>
+
+  <div class="skyWrap">
+    <div class="sky" id="sky"></div>
+    <div class="empty" id="empty">
+      <div class="ee">🎨</div>
+      <h2>아직 도착한 얼굴이 없어요</h2>
+      <p><b>[📱 QR 입장]</b>을 눌러 QR을 띄우고, 청중에게 <b>닉네임 → 얼굴형 → 색칠 → [🎨 내 얼굴 띄우기]</b>를 안내해 주세요.</p>
+    </div>
+    <div class="arrive" id="arrive">🙂 <span id="arriveName">새 얼굴 도착</span></div>
+  </div>
+
+  <div class="bar">
+    <button class="btn go" id="startBtn" type="button">🚀 대회 시작</button>
+    <div class="seg" id="durSeg" aria-label="그리기 시간">
+      <button type="button" data-dur="120">2분</button>
+      <button type="button" data-dur="180" class="on">3분</button>
+      <button type="button" data-dur="300">5분</button>
+    </div>
+    <span class="sp"></span>
+    <span class="kbdhint"><kbd>B</kbd> 소리 <kbd>R</kbd> 발표 <kbd>C</kbd> 비우기</span>
+    <button class="btn win" id="revealBtn" type="button">🏆 AI 베스트 1~3위 발표</button>
+    <button class="btn danger" id="clearBtn" type="button">🧹 참가자 비우기</button>
+    <button class="btn" id="bgmBtn" type="button">🔊 BGM ON</button>
+    <button class="btn" id="qrBtn" type="button">📱 QR 입장</button>
+  </div>
+</div>
+
+<!-- 확대 보기 -->
+<div class="zoom" id="zoom" role="dialog" aria-label="얼굴 크게 보기">
+  <div class="zoom-card">
+    <img id="zoomImg" alt="">
+    <div class="zn" id="zoomName"></div>
+    <div class="zs" id="zoomSub"></div>
+  </div>
+  <div class="zoom-hint">화면을 누르거나 ESC를 누르면 닫힙니다</div>
+</div>
+
+<!-- AI 발표 -->
+<div class="podium" id="podium" role="dialog" aria-label="AI 베스트 1~3위 발표">
+  <div class="confetti" id="confetti"></div>
+  <div class="phead">
+    <div class="pk">✦ AI 심사위원단 발표 ✦</div>
+    <h2>오늘의 얼굴 <span class="em">베스트 3</span></h2>
+    <p id="podiumSub">색 · 채움 · 대칭 · 이목구비 · 붓질을 종합 심사했습니다</p>
+  </div>
+  <div class="prow" id="podiumRow"></div>
+  <div class="pfoot">
+    <span class="note">당첨된 얼굴을 크게 띄워 박수 한 번! · 진행자 화면에만 보입니다</span>
+    <button class="btn" id="podiumClose" type="button">✕ 닫고 계속 띄우기</button>
+  </div>
+</div>
+
+<!-- QR -->
+<div class="qr-overlay" id="qrOverlay" role="dialog" aria-label="청중 입장 QR">
+  <div class="qr-card">
+    <button class="qr-close" id="qrClose" type="button" aria-label="닫기">✕</button>
+    <div class="qk">SCAN &amp; DRAW</div>
+    <div class="qt">🎨 내 얼굴 <span class="em">그리기 대회</span></div>
+    <div class="qr-box" id="qrBox"></div>
+    <div class="qs">카메라로 QR을 스캔해 주세요</div>
+    <div class="qd">닉네임 → 얼굴형 → 색칠 → 내 얼굴 띄우기</div>
+    <div class="qr-room">방 코드 <b id="qrRoom">JY22</b></div>
+    <div class="qr-hint">화면을 누르거나 ESC를 누르면 닫힙니다 · 강연 크리에이터 · 정진영</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- QR 인코더 (오프라인에서도 동작하도록 내장) -->
+<!-- QR 인코더 (오프라인에서도 동작하도록 내장) -->
+<script>//---------------------------------------------------------------------
+//
+// QR Code Generator for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//  http://www.opensource.org/licenses/mit-license.php
+//
+// The word 'QR Code' is registered trademark of
+// DENSO WAVE INCORPORATED
+//  http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+
+var qrcode = function() {
+
+  //---------------------------------------------------------------------
+  // qrcode
+  //---------------------------------------------------------------------
+
+  /**
+   * qrcode
+   * @param typeNumber 1 to 40
+   * @param errorCorrectionLevel 'L','M','Q','H'
+   */
+  var qrcode = function(typeNumber, errorCorrectionLevel) {
+
+    var PAD0 = 0xEC;
+    var PAD1 = 0x11;
+
+    var _typeNumber = typeNumber;
+    var _errorCorrectionLevel = QRErrorCorrectionLevel[errorCorrectionLevel];
+    var _modules = null;
+    var _moduleCount = 0;
+    var _dataCache = null;
+    var _dataList = [];
+
+    var _this = {};
+
+    var makeImpl = function(test, maskPattern) {
+
+      _moduleCount = _typeNumber * 4 + 17;
+      _modules = function(moduleCount) {
+        var modules = new Array(moduleCount);
+        for (var row = 0; row < moduleCount; row += 1) {
+          modules[row] = new Array(moduleCount);
+          for (var col = 0; col < moduleCount; col += 1) {
+            modules[row][col] = null;
+          }
+        }
+        return modules;
+      }(_moduleCount);
+
+      setupPositionProbePattern(0, 0);
+      setupPositionProbePattern(_moduleCount - 7, 0);
+      setupPositionProbePattern(0, _moduleCount - 7);
+      setupPositionAdjustPattern();
+      setupTimingPattern();
+      setupTypeInfo(test, maskPattern);
+
+      if (_typeNumber >= 7) {
+        setupTypeNumber(test);
+      }
+
+      if (_dataCache == null) {
+        _dataCache = createData(_typeNumber, _errorCorrectionLevel, _dataList);
+      }
+
+      mapData(_dataCache, maskPattern);
+    };
+
+    var setupPositionProbePattern = function(row, col) {
+
+      for (var r = -1; r <= 7; r += 1) {
+
+        if (row + r <= -1 || _moduleCount <= row + r) continue;
+
+        for (var c = -1; c <= 7; c += 1) {
+
+          if (col + c <= -1 || _moduleCount <= col + c) continue;
+
+          if ( (0 <= r && r <= 6 && (c == 0 || c == 6) )
+              || (0 <= c && c <= 6 && (r == 0 || r == 6) )
+              || (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+            _modules[row + r][col + c] = true;
+          } else {
+            _modules[row + r][col + c] = false;
+          }
+        }
+      }
+    };
+
+    var getBestMaskPattern = function() {
+
+      var minLostPoint = 0;
+      var pattern = 0;
+
+      for (var i = 0; i < 8; i += 1) {
+
+        makeImpl(true, i);
+
+        var lostPoint = QRUtil.getLostPoint(_this);
+
+        if (i == 0 || minLostPoint > lostPoint) {
+          minLostPoint = lostPoint;
+          pattern = i;
+        }
+      }
+
+      return pattern;
+    };
+
+    var setupTimingPattern = function() {
+
+      for (var r = 8; r < _moduleCount - 8; r += 1) {
+        if (_modules[r][6] != null) {
+          continue;
+        }
+        _modules[r][6] = (r % 2 == 0);
+      }
+
+      for (var c = 8; c < _moduleCount - 8; c += 1) {
+        if (_modules[6][c] != null) {
+          continue;
+        }
+        _modules[6][c] = (c % 2 == 0);
+      }
+    };
+
+    var setupPositionAdjustPattern = function() {
+
+      var pos = QRUtil.getPatternPosition(_typeNumber);
+
+      for (var i = 0; i < pos.length; i += 1) {
+
+        for (var j = 0; j < pos.length; j += 1) {
+
+          var row = pos[i];
+          var col = pos[j];
+
+          if (_modules[row][col] != null) {
+            continue;
+          }
+
+          for (var r = -2; r <= 2; r += 1) {
+
+            for (var c = -2; c <= 2; c += 1) {
+
+              if (r == -2 || r == 2 || c == -2 || c == 2
+                  || (r == 0 && c == 0) ) {
+                _modules[row + r][col + c] = true;
+              } else {
+                _modules[row + r][col + c] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+
+    var setupTypeNumber = function(test) {
+
+      var bits = QRUtil.getBCHTypeNumber(_typeNumber);
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[Math.floor(i / 3)][i % 3 + _moduleCount - 8 - 3] = mod;
+      }
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[i % 3 + _moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
+      }
+    };
+
+    var setupTypeInfo = function(test, maskPattern) {
+
+      var data = (_errorCorrectionLevel << 3) | maskPattern;
+      var bits = QRUtil.getBCHTypeInfo(data);
+
+      // vertical
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 6) {
+          _modules[i][8] = mod;
+        } else if (i < 8) {
+          _modules[i + 1][8] = mod;
+        } else {
+          _modules[_moduleCount - 15 + i][8] = mod;
+        }
+      }
+
+      // horizontal
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 8) {
+          _modules[8][_moduleCount - i - 1] = mod;
+        } else if (i < 9) {
+          _modules[8][15 - i - 1 + 1] = mod;
+        } else {
+          _modules[8][15 - i - 1] = mod;
+        }
+      }
+
+      // fixed module
+      _modules[_moduleCount - 8][8] = (!test);
+    };
+
+    var mapData = function(data, maskPattern) {
+
+      var inc = -1;
+      var row = _moduleCount - 1;
+      var bitIndex = 7;
+      var byteIndex = 0;
+      var maskFunc = QRUtil.getMaskFunction(maskPattern);
+
+      for (var col = _moduleCount - 1; col > 0; col -= 2) {
+
+        if (col == 6) col -= 1;
+
+        while (true) {
+
+          for (var c = 0; c < 2; c += 1) {
+
+            if (_modules[row][col - c] == null) {
+
+              var dark = false;
+
+              if (byteIndex < data.length) {
+                dark = ( ( (data[byteIndex] >>> bitIndex) & 1) == 1);
+              }
+
+              var mask = maskFunc(row, col - c);
+
+              if (mask) {
+                dark = !dark;
+              }
+
+              _modules[row][col - c] = dark;
+              bitIndex -= 1;
+
+              if (bitIndex == -1) {
+                byteIndex += 1;
+                bitIndex = 7;
+              }
+            }
+          }
+
+          row += inc;
+
+          if (row < 0 || _moduleCount <= row) {
+            row -= inc;
+            inc = -inc;
+            break;
+          }
+        }
+      }
+    };
+
+    var createBytes = function(buffer, rsBlocks) {
+
+      var offset = 0;
+
+      var maxDcCount = 0;
+      var maxEcCount = 0;
+
+      var dcdata = new Array(rsBlocks.length);
+      var ecdata = new Array(rsBlocks.length);
+
+      for (var r = 0; r < rsBlocks.length; r += 1) {
+
+        var dcCount = rsBlocks[r].dataCount;
+        var ecCount = rsBlocks[r].totalCount - dcCount;
+
+        maxDcCount = Math.max(maxDcCount, dcCount);
+        maxEcCount = Math.max(maxEcCount, ecCount);
+
+        dcdata[r] = new Array(dcCount);
+
+        for (var i = 0; i < dcdata[r].length; i += 1) {
+          dcdata[r][i] = 0xff & buffer.getBuffer()[i + offset];
+        }
+        offset += dcCount;
+
+        var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+        var rawPoly = qrPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+        var modPoly = rawPoly.mod(rsPoly);
+        ecdata[r] = new Array(rsPoly.getLength() - 1);
+        for (var i = 0; i < ecdata[r].length; i += 1) {
+          var modIndex = i + modPoly.getLength() - ecdata[r].length;
+          ecdata[r][i] = (modIndex >= 0)? modPoly.getAt(modIndex) : 0;
+        }
+      }
+
+      var totalCodeCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalCodeCount += rsBlocks[i].totalCount;
+      }
+
+      var data = new Array(totalCodeCount);
+      var index = 0;
+
+      for (var i = 0; i < maxDcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < dcdata[r].length) {
+            data[index] = dcdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      for (var i = 0; i < maxEcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < ecdata[r].length) {
+            data[index] = ecdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      return data;
+    };
+
+    var createData = function(typeNumber, errorCorrectionLevel, dataList) {
+
+      var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectionLevel);
+
+      var buffer = qrBitBuffer();
+
+      for (var i = 0; i < dataList.length; i += 1) {
+        var data = dataList[i];
+        buffer.put(data.getMode(), 4);
+        buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+        data.write(buffer);
+      }
+
+      // calc num max data.
+      var totalDataCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalDataCount += rsBlocks[i].dataCount;
+      }
+
+      if (buffer.getLengthInBits() > totalDataCount * 8) {
+        throw 'code length overflow. ('
+          + buffer.getLengthInBits()
+          + '>'
+          + totalDataCount * 8
+          + ')';
+      }
+
+      // end code
+      if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+        buffer.put(0, 4);
+      }
+
+      // padding
+      while (buffer.getLengthInBits() % 8 != 0) {
+        buffer.putBit(false);
+      }
+
+      // padding
+      while (true) {
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD0, 8);
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD1, 8);
+      }
+
+      return createBytes(buffer, rsBlocks);
+    };
+
+    _this.addData = function(data, mode) {
+
+      mode = mode || 'Byte';
+
+      var newData = null;
+
+      switch(mode) {
+      case 'Numeric' :
+        newData = qrNumber(data);
+        break;
+      case 'Alphanumeric' :
+        newData = qrAlphaNum(data);
+        break;
+      case 'Byte' :
+        newData = qr8BitByte(data);
+        break;
+      case 'Kanji' :
+        newData = qrKanji(data);
+        break;
+      default :
+        throw 'mode:' + mode;
+      }
+
+      _dataList.push(newData);
+      _dataCache = null;
+    };
+
+    _this.isDark = function(row, col) {
+      if (row < 0 || _moduleCount <= row || col < 0 || _moduleCount <= col) {
+        throw row + ',' + col;
+      }
+      return _modules[row][col];
+    };
+
+    _this.getModuleCount = function() {
+      return _moduleCount;
+    };
+
+    _this.make = function() {
+      if (_typeNumber < 1) {
+        var typeNumber = 1;
+
+        for (; typeNumber < 40; typeNumber++) {
+          var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, _errorCorrectionLevel);
+          var buffer = qrBitBuffer();
+
+          for (var i = 0; i < _dataList.length; i++) {
+            var data = _dataList[i];
+            buffer.put(data.getMode(), 4);
+            buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+            data.write(buffer);
+          }
+
+          var totalDataCount = 0;
+          for (var i = 0; i < rsBlocks.length; i++) {
+            totalDataCount += rsBlocks[i].dataCount;
+          }
+
+          if (buffer.getLengthInBits() <= totalDataCount * 8) {
+            break;
+          }
+        }
+
+        _typeNumber = typeNumber;
+      }
+
+      makeImpl(false, getBestMaskPattern() );
+    };
+
+    _this.createTableTag = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var qrHtml = '';
+
+      qrHtml += '<table style="';
+      qrHtml += ' border-width: 0px; border-style: none;';
+      qrHtml += ' border-collapse: collapse;';
+      qrHtml += ' padding: 0px; margin: ' + margin + 'px;';
+      qrHtml += '">';
+      qrHtml += '<tbody>';
+
+      for (var r = 0; r < _this.getModuleCount(); r += 1) {
+
+        qrHtml += '<tr>';
+
+        for (var c = 0; c < _this.getModuleCount(); c += 1) {
+          qrHtml += '<td style="';
+          qrHtml += ' border-width: 0px; border-style: none;';
+          qrHtml += ' border-collapse: collapse;';
+          qrHtml += ' padding: 0px; margin: 0px;';
+          qrHtml += ' width: ' + cellSize + 'px;';
+          qrHtml += ' height: ' + cellSize + 'px;';
+          qrHtml += ' background-color: ';
+          qrHtml += _this.isDark(r, c)? '#000000' : '#ffffff';
+          qrHtml += ';';
+          qrHtml += '"/>';
+        }
+
+        qrHtml += '</tr>';
+      }
+
+      qrHtml += '</tbody>';
+      qrHtml += '</table>';
+
+      return qrHtml;
+    };
+
+    _this.createSvgTag = function(cellSize, margin, alt, title) {
+
+      var opts = {};
+      if (typeof arguments[0] == 'object') {
+        // Called by options.
+        opts = arguments[0];
+        // overwrite cellSize and margin.
+        cellSize = opts.cellSize;
+        margin = opts.margin;
+        alt = opts.alt;
+        title = opts.title;
+      }
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      // Compose alt property surrogate
+      alt = (typeof alt === 'string') ? {text: alt} : alt || {};
+      alt.text = alt.text || null;
+      alt.id = (alt.text) ? alt.id || 'qrcode-description' : null;
+
+      // Compose title property surrogate
+      title = (typeof title === 'string') ? {text: title} : title || {};
+      title.text = title.text || null;
+      title.id = (title.text) ? title.id || 'qrcode-title' : null;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var c, mc, r, mr, qrSvg='', rect;
+
+      rect = 'l' + cellSize + ',0 0,' + cellSize +
+        ' -' + cellSize + ',0 0,-' + cellSize + 'z ';
+
+      qrSvg += '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"';
+      qrSvg += !opts.scalable ? ' width="' + size + 'px" height="' + size + 'px"' : '';
+      qrSvg += ' viewBox="0 0 ' + size + ' ' + size + '" ';
+      qrSvg += ' preserveAspectRatio="xMinYMin meet"';
+      qrSvg += (title.text || alt.text) ? ' role="img" aria-labelledby="' +
+          escapeXml([title.id, alt.id].join(' ').trim() ) + '"' : '';
+      qrSvg += '>';
+      qrSvg += (title.text) ? '<title id="' + escapeXml(title.id) + '">' +
+          escapeXml(title.text) + '</title>' : '';
+      qrSvg += (alt.text) ? '<description id="' + escapeXml(alt.id) + '">' +
+          escapeXml(alt.text) + '</description>' : '';
+      qrSvg += '<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>';
+      qrSvg += '<path d="';
+
+      for (r = 0; r < _this.getModuleCount(); r += 1) {
+        mr = r * cellSize + margin;
+        for (c = 0; c < _this.getModuleCount(); c += 1) {
+          if (_this.isDark(r, c) ) {
+            mc = c*cellSize+margin;
+            qrSvg += 'M' + mc + ',' + mr + rect;
+          }
+        }
+      }
+
+      qrSvg += '" stroke="transparent" fill="black"/>';
+      qrSvg += '</svg>';
+
+      return qrSvg;
+    };
+
+    _this.createDataURL = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      return createDataURL(size, size, function(x, y) {
+        if (min <= x && x < max && min <= y && y < max) {
+          var c = Math.floor( (x - min) / cellSize);
+          var r = Math.floor( (y - min) / cellSize);
+          return _this.isDark(r, c)? 0 : 1;
+        } else {
+          return 1;
+        }
+      } );
+    };
+
+    _this.createImgTag = function(cellSize, margin, alt) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+
+      var img = '';
+      img += '<img';
+      img += '\u0020src="';
+      img += _this.createDataURL(cellSize, margin);
+      img += '"';
+      img += '\u0020width="';
+      img += size;
+      img += '"';
+      img += '\u0020height="';
+      img += size;
+      img += '"';
+      if (alt) {
+        img += '\u0020alt="';
+        img += escapeXml(alt);
+        img += '"';
+      }
+      img += '/>';
+
+      return img;
+    };
+
+    var escapeXml = function(s) {
+      var escaped = '';
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charAt(i);
+        switch(c) {
+        case '<': escaped += '&lt;'; break;
+        case '>': escaped += '&gt;'; break;
+        case '&': escaped += '&amp;'; break;
+        case '"': escaped += '&quot;'; break;
+        default : escaped += c; break;
+        }
+      }
+      return escaped;
+    };
+
+    var _createHalfASCII = function(margin) {
+      var cellSize = 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r1, r2, p;
+
+      var blocks = {
+        '██': '█',
+        '█ ': '▀',
+        ' █': '▄',
+        '  ': ' '
+      };
+
+      var blocksLastLineNoMargin = {
+        '██': '▀',
+        '█ ': '▀',
+        ' █': ' ',
+        '  ': ' '
+      };
+
+      var ascii = '';
+      for (y = 0; y < size; y += 2) {
+        r1 = Math.floor((y - min) / cellSize);
+        r2 = Math.floor((y + 1 - min) / cellSize);
+        for (x = 0; x < size; x += 1) {
+          p = '█';
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r1, Math.floor((x - min) / cellSize))) {
+            p = ' ';
+          }
+
+          if (min <= x && x < max && min <= y+1 && y+1 < max && _this.isDark(r2, Math.floor((x - min) / cellSize))) {
+            p += ' ';
+          }
+          else {
+            p += '█';
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          ascii += (margin < 1 && y+1 >= max) ? blocksLastLineNoMargin[p] : blocks[p];
+        }
+
+        ascii += '\n';
+      }
+
+      if (size % 2 && margin > 0) {
+        return ascii.substring(0, ascii.length - size - 1) + Array(size+1).join('▀');
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.createASCII = function(cellSize, margin) {
+      cellSize = cellSize || 1;
+
+      if (cellSize < 2) {
+        return _createHalfASCII(margin);
+      }
+
+      cellSize -= 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r, p;
+
+      var white = Array(cellSize+1).join('██');
+      var black = Array(cellSize+1).join('  ');
+
+      var ascii = '';
+      var line = '';
+      for (y = 0; y < size; y += 1) {
+        r = Math.floor( (y - min) / cellSize);
+        line = '';
+        for (x = 0; x < size; x += 1) {
+          p = 1;
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r, Math.floor((x - min) / cellSize))) {
+            p = 0;
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          line += p ? white : black;
+        }
+
+        for (r = 0; r < cellSize; r += 1) {
+          ascii += line + '\n';
+        }
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.renderTo2dContext = function(context, cellSize) {
+      cellSize = cellSize || 2;
+      var length = _this.getModuleCount();
+      for (var row = 0; row < length; row++) {
+        for (var col = 0; col < length; col++) {
+          context.fillStyle = _this.isDark(row, col) ? 'black' : 'white';
+          context.fillRect(row * cellSize, col * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrcode.stringToBytes
+  //---------------------------------------------------------------------
+
+  qrcode.stringToBytesFuncs = {
+    'default' : function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        bytes.push(c & 0xff);
+      }
+      return bytes;
+    }
+  };
+
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['default'];
+
+  //---------------------------------------------------------------------
+  // qrcode.createStringToBytes
+  //---------------------------------------------------------------------
+
+  /**
+   * @param unicodeData base64 string of byte array.
+   * [16bit Unicode],[16bit Bytes], ...
+   * @param numChars
+   */
+  qrcode.createStringToBytes = function(unicodeData, numChars) {
+
+    // create conversion map.
+
+    var unicodeMap = function() {
+
+      var bin = base64DecodeInputStream(unicodeData);
+      var read = function() {
+        var b = bin.read();
+        if (b == -1) throw 'eof';
+        return b;
+      };
+
+      var count = 0;
+      var unicodeMap = {};
+      while (true) {
+        var b0 = bin.read();
+        if (b0 == -1) break;
+        var b1 = read();
+        var b2 = read();
+        var b3 = read();
+        var k = String.fromCharCode( (b0 << 8) | b1);
+        var v = (b2 << 8) | b3;
+        unicodeMap[k] = v;
+        count += 1;
+      }
+      if (count != numChars) {
+        throw count + ' != ' + numChars;
+      }
+
+      return unicodeMap;
+    }();
+
+    var unknownChar = '?'.charCodeAt(0);
+
+    return function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        if (c < 128) {
+          bytes.push(c);
+        } else {
+          var b = unicodeMap[s.charAt(i)];
+          if (typeof b == 'number') {
+            if ( (b & 0xff) == b) {
+              // 1byte
+              bytes.push(b);
+            } else {
+              // 2bytes
+              bytes.push(b >>> 8);
+              bytes.push(b & 0xff);
+            }
+          } else {
+            bytes.push(unknownChar);
+          }
+        }
+      }
+      return bytes;
+    };
+  };
+
+  //---------------------------------------------------------------------
+  // QRMode
+  //---------------------------------------------------------------------
+
+  var QRMode = {
+    MODE_NUMBER :    1 << 0,
+    MODE_ALPHA_NUM : 1 << 1,
+    MODE_8BIT_BYTE : 1 << 2,
+    MODE_KANJI :     1 << 3
+  };
+
+  //---------------------------------------------------------------------
+  // QRErrorCorrectionLevel
+  //---------------------------------------------------------------------
+
+  var QRErrorCorrectionLevel = {
+    L : 1,
+    M : 0,
+    Q : 3,
+    H : 2
+  };
+
+  //---------------------------------------------------------------------
+  // QRMaskPattern
+  //---------------------------------------------------------------------
+
+  var QRMaskPattern = {
+    PATTERN000 : 0,
+    PATTERN001 : 1,
+    PATTERN010 : 2,
+    PATTERN011 : 3,
+    PATTERN100 : 4,
+    PATTERN101 : 5,
+    PATTERN110 : 6,
+    PATTERN111 : 7
+  };
+
+  //---------------------------------------------------------------------
+  // QRUtil
+  //---------------------------------------------------------------------
+
+  var QRUtil = function() {
+
+    var PATTERN_POSITION_TABLE = [
+      [],
+      [6, 18],
+      [6, 22],
+      [6, 26],
+      [6, 30],
+      [6, 34],
+      [6, 22, 38],
+      [6, 24, 42],
+      [6, 26, 46],
+      [6, 28, 50],
+      [6, 30, 54],
+      [6, 32, 58],
+      [6, 34, 62],
+      [6, 26, 46, 66],
+      [6, 26, 48, 70],
+      [6, 26, 50, 74],
+      [6, 30, 54, 78],
+      [6, 30, 56, 82],
+      [6, 30, 58, 86],
+      [6, 34, 62, 90],
+      [6, 28, 50, 72, 94],
+      [6, 26, 50, 74, 98],
+      [6, 30, 54, 78, 102],
+      [6, 28, 54, 80, 106],
+      [6, 32, 58, 84, 110],
+      [6, 30, 58, 86, 114],
+      [6, 34, 62, 90, 118],
+      [6, 26, 50, 74, 98, 122],
+      [6, 30, 54, 78, 102, 126],
+      [6, 26, 52, 78, 104, 130],
+      [6, 30, 56, 82, 108, 134],
+      [6, 34, 60, 86, 112, 138],
+      [6, 30, 58, 86, 114, 142],
+      [6, 34, 62, 90, 118, 146],
+      [6, 30, 54, 78, 102, 126, 150],
+      [6, 24, 50, 76, 102, 128, 154],
+      [6, 28, 54, 80, 106, 132, 158],
+      [6, 32, 58, 84, 110, 136, 162],
+      [6, 26, 54, 82, 110, 138, 166],
+      [6, 30, 58, 86, 114, 142, 170]
+    ];
+    var G15 = (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0);
+    var G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0);
+    var G15_MASK = (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1);
+
+    var _this = {};
+
+    var getBCHDigit = function(data) {
+      var digit = 0;
+      while (data != 0) {
+        digit += 1;
+        data >>>= 1;
+      }
+      return digit;
+    };
+
+    _this.getBCHTypeInfo = function(data) {
+      var d = data << 10;
+      while (getBCHDigit(d) - getBCHDigit(G15) >= 0) {
+        d ^= (G15 << (getBCHDigit(d) - getBCHDigit(G15) ) );
+      }
+      return ( (data << 10) | d) ^ G15_MASK;
+    };
+
+    _this.getBCHTypeNumber = function(data) {
+      var d = data << 12;
+      while (getBCHDigit(d) - getBCHDigit(G18) >= 0) {
+        d ^= (G18 << (getBCHDigit(d) - getBCHDigit(G18) ) );
+      }
+      return (data << 12) | d;
+    };
+
+    _this.getPatternPosition = function(typeNumber) {
+      return PATTERN_POSITION_TABLE[typeNumber - 1];
+    };
+
+    _this.getMaskFunction = function(maskPattern) {
+
+      switch (maskPattern) {
+
+      case QRMaskPattern.PATTERN000 :
+        return function(i, j) { return (i + j) % 2 == 0; };
+      case QRMaskPattern.PATTERN001 :
+        return function(i, j) { return i % 2 == 0; };
+      case QRMaskPattern.PATTERN010 :
+        return function(i, j) { return j % 3 == 0; };
+      case QRMaskPattern.PATTERN011 :
+        return function(i, j) { return (i + j) % 3 == 0; };
+      case QRMaskPattern.PATTERN100 :
+        return function(i, j) { return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 == 0; };
+      case QRMaskPattern.PATTERN101 :
+        return function(i, j) { return (i * j) % 2 + (i * j) % 3 == 0; };
+      case QRMaskPattern.PATTERN110 :
+        return function(i, j) { return ( (i * j) % 2 + (i * j) % 3) % 2 == 0; };
+      case QRMaskPattern.PATTERN111 :
+        return function(i, j) { return ( (i * j) % 3 + (i + j) % 2) % 2 == 0; };
+
+      default :
+        throw 'bad maskPattern:' + maskPattern;
+      }
+    };
+
+    _this.getErrorCorrectPolynomial = function(errorCorrectLength) {
+      var a = qrPolynomial([1], 0);
+      for (var i = 0; i < errorCorrectLength; i += 1) {
+        a = a.multiply(qrPolynomial([1, QRMath.gexp(i)], 0) );
+      }
+      return a;
+    };
+
+    _this.getLengthInBits = function(mode, type) {
+
+      if (1 <= type && type < 10) {
+
+        // 1 - 9
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 10;
+        case QRMode.MODE_ALPHA_NUM : return 9;
+        case QRMode.MODE_8BIT_BYTE : return 8;
+        case QRMode.MODE_KANJI     : return 8;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 27) {
+
+        // 10 - 26
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 12;
+        case QRMode.MODE_ALPHA_NUM : return 11;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 10;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 41) {
+
+        // 27 - 40
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 14;
+        case QRMode.MODE_ALPHA_NUM : return 13;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 12;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else {
+        throw 'type:' + type;
+      }
+    };
+
+    _this.getLostPoint = function(qrcode) {
+
+      var moduleCount = qrcode.getModuleCount();
+
+      var lostPoint = 0;
+
+      // LEVEL1
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount; col += 1) {
+
+          var sameCount = 0;
+          var dark = qrcode.isDark(row, col);
+
+          for (var r = -1; r <= 1; r += 1) {
+
+            if (row + r < 0 || moduleCount <= row + r) {
+              continue;
+            }
+
+            for (var c = -1; c <= 1; c += 1) {
+
+              if (col + c < 0 || moduleCount <= col + c) {
+                continue;
+              }
+
+              if (r == 0 && c == 0) {
+                continue;
+              }
+
+              if (dark == qrcode.isDark(row + r, col + c) ) {
+                sameCount += 1;
+              }
+            }
+          }
+
+          if (sameCount > 5) {
+            lostPoint += (3 + sameCount - 5);
+          }
+        }
+      };
+
+      // LEVEL2
+
+      for (var row = 0; row < moduleCount - 1; row += 1) {
+        for (var col = 0; col < moduleCount - 1; col += 1) {
+          var count = 0;
+          if (qrcode.isDark(row, col) ) count += 1;
+          if (qrcode.isDark(row + 1, col) ) count += 1;
+          if (qrcode.isDark(row, col + 1) ) count += 1;
+          if (qrcode.isDark(row + 1, col + 1) ) count += 1;
+          if (count == 0 || count == 4) {
+            lostPoint += 3;
+          }
+        }
+      }
+
+      // LEVEL3
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount - 6; col += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row, col + 1)
+              &&  qrcode.isDark(row, col + 2)
+              &&  qrcode.isDark(row, col + 3)
+              &&  qrcode.isDark(row, col + 4)
+              && !qrcode.isDark(row, col + 5)
+              &&  qrcode.isDark(row, col + 6) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount - 6; row += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row + 1, col)
+              &&  qrcode.isDark(row + 2, col)
+              &&  qrcode.isDark(row + 3, col)
+              &&  qrcode.isDark(row + 4, col)
+              && !qrcode.isDark(row + 5, col)
+              &&  qrcode.isDark(row + 6, col) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      // LEVEL4
+
+      var darkCount = 0;
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount; row += 1) {
+          if (qrcode.isDark(row, col) ) {
+            darkCount += 1;
+          }
+        }
+      }
+
+      var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+      lostPoint += ratio * 10;
+
+      return lostPoint;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // QRMath
+  //---------------------------------------------------------------------
+
+  var QRMath = function() {
+
+    var EXP_TABLE = new Array(256);
+    var LOG_TABLE = new Array(256);
+
+    // initialize tables
+    for (var i = 0; i < 8; i += 1) {
+      EXP_TABLE[i] = 1 << i;
+    }
+    for (var i = 8; i < 256; i += 1) {
+      EXP_TABLE[i] = EXP_TABLE[i - 4]
+        ^ EXP_TABLE[i - 5]
+        ^ EXP_TABLE[i - 6]
+        ^ EXP_TABLE[i - 8];
+    }
+    for (var i = 0; i < 255; i += 1) {
+      LOG_TABLE[EXP_TABLE[i] ] = i;
+    }
+
+    var _this = {};
+
+    _this.glog = function(n) {
+
+      if (n < 1) {
+        throw 'glog(' + n + ')';
+      }
+
+      return LOG_TABLE[n];
+    };
+
+    _this.gexp = function(n) {
+
+      while (n < 0) {
+        n += 255;
+      }
+
+      while (n >= 256) {
+        n -= 255;
+      }
+
+      return EXP_TABLE[n];
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrPolynomial
+  //---------------------------------------------------------------------
+
+  function qrPolynomial(num, shift) {
+
+    if (typeof num.length == 'undefined') {
+      throw num.length + '/' + shift;
+    }
+
+    var _num = function() {
+      var offset = 0;
+      while (offset < num.length && num[offset] == 0) {
+        offset += 1;
+      }
+      var _num = new Array(num.length - offset + shift);
+      for (var i = 0; i < num.length - offset; i += 1) {
+        _num[i] = num[i + offset];
+      }
+      return _num;
+    }();
+
+    var _this = {};
+
+    _this.getAt = function(index) {
+      return _num[index];
+    };
+
+    _this.getLength = function() {
+      return _num.length;
+    };
+
+    _this.multiply = function(e) {
+
+      var num = new Array(_this.getLength() + e.getLength() - 1);
+
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        for (var j = 0; j < e.getLength(); j += 1) {
+          num[i + j] ^= QRMath.gexp(QRMath.glog(_this.getAt(i) ) + QRMath.glog(e.getAt(j) ) );
+        }
+      }
+
+      return qrPolynomial(num, 0);
+    };
+
+    _this.mod = function(e) {
+
+      if (_this.getLength() - e.getLength() < 0) {
+        return _this;
+      }
+
+      var ratio = QRMath.glog(_this.getAt(0) ) - QRMath.glog(e.getAt(0) );
+
+      var num = new Array(_this.getLength() );
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        num[i] = _this.getAt(i);
+      }
+
+      for (var i = 0; i < e.getLength(); i += 1) {
+        num[i] ^= QRMath.gexp(QRMath.glog(e.getAt(i) ) + ratio);
+      }
+
+      // recursive call
+      return qrPolynomial(num, 0).mod(e);
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // QRRSBlock
+  //---------------------------------------------------------------------
+
+  var QRRSBlock = function() {
+
+    var RS_BLOCK_TABLE = [
+
+      // L
+      // M
+      // Q
+      // H
+
+      // 1
+      [1, 26, 19],
+      [1, 26, 16],
+      [1, 26, 13],
+      [1, 26, 9],
+
+      // 2
+      [1, 44, 34],
+      [1, 44, 28],
+      [1, 44, 22],
+      [1, 44, 16],
+
+      // 3
+      [1, 70, 55],
+      [1, 70, 44],
+      [2, 35, 17],
+      [2, 35, 13],
+
+      // 4
+      [1, 100, 80],
+      [2, 50, 32],
+      [2, 50, 24],
+      [4, 25, 9],
+
+      // 5
+      [1, 134, 108],
+      [2, 67, 43],
+      [2, 33, 15, 2, 34, 16],
+      [2, 33, 11, 2, 34, 12],
+
+      // 6
+      [2, 86, 68],
+      [4, 43, 27],
+      [4, 43, 19],
+      [4, 43, 15],
+
+      // 7
+      [2, 98, 78],
+      [4, 49, 31],
+      [2, 32, 14, 4, 33, 15],
+      [4, 39, 13, 1, 40, 14],
+
+      // 8
+      [2, 121, 97],
+      [2, 60, 38, 2, 61, 39],
+      [4, 40, 18, 2, 41, 19],
+      [4, 40, 14, 2, 41, 15],
+
+      // 9
+      [2, 146, 116],
+      [3, 58, 36, 2, 59, 37],
+      [4, 36, 16, 4, 37, 17],
+      [4, 36, 12, 4, 37, 13],
+
+      // 10
+      [2, 86, 68, 2, 87, 69],
+      [4, 69, 43, 1, 70, 44],
+      [6, 43, 19, 2, 44, 20],
+      [6, 43, 15, 2, 44, 16],
+
+      // 11
+      [4, 101, 81],
+      [1, 80, 50, 4, 81, 51],
+      [4, 50, 22, 4, 51, 23],
+      [3, 36, 12, 8, 37, 13],
+
+      // 12
+      [2, 116, 92, 2, 117, 93],
+      [6, 58, 36, 2, 59, 37],
+      [4, 46, 20, 6, 47, 21],
+      [7, 42, 14, 4, 43, 15],
+
+      // 13
+      [4, 133, 107],
+      [8, 59, 37, 1, 60, 38],
+      [8, 44, 20, 4, 45, 21],
+      [12, 33, 11, 4, 34, 12],
+
+      // 14
+      [3, 145, 115, 1, 146, 116],
+      [4, 64, 40, 5, 65, 41],
+      [11, 36, 16, 5, 37, 17],
+      [11, 36, 12, 5, 37, 13],
+
+      // 15
+      [5, 109, 87, 1, 110, 88],
+      [5, 65, 41, 5, 66, 42],
+      [5, 54, 24, 7, 55, 25],
+      [11, 36, 12, 7, 37, 13],
+
+      // 16
+      [5, 122, 98, 1, 123, 99],
+      [7, 73, 45, 3, 74, 46],
+      [15, 43, 19, 2, 44, 20],
+      [3, 45, 15, 13, 46, 16],
+
+      // 17
+      [1, 135, 107, 5, 136, 108],
+      [10, 74, 46, 1, 75, 47],
+      [1, 50, 22, 15, 51, 23],
+      [2, 42, 14, 17, 43, 15],
+
+      // 18
+      [5, 150, 120, 1, 151, 121],
+      [9, 69, 43, 4, 70, 44],
+      [17, 50, 22, 1, 51, 23],
+      [2, 42, 14, 19, 43, 15],
+
+      // 19
+      [3, 141, 113, 4, 142, 114],
+      [3, 70, 44, 11, 71, 45],
+      [17, 47, 21, 4, 48, 22],
+      [9, 39, 13, 16, 40, 14],
+
+      // 20
+      [3, 135, 107, 5, 136, 108],
+      [3, 67, 41, 13, 68, 42],
+      [15, 54, 24, 5, 55, 25],
+      [15, 43, 15, 10, 44, 16],
+
+      // 21
+      [4, 144, 116, 4, 145, 117],
+      [17, 68, 42],
+      [17, 50, 22, 6, 51, 23],
+      [19, 46, 16, 6, 47, 17],
+
+      // 22
+      [2, 139, 111, 7, 140, 112],
+      [17, 74, 46],
+      [7, 54, 24, 16, 55, 25],
+      [34, 37, 13],
+
+      // 23
+      [4, 151, 121, 5, 152, 122],
+      [4, 75, 47, 14, 76, 48],
+      [11, 54, 24, 14, 55, 25],
+      [16, 45, 15, 14, 46, 16],
+
+      // 24
+      [6, 147, 117, 4, 148, 118],
+      [6, 73, 45, 14, 74, 46],
+      [11, 54, 24, 16, 55, 25],
+      [30, 46, 16, 2, 47, 17],
+
+      // 25
+      [8, 132, 106, 4, 133, 107],
+      [8, 75, 47, 13, 76, 48],
+      [7, 54, 24, 22, 55, 25],
+      [22, 45, 15, 13, 46, 16],
+
+      // 26
+      [10, 142, 114, 2, 143, 115],
+      [19, 74, 46, 4, 75, 47],
+      [28, 50, 22, 6, 51, 23],
+      [33, 46, 16, 4, 47, 17],
+
+      // 27
+      [8, 152, 122, 4, 153, 123],
+      [22, 73, 45, 3, 74, 46],
+      [8, 53, 23, 26, 54, 24],
+      [12, 45, 15, 28, 46, 16],
+
+      // 28
+      [3, 147, 117, 10, 148, 118],
+      [3, 73, 45, 23, 74, 46],
+      [4, 54, 24, 31, 55, 25],
+      [11, 45, 15, 31, 46, 16],
+
+      // 29
+      [7, 146, 116, 7, 147, 117],
+      [21, 73, 45, 7, 74, 46],
+      [1, 53, 23, 37, 54, 24],
+      [19, 45, 15, 26, 46, 16],
+
+      // 30
+      [5, 145, 115, 10, 146, 116],
+      [19, 75, 47, 10, 76, 48],
+      [15, 54, 24, 25, 55, 25],
+      [23, 45, 15, 25, 46, 16],
+
+      // 31
+      [13, 145, 115, 3, 146, 116],
+      [2, 74, 46, 29, 75, 47],
+      [42, 54, 24, 1, 55, 25],
+      [23, 45, 15, 28, 46, 16],
+
+      // 32
+      [17, 145, 115],
+      [10, 74, 46, 23, 75, 47],
+      [10, 54, 24, 35, 55, 25],
+      [19, 45, 15, 35, 46, 16],
+
+      // 33
+      [17, 145, 115, 1, 146, 116],
+      [14, 74, 46, 21, 75, 47],
+      [29, 54, 24, 19, 55, 25],
+      [11, 45, 15, 46, 46, 16],
+
+      // 34
+      [13, 145, 115, 6, 146, 116],
+      [14, 74, 46, 23, 75, 47],
+      [44, 54, 24, 7, 55, 25],
+      [59, 46, 16, 1, 47, 17],
+
+      // 35
+      [12, 151, 121, 7, 152, 122],
+      [12, 75, 47, 26, 76, 48],
+      [39, 54, 24, 14, 55, 25],
+      [22, 45, 15, 41, 46, 16],
+
+      // 36
+      [6, 151, 121, 14, 152, 122],
+      [6, 75, 47, 34, 76, 48],
+      [46, 54, 24, 10, 55, 25],
+      [2, 45, 15, 64, 46, 16],
+
+      // 37
+      [17, 152, 122, 4, 153, 123],
+      [29, 74, 46, 14, 75, 47],
+      [49, 54, 24, 10, 55, 25],
+      [24, 45, 15, 46, 46, 16],
+
+      // 38
+      [4, 152, 122, 18, 153, 123],
+      [13, 74, 46, 32, 75, 47],
+      [48, 54, 24, 14, 55, 25],
+      [42, 45, 15, 32, 46, 16],
+
+      // 39
+      [20, 147, 117, 4, 148, 118],
+      [40, 75, 47, 7, 76, 48],
+      [43, 54, 24, 22, 55, 25],
+      [10, 45, 15, 67, 46, 16],
+
+      // 40
+      [19, 148, 118, 6, 149, 119],
+      [18, 75, 47, 31, 76, 48],
+      [34, 54, 24, 34, 55, 25],
+      [20, 45, 15, 61, 46, 16]
+    ];
+
+    var qrRSBlock = function(totalCount, dataCount) {
+      var _this = {};
+      _this.totalCount = totalCount;
+      _this.dataCount = dataCount;
+      return _this;
+    };
+
+    var _this = {};
+
+    var getRsBlockTable = function(typeNumber, errorCorrectionLevel) {
+
+      switch(errorCorrectionLevel) {
+      case QRErrorCorrectionLevel.L :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+      case QRErrorCorrectionLevel.M :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+      case QRErrorCorrectionLevel.Q :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+      case QRErrorCorrectionLevel.H :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+      default :
+        return undefined;
+      }
+    };
+
+    _this.getRSBlocks = function(typeNumber, errorCorrectionLevel) {
+
+      var rsBlock = getRsBlockTable(typeNumber, errorCorrectionLevel);
+
+      if (typeof rsBlock == 'undefined') {
+        throw 'bad rs block @ typeNumber:' + typeNumber +
+            '/errorCorrectionLevel:' + errorCorrectionLevel;
+      }
+
+      var length = rsBlock.length / 3;
+
+      var list = [];
+
+      for (var i = 0; i < length; i += 1) {
+
+        var count = rsBlock[i * 3 + 0];
+        var totalCount = rsBlock[i * 3 + 1];
+        var dataCount = rsBlock[i * 3 + 2];
+
+        for (var j = 0; j < count; j += 1) {
+          list.push(qrRSBlock(totalCount, dataCount) );
+        }
+      }
+
+      return list;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrBitBuffer
+  //---------------------------------------------------------------------
+
+  var qrBitBuffer = function() {
+
+    var _buffer = [];
+    var _length = 0;
+
+    var _this = {};
+
+    _this.getBuffer = function() {
+      return _buffer;
+    };
+
+    _this.getAt = function(index) {
+      var bufIndex = Math.floor(index / 8);
+      return ( (_buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+    };
+
+    _this.put = function(num, length) {
+      for (var i = 0; i < length; i += 1) {
+        _this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+      }
+    };
+
+    _this.getLengthInBits = function() {
+      return _length;
+    };
+
+    _this.putBit = function(bit) {
+
+      var bufIndex = Math.floor(_length / 8);
+      if (_buffer.length <= bufIndex) {
+        _buffer.push(0);
+      }
+
+      if (bit) {
+        _buffer[bufIndex] |= (0x80 >>> (_length % 8) );
+      }
+
+      _length += 1;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrNumber
+  //---------------------------------------------------------------------
+
+  var qrNumber = function(data) {
+
+    var _mode = QRMode.MODE_NUMBER;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _data;
+
+      var i = 0;
+
+      while (i + 2 < data.length) {
+        buffer.put(strToNum(data.substring(i, i + 3) ), 10);
+        i += 3;
+      }
+
+      if (i < data.length) {
+        if (data.length - i == 1) {
+          buffer.put(strToNum(data.substring(i, i + 1) ), 4);
+        } else if (data.length - i == 2) {
+          buffer.put(strToNum(data.substring(i, i + 2) ), 7);
+        }
+      }
+    };
+
+    var strToNum = function(s) {
+      var num = 0;
+      for (var i = 0; i < s.length; i += 1) {
+        num = num * 10 + chatToNum(s.charAt(i) );
+      }
+      return num;
+    };
+
+    var chatToNum = function(c) {
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      }
+      throw 'illegal char :' + c;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrAlphaNum
+  //---------------------------------------------------------------------
+
+  var qrAlphaNum = function(data) {
+
+    var _mode = QRMode.MODE_ALPHA_NUM;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var s = _data;
+
+      var i = 0;
+
+      while (i + 1 < s.length) {
+        buffer.put(
+          getCode(s.charAt(i) ) * 45 +
+          getCode(s.charAt(i + 1) ), 11);
+        i += 2;
+      }
+
+      if (i < s.length) {
+        buffer.put(getCode(s.charAt(i) ), 6);
+      }
+    };
+
+    var getCode = function(c) {
+
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      } else if ('A' <= c && c <= 'Z') {
+        return c.charCodeAt(0) - 'A'.charCodeAt(0) + 10;
+      } else {
+        switch (c) {
+        case ' ' : return 36;
+        case '$' : return 37;
+        case '%' : return 38;
+        case '*' : return 39;
+        case '+' : return 40;
+        case '-' : return 41;
+        case '.' : return 42;
+        case '/' : return 43;
+        case ':' : return 44;
+        default :
+          throw 'illegal char :' + c;
+        }
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qr8BitByte
+  //---------------------------------------------------------------------
+
+  var qr8BitByte = function(data) {
+
+    var _mode = QRMode.MODE_8BIT_BYTE;
+    var _data = data;
+    var _bytes = qrcode.stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _bytes.length;
+    };
+
+    _this.write = function(buffer) {
+      for (var i = 0; i < _bytes.length; i += 1) {
+        buffer.put(_bytes[i], 8);
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrKanji
+  //---------------------------------------------------------------------
+
+  var qrKanji = function(data) {
+
+    var _mode = QRMode.MODE_KANJI;
+    var _data = data;
+
+    var stringToBytes = qrcode.stringToBytesFuncs['SJIS'];
+    if (!stringToBytes) {
+      throw 'sjis not supported.';
+    }
+    !function(c, code) {
+      // self test for sjis support.
+      var test = stringToBytes(c);
+      if (test.length != 2 || ( (test[0] << 8) | test[1]) != code) {
+        throw 'sjis not supported.';
+      }
+    }('\u53cb', 0x9746);
+
+    var _bytes = stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return ~~(_bytes.length / 2);
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _bytes;
+
+      var i = 0;
+
+      while (i + 1 < data.length) {
+
+        var c = ( (0xff & data[i]) << 8) | (0xff & data[i + 1]);
+
+        if (0x8140 <= c && c <= 0x9FFC) {
+          c -= 0x8140;
+        } else if (0xE040 <= c && c <= 0xEBBF) {
+          c -= 0xC140;
+        } else {
+          throw 'illegal char at ' + (i + 1) + '/' + c;
+        }
+
+        c = ( (c >>> 8) & 0xff) * 0xC0 + (c & 0xff);
+
+        buffer.put(c, 13);
+
+        i += 2;
+      }
+
+      if (i < data.length) {
+        throw 'illegal char at ' + (i + 1);
+      }
+    };
+
+    return _this;
+  };
+
+  //=====================================================================
+  // GIF Support etc.
+  //
+
+  //---------------------------------------------------------------------
+  // byteArrayOutputStream
+  //---------------------------------------------------------------------
+
+  var byteArrayOutputStream = function() {
+
+    var _bytes = [];
+
+    var _this = {};
+
+    _this.writeByte = function(b) {
+      _bytes.push(b & 0xff);
+    };
+
+    _this.writeShort = function(i) {
+      _this.writeByte(i);
+      _this.writeByte(i >>> 8);
+    };
+
+    _this.writeBytes = function(b, off, len) {
+      off = off || 0;
+      len = len || b.length;
+      for (var i = 0; i < len; i += 1) {
+        _this.writeByte(b[i + off]);
+      }
+    };
+
+    _this.writeString = function(s) {
+      for (var i = 0; i < s.length; i += 1) {
+        _this.writeByte(s.charCodeAt(i) );
+      }
+    };
+
+    _this.toByteArray = function() {
+      return _bytes;
+    };
+
+    _this.toString = function() {
+      var s = '';
+      s += '[';
+      for (var i = 0; i < _bytes.length; i += 1) {
+        if (i > 0) {
+          s += ',';
+        }
+        s += _bytes[i];
+      }
+      s += ']';
+      return s;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64EncodeOutputStream
+  //---------------------------------------------------------------------
+
+  var base64EncodeOutputStream = function() {
+
+    var _buffer = 0;
+    var _buflen = 0;
+    var _length = 0;
+    var _base64 = '';
+
+    var _this = {};
+
+    var writeEncoded = function(b) {
+      _base64 += String.fromCharCode(encode(b & 0x3f) );
+    };
+
+    var encode = function(n) {
+      if (n < 0) {
+        // error.
+      } else if (n < 26) {
+        return 0x41 + n;
+      } else if (n < 52) {
+        return 0x61 + (n - 26);
+      } else if (n < 62) {
+        return 0x30 + (n - 52);
+      } else if (n == 62) {
+        return 0x2b;
+      } else if (n == 63) {
+        return 0x2f;
+      }
+      throw 'n:' + n;
+    };
+
+    _this.writeByte = function(n) {
+
+      _buffer = (_buffer << 8) | (n & 0xff);
+      _buflen += 8;
+      _length += 1;
+
+      while (_buflen >= 6) {
+        writeEncoded(_buffer >>> (_buflen - 6) );
+        _buflen -= 6;
+      }
+    };
+
+    _this.flush = function() {
+
+      if (_buflen > 0) {
+        writeEncoded(_buffer << (6 - _buflen) );
+        _buffer = 0;
+        _buflen = 0;
+      }
+
+      if (_length % 3 != 0) {
+        // padding
+        var padlen = 3 - _length % 3;
+        for (var i = 0; i < padlen; i += 1) {
+          _base64 += '=';
+        }
+      }
+    };
+
+    _this.toString = function() {
+      return _base64;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64DecodeInputStream
+  //---------------------------------------------------------------------
+
+  var base64DecodeInputStream = function(str) {
+
+    var _str = str;
+    var _pos = 0;
+    var _buffer = 0;
+    var _buflen = 0;
+
+    var _this = {};
+
+    _this.read = function() {
+
+      while (_buflen < 8) {
+
+        if (_pos >= _str.length) {
+          if (_buflen == 0) {
+            return -1;
+          }
+          throw 'unexpected end of file./' + _buflen;
+        }
+
+        var c = _str.charAt(_pos);
+        _pos += 1;
+
+        if (c == '=') {
+          _buflen = 0;
+          return -1;
+        } else if (c.match(/^\s$/) ) {
+          // ignore if whitespace.
+          continue;
+        }
+
+        _buffer = (_buffer << 6) | decode(c.charCodeAt(0) );
+        _buflen += 6;
+      }
+
+      var n = (_buffer >>> (_buflen - 8) ) & 0xff;
+      _buflen -= 8;
+      return n;
+    };
+
+    var decode = function(c) {
+      if (0x41 <= c && c <= 0x5a) {
+        return c - 0x41;
+      } else if (0x61 <= c && c <= 0x7a) {
+        return c - 0x61 + 26;
+      } else if (0x30 <= c && c <= 0x39) {
+        return c - 0x30 + 52;
+      } else if (c == 0x2b) {
+        return 62;
+      } else if (c == 0x2f) {
+        return 63;
+      } else {
+        throw 'c:' + c;
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // gifImage (B/W)
+  //---------------------------------------------------------------------
+
+  var gifImage = function(width, height) {
+
+    var _width = width;
+    var _height = height;
+    var _data = new Array(width * height);
+
+    var _this = {};
+
+    _this.setPixel = function(x, y, pixel) {
+      _data[y * _width + x] = pixel;
+    };
+
+    _this.write = function(out) {
+
+      //---------------------------------
+      // GIF Signature
+
+      out.writeString('GIF87a');
+
+      //---------------------------------
+      // Screen Descriptor
+
+      out.writeShort(_width);
+      out.writeShort(_height);
+
+      out.writeByte(0x80); // 2bit
+      out.writeByte(0);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Global Color Map
+
+      // black
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+
+      // white
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+
+      //---------------------------------
+      // Image Descriptor
+
+      out.writeString(',');
+      out.writeShort(0);
+      out.writeShort(0);
+      out.writeShort(_width);
+      out.writeShort(_height);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Local Color Map
+
+      //---------------------------------
+      // Raster Data
+
+      var lzwMinCodeSize = 2;
+      var raster = getLZWRaster(lzwMinCodeSize);
+
+      out.writeByte(lzwMinCodeSize);
+
+      var offset = 0;
+
+      while (raster.length - offset > 255) {
+        out.writeByte(255);
+        out.writeBytes(raster, offset, 255);
+        offset += 255;
+      }
+
+      out.writeByte(raster.length - offset);
+      out.writeBytes(raster, offset, raster.length - offset);
+      out.writeByte(0x00);
+
+      //---------------------------------
+      // GIF Terminator
+      out.writeString(';');
+    };
+
+    var bitOutputStream = function(out) {
+
+      var _out = out;
+      var _bitLength = 0;
+      var _bitBuffer = 0;
+
+      var _this = {};
+
+      _this.write = function(data, length) {
+
+        if ( (data >>> length) != 0) {
+          throw 'length over';
+        }
+
+        while (_bitLength + length >= 8) {
+          _out.writeByte(0xff & ( (data << _bitLength) | _bitBuffer) );
+          length -= (8 - _bitLength);
+          data >>>= (8 - _bitLength);
+          _bitBuffer = 0;
+          _bitLength = 0;
+        }
+
+        _bitBuffer = (data << _bitLength) | _bitBuffer;
+        _bitLength = _bitLength + length;
+      };
+
+      _this.flush = function() {
+        if (_bitLength > 0) {
+          _out.writeByte(_bitBuffer);
+        }
+      };
+
+      return _this;
+    };
+
+    var getLZWRaster = function(lzwMinCodeSize) {
+
+      var clearCode = 1 << lzwMinCodeSize;
+      var endCode = (1 << lzwMinCodeSize) + 1;
+      var bitLength = lzwMinCodeSize + 1;
+
+      // Setup LZWTable
+      var table = lzwTable();
+
+      for (var i = 0; i < clearCode; i += 1) {
+        table.add(String.fromCharCode(i) );
+      }
+      table.add(String.fromCharCode(clearCode) );
+      table.add(String.fromCharCode(endCode) );
+
+      var byteOut = byteArrayOutputStream();
+      var bitOut = bitOutputStream(byteOut);
+
+      // clear code
+      bitOut.write(clearCode, bitLength);
+
+      var dataIndex = 0;
+
+      var s = String.fromCharCode(_data[dataIndex]);
+      dataIndex += 1;
+
+      while (dataIndex < _data.length) {
+
+        var c = String.fromCharCode(_data[dataIndex]);
+        dataIndex += 1;
+
+        if (table.contains(s + c) ) {
+
+          s = s + c;
+
+        } else {
+
+          bitOut.write(table.indexOf(s), bitLength);
+
+          if (table.size() < 0xfff) {
+
+            if (table.size() == (1 << bitLength) ) {
+              bitLength += 1;
+            }
+
+            table.add(s + c);
+          }
+
+          s = c;
+        }
+      }
+
+      bitOut.write(table.indexOf(s), bitLength);
+
+      // end code
+      bitOut.write(endCode, bitLength);
+
+      bitOut.flush();
+
+      return byteOut.toByteArray();
+    };
+
+    var lzwTable = function() {
+
+      var _map = {};
+      var _size = 0;
+
+      var _this = {};
+
+      _this.add = function(key) {
+        if (_this.contains(key) ) {
+          throw 'dup key:' + key;
+        }
+        _map[key] = _size;
+        _size += 1;
+      };
+
+      _this.size = function() {
+        return _size;
+      };
+
+      _this.indexOf = function(key) {
+        return _map[key];
+      };
+
+      _this.contains = function(key) {
+        return typeof _map[key] != 'undefined';
+      };
+
+      return _this;
+    };
+
+    return _this;
+  };
+
+  var createDataURL = function(width, height, getPixel) {
+    var gif = gifImage(width, height);
+    for (var y = 0; y < height; y += 1) {
+      for (var x = 0; x < width; x += 1) {
+        gif.setPixel(x, y, getPixel(x, y) );
+      }
+    }
+
+    var b = byteArrayOutputStream();
+    gif.write(b);
+
+    var base64 = base64EncodeOutputStream();
+    var bytes = b.toByteArray();
+    for (var i = 0; i < bytes.length; i += 1) {
+      base64.writeByte(bytes[i]);
+    }
+    base64.flush();
+
+    return 'data:image/gif;base64,' + base64;
+  };
+
+  //---------------------------------------------------------------------
+  // returns qrcode function.
+
+  return qrcode;
+}();
+
+// multibyte support
+!function() {
+
+  qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
+    // http://stackoverflow.com/questions/18729405/how-to-convert-utf8-string-to-byte-array
+    function toUTF8Array(str) {
+      var utf8 = [];
+      for (var i=0; i < str.length; i++) {
+        var charcode = str.charCodeAt(i);
+        if (charcode < 0x80) utf8.push(charcode);
+        else if (charcode < 0x800) {
+          utf8.push(0xc0 | (charcode >> 6),
+              0x80 | (charcode & 0x3f));
+        }
+        else if (charcode < 0xd800 || charcode >= 0xe000) {
+          utf8.push(0xe0 | (charcode >> 12),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+        // surrogate pair
+        else {
+          i++;
+          // UTF-16 encodes 0x10000-0x10FFFF by
+          // subtracting 0x10000 and splitting the
+          // 20 bits of 0x0-0xFFFFF into two halves
+          charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+            | (str.charCodeAt(i) & 0x3ff));
+          utf8.push(0xf0 | (charcode >>18),
+              0x80 | ((charcode>>12) & 0x3f),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+      }
+      return utf8;
+    }
+    return toUTF8Array(s);
+  };
+
+}();
+
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+      define([], factory);
+  } else if (typeof exports === 'object') {
+      module.exports = factory();
+  }
+}(function () {
+    return qrcode;
+}));
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ================= 설정 ================= */
+  const FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "977342156141",
+    appId: "1:977342156141:web:f9842fcc67a819ce621e64"
+  };
+  const ROOT = "rooms/face-draw/";
+  const BASE_URL = "https://jungjinyoung3512.github.io/jungjinyoung3512/face-draw/";
+  const $ = s => document.querySelector(s);
+  const params = new URLSearchParams(location.search);
+  const ROOM = (String(params.get("room") || "JY22").toUpperCase().replace(/[^A-Z0-9_-]/g, "").slice(0, 12)) || "JY22";
+  const MOBILE_URL = BASE_URL + (ROOM === "JY22" ? "" : "?room=" + encodeURIComponent(ROOM));
+
+  const el = {
+    roomCode: $("#roomCode"), cntNum: $("#cntNum"), timerPill: $("#timerPill"), timerNum: $("#timerNum"),
+    netDot: $("#netDot"), sky: $("#sky"), empty: $("#empty"), arrive: $("#arrive"), arriveName: $("#arriveName"),
+    startBtn: $("#startBtn"), durSeg: $("#durSeg"), revealBtn: $("#revealBtn"), clearBtn: $("#clearBtn"),
+    bgmBtn: $("#bgmBtn"), qrBtn: $("#qrBtn"),
+    zoom: $("#zoom"), zoomImg: $("#zoomImg"), zoomName: $("#zoomName"), zoomSub: $("#zoomSub"),
+    podium: $("#podium"), podiumRow: $("#podiumRow"), confetti: $("#confetti"), podiumClose: $("#podiumClose"),
+    podiumSub: $("#podiumSub"),
+    qrOverlay: $("#qrOverlay"), qrBox: $("#qrBox"), qrRoom: $("#qrRoom"), qrClose: $("#qrClose"),
+    toast: $("#toast")
+  };
+  el.roomCode.textContent = ROOM;
+  el.qrRoom.textContent = ROOM;
+
+  const S = {
+    db: null, room: null, players: new Map(),
+    phase: "idle", revealed: false, startAt: 0, durSec: 180, count: 0,
+    armed: 0, ready: false
+  };
+
+  /* ================= 유틸 ================= */
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const $esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+  function pad2(n){ return (n < 10 ? "0" : "") + n; }
+  let toastT = null;
+  function toast(msg){
+    el.toast.textContent = msg;
+    el.toast.classList.add("on");
+    clearTimeout(toastT);
+    toastT = setTimeout(() => el.toast.classList.remove("on"), 2500);
+  }
+
+  /* ================= 사운드 (진행자 노트북 전용) ================= */
+  const Sound = {
+    ctx: null, master: null, on: true,
+    iface(){
+      if (!this.ctx){
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        this.ctx = new AC();
+        this.master = this.ctx.createGain();
+        this.master.gain.value = this.on ? 0.9 : 0;
+        this.master.connect(this.ctx.destination);
+      }
+      if (this.ctx.state === "suspended") this.ctx.resume().catch(() => {});
+      return this.ctx;
+    },
+    setOn(v){
+      this.on = v;
+      if (this.master) this.master.gain.setTargetAtTime(v ? 0.9 : 0, this.ctx.currentTime, 0.05);
+    },
+    tone(t, freq, dur, type, amp){
+      const ctx = this.ctx, o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = type || "sine";
+      o.frequency.setValueAtTime(freq, t);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(Math.max(0.0002, amp), t + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(this.master);
+      o.start(t); o.stop(t + dur + 0.05);
+    },
+    bell(t, f, amp){
+      this.tone(t, f, 0.9, "sine", amp);
+      this.tone(t, f * 2, 0.42, "sine", amp * 0.28);
+      this.tone(t, f * 3.01, 0.24, "sine", amp * 0.12);
+    },
+    /* 새 얼굴 도착 — 톡 */
+    pop(){
+      if (!this.on || !this.iface()) return;
+      const t = this.ctx.currentTime + 0.01;
+      this.tone(t, 720, 0.09, "sine", 0.05);
+      this.tone(t + 0.05, 1080, 0.12, "sine", 0.035);
+    },
+    /* 시작 — 띠리링 */
+    start(){
+      if (!this.on || !this.iface()) return;
+      const t = this.ctx.currentTime + 0.02;
+      [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => this.tone(t + i * 0.09, f, 0.26, "triangle", 0.10));
+    },
+    /* 팡파르 */
+    fanfare(){
+      if (!this.on || !this.iface()) return;
+      const ctx = this.ctx, t = ctx.currentTime + 0.03;
+      /* 브라스 히트 */
+      [[523.25, 0], [659.25, 0.14], [783.99, 0.28], [1046.5, 0.42]].forEach(([f, d]) => {
+        const o = ctx.createOscillator(), g = ctx.createGain(), lp = ctx.createBiquadFilter();
+        o.type = "sawtooth"; o.frequency.setValueAtTime(f, t + d);
+        lp.type = "lowpass"; lp.frequency.setValueAtTime(2400, t + d);
+        lp.frequency.exponentialRampToValueAtTime(900, t + d + 0.5);
+        g.gain.setValueAtTime(0.0001, t + d);
+        g.gain.exponentialRampToValueAtTime(0.11, t + d + 0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + d + 0.6);
+        o.connect(lp); lp.connect(g); g.connect(this.master);
+        o.start(t + d); o.stop(t + d + 0.66);
+      });
+      /* 반짝 아르페지오 */
+      [1567.98, 1975.53, 2349.32, 2637.02].forEach((f, i) => this.bell(t + 0.5 + i * 0.1, f, 0.055));
+      /* 심벌 */
+      if (!this.noiseBuf) this.noiseBuf = this.makeNoise(1.2);
+      const src = ctx.createBufferSource(); src.buffer = this.noiseBuf;
+      const hp = ctx.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 5200;
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.13, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 1.1);
+      src.connect(hp); hp.connect(g); g.connect(this.master);
+      src.start(t); src.stop(t + 1.2);
+      /* 최종 화음 */
+      [523.25, 659.25, 783.99, 1046.5].forEach(f => this.tone(t + 0.62, f, 1.4, "triangle", 0.045));
+    },
+    makeNoise(sec){
+      const ctx = this.ctx, n = Math.floor(ctx.sampleRate * sec);
+      const buf = ctx.createBuffer(1, n, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+      return buf;
+    }
+  };
+
+  /* ================= BGM : 전시회·페스티벌 풍 합성 루프 ================= */
+  const Bgm = {
+    enabled: true, playing: false, gain: null, timer: null, nextT: 0, step: 0, bpm: 112, loop: 32,
+    noiseBuf: null,
+    spb(){ return 60 / this.bpm / 4; },
+    out(){
+      if (!Sound.iface()) return null;
+      if (!this.gain){
+        const g = Sound.ctx.createGain();
+        g.gain.value = 0.0001;
+        const lp = Sound.ctx.createBiquadFilter();
+        lp.type = "lowpass"; lp.frequency.value = 6800; lp.Q.value = 0.3;
+        g.connect(lp); lp.connect(Sound.master);
+        this.gain = g;
+      }
+      return this.gain;
+    },
+    tone(t, freq, dur, type, amp, glide){
+      const ctx = Sound.ctx, o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = type || "triangle";
+      o.frequency.setValueAtTime(freq, t);
+      if (glide) o.frequency.exponentialRampToValueAtTime(Math.max(30, glide), t + dur * 0.85);
+      const atk = Math.min(0.035, dur * 0.25);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(Math.max(0.0002, amp), t + atk);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(this.gain);
+      o.start(t); o.stop(t + dur + 0.05);
+    },
+    noise(t, dur, amp, hp){
+      if (!this.noiseBuf) this.noiseBuf = Sound.makeNoise(1.0);
+      const ctx = Sound.ctx, src = ctx.createBufferSource(), g = ctx.createGain(), f = ctx.createBiquadFilter();
+      src.buffer = this.noiseBuf;
+      f.type = hp ? "highpass" : "bandpass";
+      f.frequency.value = hp ? hp : 1800;
+      g.gain.setValueAtTime(amp, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      src.connect(f); f.connect(g); g.connect(this.gain);
+      src.start(t); src.stop(t + dur + 0.02);
+    },
+    /* 4개 코드: C - Am - F - G (8스텝씩) */
+    voice(step, t){
+      const s = step % this.loop, spb = this.spb();
+      const chord = Math.floor(s / 8);          /* 0..3 */
+      const CH = [
+        { root: 65.41, notes: [261.63, 329.63, 392.00] },  /* C  */
+        { root: 55.00, notes: [220.00, 261.63, 329.63] },  /* Am */
+        { root: 87.31, notes: [174.61, 220.00, 261.63] },  /* F  */
+        { root: 98.00, notes: [196.00, 246.94, 293.66] }   /* G  */
+      ][chord];
+
+      /* 베이스 — 통통 튀는 워킹 */
+      if (s % 8 === 0) this.tone(t, CH.root, 0.34, "triangle", 0.13);
+      if (s % 8 === 4) this.tone(t, CH.root * 1.5, 0.22, "triangle", 0.085);
+      if (s % 8 === 6) this.tone(t, CH.root * 1.25, 0.18, "triangle", 0.07);
+
+      /* 마림바 펜타토닉 아르페지오 */
+      const ARP = [0, 2, 4, 7, 9];
+      if (s % 2 === 0){
+        const idx = (Math.floor(s / 2) + chord * 2) % ARP.length;
+        const base = CH.notes[idx % 3];
+        const mult = [1, 2, 2, 4][(Math.floor(s / 8) + idx) % 4] || 1;
+        this.tone(t, base * (mult === 4 ? 2 : 1) * (idx >= 3 ? 1.5 : 1), 0.3, "sine", 0.055);
+      }
+      /* 두 번째 바 레이어 — 휘파람 같은 멜로디 */
+      if (s === 12 || s === 22 || s === 26) this.tone(t, CH.notes[2] * 2, 0.5, "triangle", 0.032);
+      if (s === 20) this.tone(t, CH.notes[1] * 2, 0.7, "triangle", 0.03);
+
+      /* 셰이커 */
+      if (s % 2 === 1) this.noise(t, 0.05, 0.020, 6200);
+      /* 클랩 (백비트) */
+      if (s === 4 || s === 12 || s === 20 || s === 28) this.noise(t, 0.10, 0.045, 0);
+      /* 킥 */
+      if (s === 0 || s === 8 || s === 16 || s === 24) this.tone(t, 96, 0.21, "sine", 0.15, 48);
+    },
+    start(){
+      if (!this.enabled || !Sound.on) return;
+      if (!this.out()) return;
+      if (Sound.ctx.state !== "running") Sound.ctx.resume().catch(() => {});
+      if (this.playing) return;
+      this.playing = true;
+      const now = Sound.ctx.currentTime, gn = this.gain.gain;
+      gn.cancelScheduledValues(now);
+      gn.setValueAtTime(Math.max(0.0001, gn.value), now);
+      gn.exponentialRampToValueAtTime(0.72, now + 1.2);
+      this.step = 0;
+      this.nextT = now + 0.1;
+      clearInterval(this.timer);
+      this.timer = setInterval(() => this.pump(), 250);
+      this.pump();
+    },
+    pump(){
+      if (!this.playing || !Sound.ctx) return;
+      const ctx = Sound.ctx;
+      if (this.nextT < ctx.currentTime - 0.12) this.nextT = ctx.currentTime + 0.03;
+      let guard = 0;
+      while (this.nextT < ctx.currentTime + 1.2 && guard++ < 90){
+        const t = this.nextT;
+        try { this.voice(this.step, t); } catch(e){}
+        this.step++;
+        this.nextT = t + this.spb();
+      }
+    },
+    stop(){
+      this.playing = false;
+      clearInterval(this.timer); this.timer = null;
+      if (!this.gain || !Sound.ctx) return;
+      const now = Sound.ctx.currentTime, dead = this.gain;
+      this.gain = null;
+      try {
+        dead.gain.cancelScheduledValues(now);
+        dead.gain.setValueAtTime(Math.max(0.0001, dead.gain.value), now);
+        dead.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+      } catch(e){}
+      setTimeout(() => { try { dead.disconnect(); } catch(e){} }, 400);
+    },
+    toggle(on){
+      this.enabled = on;
+      if (on) this.start(); else this.stop();
+    }
+  };
+  window.__bgm = Bgm;
+
+  [ "click", "keydown" ].forEach(ev =>
+    window.addEventListener(ev, () => { Sound.iface(); if (Bgm.enabled) Bgm.start(); }, { once: true })
+  );
+
+  /* ================= AI 심사 ================= */
+  const band = (v, lo, hi, soft) => v >= lo && v <= hi ? 1 : (v < lo ? clamp(1 - (lo - v) / soft, 0, 1) : clamp(1 - (v - hi) / soft, 0, 1));
+
+  function hashSeed(str){
+    let h = 2166136261;
+    for (let i = 0; i < str.length; i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return () => {
+      h += 0x6D2B79F5;
+      let t = h;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  const PRAISE = {
+    color: [
+      "물감을 아끼지 않는 배포 — 색마다 자기 주장이 또렷합니다.",
+      "팔레트를 통째로 들고 오셨네요. 보는 눈이 즐겁습니다.",
+      "색 조합에서 오늘 기분이 그대로 읽힙니다. 아주 화사합니다.",
+      "색을 이렇게 쓰는 사람, 미술관에서도 쉽게 못 봅니다.",
+      "한 장의 얼굴에 계절이 다 들어 있습니다."
+    ],
+    sym: [
+      "좌우 균형이 놀랍도록 정교합니다. 자로 잰 듯합니다.",
+      "거울에 비춰도 똑같을 균형감, 제법입니다.",
+      "이 정도 대칭이면 도형 시간에 앞자리 앉았을 얼굴입니다.",
+      "양쪽 눈이 서로 마주 보며 인사할 정도로 반듯합니다."
+    ],
+    zone: [
+      "눈·코·입이 제자리에 딱. 이목구비 배치가 교과서적입니다.",
+      "얼굴 삼등분이 황금비에 가깝습니다. 미대 교수님도 고개를 끄덕일 배치.",
+      "얼굴의 상·중·하가 고르게 채워져 한눈에 사람으로 읽힙니다.",
+      "이목구비 위치만큼은 오늘 참가자 중 손에 꼽습니다."
+    ],
+    fill: [
+      "빈 곳 없이 채워 넣은 성실함이 그대로 보입니다.",
+      "여백을 남기지 않는 당당한 채색, 힘이 좋습니다.",
+      "얼굴 전체를 자기 색으로 덮은 배짱이 마음에 듭니다."
+    ],
+    effort: [
+      "붓질 하나하나에 정성이 묻어납니다.",
+      "획의 개수에서 진심이 느껴집니다. 손목은 괜찮으신가요?",
+      "이 정도 붓질이면 이 얼굴은 오늘의 노동의 결과물입니다."
+    ],
+    palette: [
+      "색을 넓게 써서 얼굴에 이야기가 생겼습니다.",
+      "여러 색을 부딪쳐 만든 리듬이 재밌습니다.",
+      "색을 골라 쓰는 감각이 좋습니다. 취향이 보입니다."
+    ]
+  };
+  const CRIT = {
+    color: [
+      "다만 색은 조금 아끼셨네요 — 다음엔 한 색 더 과감하게!",
+      "색이 조금만 더 많았다면 큰 상도 노려볼 만했습니다.",
+      "흑백의 미학으로 갔군요. 그 결단은 인정합니다."
+    ],
+    sym: [
+      "좌우가 살짝 다른데, 그게 바로 사람 냄새입니다.",
+      "한쪽 볼이 조금 더 성실합니다. 애교로 봐 드립니다.",
+      "대칭은 조금 어긋났지만 개성은 확실합니다."
+    ],
+    zone: [
+      "이목구비가 자유분방한 편입니다. 그것도 개성!",
+      "눈·코·입이 서로 회의를 하지 않은 듯합니다. 다음엔 회의를 좀 시켜 주세요.",
+      "얼굴의 어느 한 구역이 조금 비어 있습니다. 한 붓 더!"
+    ],
+    fill: [
+      "여백의 미를 아시네요. 다만 얼굴이 조금 허전합니다.",
+      "채색이 얇아서 아쉽습니다 — 용기 내서 더 칠해 보세요.",
+      "색을 조금만 더 채우면 훨씬 살아날 얼굴입니다."
+    ],
+    effort: [
+      "붓질이 소박합니다. 다음엔 두 배로!",
+      "획 수가 적어 아쉽지만, 그 적은 획이 남긴 인상은 진합니다.",
+      "조금만 더 손을 움직였다면 순위가 달라졌을 겁니다."
+    ]
+  };
+  const TITLES = { color: "색채 마술사", sym: "대칭의 신", zone: "이목구비 장인", fill: "채색 장인", effort: "붓질의 장인", palette: "팔레트 수집가" };
+  const CLOSERS = [
+    "오늘의 얼굴은 오늘의 마음입니다.",
+    "이 얼굴, 명함에 넣어도 되겠습니다.",
+    "AI 심사위원 셋이 동시에 웃었습니다.",
+    "얼굴은 거짓말을 못 한다더니, 역시.",
+    "다음 강연에도 이 얼굴로 와 주세요.",
+    "이 그림은 오늘의 기념품입니다."
+  ];
+
+  function scoreOf(p){
+    const m = p.m || {};
+    const c = clamp(Number(m.c) || 0, 0, 40);
+    const hue = clamp(Number(m.hue) || 0, 0, 12);
+    const ink = clamp(Number(m.ink) || 0, 0, 1);
+    const sym = clamp(Number(m.sym) || 0, 0, 1);
+    const st = clamp(Number(m.st) || 0, 0, 999);
+    const z = Array.isArray(m.z) ? m.z.map(Number) : [0, 0, 0];
+    const rnd = hashSeed(p.key + "|" + (p.n || ""));
+
+    const colorPts = 24 * Math.min(1, c / 6) + 4 * Math.min(1, Math.max(0, hue - 3) / 5);
+    const fillPts = 16 * band(ink, 0.07, 0.42, 0.09);
+    const symPts = 18 * clamp((sym - 0.55) / 0.40, 0, 1);
+    const zPres = z.filter(v => v > 0.05).length;
+    const zBal = 1 - (Math.max.apply(null, z) - Math.min.apply(null, z));
+    const zonePts = 12 * (zPres / 3) + 4 * clamp(zBal, 0, 1);
+    const effortPts = 12 * band(st, 4, 70, 10);
+    const palPts = 6 * band(c, 2, 12, 6);
+    const spice = 4 * rnd();
+    const total = colorPts + fillPts + symPts + zonePts + effortPts + palPts + spice;
+
+    const dims = {
+      color: colorPts / 28,
+      sym: symPts / 18,
+      zone: zonePts / 16,
+      fill: fillPts / 16,
+      effort: effortPts / 12,
+      palette: palPts / 6
+    };
+    let best = "color", worst = "color";
+    Object.keys(dims).forEach(k => {
+      if (dims[k] > dims[best]) best = k;
+      if (dims[k] < dims[worst]) worst = k;
+    });
+    const pick = arr => arr[Math.floor(rnd() * arr.length) % arr.length];
+    const praise = pick(PRAISE[best] || PRAISE.color);
+    const crit = pick(CRIT[worst] || CRIT.color);
+    const closer = pick(CLOSERS);
+    const title = TITLES[best] || "오늘의 얼굴";
+
+    return {
+      total: Math.round(clamp(total, 0, 100)),
+      title,
+      comment: praise + " " + crit + " " + closer,
+      stats: "색 " + Math.round(c) + "종 · 붓질 " + Math.round(st) + "회 · 대칭 " + Math.round(sym * 100) + "% · 채움 " + Math.round(ink * 100) + "%"
+    };
+  }
+
+  /* ================= 둥둥 떠다니는 전광판 ================= */
+  const bubbles = new Map();
+  let skyRect = { width: 1200, height: 700 };
+  let rafId = null, lastTs = 0;
+
+  function bubbleSize(n){
+    if (n <= 3) return 236;
+    if (n <= 6) return 200;
+    if (n <= 10) return 172;
+    if (n <= 16) return 150;
+    if (n <= 26) return 130;
+    if (n <= 40) return 112;
+    if (n <= 60) return 98;
+    if (n <= 80) return 88;
+    return 80;
+  }
+
+  function measureSky(){
+    const r = el.sky.getBoundingClientRect();
+    skyRect.width = Math.max(320, r.width);
+    skyRect.height = Math.max(240, r.height);
+  }
+
+  function spawnPos(sz){
+    const maxX = Math.max(0, skyRect.width - sz - 8);
+    const maxY = Math.max(0, skyRect.height - sz - 8);
+    let best = { x: Math.random() * maxX + 4, y: Math.random() * maxY + 4 }, bestD = -1;
+    for (let i = 0; i < 26; i++){
+      const cx = Math.random() * maxX + 4, cy = Math.random() * maxY + 4;
+      let minD = 1e9;
+      bubbles.forEach(b => {
+        const dx = (b.x + b.sz / 2) - (cx + sz / 2);
+        const dy = (b.y + b.sz / 2) - (cy + sz / 2);
+        const d = Math.sqrt(dx * dx + dy * dy) - (b.sz + sz) / 2;
+        if (d < minD) minD = d;
+      });
+      if (minD > bestD){ bestD = minD; best = { x: cx, y: cy }; }
+      if (bestD > sz * 0.35) break;
+    }
+    return best;
+  }
+
+  function addBubble(key, v){
+    if (!v || !v.img) return;
+    const name = (v.n || "익명").toString().slice(0, 20);
+    const old = bubbles.get(key);
+    if (old){
+      /* 재제출 — 그림만 교체 */
+      old.m = v.m || old.m;
+      old.img = v.img;
+      old.ts = Number(v.ts) || old.ts;
+      if (old.imgEl){ old.imgEl.src = v.img; }
+      if (old.name !== name){ old.name = name; if (old.nmEl) old.nmEl.textContent = name; }
+      return;
+    }
+    const sz = bubbleSize(bubbles.size + 1);
+    const pos = spawnPos(sz);
+    const b = {
+      key, name, m: v.m || null, img: v.img, ts: Number(v.ts) || Date.now(),
+      sz, x: pos.x, y: pos.y,
+      vx: (Math.random() < 0.5 ? -1 : 1) * (10 + Math.random() * 16),
+      vy: (Math.random() < 0.5 ? -1 : 1) * (8 + Math.random() * 14),
+      ph: Math.random() * 6.28, rot: 2 + Math.random() * 4, el: null, imgEl: null, nmEl: null
+    };
+    const d = document.createElement("div");
+    d.className = "bub";
+    d.style.width = sz + "px";
+    d.style.height = sz + "px";
+    d.innerHTML = '<div class="bin"><img alt=""><span class="nm"></span></div>';
+    b.el = d;
+    b.imgEl = d.querySelector("img");
+    b.nmEl = d.querySelector(".nm");
+    b.imgEl.src = v.img;
+    b.nmEl.textContent = name;
+    d.addEventListener("click", () => openZoom(b));
+    el.sky.appendChild(d);
+    bubbles.set(key, b);
+    updateEmpty();
+    if (S.ready){
+      Sound.pop();
+      showArrive(name);
+    }
+    relayout();
+  }
+
+  function removeBubble(key){
+    const b = bubbles.get(key);
+    if (!b) return;
+    if (b.el) b.el.remove();
+    bubbles.delete(key);
+    relayout();
+    updateEmpty();
+  }
+
+  function relayout(){
+    const n = bubbles.size;
+    const sz = bubbleSize(n);
+    bubbles.forEach(b => {
+      if (b.sz !== sz){
+        b.sz = sz;
+        if (b.el){ b.el.style.width = sz + "px"; b.el.style.height = sz + "px"; }
+      }
+      b.x = clamp(b.x, 2, Math.max(2, skyRect.width - b.sz - 4));
+      b.y = clamp(b.y, 2, Math.max(2, skyRect.height - b.sz - 4));
+    });
+    updateCount();
+  }
+
+  function updateCount(){
+    S.count = bubbles.size;
+    el.cntNum.textContent = S.count;
+    if (S.db) S.room.child("meta/count").set(S.count).catch(() => {});
+  }
+
+  function updateEmpty(){
+    el.empty.classList.toggle("off", bubbles.size > 0);
+  }
+
+  let arriveT = null;
+  function showArrive(name){
+    el.arriveName.textContent = name + " 님 얼굴 도착";
+    el.arrive.classList.add("on");
+    clearTimeout(arriveT);
+    arriveT = setTimeout(() => el.arrive.classList.remove("on"), 2000);
+  }
+
+  function tick(ts){
+    if (!lastTs) lastTs = ts;
+    const dt = Math.min(0.06, (ts - lastTs) / 1000);
+    lastTs = ts;
+    const tsec = ts / 1000;
+    const W = skyRect.width, H = skyRect.height;
+    bubbles.forEach(b => {
+      if (!b.el) return;
+      b.x += b.vx * dt;
+      b.y += b.vy * dt;
+      const maxX = Math.max(2, W - b.sz - 4), maxY = Math.max(2, H - b.sz - 4);
+      if (b.x <= 2){ b.x = 2; b.vx = Math.abs(b.vx); }
+      else if (b.x >= maxX){ b.x = maxX; b.vx = -Math.abs(b.vx); }
+      if (b.y <= 2){ b.y = 2; b.vy = Math.abs(b.vy); }
+      else if (b.y >= maxY){ b.y = maxY; b.vy = -Math.abs(b.vy); }
+      const wob = Math.sin(tsec * 0.85 + b.ph) * 3.2;
+      const rot = Math.sin(tsec * 0.55 + b.ph) * b.rot;
+      b.el.style.transform = "translate3d(" + b.x.toFixed(1) + "px," + (b.y + wob).toFixed(1) + "px,0) rotate(" + rot.toFixed(2) + "deg)";
+    });
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function startLoop(){
+    if (rafId) return;
+    measureSky();
+    relayout();
+    lastTs = 0;
+    rafId = requestAnimationFrame(tick);
+  }
+
+  /* ================= 확대 ================= */
+  function openZoom(b){
+    el.zoomImg.src = b.img;
+    el.zoomName.textContent = b.name;
+    el.zoomSub.textContent = decodedName(b);
+    el.zoom.classList.add("on");
+  }
+  function closeZoom(){ el.zoom.classList.remove("on"); }
+  el.zoom.addEventListener("click", closeZoom);
+
+  function decodedName(b){
+    const when = b.ts ? new Date(b.ts) : null;
+    const hm = when ? pad2(when.getHours()) + ":" + pad2(when.getMinutes()) + " 도착" : "도착";
+    const m = b.m || {};
+    return hm + (m.st ? " · 붓질 " + m.st + "회" : "") + (m.c ? " · 색 " + m.c + "종" : "");
+  }
+
+  /* ================= 진행자 버튼 ================= */
+  function setPhaseLocal(){
+    el.startBtn.textContent = (S.phase === "run") ? "🔄 다시 시작" : "🚀 대회 시작";
+    el.revealBtn.disabled = bubbles.size === 0;
+  }
+
+  function startRound(){
+    if (!S.db){ toast("연결을 확인해 주세요"); return; }
+    const now = Date.now();
+    S.phase = "run"; S.startAt = now; S.revealed = false;
+    S.room.child("meta").update({ phase: "run", startAt: now, durSec: S.durSec, revealed: false })
+      .then(() => { toast("🎨 대회 시작! " + (S.durSec / 60) + "분"); })
+      .catch(() => toast("시작 신호를 보내지 못했어요"));
+    el.podium.classList.remove("on");
+    document.body.classList.remove("reveal");
+    setPhaseLocal();
+    Sound.start();
+    Bgm.start();
+  }
+
+  el.startBtn.addEventListener("click", startRound);
+
+  el.durSeg.addEventListener("click", e => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    S.durSec = Number(b.dataset.dur) || 180;
+    el.durSeg.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+    if (S.phase === "run" && S.db){
+      S.room.child("meta").update({ durSec: S.durSec, startAt: Date.now() }).catch(() => {});
+    }
+  });
+
+  el.revealBtn.addEventListener("click", reveal);
+
+  function reveal(){
+    if (bubbles.size === 0){ toast("아직 참가자가 없어요 — QR을 띄워 주세요"); return; }
+    const list = [];
+    bubbles.forEach(b => list.push(b));
+    const scored = list.map(b => {
+      const sc = scoreOf(b);
+      return { b, sc };
+    }).sort((x, y) => (y.sc.total - x.sc.total) || (x.b.ts - y.b.ts));
+    const top = scored.slice(0, 3);
+
+    el.podiumRow.innerHTML = "";
+    const order = [1, 0, 2]; /* 2위 - 1위 - 3위 배치 */
+    const rankName = ["1", "2", "3"];
+    order.forEach((idx, slot) => {
+      const item = top[idx];
+      if (!item) return;
+      const rank = idx + 1;
+      const col = document.createElement("div");
+      col.className = "pcol p" + rank;
+      col.innerHTML =
+        '<div class="rk">' + (rank === 1 ? "🏆 1위" : rank + "위") + '</div>' +
+        '<div class="pi">' + (rank === 1 ? '<span class="crown">👑</span>' : '') +
+          '<img alt="">' +
+        '</div>' +
+        '<div class="nm"></div>' +
+        '<div class="tt"></div>' +
+        '<div class="sc"></div>' +
+        '<div class="cm"></div>';
+      col.querySelector("img").src = item.b.img;
+      col.querySelector(".nm").textContent = item.b.name;
+      col.querySelector(".tt").textContent = "「" + item.sc.title + "」";
+      col.querySelector(".sc").textContent = item.sc.total + "점 · " + item.sc.stats;
+      col.querySelector(".cm").innerHTML = $esc(item.sc.comment);
+      el.podiumRow.appendChild(col);
+      setTimeout(() => col.classList.add("show"), 220 + slot * 260);
+    });
+    if (bubbles.size < 3){
+      el.podiumSub.textContent = "참가자 " + bubbles.size + "명 기준 · 색 · 채움 · 대칭 · 이목구비 · 붓질 종합 심사";
+    } else {
+      el.podiumSub.textContent = "색 · 채움 · 대칭 · 이목구비 · 붓질을 종합 심사했습니다";
+    }
+
+    el.podium.classList.add("on");
+    makeConfetti();
+    Sound.fanfare();
+    S.revealed = true;
+    if (S.db) S.room.child("meta").update({ revealed: true }).catch(() => {});
+    setPhaseLocal();
+  }
+
+  el.podiumClose.addEventListener("click", () => el.podium.classList.remove("on"));
+
+  function makeConfetti(){
+    el.confetti.innerHTML = "";
+    const colors = ["#FCD34D", "#F59E0B", "#8B5CF6", "#22D3EE", "#4ADE80", "#EC4899", "#FFFFFF", "#FB923C"];
+    for (let i = 0; i < 120; i++){
+      const p = document.createElement("i");
+      const w = 5 + Math.random() * 7;
+      p.style.left = (Math.random() * 100) + "%";
+      p.style.width = w + "px";
+      p.style.height = (w * 1.5) + "px";
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      p.style.animationDuration = (2.4 + Math.random() * 2.6).toFixed(2) + "s";
+      p.style.animationDelay = (Math.random() * 0.9).toFixed(2) + "s";
+      p.style.opacity = (0.55 + Math.random() * 0.45).toFixed(2);
+      if (Math.random() < 0.3) p.style.borderRadius = "50%";
+      el.confetti.appendChild(p);
+    }
+    setTimeout(() => { if (!el.podium.classList.contains("on")) el.confetti.innerHTML = ""; }, 6000);
+  }
+
+  /* ---- 비우기 (두 번 눌러 확정) ---- */
+  let armT = null;
+  el.clearBtn.addEventListener("click", () => {
+    if (!S.armed){
+      S.armed = Date.now();
+      el.clearBtn.classList.add("arm");
+      el.clearBtn.textContent = "정말 비울까요? 한 번 더";
+      clearTimeout(armT);
+      armT = setTimeout(() => disarmClear(), 4000);
+      return;
+    }
+    disarmClear();
+    clearAll();
+  });
+  function disarmClear(){
+    S.armed = 0;
+    el.clearBtn.classList.remove("arm");
+    el.clearBtn.textContent = "🧹 참가자 비우기";
+    clearTimeout(armT);
+  }
+  function clearAll(){
+    if (!S.db) return;
+    Bgm.stop();
+    S.room.child("players").remove()
+      .then(() => S.room.child("meta").update({ phase: "idle", startAt: 0, durSec: S.durSec, revealed: false, count: 0 }))
+      .then(() => {
+        bubbles.forEach(b => { if (b.el) b.el.remove(); });
+        bubbles.clear();
+        S.phase = "idle"; S.startAt = 0; S.revealed = false;
+        el.podium.classList.remove("on");
+        el.podiumRow.innerHTML = "";
+        updateEmpty();
+        updateCount();
+        setPhaseLocal();
+        toast("참가자 얼굴을 모두 비웠습니다 — 새 대회를 시작하세요");
+      })
+      .catch(() => toast("비우지 못했어요 — 연결을 확인해 주세요"));
+  }
+
+  /* ---- BGM ---- */
+  function renderBgmBtn(){
+    el.bgmBtn.textContent = Bgm.enabled ? "🔊 BGM ON" : "🔇 BGM OFF";
+    el.bgmBtn.classList.toggle("go", Bgm.enabled);
+  }
+  el.bgmBtn.addEventListener("click", () => {
+    Bgm.toggle(!Bgm.enabled);
+    renderBgmBtn();
+  });
+
+  /* ---- QR ---- */
+  function qrSvg(text){
+    if (typeof qrcode !== "function") return "";
+    try {
+      const qr = qrcode(0, "M");
+      qr.addData(text);
+      qr.make();
+      const n = qr.getModuleCount();
+      let d = "";
+      for (let r = 0; r < n; r++){
+        for (let c = 0; c < n; c++){
+          if (qr.isDark(r, c)) d += "M" + c + " " + r + "h1v1h-1z";
+        }
+      }
+      const pad = 2;
+      return '<svg viewBox="' + (-pad) + " " + (-pad) + " " + (n + pad * 2) + " " + (n + pad * 2) + '" shape-rendering="crispEdges" role="img" aria-label="청중 입장 QR">'
+        + '<rect x="' + (-pad) + '" y="' + (-pad) + '" width="' + (n + pad * 2) + '" height="' + (n + pad * 2) + '" fill="#FFFDF8"/>'
+        + '<path fill="#0A1120" d="' + d + '"/></svg>';
+    } catch(e){ return ""; }
+  }
+  function openQr(){
+    if (!el.qrBox.childElementCount){
+      const svg = qrSvg(MOBILE_URL);
+      el.qrBox.innerHTML = svg || '<div style="width:320px;height:320px;display:flex;align-items:center;justify-content:center;color:#8A7A5C;font-size:13px;font-weight:700">QR을 만들 수 없습니다</div>';
+    }
+    el.qrOverlay.classList.add("on");
+    Bgm.start();
+  }
+  function closeQr(){ el.qrOverlay.classList.remove("on"); }
+  el.qrBtn.addEventListener("click", openQr);
+  el.qrClose.addEventListener("click", closeQr);
+  el.qrOverlay.addEventListener("click", e => {
+    if (e.target === el.qrOverlay || e.target.closest(".qr-card") === null) closeQr();
+    else if (e.target.closest(".qr-hint")) closeQr();
+  });
+
+  /* ---- 단축키 ---- */
+  document.addEventListener("keydown", e => {
+    const k = (e.key || "").toLowerCase();
+    if (k === "b"){ Bgm.toggle(!Bgm.enabled); renderBgmBtn(); }
+    else if (k === "r"){ if (el.podium.classList.contains("on")) el.podium.classList.remove("on"); else reveal(); }
+    else if (k === "c"){ el.clearBtn.click(); }
+    else if (k === "g"){ if (el.qrOverlay.classList.contains("on")) closeQr(); else openQr(); }
+    else if (k === "1" || k === "2" || k === "3"){ startRound(); }
+    else if (e.key === "Escape"){ closeZoom(); closeQr(); el.podium.classList.remove("on"); if (el.podium.classList.contains("on")) el.podium.classList.remove("on"); }
+    else if (e.key === "Enter" && !e.metaKey){ startRound(); }
+  });
+
+  /* ================= Firebase ================= */
+  function setNet(ok){ el.netDot.classList.toggle("on", !!ok); }
+
+  function initFB(){
+    if (typeof firebase === "undefined" || !firebase.initializeApp){ setNet(false); return; }
+    try {
+      firebase.initializeApp(FB_CONFIG);
+      S.db = firebase.database();
+      S.room = S.db.ref(ROOT + ROOM);
+      S.db.ref(".info/connected").on("value", s => setNet(!!s.val()));
+
+      S.room.child("meta").on("value", snap => {
+        const m = snap.val() || {};
+        S.phase = m.phase || "idle";
+        S.startAt = Number(m.startAt) || 0;
+        S.durSec = Number(m.durSec) || S.durSec;
+        S.revealed = !!m.revealed;
+        setPhaseLocal();
+        renderTimer();
+      });
+
+      const pref = S.room.child("players");
+      pref.on("child_added", snap => addBubble(snap.key, snap.val()));
+      pref.on("child_changed", snap => addBubble(snap.key, snap.val()));
+      pref.on("child_removed", snap => removeBubble(snap.key));
+      S.ready = true;
+    } catch(e){ setNet(false); }
+  }
+
+  /* ================= 타이머 표시 ================= */
+  function renderTimer(){
+    if (!S.startAt || S.phase === "idle"){
+      el.timerNum.textContent = "--:--";
+      el.timerPill.classList.remove("big");
+      return;
+    }
+    const left = Math.ceil((S.startAt + S.durSec * 1000 - Date.now()) / 1000);
+    el.timerPill.classList.add("big");
+    if (left > 0){
+      el.timerNum.textContent = pad2(Math.floor(left / 60)) + ":" + pad2(left % 60);
+    } else {
+      el.timerNum.textContent = "종료 ✓";
+    }
+  }
+  setInterval(renderTimer, 500);
+
+  /* ================= 시작 ================= */
+  function boot(){
+    measureSky();
+    updateEmpty();
+    setPhaseLocal();
+    renderBgmBtn();
+    initFB();
+    startLoop();
+    window.addEventListener("resize", () => {
+      measureSky();
+      relayout();
+    });
+    if (document.body.offsetHeight > 0) setTimeout(() => { measureSky(); relayout(); }, 400);
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>
