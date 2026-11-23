@@ -381,7 +381,7 @@
       <span class="mc" id="editCount">상황 4개 / 최대 10개</span>
       <span class="sp"></span>
       <button class="b ghost" id="btnAddSit" type="button">＋ 상황 추가</button>
-      <button class="b ghost" id="btnRestore" type="button">🔄 기본값(학부모 4종) 복원</button>
+      <button class="b ghost" id="btnRestore" type="button">🔄 기본값(사회복지 3사례·12문항) 복원</button>
       <button class="b ok" id="btnSaveEdit" type="button">💾 저장하고 청중에게 반영</button>
       <button class="b ghost" id="btnCloseEdit" type="button">닫기 ✕</button>
     </div>
@@ -404,7 +404,7 @@
 <div class="endov" id="endOv">
   <div class="endin">
     <div class="endk">비폭력대화 · 마지막 한마디</div>
-    <p class="endq">“아이들은 부모님의 평가보다는 응원을 기다립니다”</p>
+    <p class="endq">“상대의 말 너머 마음을 들을 때, 진짜 연결이 시작됩니다”</p>
     <div class="endline"></div>
     <div class="endby">강연 크리에이터 · 정진영</div>
     <div><button class="endclose" id="btnCloseEnd" type="button">진행 화면으로 돌아가기</button></div>
@@ -942,7 +942,7 @@
 
   function newStage(i){
     return {
-      q: (STEPS[i] ? STEPS[i].key : "") + " 단계 — 아이에게 어떤 말을 건넬까요?",
+      q: (STEPS[i] ? STEPS[i].key : "") + " 단계 — 상대에게 어떤 말을 건넬까요?",
       opts: [
         { t:"", why:"", ok:true },
         { t:"", why:"", ok:false },
@@ -955,7 +955,7 @@
     return {
       emoji: "💬",
       title: "새 상황",
-      desc: "상황을 설명해 주세요. (아이의 행동과 부모가 본 장면)",
+      desc: "상황을 설명해 주세요. (상대의 행동과 내가 본 장면)",
       stages: [0,1,2,3].map(newStage)
     };
   }
@@ -976,7 +976,7 @@
         + '<button class="b danger" data-del="' + si + '" type="button">🗑 삭제</button>'
         + '</div><div class="esbody">'
         + '<div class="field"><label>상황 설명</label>'
-        + '<textarea data-si="' + si + '" data-f="desc" placeholder="아이의 행동·부모가 본 장면">' + esc(sit.desc || "") + '</textarea></div>';
+        + '<textarea data-si="' + si + '" data-f="desc" placeholder="상대의 행동·내가 본 장면">' + esc(sit.desc || "") + '</textarea></div>';
 
       (sit.stages || []).forEach((stg, ti) => {
         const stepInfo = STEPS[ti] || { key:"" };
@@ -1072,7 +1072,7 @@
     body.scrollTop = body.scrollHeight;
   });
   $("btnRestore").addEventListener("click", () => {
-    if(!confirm("기본값(초등 야구부 학부모 4종)으로 되돌릴까요?\n지금 편집 중인 내용은 사라집니다.")) return;
+    if(!confirm("기본값(사회복지 종사자 3사례 · 12문항)으로 되돌릴까요?\n지금 편집 중인 내용은 사라집니다.")) return;
     draft = clone(DEFAULTS);
     renderEditor();
     toast("기본값을 불러왔습니다 · 저장을 눌러 반영하세요");
