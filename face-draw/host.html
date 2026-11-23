@@ -3427,7 +3427,6 @@ var qrcode = function() {
     else if (k === "g"){ if (el.qrOverlay.classList.contains("on")) closeQr(); else openQr(); }
     else if (k === "1" || k === "2" || k === "3"){ startRound(); }
     else if (e.key === "Escape"){ closeZoom(); closeQr(); el.podium.classList.remove("on"); if (el.podium.classList.contains("on")) el.podium.classList.remove("on"); }
-    else if (e.key === "Enter" && !e.metaKey){ startRound(); }
   });
 
   /* ================= Firebase ================= */

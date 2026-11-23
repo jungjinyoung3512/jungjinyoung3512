@@ -597,9 +597,8 @@
       b.setAttribute("aria-label", PALETTE_NAMES[i]);
       b.dataset.color = c;
       b.addEventListener("click", () => {
+        /* 색만 바꾼다 — 채우기·지우개 도구는 그대로 유지 */
         S.color = c;
-        S.tool = "brush";
-        syncToolUI();
         el.palette.querySelectorAll(".sw").forEach(x => x.classList.toggle("on", x.dataset.color === S.color));
       });
       el.palette.appendChild(b);
@@ -706,6 +705,7 @@
       S.strokes++;
       el.drawHint.classList.add("off");
       updateStrokeCount();
+      S.tool = "brush";   /* 한 번 채우면 붓으로 복귀 */
       syncToolUI();
       return;
     }
