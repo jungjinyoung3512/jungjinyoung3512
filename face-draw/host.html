@@ -49,7 +49,9 @@
   .bt-k b{color:#D9E3EF;font-weight:800}
   .bt-t{font-family:var(--serif);font-weight:900;font-size:23px;line-height:1.1;letter-spacing:-0.03em;color:#fff;white-space:nowrap}
   .bt-t .em{color:var(--amber-lt)}
-  .bt-t .emj{font-family:var(--sans);margin-right:5px;display:inline-block;width:1.08em;text-align:center}
+  .bt-t{display:flex;align-items:center;gap:7px}
+  .bt-t .emj{font-family:var(--sans);font-size:22px;line-height:1;flex:none;display:inline-block}
+  .bt-t .txt{white-space:nowrap}
   .top-r{margin-left:auto;display:flex;align-items:center;gap:8px;flex:none}
   .pill{
     display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:#C7D2E1;
@@ -181,12 +183,12 @@
     overflow:hidden;
   }
   .podium.on{display:flex;animation:fadeIn .3s ease both}
-  .phead{flex:none;text-align:center;padding:18px 20px 2px}
+  .phead{flex:none;position:relative;z-index:2;text-align:center;padding:22px 20px 4px}
   .phead .pk{font-size:13px;font-weight:900;letter-spacing:.28em;color:var(--amber-lt)}
   .phead h2{margin:7px 0 0;font-family:var(--serif);font-size:34px;font-weight:900;letter-spacing:-0.04em;color:#fff}
   .phead h2 .em{color:var(--amber-lt)}
   .phead p{margin:5px 0 0;font-size:13px;font-weight:700;color:#9AA9BF}
-  .prow{flex:1;min-height:0;display:flex;align-items:flex-end;justify-content:center;gap:26px;padding:8px 26px 0;overflow:hidden}
+  .prow{flex:1;min-height:0;position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:34px;padding:4px 30px 8px;overflow:hidden}
   .pcol{display:flex;flex-direction:column;align-items:center;min-width:0;opacity:0;transform:translateY(26px)}
   .pcol.show{animation:rise .6s cubic-bezier(.2,1.2,.4,1) forwards}
   @keyframes rise{to{opacity:1;transform:none}}
@@ -197,28 +199,28 @@
     box-shadow:0 30px 60px -26px rgba(0,0,0,.95), 0 0 0 3px rgba(255,255,255,.5);
   }
   .pcol .pi img{display:block;width:100%;height:100%;object-fit:cover}
-  .pcol.p1 .pi{width:min(30vh,248px);height:min(30vh,248px);box-shadow:0 30px 70px -24px rgba(245,158,11,.75), 0 0 0 4px #FCD34D}
-  .pcol.p2 .pi,.pcol.p3 .pi{width:min(23vh,192px);height:min(23vh,192px);box-shadow:0 30px 60px -26px rgba(0,0,0,.95), 0 0 0 3px rgba(203,213,225,.85)}
+  .pcol.p1 .pi{width:min(33vh,300px);height:min(33vh,300px);box-shadow:0 30px 70px -24px rgba(245,158,11,.75), 0 0 0 4px #FCD34D}
+  .pcol.p2 .pi,.pcol.p3 .pi{width:min(25vh,226px);height:min(25vh,226px);box-shadow:0 30px 60px -26px rgba(0,0,0,.95), 0 0 0 3px rgba(203,213,225,.85)}
   .pcol .crown{position:absolute;right:8px;top:6px;font-size:26px;z-index:2;
     filter:drop-shadow(0 6px 14px rgba(245,158,11,.8))}
-  .pcol .nm{margin-top:10px;font-family:var(--serif);font-size:21px;font-weight:900;color:#fff;letter-spacing:-0.03em;
-    max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .pcol.p1 .nm{font-size:26px}
-  .pcol .tt{font-size:12.5px;font-weight:800;color:#FDE68A;margin-top:2px}
-  .pcol .sc{font-size:12px;font-weight:800;color:#94A3B8;margin-top:3px;font-variant-numeric:tabular-nums}
+  .pcol .nm{margin-top:14px;font-family:var(--serif);font-size:23px;font-weight:900;color:#fff;letter-spacing:-0.03em;
+    line-height:1.3;padding:1px 0 3px;max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pcol.p1 .nm{font-size:28px}
+  .pcol .tt{font-size:12.5px;font-weight:800;color:#FDE68A;margin-top:5px}
+  .pcol .sc{font-size:12px;font-weight:800;color:#94A3B8;margin-top:6px;font-variant-numeric:tabular-nums}
   .pcol .cm{
-    margin-top:8px;font-size:12.5px;font-weight:600;color:#C7D2E1;line-height:1.5;text-align:center;
-    max-width:340px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+    margin-top:10px;font-size:12.5px;font-weight:600;color:#D5DFEC;line-height:1.5;text-align:center;
+    max-width:336px;background:rgba(10,14,26,.8);border:1px solid rgba(255,255,255,.12);
     padding:9px 13px;border-radius:13px;word-break:keep-all;
   }
-  .pcol.p1 .cm{max-width:400px;font-size:13.5px;color:#E8EEF7;background:rgba(252,211,77,.09);
-    border-color:rgba(252,211,77,.28)}
+  .pcol.p1 .cm{max-width:400px;font-size:13.5px;color:#F3F7FF;background:rgba(26,20,6,.84);
+    border-color:rgba(252,211,77,.34)}
   .pcol .cm b{color:#FDE68A;font-weight:900}
-  .pfoot{flex:none;display:flex;align-items:center;justify-content:center;gap:14px;padding:10px 20px 14px;
+  .pfoot{flex:none;position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:14px;padding:10px 20px 14px;
     border-top:1px solid rgba(255,255,255,.07);background:rgba(5,6,14,.6)}
   .pfoot .note{font-size:11.5px;font-weight:700;color:#5E6C80}
   .pfoot .btn{padding:10px 16px}
-  .confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+  .confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1}
   .confetti i{position:absolute;top:-8vh;width:8px;height:14px;border-radius:2px;opacity:.95;
     animation:fall linear forwards}
   @keyframes fall{0%{transform:translateY(-10vh) rotate(0)}100%{transform:translateY(115vh) rotate(720deg)}}
@@ -271,7 +273,7 @@
       <span class="dot"></span>
       <div class="bt">
         <span class="bt-k">강연 크리에이터 · <b>정진영</b> · 진행자 화면</span>
-        <div class="bt-t"><span class="emj">🎨</span>내 얼굴 <span class="em">그리기 대회</span></div>
+        <div class="bt-t"><span class="emj" aria-hidden="true">🎨</span><span class="txt">내 얼굴 <span class="em">그리기 대회</span></span></div>
       </div>
     </div>
     <div class="top-r">
@@ -3502,6 +3504,9 @@ var qrcode = function() {
     }
   }
   setInterval(renderTimer, 500);
+
+  /* 동작 검증용 (레이아웃·발표 화면 확인) */
+  window.__host = { addBubble: addBubble, reveal: reveal, bubbles: bubbles, S: S, scoreOf: scoreOf };
 
   /* ================= 시작 ================= */
   function boot(){
