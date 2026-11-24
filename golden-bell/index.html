@@ -1,6 +1,89 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<!-- ══════════════════════════════════════════════════════════════
+     강연 종료 잠금 스위치 (LECTURE_CLOSED)
+     · 지금은 잠금 상태(true) — 접속하면 "강연이 종료되었습니다" 안내 화면만 나옵니다.
+     · 다음 강연에서 열 때는 아래 true 를 false 로 한 글자만 바꾸면 됩니다.
+     · 주소(URL) 파라미터로는 풀리지 않는 단일 스위치입니다.
+     ══════════════════════════════════════════════════════════════ -->
+<script>
+const LECTURE_CLOSED = true;
+(function () {
+  if (!LECTURE_CLOSED) return;
+  var root = document.documentElement;
+  root.classList.add('lecture-closed');
+
+  var CSS = ''
+    + 'html.lecture-closed,html.lecture-closed body{overflow:hidden !important;background:#050811 !important;}'
+    + 'html.lecture-closed body>*:not(#lectureClosedView){display:none !important;}'
+    + '#lectureClosedView{position:fixed;inset:0;z-index:2147483647;overflow-y:auto;display:flex;align-items:center;justify-content:center;'
+    + 'padding:26px 18px calc(26px + env(safe-area-inset-bottom));box-sizing:border-box;'
+    + 'background:radial-gradient(120% 70% at 50% -10%,#17213C 0%,#0A1020 45%,#050811 100%);'
+    + 'font-family:"Pretendard Variable",Pretendard,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;'
+    + 'color:#F1F5F9;word-break:keep-all;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;}'
+    + '#lectureClosedView *{box-sizing:border-box;}'
+    + '#lectureClosedView .lcCard{width:100%;max-width:420px;text-align:center;border:1px solid rgba(245,158,11,.22);'
+    + 'background:linear-gradient(180deg,rgba(26,39,67,.96),rgba(21,32,58,.96));border-radius:26px;'
+    + 'padding:38px 22px 26px;box-shadow:0 24px 60px -34px #000;}'
+    + '#lectureClosedView .lcIcon{display:grid;place-items:center;width:60px;height:60px;margin:0 auto 18px;border-radius:20px;font-size:26px;line-height:1;'
+    + 'background:radial-gradient(120% 130% at 50% 0%,rgba(245,158,11,.24),rgba(245,158,11,.06));border:1px solid rgba(245,158,11,.32);}'
+    + '#lectureClosedView .lcKicker{margin:0 0 12px;font-size:10.5px;font-weight:800;letter-spacing:.22em;color:#F59E0B;}'
+    + '#lectureClosedView .lcTitle{margin:0 0 14px;font-size:25px;line-height:1.35;font-weight:800;letter-spacing:-.03em;color:#fff;}'
+    + '#lectureClosedView .lcMsg{margin:0;font-size:13.5px;line-height:1.8;color:#C9D5E4;letter-spacing:-.02em;}'
+    + '#lectureClosedView .lcDivider{height:1px;background:rgba(255,255,255,.10);margin:24px 0 16px;}'
+    + '#lectureClosedView .lcLinks{display:grid;grid-template-columns:1fr 1fr;gap:9px;}'
+    + '#lectureClosedView .lcLinks a{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 6px;border-radius:13px;'
+    + 'background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.12);color:#E8EEF7 !important;'
+    + 'font-size:12.5px;font-weight:700;text-decoration:none !important;letter-spacing:-.02em;transition:transform .15s ease,background .15s ease;}'
+    + '#lectureClosedView .lcLinks a:active{transform:scale(.97);}'
+    + '#lectureClosedView .lcLinks a.hot{background:rgba(245,158,11,.14);border-color:rgba(245,158,11,.36);color:#FCD34D !important;}'
+    + '#lectureClosedView .lcLinks a.book{background:rgba(99,179,237,.12);border-color:rgba(99,179,237,.34);color:#BFDBFE !important;}'
+    + '#lectureClosedView .lcFoot{margin:16px 0 0;font-size:11px;color:#7C8BA3;letter-spacing:-.01em;}';
+
+  var HTML = ''
+    + '<div class="lcCard">'
+    + '<div class="lcIcon" aria-hidden="true">🔒</div>'
+    + '<p class="lcKicker">강연 크리에이터 · 정진영</p>'
+    + '<h1 class="lcTitle">강연이 종료되었습니다</h1>'
+    + '<p class="lcMsg">오늘의 강연 참여 체험은 종료되었습니다.<br>함께해 주셔서 감사합니다!</p>'
+    + '<div class="lcDivider"></div>'
+    + '<div class="lcLinks">'
+    + '<a href="https://www.instagram.com/_j_jin0/" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📸</span>인스타</a>'
+    + '<a href="https://www.threads.com/@_j_jin0" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">🧵</span>스레드</a>'
+    + '<a class="hot" href="https://docs.google.com/forms/d/e/1FAIpQLSfjzdgHSEgqiwC_E_or_w7x2GKX-bpf-qSbQH5oGeAdjBwnQA/viewform" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">🌙</span>1월 리셋밤</a>'
+    + '<a class="book" href="https://kmong.com/gig/536319" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📘</span>책 보러가기</a>'
+    + '</div>'
+    + '<p class="lcFoot">다음 강연에서 다시 만나요 🎤</p>'
+    + '</div>';
+
+  function render() {
+    if (document.getElementById('lectureClosedView')) return;
+    if (!document.getElementById('lectureClosedStyle')) {
+      var st = document.createElement('style');
+      st.id = 'lectureClosedStyle';
+      st.textContent = CSS;
+      (document.head || root).appendChild(st);
+    }
+    var wrap = document.createElement('div');
+    wrap.id = 'lectureClosedView';
+    wrap.setAttribute('role', 'main');
+    wrap.setAttribute('aria-label', '강연 종료 안내');
+    wrap.innerHTML = HTML;
+    (document.body || root).appendChild(wrap);
+  }
+
+  if (document.body) render();
+  else document.addEventListener('DOMContentLoaded', render);
+
+  /* 앱이 화면을 다시 그려도 안내 화면이 유지되도록 8초간 지켜봅니다. */
+  var n = 0, timer = setInterval(function () {
+    render();
+    if (++n > 80) clearInterval(timer);
+  }, 100);
+})();
+</script>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#07090F">
