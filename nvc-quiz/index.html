@@ -191,6 +191,13 @@
     display:flex;flex-direction:column;justify-content:center;
     padding:calc(env(safe-area-inset-top,0px) + 18px) 18px calc(env(safe-area-inset-bottom,0px) + 20px);
   }
+  .closedBrand{
+    display:flex;align-items:center;gap:7px;margin:0 0 14px;padding:0 2px;
+    font-size:12.5px;font-weight:700;color:#D5C9C0;letter-spacing:-.01em;
+  }
+  .closedBrand b{color:#fff;font-weight:900}
+  .closedBrand .closedApp{color:#8A7E76;font-weight:600}
+  .closedDot{width:7px;height:7px;border-radius:50%;background:var(--coral);box-shadow:0 0 8px rgba(255,122,89,.7);flex:none}
   .closedCard{
     text-align:center;
     border:1px solid rgba(255,178,122,.22);
@@ -237,6 +244,7 @@
 
 <!-- ── 강연 종료 안내 화면 (LECTURE_CLOSED = true 일 때만 보임) ── -->
 <section id="closedView" aria-labelledby="closedTitle">
+  <div class="closedBrand"><span class="closedDot" aria-hidden="true"></span>강연 크리에이터 · <b>정진영</b><span class="closedApp">| 비폭력대화</span></div>
   <div class="closedCard">
     <div class="closedIcon" aria-hidden="true">💬</div>
     <span class="closedKicker">LECTURE CLOSED</span>
