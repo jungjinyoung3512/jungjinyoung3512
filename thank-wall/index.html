@@ -266,6 +266,13 @@
     display:flex;flex-direction:column;justify-content:center;
     padding:calc(18px + env(safe-area-inset-top)) 18px calc(20px + env(safe-area-inset-bottom));
   }
+  .closedBrand{
+    display:flex;align-items:center;gap:7px;margin:0 0 14px;padding:0 2px;
+    font-size:12.5px;font-weight:700;color:#B9C6D8;letter-spacing:-.01em;
+  }
+  .closedBrand b{color:#fff;font-weight:800}
+  .closedBrand .closedApp{color:#7C8BA3;font-weight:600}
+  .closedDot{width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px rgba(245,158,11,.9);flex:none}
   .closedCard{
     text-align:center;
     border:1px solid rgba(245,158,11,.22);
@@ -301,6 +308,7 @@
 
 <!-- ── 강연 종료 안내 화면 (LECTURE_CLOSED = true 일 때만 보임) ── -->
 <section id="closedView" aria-labelledby="closedTitle">
+  <div class="closedBrand"><span class="closedDot" aria-hidden="true"></span>강연 크리에이터 · <b>정진영</b><span class="closedApp">| 마음편지</span></div>
   <div class="closedCard">
     <div class="closedIcon" aria-hidden="true">💌</div>
     <span class="closedKicker">LECTURE CLOSED</span>
