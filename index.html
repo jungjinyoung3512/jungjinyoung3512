@@ -742,6 +742,265 @@
                 </div>
             </div>
 
+            <!-- 캔바 현장 결과 보고서 & QR 리얼 후기 -->
+            <div class="reveal mt-16 pt-16 border-t border-white/10">
+
+                <!-- 헤더 및 누적 QR 지표 -->
+                <div class="max-w-3xl">
+                    <span class="inline-flex items-center text-amber-500 font-bold text-xs sm:text-sm tracking-widest uppercase">
+                        <span class="w-2 h-2 rounded-full bg-amber-500 mr-2"></span>CANVA RESULT REPORT &amp; QR SURVEY
+                    </span>
+                    <h2 class="font-editorial text-2xl sm:text-3xl lg:text-4xl font-bold text-white mt-3 leading-snug">
+                        교육 담당자에게 전달된 실제 결과 보고서 &amp;<br class="hidden sm:block"> QR 리얼 후기
+                    </h2>
+                    <p class="text-slate-400 mt-3 text-sm sm:text-base">
+                        강연 직후 익명 QR 설문으로 집계된 실제 만족도와 교육생들의 생생한 한마디입니다.
+                    </p>
+                </div>
+
+                <!-- 누적 QR 지표 바 -->
+                <div class="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                    <div class="rounded-2xl bg-navy-800/60 border border-white/10 px-4 py-4 sm:px-5 sm:py-5">
+                        <p class="text-amber-400 font-editorial font-bold text-xl sm:text-2xl leading-none">112명</p>
+                        <p class="text-slate-400 text-[11px] sm:text-xs mt-2">최근 4개 기관 사후 응답</p>
+                    </div>
+                    <div class="rounded-2xl bg-navy-800/60 border border-white/10 px-4 py-4 sm:px-5 sm:py-5">
+                        <p class="text-amber-400 font-editorial font-bold text-xl sm:text-2xl leading-none">4.73<span class="text-sm sm:text-base text-slate-400 font-sans"> / 5.00</span></p>
+                        <p class="text-slate-400 text-[11px] sm:text-xs mt-2">평균 만족도</p>
+                    </div>
+                    <div class="rounded-2xl bg-navy-800/60 border border-white/10 px-4 py-4 sm:px-5 sm:py-5">
+                        <p class="text-amber-400 font-editorial font-bold text-xl sm:text-2xl leading-none">95.5<span class="text-sm sm:text-base text-slate-400 font-sans">%</span></p>
+                        <p class="text-slate-400 text-[11px] sm:text-xs mt-2">4점 이상 긍정 평가 · 107/112명</p>
+                    </div>
+                    <div class="rounded-2xl bg-navy-800/60 border border-white/10 px-4 py-4 sm:px-5 sm:py-5">
+                        <p class="text-amber-400 font-editorial font-bold text-xl sm:text-2xl leading-none">다수</p>
+                        <p class="text-slate-400 text-[11px] sm:text-xs mt-2">재섭외 · 후속 특강 희망</p>
+                    </div>
+                </div>
+
+                <!-- 캔바 결과 보고서 갤러리 (4개 기관 · 2열) -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 lg:gap-8 mt-8 sm:mt-10">
+
+                    <!-- 김해시청 -->
+                    <div class="report-card group flex flex-col rounded-3xl bg-navy-800/60 border border-white/10 hover:border-amber-500/40 transition overflow-hidden">
+                        <div class="relative aspect-video bg-navy-950 overflow-hidden cursor-zoom-in" onclick="openReportLightbox('gimhae')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openReportLightbox('gimhae');}">
+                            <img id="report-img-gimhae" src="assets/reports/gimhae-p1.png" alt="김해시청 사회복지법인 역량강화 교육 결과 보고서 1p 결과 요약" loading="lazy" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-[1.02]">
+                            <span id="report-pagebadge-gimhae" class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/70 text-amber-400 text-[11px] font-bold">1p 결과 요약</span>
+                            <span class="absolute bottom-3 right-3 inline-flex items-center px-2.5 py-1 rounded-md bg-black/70 text-white text-[11px] font-semibold"><i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i>클릭 확대</span>
+                        </div>
+                        <div class="flex flex-col flex-1 p-5 sm:p-6">
+                            <div class="flex items-start justify-between gap-3">
+                                <h3 class="font-bold text-white text-base sm:text-lg leading-snug">김해시청 사회복지법인 역량강화 교육</h3>
+                                <span class="shrink-0 text-[11px] font-mono text-slate-400 mt-0.5">2026.11.24</span>
+                            </div>
+                            <div class="mt-3 flex flex-wrap gap-2 text-[11px] sm:text-xs">
+                                <span class="px-2.5 py-1 rounded-lg bg-navy-900/90 border border-white/5 text-amber-400 font-bold">만족도 4.76</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-navy-900/90 border border-white/5 text-emerald-400 font-bold">4점 이상 100%</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-navy-900/90 border border-white/5 text-slate-300">응답 17명</span>
+                            </div>
+                            <div class="mt-4 sm:mt-5 grid grid-cols-2 gap-2">
+                                <button type="button" id="report-btn-gimhae-1" onclick="switchReportPage('gimhae', 1)" class="px-3 py-2 rounded-xl border text-xs font-semibold transition bg-amber-600 text-white border-amber-600">1p 결과 요약</button>
+                                <button type="button" id="report-btn-gimhae-2" onclick="switchReportPage('gimhae', 2)" class="px-3 py-2 rounded-xl border text-xs font-semibold transition bg-white/5 text-slate-300 border-white/10 hover:bg-white/10">2p 후기·제안</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 강릉고등학교 -->
+                    <div class="report-card group flex flex-col rounded-3xl bg-navy-800/60 border border-white/10 hover:border-amber-500/40 transition overflow-hidden">
+                        <div class="relative aspect-video bg-navy-950 overflow-hidden cursor-zoom-in" onclick="openReportLightbox('gangneung')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openReportLightbox('gangneung');}">
+                            <img id="report-img-gangneung" src="assets/reports/gangneung-p1.png" alt="강릉고등학교 학부모 힐링 특강 결과 보고서 1p 결과 요약" loading="lazy" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-[1.02]">
+                            <span id="report-pagebadge-gangneung" class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/70 text-amber-400 text-[11px] font-bold">1p 결과 요약</span>
+                            <span class="absolute bottom-3 right-3 inline-flex items-center px-2.5 py-1 rounded-md bg-black/70 text-white text-[11px] font-semibold"><i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i>클릭 확대</span>
+                        </div>
+                        <div class="flex flex-col flex-1 p-5 sm:p-6">
+                            <div class="flex items-start justify-between gap-3">
+                                <h3 class="font-bold text-white text-base sm:text-lg leading-snug">강릉고등학교 학부모 힐링 특강</h3>
+                                <span class="shrink-0 text-[11px] font-mono text-slate-400 mt-0.5">2026.11.23</span>
+                            </div>
+                            <div class="mt-3 flex flex-wrap gap-2 text-[11px] sm:text-xs">
+                                <span class="px-2.5 py-1 rounded-lg bg-navy-900/90 border border-white/5 text-amber-400 font-bold">만족도 4.74</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-navy-900/90 border border-white/5 text-emerald-400 font-bold">4점 이상 97.1%</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-navy-900/90 border border-white/5 text-slate-300">응답 34명</span>
+                            </div>
+                            <div class="mt-4 sm:mt-5 grid grid-cols-2 gap-2">
+                                <button type="button" id="report-btn-gangneung-1" onclick="switchReportPage('gangneung', 1)" class="px-3 py-2 rounded-xl border text-xs font-semibold transition bg-amber-600 text-white border-amber-600">1p 결과 요약</button>
+                                <button type="button" id="report-btn-gangneung-2" onclick="switchReportPage('gangneung', 2)" class="px-3 py-2 rounded-xl border text-xs font-semibold transition bg-white/5 text-slate-300 border-white/10 hover:bg-white/10">2p 후기·제안</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 호남권 119특수대응단(제주) -->
+                    <div class="report-card group flex flex-col rounded-3xl bg-navy-800/60 border border-white/10 hover:border-amber-500/40 transition overflow-hidden">
+                        <div class="relative aspect-video bg-navy-950 overflow-hidden cursor-zoom-in" onclick="openReportLightbox('jeju')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openReportLightbox('jeju');}">
+                            <img id="report-img-jeju" src="assets/reports/jeju-p1.png" alt="호남권 119특수대응단 워크숍 결과 보고서 1p 결과 요약" loading="lazy" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-[1.02]">
+                            <span id="report-pagebadge-jeju" class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/70 text-amber-400 text-[11px] font-bold">1p 결과 요약</span>
+                            <span class="absolute bottom-3 right-3 inline-flex items-center px-2.5 py-1 rounded-md bg-black/70 text-white text-[11px] font-semibold"><i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i>클릭 확대</span>
+                        </div>
+                        <div class="flex flex-col flex-1 p-5 sm:p-6">
+                            <div class="flex items-start justify-between gap-3">
+                                <h3 class="font-bold text-white text-base sm:text-lg leading-snug">호남권 119특수대응단(제주) 워크숍</h3>
+                                <span class="shrink-0 text-[11px] font-mono text-slate-400 mt-0.5">2026.11.19</span>
+                            </div>
+                            <div class="mt-3 flex flex-wrap gap-2 text-[11px] sm:text-xs">
+                                <span class="px-2.5 py-1 rounded-lg bg-navy-900/90 border border-white/5 text-amber-400 font-bold">만족도 4.73</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-navy-900/90 border border-white/5 text-emerald-400 font-bold">4점 이상 93.2%</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-navy-900/90 border border-white/5 text-slate-300">응답 44명</span>
+                            </div>
+                            <div class="mt-4 sm:mt-5 grid grid-cols-2 gap-2">
+                                <button type="button" id="report-btn-jeju-1" onclick="switchReportPage('jeju', 1)" class="px-3 py-2 rounded-xl border text-xs font-semibold transition bg-amber-600 text-white border-amber-600">1p 결과 요약</button>
+                                <button type="button" id="report-btn-jeju-2" onclick="switchReportPage('jeju', 2)" class="px-3 py-2 rounded-xl border text-xs font-semibold transition bg-white/5 text-slate-300 border-white/10 hover:bg-white/10">2p 후기·제안</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 대전특수교육원 -->
+                    <div class="report-card group flex flex-col rounded-3xl bg-navy-800/60 border border-white/10 hover:border-amber-500/40 transition overflow-hidden">
+                        <div class="relative aspect-video bg-navy-950 overflow-hidden cursor-zoom-in" onclick="openReportLightbox('daejeon')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openReportLightbox('daejeon');}">
+                            <img id="report-img-daejeon" src="assets/reports/daejeon-p1.png" alt="대전특수교육원 마음챙김 연수 결과 보고서 1p 결과 요약" loading="lazy" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-[1.02]">
+                            <span id="report-pagebadge-daejeon" class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/70 text-amber-400 text-[11px] font-bold">1p 결과 요약</span>
+                            <span class="absolute bottom-3 right-3 inline-flex items-center px-2.5 py-1 rounded-md bg-black/70 text-white text-[11px] font-semibold"><i class="fa-solid fa-magnifying-glass-plus mr-1.5"></i>클릭 확대</span>
+                        </div>
+                        <div class="flex flex-col flex-1 p-5 sm:p-6">
+                            <div class="flex items-start justify-between gap-3">
+                                <h3 class="font-bold text-white text-base sm:text-lg leading-snug">대전특수교육원 마음챙김 연수</h3>
+                                <span class="shrink-0 text-[11px] font-mono text-slate-400 mt-0.5">2026.11.16</span>
+                            </div>
+                            <div class="mt-3 flex flex-wrap gap-2 text-[11px] sm:text-xs">
+                                <span class="px-2.5 py-1 rounded-lg bg-navy-900/90 border border-white/5 text-amber-400 font-bold">만족도 4.65</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-navy-900/90 border border-white/5 text-emerald-400 font-bold">4점 이상 94.1%</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-navy-900/90 border border-white/5 text-slate-300">응답 17명</span>
+                            </div>
+                            <div class="mt-4 sm:mt-5 grid grid-cols-2 gap-2">
+                                <button type="button" id="report-btn-daejeon-1" onclick="switchReportPage('daejeon', 1)" class="px-3 py-2 rounded-xl border text-xs font-semibold transition bg-amber-600 text-white border-amber-600">1p 결과 요약</button>
+                                <button type="button" id="report-btn-daejeon-2" onclick="switchReportPage('daejeon', 2)" class="px-3 py-2 rounded-xl border text-xs font-semibold transition bg-white/5 text-slate-300 border-white/10 hover:bg-white/10">2p 후기·제안</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- QR 리얼 후기 (익명 설문 원문) -->
+                <div class="mt-12 sm:mt-14">
+                    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-5 sm:mb-6">
+                        <div>
+                            <span class="inline-flex items-center text-emerald-400 font-bold text-xs tracking-wider uppercase">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 mr-2"></span>REAL VOICE FROM QR SURVEY
+                            </span>
+                            <h3 class="font-editorial text-xl sm:text-2xl font-bold text-white mt-1.5">담당자들이 연락하고 싶어지는 QR 리얼 후기</h3>
+                        </div>
+                        <span class="text-[11px] sm:text-xs text-slate-500">익명 응답 원문 · 이름·소속 미수집</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+
+                        <!-- 김해시청 후기 -->
+                        <div class="rounded-3xl bg-navy-800/60 border border-white/10 p-5 sm:p-6">
+                            <div class="flex items-center justify-between gap-3 pb-3.5 border-b border-white/10">
+                                <p class="font-bold text-white text-sm sm:text-base">김해시청 <span class="text-slate-400 font-normal text-xs">사회복지법인 역량강화</span></p>
+                                <span class="shrink-0 text-[11px] text-amber-400 font-bold">4.76 · 100%</span>
+                            </div>
+                            <div class="mt-4 space-y-2.5">
+                                <div class="relative pl-5 pr-3 py-3 rounded-2xl bg-navy-900/90 border border-white/5">
+                                    <i class="fa-solid fa-quote-left absolute left-2 top-3.5 text-amber-500/40 text-[10px]"></i>
+                                    <p class="text-slate-200 text-sm leading-relaxed">“저희 직원 행사에 교육해주시면 좋겠어요!!”</p>
+                                </div>
+                                <div class="relative pl-5 pr-3 py-3 rounded-2xl bg-navy-900/90 border border-white/5">
+                                    <i class="fa-solid fa-quote-left absolute left-2 top-3.5 text-amber-500/40 text-[10px]"></i>
+                                    <p class="text-slate-200 text-sm leading-relaxed">“지루할 줄 알았는데 매우 재밌게 했습니다. 시간 삭제!”</p>
+                                </div>
+                                <div class="relative pl-5 pr-3 py-3 rounded-2xl bg-navy-900/90 border border-white/5">
+                                    <i class="fa-solid fa-quote-left absolute left-2 top-3.5 text-amber-500/40 text-[10px]"></i>
+                                    <p class="text-slate-200 text-sm leading-relaxed">“내년에 또 강의해 주세요”</p>
+                                </div>
+                                <div class="relative pl-5 pr-3 py-3 rounded-2xl bg-navy-900/90 border border-white/5">
+                                    <i class="fa-solid fa-quote-left absolute left-2 top-3.5 text-amber-500/40 text-[10px]"></i>
+                                    <p class="text-slate-200 text-sm leading-relaxed">“큐알코드를 활용한 강의 진행이 재밌었음”</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 강릉고등학교 후기 -->
+                        <div class="rounded-3xl bg-navy-800/60 border border-white/10 p-5 sm:p-6">
+                            <div class="flex items-center justify-between gap-3 pb-3.5 border-b border-white/10">
+                                <p class="font-bold text-white text-sm sm:text-base">강릉고등학교 <span class="text-slate-400 font-normal text-xs">학부모 힐링 특강</span></p>
+                                <span class="shrink-0 text-[11px] text-amber-400 font-bold">4.74 · 97.1%</span>
+                            </div>
+                            <div class="mt-4 space-y-2.5">
+                                <div class="relative pl-5 pr-3 py-3 rounded-2xl bg-navy-900/90 border border-white/5">
+                                    <i class="fa-solid fa-quote-left absolute left-2 top-3.5 text-amber-500/40 text-[10px]"></i>
+                                    <p class="text-slate-200 text-sm leading-relaxed">“더 깊은 강의를 듣고 싶게 만드는 강의였습니다. 남편 회사에 강의 제안하면 좋을 것 같습니다.”</p>
+                                </div>
+                                <div class="relative pl-5 pr-3 py-3 rounded-2xl bg-navy-900/90 border border-white/5">
+                                    <i class="fa-solid fa-quote-left absolute left-2 top-3.5 text-amber-500/40 text-[10px]"></i>
+                                    <p class="text-slate-200 text-sm leading-relaxed">“꼭 한번 자리가 마련되는 곳에 적극적으로 모시고픈 분이세요 👍”</p>
+                                </div>
+                                <div class="relative pl-5 pr-3 py-3 rounded-2xl bg-navy-900/90 border border-white/5">
+                                    <i class="fa-solid fa-quote-left absolute left-2 top-3.5 text-amber-500/40 text-[10px]"></i>
+                                    <p class="text-slate-200 text-sm leading-relaxed">“마음에 와닿는 말을 많이 해주시고 AI, QR로 강의 준비를 너무 잘해오셨네요! 또 만나고 싶어요!”</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 호남권 119특수대응단(제주) 후기 -->
+                        <div class="rounded-3xl bg-navy-800/60 border border-white/10 p-5 sm:p-6">
+                            <div class="flex items-center justify-between gap-3 pb-3.5 border-b border-white/10">
+                                <p class="font-bold text-white text-sm sm:text-base">호남권 119특수대응단 <span class="text-slate-400 font-normal text-xs">제주 워크숍</span></p>
+                                <span class="shrink-0 text-[11px] text-amber-400 font-bold">4.73 · 93.2%</span>
+                            </div>
+                            <div class="mt-4 space-y-2.5">
+                                <div class="relative pl-5 pr-3 py-3 rounded-2xl bg-navy-900/90 border border-white/5">
+                                    <i class="fa-solid fa-quote-left absolute left-2 top-3.5 text-amber-500/40 text-[10px]"></i>
+                                    <p class="text-slate-200 text-sm leading-relaxed">“두 번째지만 훨씬 더 공감되고 도움이 됩니다. 감사해요”</p>
+                                </div>
+                                <div class="relative pl-5 pr-3 py-3 rounded-2xl bg-navy-900/90 border border-white/5">
+                                    <i class="fa-solid fa-quote-left absolute left-2 top-3.5 text-amber-500/40 text-[10px]"></i>
+                                    <p class="text-slate-200 text-sm leading-relaxed">“큐알로 진행하는 투표가 신박했습니다. 먼 데까지 오셔서 강의해주시니 정말 감사합니다”</p>
+                                </div>
+                                <div class="relative pl-5 pr-3 py-3 rounded-2xl bg-navy-900/90 border border-white/5">
+                                    <i class="fa-solid fa-quote-left absolute left-2 top-3.5 text-amber-500/40 text-[10px]"></i>
+                                    <p class="text-slate-200 text-sm leading-relaxed">“딱딱한 분위기를 끌어올려주시느라 고생 많으셨습니다. 더 자주 뵐게요”</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 대전특수교육원 후기 -->
+                        <div class="rounded-3xl bg-navy-800/60 border border-white/10 p-5 sm:p-6">
+                            <div class="flex items-center justify-between gap-3 pb-3.5 border-b border-white/10">
+                                <p class="font-bold text-white text-sm sm:text-base">대전특수교육원 <span class="text-slate-400 font-normal text-xs">마음챙김 연수</span></p>
+                                <span class="shrink-0 text-[11px] text-amber-400 font-bold">4.65 · 94.1%</span>
+                            </div>
+                            <div class="mt-4 space-y-2.5">
+                                <div class="relative pl-5 pr-3 py-3 rounded-2xl bg-navy-900/90 border border-white/5">
+                                    <i class="fa-solid fa-quote-left absolute left-2 top-3.5 text-amber-500/40 text-[10px]"></i>
+                                    <p class="text-slate-200 text-sm leading-relaxed">“스트레스 관련 강의 중 가장 좋았습니다.”</p>
+                                </div>
+                                <div class="relative pl-5 pr-3 py-3 rounded-2xl bg-navy-900/90 border border-white/5">
+                                    <i class="fa-solid fa-quote-left absolute left-2 top-3.5 text-amber-500/40 text-[10px]"></i>
+                                    <p class="text-slate-200 text-sm leading-relaxed">“지친 하루에 정말 신나는 2시간 30분이었습니다. 감사합니다!!”</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 하단 연결 CTA -->
+                <div class="mt-10 sm:mt-12 rounded-3xl bg-gradient-to-r from-navy-800/90 via-navy-800/70 to-navy-900/90 border border-amber-500/25 px-6 py-7 sm:px-10 sm:py-9 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    <div>
+                        <p class="text-amber-400 text-[11px] sm:text-xs font-bold tracking-widest uppercase">NEXT STEP</p>
+                        <p class="font-editorial text-lg sm:text-2xl font-bold text-white mt-2 leading-snug">
+                            우리 기관 맞춤 QR 설문 &amp; 결과 보고서까지 한 번에 받아보시겠어요?
+                        </p>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2.5 leading-relaxed">강연 전 스트레스 진단 → 현장 실시간 결과 → 강연 후 만족도 보고서까지, 담당자 업무를 늘리지 않고 그대로 전달합니다.</p>
+                    </div>
+                    <a href="#contact" class="shrink-0 inline-flex items-center justify-center px-6 sm:px-7 py-4 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white font-semibold text-sm sm:text-base shadow-lg shadow-amber-600/20 transition transform hover:-translate-y-0.5">
+                        이 구성으로 강의 문의하기
+                        <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+            </div>
+
             <!-- 하단: 기관 출강 레퍼런스 & 네이버 블로그 아카이브 -->
             <div class="reveal mt-16 pt-16 border-t border-white/10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
                 
@@ -786,7 +1045,7 @@
 
                     <div class="mt-6 pt-5 border-t border-white/10 text-xs text-slate-400 flex items-center justify-between">
                         <span>재출강 및 타 부서 추천 의뢰 다수</span>
-                        <span class="text-amber-400 font-semibold">2026.11 현장 만족도 4.70/5.00</span>
+                        <span class="text-amber-400 font-semibold">2026.11 현장 만족도 4.73/5.00</span>
                     </div>
                 </div>
 
@@ -1292,6 +1551,34 @@
     </div>
 
     <!-- 모달 3: 문의 접수 완료 확인 모달 -->
+    <!-- 캔바 결과 보고서 라이트박스 -->
+    <div id="reportLightbox" class="fixed inset-0 z-[60] hidden items-center justify-center bg-navy-950/95 backdrop-blur-sm p-3 sm:p-6">
+        <div class="w-full max-w-6xl">
+            <div class="flex items-start justify-between gap-3 mb-3">
+                <div class="min-w-0">
+                    <p id="reportLightboxTitle" class="text-white font-bold text-sm sm:text-base truncate"></p>
+                    <p id="reportLightboxSub" class="text-slate-400 text-[11px] sm:text-xs mt-0.5"></p>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                    <button type="button" onclick="stepLightbox(-1)" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer" aria-label="이전 페이지">
+                        <i class="fa-solid fa-chevron-left text-sm"></i>
+                    </button>
+                    <span id="reportLightboxCounter" class="text-amber-400 font-mono text-xs w-10 text-center">1 / 2</span>
+                    <button type="button" onclick="stepLightbox(1)" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer" aria-label="다음 페이지">
+                        <i class="fa-solid fa-chevron-right text-sm"></i>
+                    </button>
+                    <button type="button" onclick="closeReportLightbox()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer" aria-label="닫기">
+                        <i class="fa-solid fa-xmark text-base"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="rounded-2xl overflow-hidden bg-navy-900 border border-white/10">
+                <img id="reportLightboxImg" src="" alt="" class="w-full h-auto max-h-[76vh] object-contain mx-auto">
+            </div>
+            <p class="text-center text-slate-500 text-[11px] mt-3">← → 로 1p·2p 이동 · ESC 또는 바깥 클릭으로 닫기</p>
+        </div>
+    </div>
+
     <div id="submitSuccessModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-navy-950/80 backdrop-blur-sm p-4">
         <div class="bg-white rounded-3xl max-w-md w-full p-7 sm:p-8 text-center shadow-2xl border border-slate-200">
             <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl mx-auto mb-5">
@@ -1443,6 +1730,139 @@
                 }
             }
         }
+
+        // 5. 캔바 결과 보고서: 1p/2p 전환 & 라이트박스 확대
+        const REPORT_DATA = {
+            gimhae: {
+                title: '김해시청 사회복지법인 역량강화 교육',
+                sub: '2026.11.24 · 만족도 4.76 / 5.00 · 4점 이상 100% · 응답 17명',
+                pages: ['assets/reports/gimhae-p1.png', 'assets/reports/gimhae-p2.png']
+            },
+            gangneung: {
+                title: '강릉고등학교 학부모 힐링 특강',
+                sub: '2026.11.23 · 만족도 4.74 / 5.00 · 4점 이상 97.1% · 응답 34명',
+                pages: ['assets/reports/gangneung-p1.png', 'assets/reports/gangneung-p2.png']
+            },
+            jeju: {
+                title: '호남권 119특수대응단(제주) 워크숍',
+                sub: '2026.11.19 · 만족도 4.73 / 5.00 · 4점 이상 93.2% · 응답 44명',
+                pages: ['assets/reports/jeju-p1.png', 'assets/reports/jeju-p2.png']
+            },
+            daejeon: {
+                title: '대전특수교육원 마음챙김 연수',
+                sub: '2026.11.16 · 만족도 4.65 / 5.00 · 4점 이상 94.1% · 응답 17명',
+                pages: ['assets/reports/daejeon-p1.png', 'assets/reports/daejeon-p2.png']
+            }
+        };
+        const REPORT_PAGE_LABEL = { 1: '1p 결과 요약', 2: '2p 후기·제안' };
+        const reportPageState = { gimhae: 1, gangneung: 1, jeju: 1, daejeon: 1 };
+        let lightboxKey = null;
+
+        function switchReportPage(key, page) {
+            const data = REPORT_DATA[key];
+            if (!data || !data.pages[page - 1]) return;
+            reportPageState[key] = page;
+
+            const img = document.getElementById('report-img-' + key);
+            if (img) {
+                img.src = data.pages[page - 1];
+                img.alt = data.title + ' 결과 보고서 ' + REPORT_PAGE_LABEL[page];
+            }
+            const badge = document.getElementById('report-pagebadge-' + key);
+            if (badge) {
+                badge.textContent = REPORT_PAGE_LABEL[page];
+            }
+
+            [1, 2].forEach(p => {
+                const btn = document.getElementById('report-btn-' + key + '-' + p);
+                if (!btn) return;
+                if (p === page) {
+                    btn.classList.remove('bg-white/5', 'text-slate-300', 'border-white/10', 'hover:bg-white/10');
+                    btn.classList.add('bg-amber-600', 'text-white', 'border-amber-600');
+                } else {
+                    btn.classList.remove('bg-amber-600', 'text-white', 'border-amber-600');
+                    btn.classList.add('bg-white/5', 'text-slate-300', 'border-white/10', 'hover:bg-white/10');
+                }
+            });
+
+            if (lightboxKey === key) {
+                renderReportLightbox();
+            }
+        }
+
+        function renderReportLightbox() {
+            if (!lightboxKey) return;
+            const data = REPORT_DATA[lightboxKey];
+            const page = reportPageState[lightboxKey];
+            const img = document.getElementById('reportLightboxImg');
+            const titleEl = document.getElementById('reportLightboxTitle');
+            const subEl = document.getElementById('reportLightboxSub');
+            const counter = document.getElementById('reportLightboxCounter');
+            if (img) {
+                img.src = data.pages[page - 1];
+                img.alt = data.title + ' 결과 보고서 ' + REPORT_PAGE_LABEL[page] + ' 확대 보기';
+            }
+            if (titleEl) {
+                titleEl.textContent = data.title + ' — ' + REPORT_PAGE_LABEL[page];
+            }
+            if (subEl) {
+                subEl.textContent = data.sub;
+            }
+            if (counter) {
+                counter.textContent = page + ' / ' + data.pages.length;
+            }
+        }
+
+        function openReportLightbox(key) {
+            if (!REPORT_DATA[key]) return;
+            lightboxKey = key;
+            renderReportLightbox();
+            const modal = document.getElementById('reportLightbox');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeReportLightbox() {
+            const modal = document.getElementById('reportLightbox');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+            document.body.style.overflow = '';
+            lightboxKey = null;
+        }
+
+        function stepLightbox(dir) {
+            if (!lightboxKey) return;
+            const total = REPORT_DATA[lightboxKey].pages.length;
+            let next = reportPageState[lightboxKey] + dir;
+            if (next < 1) next = total;
+            if (next > total) next = 1;
+            switchReportPage(lightboxKey, next);
+        }
+
+        const reportLightboxEl = document.getElementById('reportLightbox');
+        if (reportLightboxEl) {
+            reportLightboxEl.addEventListener('click', (e) => {
+                if (e.target === reportLightboxEl) {
+                    closeReportLightbox();
+                }
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (!lightboxKey) return;
+            if (e.key === 'Escape') {
+                closeReportLightbox();
+            } else if (e.key === 'ArrowLeft') {
+                stepLightbox(-1);
+            } else if (e.key === 'ArrowRight') {
+                stepLightbox(1);
+            }
+        });
 
         // 모달 바깥 영역 클릭 시 닫기
         window.addEventListener('click', (e) => {
