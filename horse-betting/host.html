@@ -750,9 +750,9 @@
       var v = s.val() || {};
       players = Object.keys(v).map(function(id){
         var p = v[id]||{};
-        return { id:id, name:p.name||'이름없음', coins:Number(p.coins)||0,
+        return { id:id, name:p.name||'', coins:Number(p.coins)||0,
                  bet:p.bet||null, last:p.last||null, joinedAt:Number(p.joinedAt)||0 };
-      });
+      }).filter(function(p){ return !!p.name; });
       players.sort(function(a,b){ return (b.coins-a.coins) || (a.joinedAt-b.joinedAt); });
       paint();
     });
@@ -1288,8 +1288,9 @@
     if (!confirm('참가자 명단과 자산을 모두 지우고 ROUND 1부터 다시 시작합니다.\n계속할까요?')) return;
     bgmStop(); animating=false; cancelAnimationFrame(rafId); armed=false; raceResult=null;
     var p = db.ref(ROOT + '/players').remove();
+    var r = db.ref(ROOT + '/race').remove();
     var m = db.ref(ROOT + '/meta').set({ round:1, state:'betting', raceId:0, winner:null, order:null, startedAt:null, revealedAt:null });
-    Promise.all([p,m]).then(function(){
+    Promise.all([p,r,m]).then(function(){
       resetLanes(); toast('참가자 명단을 비웠습니다 — 새로 입장시켜 주세요');
     }).catch(function(){ toast('비우기에 실패했어요'); });
   }
