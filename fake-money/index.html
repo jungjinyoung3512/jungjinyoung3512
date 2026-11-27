@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A0F1A">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>💵</text></svg>">
+<!-- ══════════════════════════════════════════════════════════════
+     강연 종료 잠금 스위치 (LECTURE_CLOSED)
+     · 지금은 열림 상태(false) — 강연에서 바로 사용합니다.
+     · 강연이 끝나면 work/lecture-lock/toggle.py 로 닫습니다.
+     ══════════════════════════════════════════════════════════════ -->
+<script>
+const LECTURE_CLOSED = false;
+(function () {
+  if (!LECTURE_CLOSED) return;
+  var root = document.documentElement;
+  root.classList.add('lecture-closed');
+  var CSS = ''
+    + 'html.lecture-closed,html.lecture-closed body{overflow:hidden !important;background:#050811 !important;}'
+    + 'html.lecture-closed body>*:not(#lectureClosedView){display:none !important;}'
+    + '#lectureClosedView{position:fixed;inset:0;z-index:2147483647;overflow-y:auto;display:flex;align-items:center;justify-content:center;'
+    + 'padding:26px 18px calc(26px + env(safe-area-inset-bottom));box-sizing:border-box;'
+    + 'background:radial-gradient(120% 70% at 50% -10%,#17213C 0%,#0A1020 45%,#050811 100%);'
+    + 'font-family:"Pretendard Variable",Pretendard,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;'
+    + 'color:#F1F5F9;word-break:keep-all;-webkit-text-size-adjust:100%;}'
+    + '#lectureClosedView *{box-sizing:border-box;}'
+    + '#lectureClosedView .lcCard{width:100%;max-width:420px;text-align:center;border:1px solid rgba(245,196,81,.22);'
+    + 'background:linear-gradient(180deg,rgba(26,39,67,.96),rgba(21,32,58,.96));border-radius:26px;padding:38px 22px 26px;}'
+    + '#lectureClosedView .lcIcon{display:grid;place-items:center;width:60px;height:60px;margin:0 auto 18px;border-radius:20px;font-size:26px;'
+    + 'background:radial-gradient(120% 130% at 50% 0%,rgba(245,196,81,.24),rgba(245,196,81,.06));border:1px solid rgba(245,196,81,.32);}'
+    + '#lectureClosedView .lcKicker{margin:0 0 12px;font-size:10.5px;font-weight:800;letter-spacing:.22em;color:#F5C451;}'
+    + '#lectureClosedView .lcTitle{margin:0 0 14px;font-size:25px;line-height:1.35;font-weight:800;color:#fff;}'
+    + '#lectureClosedView .lcMsg{margin:0;font-size:13.5px;line-height:1.8;color:#C9D5E4;}'
+    + '#lectureClosedView .lcDivider{height:1px;background:rgba(255,255,255,.10);margin:24px 0 16px;}'
+    + '#lectureClosedView .lcLinks{display:grid;grid-template-columns:1fr 1fr;gap:9px;}'
+    + '#lectureClosedView .lcLinks a{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 6px;border-radius:13px;'
+    + 'background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.12);color:#E8EEF7 !important;font-size:12.5px;font-weight:700;text-decoration:none !important;}'
+    + '#lectureClosedView .lcLinks a.hot{background:rgba(245,196,81,.14);border-color:rgba(245,196,81,.36);color:#FBD87A !important;}'
+    + '#lectureClosedView .lcLinks a.book{background:rgba(99,179,237,.12);border-color:rgba(99,179,237,.34);color:#BFDBFE !important;}'
+    + '#lectureClosedView .lcFoot{margin:16px 0 0;font-size:11px;color:#7C8BA3;}';
+  var HTML = ''
+    + '<div class="lcCard"><div class="lcIcon" aria-hidden="true">🔒</div>'
+    + '<p class="lcKicker">강연 크리에이터 · 정진영</p>'
+    + '<h1 class="lcTitle">강연이 종료되었습니다</h1>'
+    + '<p class="lcMsg">오늘의 감별단 체험은 종료되었습니다.<br>함께해 주셔서 감사합니다!</p>'
+    + '<div class="lcDivider"></div><div class="lcLinks">'
+    + '<a href="https://www.instagram.com/_j_jin0/" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📸</span>인스타</a>'
+    + '<a href="https://www.threads.com/@_j_jin0" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">🧵</span>스레드</a>'
+    + '<a class="hot" href="https://docs.google.com/forms/d/e/1FAIpQLSfjzdgHSEgqiwC_E_orw7x2GKX-bpf-qSbQH5oGeAdjBwnQA/viewform" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">🌙</span>1월 리셋밤</a>'
+    + '<a class="book" href="https://kmong.com/gig/536319" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📘</span>책 보러가기</a>'
+    + '</div><p class="lcFoot">다음 강연에서 다시 만나요 🎤</p></div>';
+  function render() {
+    if (document.getElementById('lectureClosedView')) return;
+    var d = document.createElement('div');
+    d.id = 'lectureClosedView';
+    d.innerHTML = HTML;
+    document.body.appendChild(d);
+    var st = document.createElement('style');
+    st.textContent = CSS;
+    document.head.appendChild(st);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render);
+  else render();
+})();
+</script>
+<title>💵 암시장 위조지폐 감별단 | 강연 크리에이터 정진영</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  :root{
+    --bg:#0A0F1A;--panel:#111A2C;--panel2:#16223A;
+    --line:rgba(255,255,255,.10);--line2:rgba(255,255,255,.18);
+    --gold:#F5C451;--gold-lt:#FBD87A;--gold-deep:#C9922B;
+    --mint:#4ADE80;--rose:#F87171;--sky:#60A5FA;
+    --text:#F2F5FA;--muted:#9FAEC4;--dim:#64748B;
+    --sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR",Georgia,serif;
+  }
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;background:var(--bg)}
+  body{
+    color:var(--text);font-family:var(--sans);line-height:1.35;letter-spacing:-.01em;word-break:keep-all;
+    -webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;user-select:none;-webkit-tap-highlight-color:transparent;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(90% 55% at 50% -8%, rgba(245,196,81,.16) 0%, rgba(245,196,81,0) 62%),
+      radial-gradient(70% 45% at 100% 106%, rgba(96,165,250,.10) 0%, rgba(96,165,250,0) 70%);
+  }
+  .wrap{position:relative;z-index:1;height:100vh;height:100dvh;display:flex;flex-direction:column;
+    padding:calc(8px + env(safe-area-inset-top)) 14px calc(10px + env(safe-area-inset-bottom));}
+  /* ── 상단 바 ── */
+  .top{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2px 2px 8px}
+  .brand{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand .dot{width:5px;height:5px;border-radius:50%;background:var(--gold);box-shadow:0 0 9px rgba(245,196,81,.9);flex:none}
+  .brand b{color:#DCE5F1;font-weight:700}
+  .rchip{flex:none;font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--gold);
+    border:1px solid rgba(245,196,81,.3);background:rgba(245,196,81,.09);padding:4px 10px;border-radius:99px;opacity:0;transition:opacity .2s}
+  .rchip.on{opacity:1}
+  main{flex:1;min-height:0;position:relative}
+  .screen{position:absolute;inset:0;display:none;flex-direction:column;min-height:0}
+  .screen.on{display:flex}
+
+  /* ── 입장 ── */
+  #scEntry{justify-content:center;text-align:center;padding:0 6px;overflow-y:auto}
+  .badge{font-size:52px;line-height:1;filter:drop-shadow(0 8px 22px rgba(245,196,81,.35))}
+  #scEntry h1{margin:10px 0 6px;font-size:33px;line-height:1.18;font-weight:900;letter-spacing:-.045em;
+    background:linear-gradient(180deg,#FFF6DF 0%,#F5C451 60%,#D89B29 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .tagline{margin:0 0 20px;font-size:17px;font-weight:800;color:#FBD87A;letter-spacing:.01em}
+  .nameIn{width:100%;height:58px;border-radius:16px;border:1.5px solid var(--line2);background:rgba(255,255,255,.05);
+    color:#fff;font-family:var(--sans);font-size:20px;font-weight:700;text-align:center;outline:none;letter-spacing:-.01em}
+  .nameIn::placeholder{color:#6E7E96;font-weight:600}
+  .nameIn:focus{border-color:rgba(245,196,81,.6);background:rgba(245,196,81,.07)}
+  .joinBtn{margin-top:12px;width:100%;height:66px;border:0;border-radius:18px;font-family:var(--sans);font-size:23px;font-weight:900;
+    color:#221703;background:linear-gradient(180deg,#FBD87A,#E9AE33 75%,#D2911F);
+    box-shadow:0 14px 30px -12px rgba(245,196,81,.85), inset 0 1px 0 rgba(255,255,255,.55);letter-spacing:-.02em}
+  .joinBtn:active{transform:translateY(1px) scale(.995)}
+  .rules{list-style:none;margin:22px 0 0;padding:0;text-align:left;display:flex;flex-direction:column;gap:9px}
+  .rules li{font-size:14px;line-height:1.45;color:#C6D2E2;background:rgba(255,255,255,.04);border:1px solid var(--line);
+    border-radius:12px;padding:10px 13px;letter-spacing:-.01em}
+  .rules b{color:var(--gold-lt)}
+  .entryFoot{margin-top:16px;font-size:11px;color:#61708A}
+
+  /* ── 대기 ── */
+  #scLobby{justify-content:center;text-align:center;padding:0 8px}
+  .loic{font-size:56px;line-height:1;animation:float 2.4s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  #lobName{margin:12px 0 8px;font-size:27px;font-weight:900;letter-spacing:-.03em;color:#fff}
+  #lobName span{color:var(--gold-lt)}
+  .lobmsg{margin:0;font-size:17px;line-height:1.6;color:#C9D5E5;font-weight:700}
+  .lobmsg small{display:block;margin-top:6px;font-size:14px;font-weight:600;color:#8FA0B8}
+  .dots{display:flex;gap:9px;justify-content:center;margin:26px 0 0}
+  .dots i{width:26px;height:7px;border-radius:99px;background:rgba(255,255,255,.14)}
+  .dots i.done{background:var(--gold)}
+  .dots i.now{background:var(--gold-lt);box-shadow:0 0 12px rgba(251,216,122,.8)}
+  .lobtip{margin-top:26px;font-size:14px;color:#8B9AB2;line-height:1.6}
+  .lobtip b{color:#D6E0EE}
+
+  /* ── 플레이 ── */
+  #scPlay{gap:6px}
+  .timerbar{flex:none;height:9px;border-radius:99px;background:rgba(255,255,255,.09);overflow:hidden}
+  .timerbar > i{display:block;height:100%;width:100%;border-radius:99px;
+    background:linear-gradient(90deg,#5EEAD4,#4ADE80 55%,#FBD87A);transition:background .25s}
+  .timerbar.hot > i{background:linear-gradient(90deg,#FB923C,#F87171)}
+  .ptop{flex:none;text-align:center;padding:2px 0 0}
+  .ask{margin:0;font-size:26px;line-height:1.2;font-weight:900;letter-spacing:-.035em;color:#fff;padding:0 62px 0 48px}
+  .ask em{font-style:normal;color:var(--gold-lt)}
+  .asksub{margin:3px 0 0;font-size:13px;font-weight:700;color:#9FB0C7;letter-spacing:0}
+  .tsec{position:absolute;top:-2px;right:0;font-family:var(--serif);font-size:22px;font-weight:700;color:var(--gold-lt);opacity:.95}
+  .notes{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;overflow:hidden}
+  .notes.three{gap:7px}
+  .vs{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:1;width:40px;height:40px;border-radius:50%;
+    display:grid;place-items:center;font-family:var(--serif);font-size:15px;font-weight:700;color:#1B1305;
+    background:linear-gradient(180deg,#FBD87A,#DFA432);border:3px solid #0A0F1A;box-shadow:0 6px 18px -6px rgba(0,0,0,.8);letter-spacing:0}
+  .note{position:relative;flex:0 0 auto;width:100%;display:flex;flex-direction:column;gap:3px;padding:0;border:0;background:none;
+    font-family:var(--sans);text-align:left;color:inherit;cursor:pointer}
+  .nhead{flex:none;display:flex;align-items:center;gap:8px}
+  .nletter{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;font-size:17px;font-weight:900;
+    color:#1B1305;background:linear-gradient(180deg,#FBD87A,#DFA432);flex:none}
+  .nname{font-size:13px;font-weight:800;color:#B9C7DA;letter-spacing:-.01em}
+  .nsel{margin-left:auto;font-size:11.5px;font-weight:800;color:#8FA0B8;letter-spacing:-.01em}
+  .note.picked .nsel{color:#6EE7B7}
+  .nbox{position:relative;width:100%;aspect-ratio:440/200;border-radius:12px;overflow:hidden;
+    border:2px solid rgba(255,255,255,.14);box-shadow:0 10px 24px -16px #000;transition:border-color .18s,transform .18s,opacity .18s}
+  .nbox svg{display:block;width:100%;height:100%}
+  .note.picked .nbox{border-color:var(--gold-lt);transform:scale(1.008)}
+  .note.muted .nbox{opacity:.42;border-color:rgba(255,255,255,.08)}
+  .note.muted .nletter{opacity:.5}
+  .playhint{flex:none;text-align:center;font-size:12px;font-weight:700;color:#7F8FA8;padding-top:1px;letter-spacing:-.01em}
+  .playhint b{color:var(--gold)}
+  #lockBox{position:absolute;left:0;right:0;bottom:0;top:0;display:none;align-items:center;justify-content:center;z-index:6;
+    background:rgba(6,10,18,.72);backdrop-filter:blur(3px);border-radius:14px}
+  #scPlay.locked #lockBox{display:flex}
+  .lockedCard{text-align:center;padding:18px 22px;border-radius:20px;border:1px solid rgba(74,222,128,.35);
+    background:rgba(10,26,18,.92);box-shadow:0 20px 50px -24px #000}
+  .lockedCard .ck{font-size:34px;line-height:1}
+  .lockedCard b{display:block;margin-top:6px;font-size:19px;font-weight:900;color:#BBF7D0}
+  .lockedCard small{display:block;margin-top:5px;font-size:13px;color:#9AE6B4;font-weight:600}
+
+  /* ── 결과 ── */
+  #scResult{overflow-y:auto;text-align:center;gap:0;padding-top:2px}
+  #scResult > .verdict{margin-top:auto}
+  #scResult > .nextMsg,#scResult > .cta{margin-bottom:auto}
+  .verdict{flex:none;font-size:40px;line-height:1.1;font-weight:900;letter-spacing:-.04em}
+  .verdict.ok{color:#5EEAD4}
+  .verdict.no{color:#FDBA74}
+  .vsub{flex:none;margin-top:2px;font-size:15px;font-weight:800;color:#C9D5E5}
+  .rcard{flex:none;margin-top:12px;text-align:left;border:1px solid var(--line2);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.045)}
+  .rrow{padding:11px 14px;border-bottom:1px solid var(--line);font-size:15px;font-weight:700;color:#E7EEF8;line-height:1.4}
+  .rrow:last-child{border-bottom:0}
+  .rrow span{color:var(--gold-lt)}
+  .rexp{padding:12px 14px;font-size:14.5px;line-height:1.55;color:#CBD8E8;font-weight:600;letter-spacing:-.01em;background:rgba(245,196,81,.06)}
+  .rnote{padding:9px 10px 4px;background:rgba(255,255,255,.02)}
+  .rnbox{position:relative;width:100%;aspect-ratio:440/200;border-radius:8px;overflow:hidden;border:1.5px solid rgba(239,68,68,.55)}
+  .rnbox svg.noteSvg{display:block;width:100%;height:100%}
+  .rnbox .markSvg{position:absolute;inset:0;width:100%;height:100%}
+  .rnbox .markSvg circle{fill:rgba(239,68,68,.13);stroke:#EF4444;stroke-width:3.4;stroke-dasharray:7 4;
+    filter:drop-shadow(0 0 7px rgba(239,68,68,.8));animation:dash 1.1s linear infinite}
+  @keyframes dash{to{stroke-dashoffset:-44}}
+  .rncap{padding:5px 2px 4px;font-size:11.5px;font-weight:800;color:#FDA4AF;letter-spacing:-.01em}
+  .scoreRow{flex:none;margin-top:12px;display:flex;gap:8px}
+  .scoreCell{flex:1;border:1px solid var(--line);border-radius:14px;padding:10px 8px;background:rgba(255,255,255,.04)}
+  .scoreCell b{display:block;font-family:var(--serif);font-size:26px;font-weight:700;color:var(--gold-lt);line-height:1.1}
+  .scoreCell small{display:block;margin-top:2px;font-size:11.5px;font-weight:700;color:#93A3BA;letter-spacing:0}
+  .rankBox{flex:none;margin-top:12px;border:1px solid rgba(245,196,81,.26);border-radius:16px;background:rgba(245,196,81,.06);padding:11px 12px}
+  .rankTitle{font-size:12px;font-weight:900;color:var(--gold);letter-spacing:.12em;margin-bottom:7px}
+  .rankLine{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800;color:#EAF1FA;padding:4px 0}
+  .rankLine b{width:24px;text-align:center;font-size:16px}
+  .rankLine span{flex:1;text-align:left}
+  .rankLine i{font-style:normal;font-family:var(--serif);color:#FBD87A}
+  .nextMsg{flex:none;margin-top:12px;font-size:14px;font-weight:700;color:#8FA0B8}
+  .cta{flex:none;margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-bottom:4px}
+  .cta a{display:flex;align-items:center;justify-content:center;gap:6px;height:50px;border-radius:14px;text-decoration:none;
+    font-size:14.5px;font-weight:800;color:#E8EEF7;background:rgba(255,255,255,.06);border:1px solid var(--line2);letter-spacing:-.02em}
+  .cta a.hot{background:rgba(245,196,81,.16);border-color:rgba(245,196,81,.42);color:#FBD87A}
+  .cta a.book{background:rgba(96,165,250,.14);border-color:rgba(96,165,250,.38);color:#BFDBFE}
+  .cta a:active{transform:scale(.98)}
+  .ctaTitle{flex:none;margin:16px 0 0;font-size:12px;font-weight:800;letter-spacing:.16em;color:#7E8DA5}
+
+  /* ── 공통 오버레이 ── */
+  #net{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));z-index:60;
+    font-size:11.5px;font-weight:800;color:#1A1204;background:rgba(251,216,122,.95);padding:7px 14px;border-radius:99px;
+    box-shadow:0 8px 20px -8px #000;display:none}
+  #net.on{display:block}
+  .toast{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);z-index:70;max-width:84%;
+    padding:14px 18px;border-radius:16px;background:rgba(17,26,44,.97);border:1px solid var(--line2);
+    font-size:15px;font-weight:800;color:#EAF1FA;text-align:center;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s}
+  .toast.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><span class="dot"></span><b>강연 크리에이터 · 정진영</b></div>
+    <div class="rchip" id="rchip">ROUND <b id="rnum">1</b> / 5</div>
+  </header>
+  <main>
+    <!-- 입장 -->
+    <section class="screen on" id="scEntry">
+      <div class="badge" aria-hidden="true">💵</div>
+      <h1>암시장 위조지폐<br>감별단</h1>
+      <p class="tagline">진짜 돈을 찾아라!</p>
+      <input class="nameIn" id="nameInput" maxlength="10" placeholder="이름 (비워도 입장돼요)" autocomplete="off" enterkeyhint="done">
+      <button class="joinBtn" id="joinBtn">감별단 입장하기</button>
+      <ul class="rules">
+        <li>① 진행자가 시작하면 <b>지폐가 짠!</b> 나타나요</li>
+        <li>② <b>진짜 지폐</b>를 시간 안에 톡! 누르세요</li>
+        <li>③ <b>빠를수록 점수</b>가 더 커요</li>
+      </ul>
+      <p class="entryFoot">정답은 진행자가 공개할 때까지 비밀이에요 🤫</p>
+    </section>
+
+    <!-- 대기 -->
+    <section class="screen" id="scLobby">
+      <div class="loic" aria-hidden="true">🕵️</div>
+      <h2 id="lobName"><span>감별사</span> 님</h2>
+      <p class="lobmsg">감별단 입장 완료!<small>진행자의 신호를 기다려 주세요</small></p>
+      <div class="dots" id="dots"></div>
+      <p class="lobtip">가짜 지폐는 <b>아주 작은 한 곳</b>만 다릅니다 👀<br>눈을 크게 뜨고 준비하세요</p>
+    </section>
+
+    <!-- 플레이 -->
+    <section class="screen" id="scPlay">
+      <div class="ptop">
+        <p class="ask" id="askText">진짜 지폐를 찾아라!</p>
+        <p class="asksub" id="askSub">1라운드 · 5만원권</p>
+        <div class="tsec"><span id="tsec">10</span><small>초</small></div>
+      </div>
+      <div class="timerbar" id="timerbar"><i id="tfill"></i></div>
+      <div class="notes" id="notes"></div>
+      <p class="playhint" id="playHint">정답은 진행자가 공개합니다 · <b>빠를수록 점수 UP</b></p>
+      <div id="lockBox"><div class="lockedCard"><div class="ck">✅</div><b>선택 완료!</b><small>결과는 진행자가 공개합니다</small></div></div>
+    </section>
+
+    <!-- 결과 -->
+    <section class="screen" id="scResult">
+      <div class="verdict ok" id="verdict">정답!</div>
+      <div class="vsub" id="vsub">명예 감별사다운 눈썰미였습니다</div>
+      <div class="rcard">
+        <div class="rrow" id="answerLine">정답은 <span>B</span></div>
+        <div class="rnote"><div class="rnbox" id="rnote"></div><div class="rncap" id="rncap">빨간 동그라미 — 가짜의 틀린 곳</div></div>
+        <div class="rexp" id="explain"></div>
+      </div>
+      <div class="scoreRow">
+        <div class="scoreCell"><b id="ptsNow">+0</b><small>이번 라운드</small></div>
+        <div class="scoreCell"><b id="ptsTotal">0</b><small>누적 점수</small></div>
+      </div>
+      <div class="rankBox" id="rankBox" style="display:none">
+        <div class="rankTitle">🏆 명예 감별사</div>
+        <div id="rankLines"></div>
+      </div>
+      <p class="ctaTitle" id="ctaTitle" style="display:none">정진영과 계속 이어지기</p>
+      <div class="cta" id="ctaBox" style="display:none">
+        <a href="https://www.instagram.com/_j_jin0/" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📸</span>인스타</a>
+        <a href="https://www.threads.com/@_j_jin0" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">🧵</span>스레드</a>
+        <a class="hot" href="https://docs.google.com/forms/d/e/1FAIpQLSfjzdgHSEgqiwC_E_orw7x2GKX-bpf-qSbQH5oGeAdjBwnQA/viewform" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">🌙</span>1월 리셋밤</a>
+        <a class="book" href="https://kmong.com/gig/536319" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📘</span>책 보러가기</a>
+      </div>
+      <p class="nextMsg" id="nextMsg">다음 라운드를 기다리는 중…</p>
+    </section>
+  </main>
+</div>
+
+<div id="net">연결 중…</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script src="notes.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var QS = new URLSearchParams(location.search);
+  var ROOM = (QS.get("room") || "JY71").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8) || "JY71";
+  var FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "977342156141",
+    appId: "1:977342156141:web:f9842fcc67a819ce621e64"
+  };
+  var PID_KEY = "fm_pid_" + ROOM, NAME_KEY = "fm_name_" + ROOM;
+  var pid = localStorage.getItem(PID_KEY);
+  if (!pid) { pid = "p" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-3); localStorage.setItem(PID_KEY, pid); }
+
+  var S = {
+    phase: "idle", round: 1, startAt: 0, dur: 10000, revealed: 0, top: null,
+    joined: false, name: "", myAnswers: {}, seenRound: 0,
+    locked: false, timerRAF: 0, renderedRound: 0
+  };
+  var FB = { db: null, room: null, me: null, offset: 0, ready: false };
+  var now = function () { return Date.now() + FB.offset; };
+
+  /* ── 화면 ───────────────────────────────────────────── */
+  function show(id) {
+    ["scEntry", "scLobby", "scPlay", "scResult"].forEach(function (k) {
+      $(k).classList.toggle("on", k === id);
+    });
+  }
+  function toast(msg, ms) {
+    var t = $("toast");
+    t.textContent = msg; t.classList.add("on");
+    clearTimeout(t._t); t._t = setTimeout(function () { t.classList.remove("on"); }, ms || 2200);
+  }
+
+  /* ── 대기 점 ─────────────────────────────────────────── */
+  function paintDots() {
+    var html = "";
+    for (var i = 1; i <= 5; i++) {
+      var cls = i < S.round ? "done" : (i === S.round ? "now" : "");
+      html += '<i class="' + cls + '"></i>';
+    }
+    $("dots").innerHTML = html;
+  }
+
+  /* ── 라운드 화면 ─────────────────────────────────────── */
+  function paintRound() {
+    var r = FM.ROUNDS[S.round - 1];
+    if (!r) return;
+    $("rnum").textContent = r.n;
+    $("rchip").classList.add("on");
+    $("askText").innerHTML = FM.askLabel(r).replace("찾아라!", "<em>찾아라!</em>");
+    $("askSub").textContent = r.n + "라운드 · " + r.title + (r.count === 3 ? " · 3장 중 1장" : " · 2장 중 1장");
+    $("playHint").innerHTML = tipHtml(S.round);
+    var html = "";
+    for (var i = 0; i < r.count; i++) {
+      var L = "ABC"[i];
+      html += '<button class="note" data-i="' + i + '" aria-label="' + L + ' 지폐 선택">' +
+        '<span class="nhead"><span class="nletter">' + L + '</span>' +
+        '<span class="nname">' + r.title + ' ' + L + '</span>' +
+        '<span class="nsel">눌러서 선택</span></span>' +
+        '<span class="nbox">' + FM.noteSVG(r.type, { uid: "p" + r.n + i, fake: i === r.fakeIdx, kind: r.kind, serial: "AA " + (7000000 + r.n * 137 + i * 11) }) +
+        '</span></button>';
+    }
+    $("notes").className = "notes" + (r.count === 3 ? " three" : "");
+    $("notes").innerHTML = html + (r.count === 2 ? '<div class="vs" aria-hidden="true">VS</div>' : '');
+    Array.prototype.forEach.call($("notes").querySelectorAll(".note"), function (el) {
+      el.addEventListener("click", function () { pick(parseInt(el.dataset.i, 10), el); });
+    });
+    fitNotes(r.count);
+  }
+
+  function tipHtml(n) {
+    var r = FM.ROUNDS[n - 1];
+    return (r ? r.tip : "") + " · <b>정답은 진행자가 공개</b>";
+  }
+
+  function fitNotes(n) {
+    var wrap = $("notes");
+    var cards = Array.prototype.slice.call(wrap.querySelectorAll(".note"));
+    if (!cards.length) return;
+    var H = wrap.clientHeight, W = wrap.clientWidth;
+    if (!H) return;
+    var labelH = 36, gap = n === 3 ? 7 : 28;
+    var boxH = (H - n * labelH - (n - 1) * gap) / n;
+    var w = Math.min(W, boxH * 2.2);
+    cards.forEach(function (c) { c.style.width = Math.floor(w) + "px"; });
+  }
+  window.addEventListener("resize", function () {
+    if ($("scPlay").classList.contains("on")) fitNotes(FM.ROUNDS[S.round - 1].count);
+  });
+
+  function markPicked(idx) {
+    Array.prototype.forEach.call($("notes").querySelectorAll(".note"), function (el) {
+      var i = parseInt(el.dataset.i, 10);
+      el.classList.toggle("picked", i === idx);
+      el.classList.toggle("muted", idx != null && i !== idx);
+      var cue = el.querySelector(".nsel");
+      if (cue) cue.textContent = i === idx ? "선택 완료 ✓" : "눌러서 선택";
+    });
+
+  }
+
+  function pick(idx, el) {
+    if (S.locked || S.phase !== "playing") return;
+    var r = FM.ROUNDS[S.round - 1];
+    if (!r) return;
+    S.locked = true;
+    markPicked(idx);
+    var elapsed = Math.max(0, Math.min(S.dur, now() - S.startAt));
+    var rec = { c: idx, t: Math.round(elapsed), d: S.dur };
+    S.myAnswers["a" + r.n] = rec;
+    if (FB.ready) {
+      FB.me.child("answers/a" + r.n).set(rec).catch(function () {});
+    }
+    $("playHint").innerHTML = "✅ <b>선택 완료!</b> 결과는 진행자가 공개합니다";
+    if (navigator.vibrate) try { navigator.vibrate(18); } catch (e) {}
+  }
+
+  /* ── 타이머 ─────────────────────────────────────────── */
+  function tickTimer() {
+    if (S.timerRAF) return;
+    var loop = function () {
+      if (!document.getElementById("scPlay").classList.contains("on")) { S.timerRAF = 0; return; }
+      var left = Math.max(0, S.startAt + S.dur - now());
+      var sec = Math.ceil(left / 1000);
+      $("tsec").textContent = sec;
+      var pct = Math.max(0, Math.min(100, (left / S.dur) * 100));
+      $("tfill").style.width = pct + "%";
+      $("timerbar").classList.toggle("hot", left <= 3000);
+      S.timerRAF = requestAnimationFrame(loop);
+    };
+    S.timerRAF = requestAnimationFrame(loop);
+  }
+
+  /* ── 점수 계산 ───────────────────────────────────────── */
+  function totalScore() {
+    var sum = 0;
+    FM.ROUNDS.forEach(function (r) {
+      var a = S.myAnswers["a" + r.n];
+      if (!a) return;
+      sum += FM.score(r.n, a.c === r.answer, a.t, a.d || 10000);
+    });
+    return sum;
+  }
+
+  /* ── 결과 화면 ───────────────────────────────────────── */
+  function paintResult() {
+    var r = FM.ROUNDS[S.round - 1];
+    if (!r) return;
+    var a = S.myAnswers["a" + r.n];
+    var ok = !!a && a.c === r.answer;
+    var pts = a ? FM.score(r.n, ok, a.t, a.d || 10000) : 0;
+    var isFinal = (S.round === FM.roundCount);
+    $("verdict").className = "verdict " + (ok ? "ok" : "no");
+    $("verdict").textContent = ok ? "정답! 🎉" : (a ? "아쉽습니다 😢" : "시간 초과 ⏰");
+    $("vsub").textContent = ok
+      ? (a && a.t <= (a.d || 10000) * 0.4 ? "엄청 빠른 눈썰미! 최고 점수입니다" : "명예 감별사다운 눈썰미였습니다")
+      : "가짜의 틀린 곳을 확인해 보세요";
+    $("answerLine").innerHTML = "정답은 <span>" + "ABC"[r.answer] + "</span> — " +
+      (r.ask === "fake" ? "가짜 지폐" : "진짜 지폐");
+    $("explain").textContent = r.explain;
+    $("rnote").innerHTML = FM.noteSVG(r.type, { uid: "r" + r.n, fake: true, kind: r.kind, serial: "AA " + (7000000 + r.n * 137 + r.fakeIdx * 11) }) +
+      '<svg class="markSvg" viewBox="0 0 440 200" preserveAspectRatio="xMidYMid meet"><circle cx="' + r.diff.x + '" cy="' + r.diff.y + '" r="' + r.diff.r + '"/></svg>';
+    $("rncap").textContent = "빨간 동그라미 — " + (r.ask === "fake" ? "정답인 가짜 지폐의 틀린 곳" : "가짜 " + "ABC"[r.fakeIdx] + "의 틀린 곳");
+    $("ptsNow").textContent = "+" + pts;
+    $("ptsTotal").textContent = totalScore();
+    /* 랭킹 */
+    var top = S.top;
+    if (isFinal && top && top.length) {
+      $("rankBox").style.display = "";
+      $("rankLines").innerHTML = top.slice(0, 3).map(function (p, i) {
+        return '<div class="rankLine"><b>' + ["🥇", "🥈", "🥉"][i] + '</b><span>' + esc(p.n) + '</span><i>' + (p.s || 0) + '점</i></div>';
+      }).join("");
+    } else {
+      $("rankBox").style.display = "none";
+    }
+    if (isFinal) {
+      $("ctaTitle").style.display = "";
+      $("ctaBox").style.display = "";
+      $("nextMsg").textContent = "오늘의 감별은 여기까지! 수고하셨습니다 👏";
+    } else {
+      $("ctaTitle").style.display = "none";
+      $("ctaBox").style.display = "none";
+      $("nextMsg").textContent = "다음 라운드를 기다리는 중…";
+    }
+    show("scResult");
+  }
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  /* ── 상태 적용 ───────────────────────────────────────── */
+  function apply(meta) {
+    meta = meta || {};
+    var prevPhase = S.phase, prevRound = S.round;
+    S.phase = meta.phase || "idle";
+    S.round = Math.max(1, Math.min(FM.roundCount, meta.round || 1));
+    S.startAt = meta.startAt || 0;
+    S.dur = meta.dur || 10000;
+    S.revealed = meta.revealed || 0;
+    S.top = meta.top || null;
+
+    if (!S.joined) { return; }
+
+    if (S.phase === "idle") {
+      if (prevPhase !== "idle") toast("새 게임 — 곧 시작합니다");
+      paintDots(); show("scLobby"); return;
+    }
+    if (S.phase === "ready") {
+      S.locked = false; markPicked(null);
+      paintDots(); paintRound(); show("scLobby"); return;
+    }
+    if (S.phase === "playing") {
+      var fresh = (S.renderedRound !== S.round) || prevPhase !== "playing";
+      if (fresh) {
+        S.renderedRound = S.round;
+        S.locked = false;
+        paintRound();
+        markPicked(null);
+        $("scPlay").classList.remove("locked");
+        $("playHint").innerHTML = tipHtml(S.round);
+        if (S.myAnswers["a" + S.round]) { S.locked = true; markPicked(S.myAnswers["a" + S.round].c); }
+      }
+      paintDots();
+      show("scPlay");
+      tickTimer();
+      return;
+    }
+    if (S.phase === "closed") {
+      paintDots();
+      show("scPlay");
+      $("lockBox").innerHTML = '<div class="lockedCard"><div class="ck">⏰</div><b>감별 종료!</b><small>결과 발표를 기다려 주세요</small></div>';
+      $("scPlay").classList.add("locked");
+      $("playHint").innerHTML = "감별 종료! <b>진행자의 결과 발표를 기다려 주세요</b>";
+      $("tsec").textContent = "0";
+      $("tfill").style.width = "0%";
+      return;
+    }
+    if (S.phase === "revealed") {
+      paintDots();
+      paintResult();
+      return;
+    }
+  }
+
+  /* ── 파이어베이스 ────────────────────────────────────── */
+  function initFB() {
+    if (typeof firebase === "undefined" || !firebase.initializeApp) {
+      $("net").textContent = "연결 실패 — 새로고침 해 주세요";
+      $("net").classList.add("on");
+      return;
+    }
+    try {
+      firebase.initializeApp(FB_CONFIG);
+      FB.db = firebase.database();
+      FB.room = FB.db.ref("rooms/fake-money/" + ROOM);
+      FB.me = FB.room.child("players/" + pid);
+      FB.db.ref(".info/serverTimeOffset").on("value", function (s) { FB.offset = s.val() || 0; });
+      FB.db.ref(".info/connected").on("value", function (s) {
+        var on = !!s.val();
+        $("net").textContent = on ? "실시간 연결" : "연결 중…";
+        $("net").classList.toggle("on", !on);
+        if (on) { clearTimeout($("net")._t); $("net")._t = setTimeout(function () { $("net").classList.remove("on"); }, 1400); }
+      });
+      FB.room.child("meta").on("value", function (s) { apply(s.val()); });
+      FB.me.child("answers").on("value", function (s) { S.myAnswers = s.val() || {}; });
+      FB.ready = true;
+    } catch (e) {
+      $("net").textContent = "연결 실패 — 새로고침 해 주세요";
+      $("net").classList.add("on");
+    }
+  }
+
+  /* ── 입장 ────────────────────────────────────────────── */
+  function join() {
+    if (S.joined) return;
+    var nm = ($("nameInput").value || "").trim().slice(0, 10);
+    S.name = nm || "익명 감별사";
+    S.joined = true;
+    localStorage.setItem(NAME_KEY, nm);
+    $("lobName").innerHTML = "<span>" + esc(S.name) + "</span> 님";
+    paintDots();
+    show("scLobby");
+    if (FB.ready) {
+      FB.me.update({ name: S.name, ts: now() }).then(function () {
+        FB.me.onDisconnect().remove();
+      }).catch(function () {});
+      FB.room.child("players").once("value").then(function (s) {
+        var n = s.numChildren() || 0;
+        FB.room.child("meta/total").set(n).catch(function () {});
+      }).catch(function () {});
+    }
+  }
+
+  $("joinBtn").addEventListener("click", join);
+  $("nameInput").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); join(); } });
+  var savedName = localStorage.getItem(NAME_KEY);
+  if (savedName) $("nameInput").value = savedName;
+
+  initFB();
+})();
+</script>
+</body>
+</html>
