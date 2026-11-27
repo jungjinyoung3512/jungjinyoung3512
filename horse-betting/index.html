@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#080D18">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>🐎 은밀한 경마장 | 강연 크리에이터 · 정진영</title>
+<meta name="description" content="가상 시드머니 1,000만 원으로 즐기는 강연 참여 경마 게임 — 강연 크리에이터 · 정진영">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<!-- ══════════════════════════════════════════════════════════════
+     강연 종료 잠금 스위치 (LECTURE_CLOSED)
+     · 지금은 열림 상태(false) — 12/2 계양 CN웨딩홀 테스트·실전용.
+     · 강연이 끝나면 아래 false 를 true 로 한 글자만 바꾸면 됩니다.
+     · work/lecture-lock/toggle.py 로 열고 닫습니다.
+     ══════════════════════════════════════════════════════════════ -->
+<script>
+const LECTURE_CLOSED = false;
+(function () {
+  if (!LECTURE_CLOSED) return;
+  var root = document.documentElement;
+  root.classList.add('lecture-closed');
+
+  var CSS = ''
+    + 'html.lecture-closed,html.lecture-closed body{overflow:hidden !important;background:#050811 !important;}'
+    + 'html.lecture-closed body>*:not(#lectureClosedView){display:none !important;}'
+    + '#lectureClosedView{position:fixed;inset:0;z-index:2147483647;overflow-y:auto;display:flex;align-items:center;justify-content:center;'
+    + 'padding:26px 18px calc(26px + env(safe-area-inset-bottom));box-sizing:border-box;'
+    + 'background:radial-gradient(120% 70% at 50% -10%,#17213C 0%,#0A1020 45%,#050811 100%);'
+    + 'font-family:"Pretendard Variable",Pretendard,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;'
+    + 'color:#F1F5F9;word-break:keep-all;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;}'
+    + '#lectureClosedView *{box-sizing:border-box;}'
+    + '#lectureClosedView .lcCard{width:100%;max-width:420px;text-align:center;border:1px solid rgba(245,158,11,.22);'
+    + 'background:linear-gradient(180deg,rgba(26,39,67,.96),rgba(21,32,58,.96));border-radius:26px;'
+    + 'padding:38px 22px 26px;box-shadow:0 24px 60px -34px #000;}'
+    + '#lectureClosedView .lcIcon{display:grid;place-items:center;width:60px;height:60px;margin:0 auto 18px;border-radius:20px;font-size:26px;line-height:1;'
+    + 'background:radial-gradient(120% 130% at 50% 0%,rgba(245,158,11,.24),rgba(245,158,11,.06));border:1px solid rgba(245,158,11,.32);}'
+    + '#lectureClosedView .lcKicker{margin:0 0 12px;font-size:10.5px;font-weight:800;letter-spacing:.22em;color:#F59E0B;}'
+    + '#lectureClosedView .lcTitle{margin:0 0 14px;font-size:25px;line-height:1.35;font-weight:800;letter-spacing:-.03em;color:#fff;}'
+    + '#lectureClosedView .lcMsg{margin:0;font-size:13.5px;line-height:1.8;color:#C9D5E4;letter-spacing:-.02em;}'
+    + '#lectureClosedView .lcDivider{height:1px;background:rgba(255,255,255,.10);margin:24px 0 16px;}'
+    + '#lectureClosedView .lcLinks{display:grid;grid-template-columns:1fr 1fr;gap:9px;}'
+    + '#lectureClosedView .lcLinks a{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 6px;border-radius:13px;'
+    + 'background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.12);color:#E8EEF7 !important;'
+    + 'font-size:12.5px;font-weight:700;text-decoration:none !important;letter-spacing:-.02em;transition:transform .15s ease,background .15s ease;}'
+    + '#lectureClosedView .lcLinks a:active{transform:scale(.97);}'
+    + '#lectureClosedView .lcLinks a.hot{background:rgba(245,158,11,.14);border-color:rgba(245,158,11,.36);color:#FCD34D !important;}'
+    + '#lectureClosedView .lcLinks a.book{background:rgba(99,179,237,.12);border-color:rgba(99,179,237,.34);color:#BFDBFE !important;}'
+    + '#lectureClosedView .lcFoot{margin:16px 0 0;font-size:11px;color:#7C8BA3;letter-spacing:-.01em;}';
+
+  var HTML = ''
+    + '<div class="lcCard">'
+    + '<div class="lcIcon" aria-hidden="true">🔒</div>'
+    + '<p class="lcKicker">강연 크리에이터 · 정진영</p>'
+    + '<h1 class="lcTitle">강연이 종료되었습니다</h1>'
+    + '<p class="lcMsg">오늘의 강연 참여 체험은 종료되었습니다.<br>함께해 주셔서 감사합니다!</p>'
+    + '<div class="lcDivider"></div>'
+    + '<div class="lcLinks">'
+    + '<a href="https://www.instagram.com/_j_jin0/" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📸</span>인스타</a>'
+    + '<a href="https://www.threads.com/@_j_jin0" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">🧵</span>스레드</a>'
+    + '<a class="hot" href="https://docs.google.com/forms/d/e/1FAIpQLSfjzdgHSEgqiwC_E_or_w7x2GKX-bpf-qSbQH5oGeAdjBwnQA/viewform" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">🌙</span>1월 리셋밤</a>'
+    + '<a class="book" href="https://kmong.com/gig/536319" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📘</span>책 보러가기</a>'
+    + '</div>'
+    + '<p class="lcFoot">다음 강연에서 다시 만나요 🎤</p>'
+    + '</div>';
+
+  function render() {
+    if (document.getElementById('lectureClosedView')) return;
+    var wrap = document.createElement('div');
+    wrap.id = 'lectureClosedView';
+    wrap.innerHTML = HTML;
+    var st = document.createElement('style');
+    st.textContent = CSS;
+    document.head.appendChild(st);
+    document.body.appendChild(wrap);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render);
+  else render();
+})();
+</script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --bg:#080D18; --bg2:#0C1424;
+    --panel:#111C31; --panel2:#16243C;
+    --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.16);
+    --gold:#F7CB5C; --gold2:#E9A93B; --golddk:#8A5A12;
+    --turf:#1C7A4A; --turf2:#2BAE68;
+    --ink:#F6F9FD; --mute:#A6B6CC;
+    --h1:#3B82F6; --h2:#F5C451; --h3:#B074F5; --h4:#34D399; --h5:#FB7185;
+    --sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR","Noto Serif CJK KR",Georgia,serif;
+  }
+  html{-webkit-text-size-adjust:100%;background:var(--bg)}
+  html,body{margin:0;padding:0;min-height:100%}
+  body{
+    background:var(--bg);color:var(--ink);font-family:var(--sans);
+    word-break:keep-all;-webkit-font-smoothing:antialiased;line-height:1.4;
+    letter-spacing:-0.01em;-webkit-user-select:none;user-select:none;
+    min-height:100vh;min-height:100dvh;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(120% 42% at 50% -8%, rgba(247,203,92,.16) 0%, rgba(247,203,92,0) 62%),
+      radial-gradient(90% 40% at 100% 104%, rgba(43,174,104,.16) 0%, rgba(43,174,104,0) 70%),
+      repeating-linear-gradient(135deg, rgba(255,255,255,.016) 0 2px, transparent 2px 14px);
+  }
+  .app{
+    position:relative;z-index:1;width:100%;max-width:520px;margin:0 auto;
+    min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;
+    padding:calc(8px + env(safe-area-inset-top)) 16px calc(14px + env(safe-area-inset-bottom));
+  }
+  /* ── top bar ── */
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 2px 10px;flex:none}
+  .brand{display:flex;align-items:center;gap:9px;min-width:0}
+  .brand .logo{font-size:24px;line-height:1;filter:drop-shadow(0 2px 8px rgba(247,203,92,.4))}
+  .brand b{display:block;font-size:15.5px;font-weight:800;letter-spacing:-.02em}
+  .brand small{display:block;font-size:10px;letter-spacing:.13em;color:var(--mute);margin-top:1px}
+  .roompill{
+    flex:none;font-size:11px;font-weight:700;color:var(--gold);
+    background:rgba(247,203,92,.10);border:1px solid rgba(247,203,92,.30);
+    padding:6px 10px;border-radius:999px;letter-spacing:.02em;
+  }
+  .roompill b{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;letter-spacing:.06em}
+  /* ── views ── */
+  main{flex:1;display:flex;flex-direction:column;min-height:0}
+  .view{display:none;flex-direction:column;flex:1;min-height:0;animation:fade .28s ease-out}
+  .view.on{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ── entry ── */
+  #v-entry{justify-content:space-between;gap:18px;padding-top:10px}
+  .entry-hero{text-align:center;padding-top:6px}
+  .entry-kicker{
+    display:inline-block;font-size:13px;font-weight:800;letter-spacing:.16em;color:var(--gold);
+    border:1px solid rgba(247,203,92,.32);background:rgba(247,203,92,.08);
+    padding:6px 14px;border-radius:999px;margin-bottom:16px;
+  }
+  .entry-hero h1{
+    margin:0;font-family:var(--serif);font-weight:900;font-size:clamp(46px,13.5vw,64px);
+    line-height:1.06;letter-spacing:-.03em;
+    background:linear-gradient(180deg,#FFF6DA 0%,#F7CB5C 55%,#D79A2E 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 8px 26px rgba(233,169,59,.22));
+  }
+  .entry-sub{margin:18px 0 0;font-size:17.5px;line-height:1.65;color:#DCE6F4}
+  .entry-sub b{color:var(--gold);font-weight:800}
+  .entry-horses{display:flex;flex-direction:column;gap:7px}
+  .entry-horses .eh-t{text-align:center;font-size:12.5px;font-weight:800;letter-spacing:.06em;color:#8395AB}
+  .eh-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .eh.last{grid-column:1 / -1}
+  .eh{
+    display:flex;align-items:center;gap:6px;padding:9px 9px;border-radius:12px;
+    background:rgba(255,255,255,.035);border:1px solid var(--line);min-width:0;
+  }
+  .eh .n{width:21px;height:21px;border-radius:7px;display:grid;place-items:center;flex:none;
+         font-size:12px;font-weight:900;color:#0A0F1A;background:var(--c,#888)}
+  .eh .h{flex:1;min-width:0;font-size:13.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .eh .o{flex:none;font-size:13px;font-weight:900;color:var(--gold)}
+  .entry-form{display:flex;flex-direction:column;gap:12px}
+  .entry-form label{font-size:14px;font-weight:700;color:var(--mute);letter-spacing:.01em}
+  #nm{
+    width:100%;height:72px;border-radius:18px;border:2px solid var(--line2);
+    background:var(--panel);color:var(--ink);font-family:inherit;font-size:26px;font-weight:700;
+    padding:0 20px;outline:none;letter-spacing:-.01em;
+  }
+  #nm::placeholder{color:#5E7088;font-weight:600;font-size:21px}
+  #nm:focus{border-color:var(--gold);background:var(--panel2);box-shadow:0 0 0 4px rgba(247,203,92,.13)}
+  .bigbtn{
+    width:100%;height:82px;border-radius:20px;border:none;cursor:pointer;
+    font-family:inherit;font-size:27px;font-weight:900;letter-spacing:-.02em;
+    color:#20160A;background:linear-gradient(135deg,#FFE7A6 0%,#F7CB5C 45%,#E9A93B 100%);
+    box-shadow:0 14px 30px -14px rgba(247,203,92,.75),inset 0 -2px 0 rgba(0,0,0,.14);
+    transition:transform .12s;
+  }
+  .bigbtn:active{transform:scale(.98)}
+  .bigbtn:disabled{opacity:.55;cursor:default}
+  .fine{margin:0;text-align:center;font-size:12px;color:#7F91A8;line-height:1.6}
+
+  /* ── bet view ── */
+  #v-bet{gap:10px}
+  .roundbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex:none;padding:2px 0}
+  .round{font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--gold)}
+  .round b{font-size:15px}
+  .wallet{font-size:14px;color:var(--mute);font-weight:700}
+  .wallet b{font-size:19px;color:#fff;letter-spacing:-.02em;margin-left:4px}
+  .ask{margin:2px 0 0;font-size:27px;font-weight:900;letter-spacing:-.03em;line-height:1.25}
+  .hint{margin:0;font-size:14px;color:var(--mute)}
+  .horses{display:flex;flex-direction:column;gap:9px;margin-top:4px}
+  .horse{
+    display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;
+    min-height:78px;padding:12px 14px;border-radius:18px;font-family:inherit;
+    background:linear-gradient(150deg,var(--panel),var(--panel2));
+    border:2px solid var(--line);color:var(--ink);transition:border-color .14s,background .14s,transform .1s;
+    position:relative;
+  }
+  .horse:active{transform:scale(.985)}
+  .horse .num{
+    position:relative;flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;
+    font-size:24px;font-weight:900;color:#0A0F1A;background:var(--c,#888);
+    box-shadow:0 6px 16px -8px var(--c,#888);
+  }
+  .horse .num::after{
+    content:"✓";position:absolute;top:-7px;right:-7px;width:22px;height:22px;border-radius:50%;
+    display:grid;place-items:center;font-size:13px;font-weight:900;color:#20160A;
+    background:var(--gold);border:2px solid #0B1220;opacity:0;transform:scale(.5);transition:.15s;
+  }
+  .horse.sel .num::after{opacity:1;transform:none}
+  .horse .nm{flex:1;min-width:0;font-size:23px;font-weight:800;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .horse .od{
+    flex:none;font-size:19px;font-weight:900;color:var(--gold);
+    background:rgba(247,203,92,.10);border:1px solid rgba(247,203,92,.28);
+    border-radius:12px;padding:7px 12px;letter-spacing:-.01em;
+  }
+  .horse .chk{display:none}
+  .horse.sel{border-color:var(--gold);background:linear-gradient(150deg,rgba(247,203,92,.16),rgba(247,203,92,.06));
+    box-shadow:0 0 0 2px rgba(247,203,92,.20), 0 14px 30px -20px rgba(247,203,92,.9)}
+  .horse.sel .od{background:var(--gold);color:#20160A;border-color:transparent}
+  .odds-note{margin:2px 0 0;font-size:11.5px;color:#7F91A8;text-align:center}
+  .betbar{margin-top:auto;padding-top:10px;display:flex;flex-direction:column;gap:9px;flex:none}
+  .picked{text-align:center;font-size:14px;color:var(--mute);font-weight:700;min-height:20px}
+  .picked b{color:var(--gold);font-weight:900;font-size:16px}
+  .betbtns{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .betbtn{
+    min-height:84px;border-radius:18px;border:none;cursor:pointer;font-family:inherit;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+    font-weight:900;letter-spacing:-.02em;transition:transform .1s,filter .12s;
+  }
+  .betbtn:active{transform:scale(.97)}
+  .betbtn span{font-size:24px;line-height:1.1}
+  .betbtn small{font-size:14px;font-weight:700;opacity:.82;letter-spacing:0}
+  .betbtn.allin{color:#20160A;background:linear-gradient(135deg,#FFE7A6,#F7CB5C 50%,#E9A93B);box-shadow:0 12px 26px -14px rgba(247,203,92,.8)}
+  .betbtn.half{color:#EAF3FF;background:linear-gradient(135deg,#26405F,#1B2C46);border:2px solid rgba(160,190,230,.32)}
+  .betbtn:disabled{opacity:.42;filter:grayscale(.45);cursor:default}
+  .betbtn:disabled:active{transform:none}
+
+  /* ── wait / race ── */
+  #v-wait,#v-race{justify-content:center;align-items:center;text-align:center;gap:14px}
+  .big-emoji{font-size:64px;line-height:1;animation:pop .5s cubic-bezier(.2,1.5,.4,1)}
+  @keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+  .big-title{margin:0;font-size:34px;font-weight:900;letter-spacing:-.03em}
+  .waitline{margin:0;font-size:17px;line-height:1.6;color:#C9D6E6}
+  .waitline b{color:var(--gold)}
+  .ticket{
+    width:100%;border-radius:18px;padding:16px 18px;text-align:left;
+    background:linear-gradient(150deg,var(--panel),var(--panel2));border:1px solid var(--line2);
+  }
+  .ticket .trow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:5px 0;font-size:14px;color:var(--mute)}
+  .ticket .trow b{font-size:19px;color:#fff;font-weight:800}
+  .ticket .tsum{display:flex;align-items:center;gap:9px;padding-bottom:8px;border-bottom:1px dashed rgba(255,255,255,.14);margin-bottom:6px}
+  .ticket .tsum .num{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-size:19px;font-weight:900;color:#0A0F1A;background:var(--c)}
+  .ticket .tsum .nm{font-size:21px;font-weight:900}
+  .dots{display:flex;gap:7px}
+  .dots i{width:9px;height:9px;border-radius:50%;background:var(--gold);opacity:.35;animation:blink 1.2s infinite}
+  .dots i:nth-child(2){animation-delay:.2s}
+  .dots i:nth-child(3){animation-delay:.4s}
+  @keyframes blink{0%,100%{opacity:.25;transform:scale(.86)}50%{opacity:1;transform:scale(1.1)}}
+  .race-emoji{font-size:74px;line-height:1;animation:gallop 1s infinite}
+  @keyframes gallop{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+  .race-strip{
+    width:100%;height:10px;border-radius:6px;margin-top:6px;
+    background:repeating-linear-gradient(90deg,rgba(247,203,92,.85) 0 14px,transparent 14px 28px);
+    background-size:200% 100%;animation:strip 1s linear infinite;
+  }
+  @keyframes strip{to{background-position:-56px 0}}
+
+  /* ── result ── */
+  #v-result{justify-content:flex-start;gap:10px;text-align:center;padding-top:4px;overflow-y:auto}
+  .res-wrap{display:flex;flex-direction:column;gap:10px;width:100%;margin:auto 0}
+  .res-round{font-size:11.5px;font-weight:900;letter-spacing:.16em;color:var(--gold)}
+  .res-emoji{font-size:58px;line-height:1;animation:pop .55s cubic-bezier(.2,1.5,.4,1)}
+  .res-title{margin:0;font-size:30px;font-weight:900;letter-spacing:-.03em}
+  .res-prize{
+    font-size:clamp(38px,11.5vw,50px);font-weight:900;letter-spacing:-.04em;line-height:1.1;
+    background:linear-gradient(180deg,#FFF6DA,#F7CB5C 60%,#D79A2E);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .res-prize.lose{background:none;color:#DCE6F4;font-size:28px}
+  .res-detail{margin:0;font-size:15px;line-height:1.65;color:#C9D6E6}
+  .res-wallet{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:15px 18px;border-radius:16px;margin-top:2px;
+    background:linear-gradient(150deg,var(--panel),var(--panel2));border:1px solid var(--line2);
+  }
+  .res-wallet span{font-size:14px;color:var(--mute);font-weight:700}
+  .res-wallet b{font-size:25px;font-weight:900;letter-spacing:-.03em;color:#fff}
+  .revive{
+    display:none;align-items:center;justify-content:center;gap:8px;
+    padding:12px 14px;border-radius:14px;font-size:14.5px;font-weight:800;color:#BFF3D8;
+    background:rgba(43,174,104,.14);border:1px solid rgba(43,174,104,.40);
+  }
+  .revive.on{display:flex}
+  .res-next{margin:0;font-size:12.5px;color:#8395AB;line-height:1.6}
+  .ctaHub{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto;padding-top:14px}
+  .ctaHub a{
+    display:flex;align-items:center;justify-content:center;gap:6px;min-height:50px;padding:10px 6px;
+    border-radius:13px;font-size:14px;font-weight:800;text-decoration:none;letter-spacing:-.02em;
+    background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.13);color:#E8EEF7 !important;
+  }
+  .ctaHub a:active{transform:scale(.97)}
+  .ctaHub a.hot{background:#F7CB5C;border-color:transparent;color:#20160A !important}
+  .ctaHub a.book{background:rgba(99,179,237,.13);border-color:rgba(99,179,237,.34);color:#BFDBFE !important}
+
+  /* ── splash ── */
+  .splash{
+    position:fixed;inset:0;z-index:900;display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;
+    background:radial-gradient(60% 50% at 50% 45%,rgba(247,203,92,.20),rgba(8,13,24,.96) 68%);
+    backdrop-filter:blur(3px);text-align:center;padding:20px;
+  }
+  .splash.on{display:flex;animation:fade .2s}
+  .splash .coin{font-size:66px;animation:coinPop .7s cubic-bezier(.2,1.4,.4,1)}
+  @keyframes coinPop{0%{transform:scale(.2) rotate(-30deg);opacity:0}70%{transform:scale(1.14) rotate(6deg)}100%{transform:scale(1)}}
+  .splash .copy{font-size:17px;color:#DCE6F4;font-weight:700}
+  .splash .amount{font-size:44px;font-weight:900;letter-spacing:-.03em;
+    background:linear-gradient(180deg,#FFF6DA,#F7CB5C 60%,#D79A2E);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .splash .name{font-size:22px;font-weight:800}
+  .splash .name b{color:var(--gold)}
+  .splash .tip{font-size:13px;color:#9FB0C7}
+
+  /* ── toast ── */
+  .toast{
+    position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,16px);
+    max-width:88vw;padding:12px 18px;border-radius:999px;z-index:950;
+    background:#F6F9FD;color:#0A1220;font-size:14px;font-weight:800;text-align:center;
+    box-shadow:0 16px 40px -16px rgba(0,0,0,.9);opacity:0;pointer-events:none;transition:.2s;
+  }
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+  .conn{position:fixed;top:calc(8px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:800;
+    font-size:11px;font-weight:800;color:#0A1220;background:#F7CB5C;padding:4px 10px;border-radius:999px;display:none}
+  .conn.on{display:block}
+  @media (max-height:700px){
+    .entry-hero h1{font-size:44px}
+    .entry-sub{font-size:16px;margin-top:12px}
+    .horse{min-height:70px}
+    .horse .nm{font-size:21px}
+    .betbtn{min-height:76px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">🐎</span>
+      <div><b>은밀한 경마장</b><small>강연 크리에이터 · 정진영</small></div>
+    </div>
+    <div class="roompill">방 코드 <b id="roomCode">JY79</b></div>
+  </header>
+
+  <main>
+    <!-- ① 입장 -->
+    <section id="v-entry" class="view on" aria-label="입장">
+      <div class="entry-hero">
+        <div class="entry-kicker">오늘만 열리는</div>
+        <h1>은밀한<br>경마장</h1>
+        <p class="entry-sub">가상 시드머니 <b>1,000만 원</b>으로 시작!<br>오늘의 큰손이 되어 보세요.</p>
+      </div>
+      <div class="entry-horses">
+        <div class="eh-t">오늘의 출전마 5마리</div>
+        <div class="eh-grid" id="ehGrid"></div>
+      </div>
+      <div class="entry-form">
+        <label for="nm">이름 또는 좌석번호</label>
+        <input id="nm" maxlength="10" placeholder="예) 김영자 / 12번" autocomplete="off" enterkeyhint="go">
+        <button id="btnJoin" class="bigbtn" type="button">입장하기 🐎</button>
+        <p class="fine">실제 돈이 아닙니다 · 강연 체험용 가상 머니</p>
+      </div>
+    </section>
+
+    <!-- ② 배팅 -->
+    <section id="v-bet" class="view" aria-label="배팅">
+      <div class="roundbar">
+        <span class="round">ROUND <b id="betRound">1</b></span>
+        <span class="wallet">내 자산 <b id="betCoins">1,000만 원</b></span>
+      </div>
+      <h2 class="ask">어느 말에 거시겠어요?</h2>
+      <p class="hint">말을 고르고, 아래 버튼 하나만 누르면 끝!</p>
+      <div class="horses" id="horseList"></div>
+      <p class="odds-note">배당률은 라운드마다 같아요 · 맞히면 건 돈 × 배당률을 받아요</p>
+      <div class="betbar">
+        <div class="picked" id="pickedLine">말을 먼저 골라 주세요</div>
+        <div class="betbtns">
+          <button id="btnAllIn" class="betbtn allin" type="button" disabled><span>전액 올인</span><small id="amtAll">-</small></button>
+          <button id="btnHalf" class="betbtn half" type="button" disabled><span>절반 걸기</span><small id="amtHalf">-</small></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ③ 배팅 완료 -->
+    <section id="v-wait" class="view" aria-label="배팅 완료">
+      <div class="big-emoji">✅</div>
+      <h2 class="big-title">배팅 완료!</h2>
+      <div class="ticket" id="waitTicket"></div>
+      <p class="waitline">진행자가 경주를 시작합니다.<br><b>앞의 스크린을 보세요!</b></p>
+      <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+    </section>
+
+    <!-- ④ 경주 중 -->
+    <section id="v-race" class="view" aria-label="경주 중">
+      <div class="race-emoji">🏁</div>
+      <h2 class="big-title">경주 중!</h2>
+      <p class="waitline">말들이 힘차게 달리고 있어요.<br><b>스크린을 크게 보세요!</b></p>
+      <div class="race-strip" aria-hidden="true"></div>
+      <div class="ticket" id="raceTicket"></div>
+    </section>
+
+    <!-- ⑤ 결과 -->
+    <section id="v-result" class="view" aria-label="결과">
+      <div class="res-wrap">
+        <div class="res-round" id="resRound">ROUND 1 결과</div>
+        <div class="res-emoji" id="resEmoji">🎉</div>
+        <h2 class="res-title" id="resTitle">축! 당첨!</h2>
+        <div class="res-prize" id="resPrize">2,000만 원</div>
+        <p class="res-detail" id="resDetail"></p>
+        <div class="res-wallet"><span>내 자산</span><b id="resCoins">—</b></div>
+        <div class="revive" id="resRevive">💊 부활 지원금 100만 원 지급</div>
+        <p class="res-next" id="resNext">진행자가 다음 라운드를 열면 자동으로 이어집니다.</p>
+      </div>
+      <div class="ctaHub" aria-label="정진영 채널 바로가기">
+        <a href="https://www.instagram.com/_j_jin0/" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📸</span>인스타</a>
+        <a href="https://www.threads.com/@_j_jin0" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">🧵</span>스레드</a>
+        <a class="hot" href="https://docs.google.com/forms/d/e/1FAIpQLSfjzdgHSEgqiwC_E_or_w7x2GKX-bpf-qSbQH5oGeAdjBwnQA/viewform" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">🌙</span>1월 리셋밤</a>
+        <a class="book" href="https://kmong.com/gig/536319" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📘</span>책 보러가기</a>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="splash" id="splash" role="status" aria-live="polite">
+  <div class="coin" aria-hidden="true">🪙</div>
+  <div class="copy">시드머니 지급 완료!</div>
+  <div class="amount">1,000만 원</div>
+  <div class="name"><b id="splashName">—</b> 님, 환영합니다</div>
+  <div class="tip">실제 돈이 아닙니다 · 가상 머니</div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="conn" id="conn">연결 중…</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  var HORSES = [
+    {id:1, name:'번개호',   odds:2,  color:'#3B82F6'},
+    {id:2, name:'황금호',   odds:3,  color:'#F5C451'},
+    {id:3, name:'꼴찌반란호', odds:5,  color:'#B074F5'},
+    {id:4, name:'청춘호',   odds:8,  color:'#34D399'},
+    {id:5, name:'로또호',   odds:10, color:'#FB7185'}
+  ];
+  var START_COINS = 10000000;
+
+  var FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "72674304952",
+    appId: "1:72674304952:web:6d0ba7e0b3b8a5f6a19a8d"
+  };
+
+  var qs = new URLSearchParams(location.search);
+  var ROOM = (qs.get('room') || 'JY79').toUpperCase().replace(/[^A-Z0-9]/g,'') || 'JY79';
+  var ROOT = 'rooms/horse-betting/' + ROOM;
+  var LS_PID = 'hb_pid_' + ROOM;
+  var LS_NM  = 'hb_nm_' + ROOM;
+
+  var db = null, meRef = null, metaRef = null, connRef = null;
+  var pid = null, me = null, meta = {round:1, state:'betting'};
+  var selected = -1, busy = false, shownRound = -1, splashTimer = null, hbTimer = null;
+  var connected = false;
+
+  function $(id){ return document.getElementById(id); }
+  function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.className=cls; if(txt!=null) n.textContent=txt; return n; }
+
+  /* ── 돈 표기 ── */
+  function man(n){
+    n = Math.round(Number(n)||0);
+    if (n <= 0) return '0원';
+    if (n >= 100000000){
+      var eok = Math.floor(n/100000000), rest = Math.round((n%100000000)/10000);
+      return eok + '억' + (rest ? ' ' + rest.toLocaleString('ko-KR') + '만' : '') + ' 원';
+    }
+    return (Math.round(n/10000)).toLocaleString('ko-KR') + '만 원';
+  }
+  function shortMan(n){
+    n = Math.round(Number(n)||0);
+    if (n <= 0) return '0';
+    if (n >= 100000000){ var e=Math.floor(n/100000000), r=Math.round((n%100000000)/10000); return e+'억'+(r?' '+r.toLocaleString('ko-KR')+'만':''); }
+    return Math.round(n/10000).toLocaleString('ko-KR')+'만';
+  }
+  function safeName(s){ return String(s==null?'':s).replace(/[<>]/g,'').trim().slice(0,10); }
+
+  var toastTimer = null;
+  function toast(msg){
+    var t = $('toast'); t.textContent = msg; t.classList.add('on');
+    clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove('on'); }, 2400);
+  }
+  function hb(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms||12); }catch(e){} }
+
+  /* ── views ── */
+  var VIEWS = ['v-entry','v-bet','v-wait','v-race','v-result'];
+  var curView = 'v-entry';
+  function show(id){
+    if (curView === id) return;
+    curView = id;
+    VIEWS.forEach(function(v){ $(v).classList.toggle('on', v === id); });
+    // 스크롤을 항상 위로
+    var m = $(id); if(m) m.scrollTop = 0;
+    window.scrollTo(0,0);
+  }
+
+  /* ── Firebase ── */
+  function initFB(){
+    try{
+      if (typeof firebase === 'undefined' || !firebase.initializeApp) return false;
+      firebase.initializeApp(FB_CONFIG);
+      db = firebase.database();
+      return true;
+    }catch(e){ console.warn('[fb]', e); return false; }
+  }
+
+  function watch(){
+    if (!db) { $('conn').classList.add('on'); return; }
+    connRef = db.ref('.info/connected');
+    connRef.on('value', function(s){
+      connected = !!s.val();
+      $('conn').classList.toggle('on', !connected);
+    });
+    metaRef = db.ref(ROOT + '/meta');
+    metaRef.on('value', function(s){
+      var v = s.val() || {};
+      meta = { round: Number(v.round)||1, state: v.state || 'betting', winner: v.winner||null, revealAt: v.revealAt||null };
+      render();
+    }, function(err){ console.warn('[meta]', err); $('conn').classList.add('on'); });
+  }
+
+  function subMe(){
+    if (!db || !pid) return;
+    if (meRef) meRef.off();
+    meRef = db.ref(ROOT + '/players/' + pid);
+    meRef.on('value', function(s){
+      me = s.val();
+      if (!me) { selected = -1; }
+      render();
+    });
+  }
+
+  function setPresence(){
+    if (!db || !pid) return;
+    db.ref(ROOT + '/players/' + pid + '/seen').set(Date.now()).catch(function(){});
+  }
+
+  /* ── join ── */
+  function join(){
+    if (busy) return;
+    var name = safeName($('nm').value);
+    if (!name){ toast('이름을 입력해 주세요'); $('nm').focus(); return; }
+    if (!db){ initFB(); if(!db){ toast('연결 중입니다. 잠시 후 다시 눌러 주세요.'); return; } watch(); }
+    busy = true;
+    if (!pid){
+      pid = 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+    }
+    try{ localStorage.setItem(LS_PID, pid); localStorage.setItem(LS_NM, name); }catch(e){}
+    var payload = { name: name, coins: START_COINS, joinedAt: Date.now(), seen: Date.now(), bet: null, last: null };
+    db.ref(ROOT + '/players/' + pid).update(payload).then(function(){
+      busy = false;
+      subMe();
+      setPresence();
+      if (!hbTimer) hbTimer = setInterval(setPresence, 25000);
+      $('splashName').textContent = name;
+      $('splash').classList.add('on');
+      clearTimeout(splashTimer);
+      splashTimer = setTimeout(function(){ $('splash').classList.remove('on'); }, 2300);
+      hb(30);
+    }).catch(function(err){
+      busy = false;
+      console.warn('[join]', err);
+      toast('입장에 실패했어요. 인터넷을 확인하고 다시 눌러 주세요.');
+    });
+  }
+
+  /* ── betting ── */
+  function buildEntryHorses(){
+    var g = $('ehGrid'); if (!g) return;
+    g.innerHTML = HORSES.map(function(h,i){
+      return '<div class="eh'+(i===HORSES.length-1?' last':'')+'" style="--c:'+h.color+'"><span class="n">'+h.id+'</span>'
+        + '<span class="h">'+h.name+'</span><span class="o">'+h.odds+'배</span></div>';
+    }).join('');
+  }
+
+  function buildHorses(){
+    var wrap = $('horseList');
+    wrap.innerHTML = '';
+    HORSES.forEach(function(h, i){
+      var b = el('button','horse');
+      b.type = 'button'; b.setAttribute('data-i', String(i));
+      b.style.setProperty('--c', h.color);
+      b.appendChild(el('span','num', String(h.id)));
+      b.appendChild(el('span','nm', h.name));
+      b.appendChild(el('span','od', h.odds + '배'));
+      b.appendChild(el('span','chk','✓ 선택됨'));
+      b.addEventListener('click', function(){
+        if (!canBet()) return;
+        selected = i; hb(10); paintBet();
+      });
+      wrap.appendChild(b);
+    });
+  }
+
+  function myBetThisRound(){
+    if (!me || !me.bet) return null;
+    var r = Number(meta.round)||1;
+    if (Number(me.bet.horse) >= 1 && Number(me.bet.round) === r) return me.bet;
+    return null;
+  }
+  function canBet(){
+    return !!me && meta.state === 'betting' && !myBetThisRound();
+  }
+
+  function paintBet(){
+    var coins = Number(me && me.coins) || 0;
+    $('betRound').textContent = String(meta.round||1);
+    $('betCoins').textContent = man(coins);
+
+    var cards = $('horseList').children;
+    for (var i = 0; i < cards.length; i++){
+      cards[i].classList.toggle('sel', i === selected);
+    }
+
+    var half = Math.floor(coins/2/10000)*10000;
+    if (half < 10000) half = coins;
+    $('amtAll').textContent  = coins >= 10000 ? shortMan(coins)+' 원' : '잔액 부족';
+    $('amtHalf').textContent = half > 0 ? shortMan(half)+' 원' : '-';
+
+    var ready = selected >= 0 && coins >= 10000 && canBet();
+    $('btnAllIn').disabled = !ready;
+    $('btnHalf').disabled  = !ready || half <= 0;
+
+    if (selected >= 0){
+      var h = HORSES[selected];
+      $('pickedLine').innerHTML = '고른 말 <b>' + h.id + '번 ' + h.name + '</b> · ' + h.odds + '배';
+    } else {
+      $('pickedLine').textContent = '말을 먼저 골라 주세요';
+    }
+  }
+
+  function placeBet(kind){
+    if (busy || !db || !me) return;
+    if (!canBet()) { render(); return; }
+    if (selected < 0) { toast('먼저 말을 골라 주세요'); return; }
+    var coins = Number(me.coins)||0;
+    if (coins < 10000){ toast('잔액이 부족해요. 다음 라운드에 지원금이 들어와요!'); return; }
+    var amount = (kind === 'half') ? Math.floor(coins/2/10000)*10000 : coins;
+    if (amount < 10000) amount = coins;
+    busy = true;
+    $('btnAllIn').disabled = true; $('btnHalf').disabled = true;
+    // 자산은 배팅 순간에 깎지 않고 정산 때 한 번에 계산한다(중간에 0원으로 보이는 혼란 방지)
+    db.ref(ROOT + '/players/' + pid).update({
+      bet: { round: Number(meta.round)||1, horse: HORSES[selected].id, amount: amount, at: Date.now() }
+    }).then(function(){
+      busy = false; hb(25);
+    }).catch(function(err){
+      busy = false; console.warn('[bet]', err);
+      toast('전송이 막혔어요. 다시 한 번 눌러 주세요.');
+      render();
+    });
+  }
+
+  /* ── tickets ── */
+  function ticketNode(bet, opts){
+    var h = HORSES[(Number(bet.horse)||1) - 1] || HORSES[0];
+    var box = el('div');
+    var head = el('div','tsum');
+    var num = el('span','num', String(h.id)); num.style.setProperty('--c', h.color);
+    head.appendChild(num);
+    head.appendChild(el('span','nm', h.name));
+    box.appendChild(head);
+    var r1 = el('div','trow'); r1.appendChild(el('span',null,'건 돈')); r1.appendChild(el('b',null, man(bet.amount))); box.appendChild(r1);
+    var r2 = el('div','trow'); r2.appendChild(el('span',null,'배당률')); r2.appendChild(el('b',null, h.odds + '배')); box.appendChild(r2);
+    if (opts && opts.coins != null){
+      var r3 = el('div','trow'); r3.appendChild(el('span',null,'걸고 남은 돈')); r3.appendChild(el('b',null, man(opts.coins))); box.appendChild(r3);
+    }
+    return box;
+  }
+
+  /* ── render ── */
+  function render(){
+    if (!me){
+      show('v-entry');
+      if (me === null && pid){ /* 지워진 참가자 — 이름만 남겨 둔다 */ }
+      return;
+    }
+    var state = meta.state || 'betting';
+    var bet = myBetThisRound();
+
+    if (state === 'betting'){
+      if (bet){ show('v-wait'); paintWait(bet); }
+      else {
+        if (shownRound !== Number(meta.round)){ shownRound = Number(meta.round); selected = -1; }
+        show('v-bet'); paintBet();
+      }
+      return;
+    }
+    if (state === 'racing'){
+      show('v-race'); paintRace(bet);
+      return;
+    }
+    if (state === 'revealed'){
+      show('v-result'); paintResult(bet);
+      return;
+    }
+    if (bet){ show('v-wait'); paintWait(bet); }
+    else { show('v-bet'); paintBet(); }
+  }
+
+  function paintWait(bet){
+    var t = $('waitTicket'); t.innerHTML = '';
+    t.appendChild(ticketNode(bet, {coins: Math.max(0, (Number(me.coins)||0) - (Number(bet.amount)||0))}));
+  }
+  function paintRace(bet){
+    var t = $('raceTicket'); t.innerHTML = '';
+    if (bet) t.appendChild(ticketNode(bet, null));
+    else {
+      t.innerHTML = '<div class="trow"><span>이번 라운드는 배팅하지 않았어요</span><b>다음 라운드부터!</b></div>';
+    }
+  }
+
+  function paintResult(bet){
+    var last = me.last || null;
+    var round = Number(meta.round)||1;
+    var win = meta.winner ? HORSES[Number(meta.winner)-1] : null;
+    var emoji = $('resEmoji'), title = $('resTitle'), prize = $('resPrize'),
+        detail = $('resDetail'), coins = $('resCoins'), revive = $('resRevive'), next = $('resNext');
+
+    prize.classList.remove('lose');
+    revive.classList.remove('on');
+    next.textContent = '진행자가 다음 라운드를 열면 자동으로 이어집니다.';
+    $('resRound').textContent = 'ROUND ' + round + ' 결과';
+
+    if (last && Number(last.round) === round && !last.none){
+      if (last.win){
+        emoji.textContent = '🎉';
+        title.textContent = '축! 당첨!';
+        prize.textContent = man(last.payout);
+        var h = HORSES[(Number(last.horse)||1)-1];
+        detail.innerHTML = '<b>' + h.id + '번 ' + h.name + '</b> 적중!<br>건 돈 ' + man(last.amount) + ' × ' + h.odds + '배';
+      } else {
+        emoji.textContent = '😌';
+        title.textContent = '아쉽지만 괜찮아요!';
+        prize.classList.add('lose');
+        prize.textContent = '다음 라운드에 다시!';
+        detail.innerHTML = '이번 1등은 <b>' + (win ? (win.id + '번 ' + win.name) : '?') + '</b>' +
+          '<br>건 돈 ' + man(last.amount) + ', 아깝게 놓쳤어요';
+      }
+    } else if (bet && Number(bet.round) === round){
+      emoji.textContent = '⏳';
+      title.textContent = '결과 집계 중';
+      prize.classList.add('lose');
+      prize.textContent = '잠시만요';
+      detail.textContent = '곧 결과가 표시됩니다.';
+    } else {
+      emoji.textContent = '🐴';
+      title.textContent = '이번 라운드는 쉬어갔어요';
+      prize.classList.add('lose');
+      prize.textContent = '다음 라운드부터!';
+      detail.innerHTML = win ? ('이번 1등은 <b>' + win.id + '번 ' + win.name + '</b>') : '';
+    }
+
+    coins.textContent = man(me.coins);
+    if (last && last.revived) revive.classList.add('on');
+  }
+
+  /* ── start ── */
+  function boot(){
+    $('roomCode').textContent = ROOM;
+    buildEntryHorses();
+    buildHorses();
+    try{ pid = localStorage.getItem(LS_PID) || null; }catch(e){}
+    try{
+      var nm = localStorage.getItem(LS_NM); if (nm) $('nm').value = nm;
+    }catch(e){}
+
+    $('btnJoin').addEventListener('click', join);
+    $('nm').addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.preventDefault(); join(); } });
+    $('btnAllIn').addEventListener('click', function(){ placeBet('all'); });
+    $('btnHalf').addEventListener('click', function(){ placeBet('half'); });
+    $('splash').addEventListener('click', function(){ $('splash').classList.remove('on'); });
+
+    if (!initFB()){
+      $('conn').classList.add('on');
+      // SDK가 늦게 뜨는 경우 한 번 더
+      setTimeout(function(){ if (!db && initFB()){ watch(); if (pid) subMe(); } }, 1200);
+    }
+    watch();
+    if (pid) subMe();
+    if (pid && !hbTimer) hbTimer = setInterval(setPresence, 25000);
+
+    // 뒤로 갔다 돌아왔을 때
+    document.addEventListener('visibilitychange', function(){
+      if (!document.hidden && db && pid) setPresence();
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
+</body>
+</html>
