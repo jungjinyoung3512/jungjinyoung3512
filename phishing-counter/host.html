@@ -742,22 +742,9 @@
     else { Snd.ding(); }
   }
 
-  let clearArmed = false, clearTimer = null;
   function clearRoom(){
-    const btn = $("btnClear");
-    if(!clearArmed){
-      clearArmed = true;
-      btn.classList.add("armed");
-      btn.textContent = "⚠️ 한 번 더 누르면 비웁니다";
-      clearTimeout(clearTimer);
-      clearTimer = setTimeout(() => {
-        clearArmed = false; btn.classList.remove("armed"); btn.textContent = "🧹 참가자 비우기";
-      }, 4000);
-      return;
-    }
-    clearArmed = false; clearTimeout(clearTimer);
-    btn.classList.remove("armed"); btn.textContent = "🧹 참가자 비우기";
     if(!db){ toast("연결을 기다리는 중입니다"); return; }
+    if(!window.confirm("참가자와 선택 기록을 모두 비웁니다.\n새 강연을 시작할 때만 사용하세요.")) return;
     db.ref(BASE + "/players").remove()
       .then(() => db.ref(BASE + "/choices").remove())
       .then(() => db.ref(BASE + "/state").update({ open:false, sidx:0, reveal:false, finished:false, ts:Date.now() }))
