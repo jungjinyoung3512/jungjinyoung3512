@@ -555,6 +555,8 @@ const LECTURE_CLOSED = false;
 
   function setPresence(){
     if (!db || !pid) return;
+    // 진행자가 참가자를 비운 뒤에는 다시 만들지 않는다 (유령 참가자 방지)
+    if (!me) return;
     db.ref(ROOT + '/players/' + pid + '/seen').set(Date.now()).catch(function(){});
   }
 
