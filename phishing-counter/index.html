@@ -358,7 +358,7 @@
     let out = "";
     if(eok) out += eok.toLocaleString("ko-KR") + "억";
     if(man) out += (out ? " " : "") + man.toLocaleString("ko-KR") + "만";
-    return out + "원";
+    return out + " 원";
   }
 
   /* ── 참가자 신원 ── */
@@ -551,11 +551,22 @@
     renderWait();
   }
 
+  /* 결과 공개 전에는 선택 이전 자산을 보여 준다(현상금·손실을 미리 흘리지 않기 위해) */
+  function shownAsset(){
+    if(!me) return 0;
+    const a = Number(me.asset) || 0;
+    const sc = currentScen();
+    if(state.reveal || !sc || me.lastSid !== sc.id) return a;
+    if(me.lastType === "naive") return Number(me.lastLost) || 0;
+    if(me.lastType === "destroy") return Math.max(0, a - (Number(me.lastGain) || 0));
+    return a;
+  }
+
   function syncAssetChip(){
     const chip = $("assetChip");
     if(!joined || !me){ chip.style.display = "none"; return; }
     chip.style.display = "";
-    $("assetTop").textContent = fmtWon(me.asset);
+    $("assetTop").textContent = fmtWon(shownAsset());
   }
 
   function renderWait(){
@@ -609,7 +620,7 @@
   function renderDone(sc){
     const opt = sc.options.find(o => o.t === (me.lastType || "")) ;
     $("doneEcho").textContent = opt ? ("내 선택 · " + opt.label) : "선택을 저장했습니다.";
-    $("doneAsset").textContent = fmtWon(me.asset);
+    $("doneAsset").textContent = fmtWon(shownAsset());
     show("v-done");
   }
 

@@ -90,7 +90,8 @@
 
   .answers{flex:none;display:flex;gap:8px;margin-top:2px}
   .ans{flex:1;border-radius:14px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);
-    padding:9px 10px;font-size:11px;line-height:1.42;font-weight:800;color:#CFC9BC;position:relative}
+    padding:8px 10px;font-size:10.5px;line-height:1.4;font-weight:800;color:#CFC9BC;position:relative;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .ans span{display:block;font-size:9.5px;letter-spacing:.06em;font-weight:900;margin-bottom:3px;opacity:.85}
   .ans.n{border-color:rgba(255,92,110,.32);background:rgba(255,92,110,.07);color:#FFC9CE}
   .ans.s{border-color:rgba(111,195,255,.3);background:rgba(111,195,255,.07);color:#C9E8FF}
@@ -145,7 +146,7 @@
   .bar{display:flex;align-items:center;gap:8px}
   .bar .bl{width:66px;flex:none;font-size:11px;font-weight:900;letter-spacing:-.02em}
   .bar .track{flex:1;height:20px;border-radius:8px;background:rgba(255,255,255,.07);overflow:hidden;position:relative}
-  .bar .fill{height:100%;width:0;border-radius:8px;transition:width .8s cubic-bezier(.2,.9,.3,1)}
+  .bar .fill{display:block;height:100%;width:0;border-radius:8px;transition:width .8s cubic-bezier(.2,.9,.3,1)}
   .bar .num{width:56px;flex:none;text-align:right;font-size:11.5px;font-weight:900;font-variant-numeric:tabular-nums}
   .bar.n .bl{color:#FFB9C0} .bar.n .fill{background:linear-gradient(90deg,#FF5C6E,#FF7C8B)} .bar.n .num{color:#FFB9C0}
   .bar.s .bl{color:#A9DDFF} .bar.s .fill{background:linear-gradient(90deg,#3E9BD6,#6FC3FF)} .bar.s .num{color:#A9DDFF}
@@ -368,7 +369,7 @@
     let out = "";
     if(eok) out += eok.toLocaleString("ko-KR") + "억";
     if(man) out += (out ? " " : "") + man.toLocaleString("ko-KR") + "만";
-    return out + "원";
+    return out + " 원";
   }
 
   const DEFAULTS = JSON.parse(JSON.stringify(window.PC_DEFAULT_SCENARIOS || []));
@@ -571,7 +572,10 @@
       $("tipStrip").style.display = "none";
       return;
     }
-    $("rtitle").textContent = sc.title;
+    if(state.finished){
+      $("rno").textContent = "FINISHED";
+    }
+    $("rtitle").textContent = state.finished ? "수사 종료 · 사기꾼 퇴치왕 발표" : sc.title;
     $("chatAvatar").textContent = sc.icon;
     $("chatWho").textContent = sc.sender;
     $("chatNote").textContent = sc.senderNote || "문자";
@@ -712,7 +716,7 @@
     $("btnReveal").disabled = state.finished || !state.open || state.reveal;
     $("btnNext").disabled = !state.reveal;
     $("btnNext").innerHTML = last ? "🏁 최종 시상" : "🔄 다음 시나리오";
-    $("btnStart").textContent = state.open ? "▶ 진행 중" : "▶ 시나리오 시작";
+    $("btnStart").textContent = state.finished ? "🏁 수사 종료" : (state.open ? "▶ 진행 중" : "▶ 시나리오 시작");
     $("btnNext").classList.toggle("next", true);
     if(state.finished){
       $("btnNext").innerHTML = "🔄 처음부터";
