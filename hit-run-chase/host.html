@@ -79,9 +79,11 @@
   .qrCard{background:linear-gradient(180deg,#12203A,#0C1626);border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
   .qrCard .lbl{font-size:12px;font-weight:900;letter-spacing:.16em;color:var(--amber);margin-bottom:10px}
   .qrCard .frame{background:#fff;border-radius:14px;padding:10px;box-shadow:0 10px 30px rgba(0,0,0,.45);line-height:0}
-  .qrCard .frame img{width:100%;max-width:300px;height:auto;display:block;border-radius:6px}
+  .qrCard .frame img{width:100%;max-width:340px;height:auto;display:block;border-radius:6px}
   .qrCard .code{margin-top:12px;font-family:var(--mono);font-size:30px;font-weight:800;letter-spacing:.18em;color:#fff}
   .qrCard .url{margin-top:3px;font-size:11px;font-weight:700;color:#7E90A8;word-break:break-all;line-height:1.4}
+  .qrCard .qrHero{width:min(78%,260px);margin-bottom:10px;filter:drop-shadow(0 10px 18px rgba(0,0,0,.5))}
+  .qrCard .qrHero svg{width:100%;height:auto;display:block}
   .qrCard .qrFoot{margin-top:14px;font-size:11.5px;font-weight:900;letter-spacing:.06em;color:#8FA3BC;border-top:1px solid var(--line);padding-top:12px;width:100%}
   .idleRight{min-height:0;display:flex;flex-direction:column;gap:14px}
   .plan{background:linear-gradient(180deg,#101D31,#0C1626);border:1px solid var(--line);border-radius:18px;padding:14px 16px}
@@ -285,6 +287,7 @@
     <section class="board on" id="bIdle">
       <div class="idle">
         <div class="qrCard">
+          <div class="qrHero" id="qrHero"></div>
           <div class="lbl">QR 스캔 후 입장</div>
           <div class="frame"><img id="qrImg" alt="입장 QR"></div>
           <div class="code" id="idleRoom">JY73</div>
@@ -366,7 +369,7 @@
           <div class="topHead"><div class="t">최고의 명탐정 <b>TOP 5</b></div><div class="c" id="revTopMeta">참가 0명</div></div>
           <div class="topList" id="topList"></div>
           <div class="revStats" id="revStats"></div>
-          <div class="revNext" id="revNext">[🔄 다음 라운드]를 눌러 계속하세요</div>
+          <div class="revNext" id="revNext">[다음 라운드]를 눌러 계속하세요</div>
         </div>
       </div>
     </section>
@@ -1222,8 +1225,8 @@
 
     $("revChip").innerHTML = '정답 <b>' + (correct + 1) + '</b>번 · ' + esc(car.p || '');
     $("revNext").textContent = H.round >= 5
-      ? "모든 라운드 종료 — [🔄 처음부터]로 새 게임을 시작할 수 있습니다"
-      : "[🔄 다음 라운드]를 눌러 계속하세요";
+      ? "모든 라운드 종료 — [다음 라운드] → [처음부터]로 새 게임을 시작할 수 있습니다"
+      : "[다음 라운드]를 눌러 계속하세요";
     paintTop();
   }
 
@@ -1278,14 +1281,14 @@
     if (!db){ toast("연결 중입니다. 잠시 후 다시 시도해 주세요."); return; }
     if (!Object.keys(H.players || {}).length){ toast("참가자가 없습니다. QR로 먼저 입장시켜 주세요.", 2600); return; }
     if (H.state === "sighting"){ toast("이미 목격이 진행 중입니다."); return; }
-    if (H.state === "reveal" && H.round >= 5){ toast("5라운드가 모두 끝났습니다. [🔄 처음부터]로 새 게임을 시작하세요.", 3000); return; }
+    if (H.state === "reveal" && H.round >= 5){ toast("5라운드가 모두 끝났습니다. [다음 라운드]를 눌러 새 게임을 시작하세요.", 3000); return; }
     if (H.state === "reveal" && H.round < 5){
       /* 결과 화면에서 바로 다음 라운드로 이어갈 수 있게 정리 후 진행 */
       try{ revealRef.remove(); boardRef.remove(); }catch(e){}
       H.state = "idle";
     }
     if (H.round >= 5 && H.state === "idle" && Object.keys(H.keys || {}).length >= 5){
-      toast("5라운드가 모두 끝났습니다. [🔄 처음부터]로 새 게임을 시작하세요.", 3000);
+      toast("5라운드가 모두 끝났습니다. [다음 라운드]를 눌러 새 게임을 시작하세요.", 3000);
       return;
     }
     unlock();
@@ -1452,6 +1455,7 @@
 
     buildCity();
     if (window.__QR_SRC){ $("qrImg").src = window.__QR_SRC; $("qrImg2").src = window.__QR_SRC; }
+    if ($("qrHero")) $("qrHero").innerHTML = carSVG(ROUNDS[0].car);
 
     $("btnStart").addEventListener("click", startSighting);
     $("btnReplay").addEventListener("click", doReplay);
