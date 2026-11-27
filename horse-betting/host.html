@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#070C16">
+<meta name="robots" content="noindex, nofollow">
+<title>🐎 은밀한 경마장 · 진행자 | 강연 크리에이터 · 정진영</title>
+<meta name="description" content="진행자 화면 — 실시간 배팅 현황·경주 연출·수동 결과 공개·큰손 랭킹·경품 추첨 (강연 크리에이터 · 정진영)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  :root{
+    --bg:#070C16; --bg2:#0B1322;
+    --panel:#0F1929; --panel2:#142034;
+    --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.16);
+    --gold:#F7CB5C; --gold2:#E9A93B; --golddk:#7A5210;
+    --green:#2BAE68; --turf:#12583A; --turf2:#1A7448;
+    --ink:#F5F8FD; --mute:#9AACC4; --mute2:#6C7F98;
+    --h1:#3B82F6; --h2:#F5C451; --h3:#B074F5; --h4:#34D399; --h5:#FB7185;
+    --sans:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --serif:"Noto Serif KR","Noto Serif CJK KR",Georgia,serif;
+  }
+  html,body{margin:0;padding:0;height:100%}
+  body{
+    background:var(--bg);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;letter-spacing:-.01em;overflow:hidden;
+    -webkit-user-select:none;user-select:none;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(70% 55% at 8% -10%, rgba(247,203,92,.13), transparent 62%),
+      radial-gradient(60% 50% at 102% 6%, rgba(59,130,246,.10), transparent 60%),
+      radial-gradient(70% 50% at 50% 112%, rgba(43,174,104,.12), transparent 66%);
+  }
+  #app{position:relative;z-index:1;height:100vh;height:100dvh;display:flex;flex-direction:column;
+       padding:clamp(9px,1.1vh,15px) clamp(12px,1.4vw,22px) clamp(9px,1.1vh,14px);gap:clamp(8px,1vh,12px)}
+
+  /* ── header ── */
+  .hbar{display:flex;align-items:center;gap:clamp(10px,1.4vw,22px);flex:none;min-width:0}
+  .hbrand{display:flex;align-items:center;gap:11px;flex:none;min-width:0}
+  .hbrand .logo{font-size:clamp(22px,2vw,30px);line-height:1;filter:drop-shadow(0 3px 10px rgba(247,203,92,.45))}
+  .hbrand b{display:block;font-size:clamp(15px,1.35vw,20px);font-weight:900;letter-spacing:-.03em;white-space:nowrap}
+  .hbrand small{display:block;font-size:clamp(9px,.72vw,11px);letter-spacing:.16em;color:var(--mute);margin-top:2px;white-space:nowrap}
+  .hstats{display:flex;align-items:center;gap:clamp(6px,.9vw,14px);margin-left:auto;flex:none}
+  .stat{
+    min-width:clamp(62px,5.6vw,92px);padding:6px 12px;border-radius:12px;text-align:center;
+    background:rgba(255,255,255,.035);border:1px solid var(--line);
+  }
+  .stat small{display:block;font-size:clamp(8.5px,.62vw,10px);letter-spacing:.13em;color:var(--mute2);font-weight:800}
+  .stat b{font-size:clamp(16px,1.5vw,23px);font-weight:900;letter-spacing:-.03em;line-height:1.15}
+  .stat i{font-style:normal;font-size:clamp(9.5px,.7vw,11.5px);color:var(--mute);margin-left:2px;font-weight:700}
+  .stat.gold b{color:var(--gold)}
+  .htools{display:flex;align-items:center;gap:7px;flex:none}
+  .tool{
+    display:flex;align-items:center;gap:6px;cursor:pointer;font-family:inherit;font-weight:800;
+    font-size:clamp(11px,.85vw,13px);color:var(--ink);padding:9px 12px;border-radius:11px;
+    background:rgba(255,255,255,.05);border:1px solid var(--line2);transition:.14s;white-space:nowrap;
+  }
+  .tool:hover{border-color:rgba(247,203,92,.42);background:rgba(255,255,255,.08)}
+  .tool.off{color:var(--mute2)}
+  .statepill{
+    display:flex;align-items:center;gap:7px;font-size:clamp(10.5px,.8vw,12.5px);font-weight:900;
+    padding:7px 13px;border-radius:999px;letter-spacing:-.01em;white-space:nowrap;
+    background:rgba(247,203,92,.10);border:1px solid rgba(247,203,92,.30);color:var(--gold);
+  }
+  .statepill.race{background:rgba(43,174,104,.13);border-color:rgba(43,174,104,.38);color:#7FE9AC}
+  .statepill.res{background:rgba(59,130,246,.14);border-color:rgba(59,130,246,.40);color:#9CC8FF}
+  .statepill .dot{width:7px;height:7px;border-radius:50%;background:currentColor;animation:blink 1.4s infinite}
+  @keyframes blink{0%,100%{opacity:.35}50%{opacity:1}}
+
+  /* ── main ── */
+  .hmain{flex:1;display:flex;gap:clamp(8px,1vw,14px);min-height:0}
+  .stage{
+    position:relative;flex:1;min-width:0;border-radius:20px;overflow:hidden;
+    border:1px solid var(--line2);
+    background:
+      radial-gradient(120% 80% at 50% -20%, rgba(247,203,92,.07), transparent 60%),
+      linear-gradient(160deg,#0C1524,#0A111E 58%,#0C1626);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 30px 70px -50px #000;
+  }
+  .pane{position:absolute;inset:0;display:none;flex-direction:column}
+  .pane.on{display:flex;animation:fade .3s ease-out}
+  @keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+  /* ── betting board ── */
+  #board{padding:clamp(12px,1.5vw,24px);gap:clamp(6px,.9vh,12px)}
+  .bhead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex:none}
+  .bhead h2{margin:0;font-size:clamp(17px,1.75vw,27px);font-weight:900;letter-spacing:-.03em;display:flex;align-items:center;gap:9px}
+  .bhead p{margin:4px 0 0;font-size:clamp(10.5px,.85vw,13px);color:var(--mute)}
+  .bsum{display:flex;gap:clamp(8px,1vw,16px);flex:none;text-align:right}
+  .bsum div small{display:block;font-size:clamp(8.5px,.62vw,10px);color:var(--mute2);letter-spacing:.1em;font-weight:800}
+  .bsum div b{font-size:clamp(18px,1.7vw,26px);font-weight:900;letter-spacing:-.03em}
+  .bsum div b em{font-style:normal;font-size:.6em;color:var(--mute);margin-left:2px;font-weight:700}
+  .brows{flex:1;display:flex;flex-direction:column;justify-content:center;gap:clamp(6px,1.1vh,14px);min-height:0}
+  .brow{
+    flex:1;max-height:clamp(76px,11.5vh,132px);
+    display:grid;grid-template-columns:clamp(38px,3.2vw,52px) clamp(90px,9vw,170px) clamp(52px,4.4vw,72px) 1fr clamp(58px,5vw,86px) clamp(90px,8vw,150px);
+    align-items:center;gap:clamp(7px,.9vw,14px);
+    padding:clamp(7px,1.05vh,14px) clamp(9px,1vw,16px);border-radius:14px;
+    background:linear-gradient(100deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
+    border:1px solid var(--line);
+  }
+  .brow.lead{border-color:rgba(247,203,92,.45);background:linear-gradient(100deg,rgba(247,203,92,.11),rgba(247,203,92,.03))}
+  .bnum{
+    width:clamp(34px,2.9vw,46px);height:clamp(34px,2.9vw,46px);border-radius:12px;display:grid;place-items:center;
+    font-size:clamp(17px,1.5vw,23px);font-weight:900;color:#0A0F1A;background:var(--c,#888);
+    box-shadow:0 6px 18px -8px var(--c,#888);
+  }
+  .bname{font-size:clamp(14px,1.25vw,20px);font-weight:900;letter-spacing:-.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bodds{font-size:clamp(13px,1.15vw,18px);font-weight:900;color:var(--gold);background:rgba(247,203,92,.10);
+         border:1px solid rgba(247,203,92,.26);border-radius:9px;padding:4px 7px;text-align:center}
+  .bbar{height:clamp(16px,1.8vh,26px);border-radius:8px;background:rgba(255,255,255,.055);position:relative;overflow:hidden}
+  .bbar i{position:absolute;inset:0 auto 0 0;width:0;border-radius:8px;transition:width .45s cubic-bezier(.2,.8,.3,1);
+          background:var(--c,#888);box-shadow:inset 0 -7px 10px rgba(0,0,0,.22), inset 0 7px 10px rgba(255,255,255,.22)}
+  .bbar span{position:absolute;inset:0;display:flex;align-items:center;padding-left:9px;font-size:clamp(10px,.8vw,12.5px);
+             font-weight:900;color:#06101F;letter-spacing:-.01em}
+  .bpeople{font-size:clamp(13px,1.15vw,18px);font-weight:900;text-align:right;white-space:nowrap}
+  .bpeople em{font-style:normal;font-size:.7em;color:var(--mute);margin-left:2px}
+  .bmoney{font-size:clamp(13px,1.15vw,18px);font-weight:900;color:var(--gold);text-align:right;white-space:nowrap}
+  .bfoot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex:none;
+         padding-top:8px;border-top:1px dashed rgba(255,255,255,.10);font-size:clamp(10.5px,.85vw,13px);color:var(--mute)}
+  .bfoot b{color:var(--ink);font-weight:800}
+  .bfoot .wait{color:#FFD48A}
+  .emptybig{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;height:100%;text-align:center;color:var(--mute);
+  }
+  .emptybig .e{font-size:clamp(34px,4vw,58px)}
+  .emptybig b{font-size:clamp(15px,1.5vw,22px);color:var(--ink)}
+  .emptybig p{margin:0;font-size:clamp(11px,.9vw,14px);line-height:1.7}
+
+  /* ── track ── */
+  #track{padding:clamp(10px,1.3vw,20px) clamp(12px,1.5vw,24px) clamp(8px,1.1vw,16px);gap:clamp(5px,.7vh,10px)}
+  .tcomment{
+    flex:none;text-align:center;font-size:clamp(15px,1.65vw,26px);font-weight:900;letter-spacing:-.03em;color:var(--gold);
+    min-height:1.35em;text-shadow:0 2px 18px rgba(247,203,92,.36);
+  }
+  .tcomment.pop{animation:comPop .35s ease-out}
+  @keyframes comPop{from{opacity:.2;transform:translateY(4px) scale(.99)}to{opacity:1;transform:none}}
+  .lanes{flex:1;display:flex;flex-direction:column;gap:clamp(4px,.75vh,10px);min-height:0}
+  .lane{flex:1;display:grid;grid-template-columns:clamp(112px,11.5vw,210px) 1fr;gap:clamp(6px,.9vw,13px);min-height:0;align-items:stretch}
+  .lsinfo{display:flex;align-items:center;gap:7px;min-width:0}
+  .lnum{
+    width:clamp(24px,2.1vw,34px);height:clamp(24px,2.1vw,34px);border-radius:9px;display:grid;place-items:center;flex:none;
+    font-size:clamp(13px,1.1vw,17px);font-weight:900;color:#0A0F1A;background:var(--c,#888);
+  }
+  .lname{font-size:clamp(12px,1.05vw,17px);font-weight:900;letter-spacing:-.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lmeta{font-size:clamp(9.5px,.72vw,11.5px);color:var(--mute);font-weight:800;white-space:nowrap}
+  .ltrack{
+    position:relative;border-radius:11px;overflow:visible;
+    background:
+      repeating-linear-gradient(90deg,rgba(255,255,255,.055) 0 1px,transparent 1px 64px),
+      linear-gradient(180deg,var(--turf2),var(--turf));
+    box-shadow:inset 0 2px 8px rgba(0,0,0,.35), inset 0 -1px 0 rgba(255,255,255,.10);
+  }
+  .ltrack::after{
+    content:"";position:absolute;right:0;top:0;bottom:0;width:12px;border-radius:0 11px 11px 0;
+    background:repeating-linear-gradient(180deg,#F8FAFC 0 8px,#1E293B 8px 16px);
+    opacity:.92;
+  }
+  .runner{
+    position:absolute;top:50%;left:2%;transform:translate(-50%,-50%);
+    display:flex;align-items:center;gap:3px;will-change:left;z-index:2;
+  }
+  .runner .rn{
+    display:grid;place-items:center;width:clamp(18px,1.6vw,26px);height:clamp(18px,1.6vw,26px);border-radius:50%;
+    font-size:clamp(10px,.85vw,13px);font-weight:900;color:#0A0F1A;background:var(--c,#888);
+    box-shadow:0 2px 8px rgba(0,0,0,.5);
+  }
+  .runner .re{font-size:clamp(26px,2.9vw,48px);line-height:1;transform:scaleX(-1);filter:drop-shadow(0 4px 10px rgba(0,0,0,.55))}
+  .runner.run .re{animation:bob .26s infinite ease-in-out}
+  @keyframes bob{0%,100%{transform:scaleX(-1) translateY(0) rotate(-3deg)}50%{transform:scaleX(-1) translateY(-5px) rotate(3deg)}}
+  .runner .dust{
+    position:absolute;right:100%;top:62%;width:26px;height:10px;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(255,255,255,.5),transparent);opacity:0;
+  }
+  .runner.run .dust{animation:dust .5s infinite}
+  @keyframes dust{0%{opacity:.55;transform:translateX(0) scale(.7)}100%{opacity:0;transform:translateX(-16px) scale(1.4)}}
+  .flagline{
+    position:absolute;right:clamp(112px,11.5vw,210px);top:0;bottom:0;width:2px;background:rgba(255,255,255,.35);
+  }
+  .racefoot{flex:none;display:flex;align-items:center;justify-content:center;gap:14px;font-size:clamp(10.5px,.85vw,13px);color:var(--mute)}
+  .racefoot b{color:var(--gold)}
+  .cd{
+    position:absolute;inset:0;z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;
+    background:radial-gradient(60% 60% at 50% 50%,rgba(8,13,22,.55),rgba(8,13,22,.92));
+    backdrop-filter:blur(2px);
+  }
+  .cd.on{display:flex}
+  .cd .n{font-size:clamp(80px,16vw,220px);font-weight:900;line-height:1;letter-spacing:-.06em;
+        background:linear-gradient(180deg,#FFF6DA,#F7CB5B 60%,#D79A2E);-webkit-background-clip:text;background-clip:text;color:transparent;
+        animation:cdPop .6s ease-out}
+  @keyframes cdPop{0%{transform:scale(1.5);opacity:0}40%{transform:scale(1);opacity:1}100%{transform:scale(.94);opacity:.9}}
+  .cd .t{font-size:clamp(13px,1.2vw,18px);font-weight:800;color:#E7EEF8;letter-spacing:.02em}
+  .awaitbar{
+    margin-top:auto;display:flex;align-items:center;justify-content:center;gap:12px;padding:10px 14px;border-radius:14px;
+    background:rgba(43,174,104,.12);border:1px solid rgba(43,174,104,.4);color:#B8F5D2;
+    font-size:clamp(12px,1vw,15px);font-weight:900;flex:none;
+  }
+  .awaitbar.armed{animation:arm 1.1s infinite}
+  @keyframes arm{0%,100%{box-shadow:0 0 0 0 rgba(43,174,104,.0)}50%{box-shadow:0 0 0 6px rgba(43,174,104,.14)}}
+
+  /* ── podium / result ── */
+  #podium{padding:clamp(12px,1.5vw,24px);gap:clamp(7px,1vh,14px)}
+  .pod-head{display:flex;align-items:center;gap:clamp(10px,1.4vw,22px);flex:none}
+  .pod-cup{font-size:clamp(38px,4.6vw,72px);line-height:1;filter:drop-shadow(0 8px 26px rgba(247,203,92,.45));animation:pop .5s cubic-bezier(.2,1.5,.4,1)}
+  @keyframes pop{from{transform:scale(.5) rotate(-8deg);opacity:0}to{transform:none;opacity:1}}
+  .pod-tt{min-width:0}
+  .pod-tt small{display:block;font-size:clamp(9px,.72vw,11px);letter-spacing:.18em;color:var(--gold);font-weight:900}
+  .pod-tt h2{margin:2px 0 0;font-size:clamp(24px,3.2vw,54px);font-weight:900;letter-spacing:-.04em;line-height:1.1;white-space:nowrap;
+             overflow:hidden;text-overflow:ellipsis}
+  .pod-tt h2 em{font-style:normal;font-size:.52em;color:var(--mute);font-weight:800;margin-left:6px}
+  .pod-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(6px,.9vw,13px);flex:none}
+  .pcard{padding:clamp(8px,1.1vh,14px) clamp(9px,1vw,16px);border-radius:13px;
+         background:linear-gradient(150deg,rgba(255,255,255,.055),rgba(255,255,255,.02));border:1px solid var(--line)}
+  .pcard small{display:block;font-size:clamp(8.5px,.65vw,10.5px);letter-spacing:.1em;color:var(--mute2);font-weight:800;margin-bottom:3px}
+  .pcard b{font-size:clamp(14px,1.35vw,21px);font-weight:900;letter-spacing:-.03em;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pcard span{font-size:clamp(10px,.8vw,12.5px);color:var(--mute);font-weight:700}
+  .pod-body{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);gap:clamp(8px,1.2vw,18px)}
+  .pod-rankbox{display:flex;flex-direction:column;gap:6px;min-height:0}
+  #podRank{flex:1;min-height:0;display:flex;flex-direction:column;gap:5px;overflow-y:auto}
+  .pod-foot{flex:none;text-align:center;font-size:clamp(10.5px,.85vw,13px);color:var(--mute);
+            padding:8px 10px;border-radius:11px;background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.12)}
+  .pod-foot b{color:var(--gold)}
+  .pod-winners{display:flex;flex-direction:column;gap:5px;min-height:0}
+  .pod-winners .wlist{flex:1;min-height:0;display:flex;flex-direction:column;gap:4px;overflow-y:auto;padding-right:4px}
+  .pod-winners .wlist::-webkit-scrollbar{width:5px}
+  .pod-winners .wlist::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:3px}
+  .wrow{flex:none;display:flex;align-items:center;gap:7px;padding:clamp(5px,.8vh,10px) 10px;border-radius:9px;background:rgba(255,255,255,.035);border:1px solid var(--line)}
+  .wrow .wn{flex:1;min-width:0;font-size:clamp(11px,.9vw,14px);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .wrow .wv{font-size:clamp(10.5px,.82vw,13px);font-weight:900;color:var(--gold);white-space:nowrap}
+  .wrow .wh{font-size:10px;font-weight:900;color:var(--mute);background:rgba(255,255,255,.06);border-radius:5px;padding:1px 5px;flex:none}
+  .pod-rankbox h3{margin:0;font-size:clamp(11px,.9vw,14px);letter-spacing:.1em;color:var(--mute);font-weight:900;flex:none}
+  .prow{
+    flex:1;max-height:clamp(40px,7.4vh,78px);
+    display:grid;grid-template-columns:clamp(26px,2.2vw,36px) 1fr auto;align-items:center;gap:10px;
+    padding:clamp(5px,.72vh,10px) clamp(9px,1vw,14px);border-radius:11px;background:rgba(255,255,255,.035);border:1px solid var(--line);
+  }
+  .prow.top{background:linear-gradient(100deg,rgba(247,203,92,.14),rgba(247,203,92,.03));border-color:rgba(247,203,92,.34)}
+  .prow .medal{font-size:clamp(13px,1.15vw,18px);font-weight:900;text-align:center;color:var(--mute2)}
+  .prow .pnm{font-size:clamp(12px,1.05vw,16px);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .prow .pnm i{font-style:normal;font-size:.8em;color:var(--mute);font-weight:700;margin-left:6px}
+  .prow .pmoney{font-size:clamp(12px,1.05vw,16px);font-weight:900;color:var(--gold);white-space:nowrap}
+  .pod-empty{display:flex;align-items:center;justify-content:center;flex:1;color:var(--mute);font-size:13px}
+  .confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:6}
+  .confetti i{position:absolute;top:-16px;width:9px;height:14px;border-radius:2px;opacity:.95;animation:fall linear forwards}
+  @keyframes fall{0%{transform:translateY(0) rotate(0);opacity:.95}100%{transform:translateY(110vh) rotate(640deg);opacity:.15}}
+
+  /* ── side ── */
+  .side{width:clamp(230px,19vw,320px);flex:none;display:flex;flex-direction:column;gap:clamp(7px,1vh,12px);min-height:0}
+  .side-sec{
+    display:flex;flex-direction:column;min-height:0;border-radius:16px;border:1px solid var(--line2);
+    background:linear-gradient(160deg,rgba(16,26,43,.92),rgba(12,20,34,.92));overflow:hidden;
+  }
+  .side-sec.grow{flex:1}
+  .side-sec h3{
+    margin:0;padding:clamp(7px,.9vh,12px) clamp(9px,1vw,14px);font-size:clamp(10px,.82vw,12.5px);
+    letter-spacing:.1em;color:var(--mute);font-weight:900;display:flex;align-items:center;justify-content:space-between;gap:6px;
+    border-bottom:1px solid var(--line);flex:none;
+  }
+  .side-sec h3 b{color:var(--gold);font-size:1.15em;letter-spacing:0}
+  .plist{flex:1;overflow-y:auto;padding:5px 6px 8px;scrollbar-width:thin}
+  .plist::-webkit-scrollbar{width:5px}
+  .plist::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:3px}
+  .pitem{display:flex;align-items:center;gap:7px;padding:5px 6px;border-radius:8px}
+  .pitem+.pitem{margin-top:1px}
+  .pitem.top{background:rgba(247,203,92,.07)}
+  .prank{width:16px;flex:none;font-size:10px;font-weight:800;color:var(--mute2);text-align:right;font-variant-numeric:tabular-nums}
+  .pnm2{flex:1;min-width:0;font-size:clamp(11px,.88vw,13.5px);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pbet{flex:none;font-size:9.5px;font-weight:800;padding:2px 5px;border-radius:5px;background:rgba(255,255,255,.05);color:var(--mute);white-space:nowrap}
+  .pbet.done{background:rgba(43,174,104,.16);color:#8BEAB0}
+  .pcoin{flex:none;width:64px;text-align:right;font-size:clamp(10px,.8vw,12px);font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums}
+  .ranklist{padding:6px 7px 8px;display:flex;flex-direction:column;gap:3px}
+  .rankrow{display:flex;align-items:center;gap:7px;padding:4px 6px;border-radius:8px}
+  .rankrow .m{width:16px;text-align:center;font-size:11px;font-weight:900;color:var(--mute2);flex:none}
+  .rankrow.g1{background:linear-gradient(90deg,rgba(247,203,92,.18),rgba(247,203,92,.03))}
+  .rankrow.g1 .m{color:var(--gold)}
+  .rankrow .n{flex:1;min-width:0;font-size:clamp(10.5px,.85vw,13px);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rankrow .v{font-size:clamp(10px,.8vw,12px);font-weight:900;color:var(--gold);white-space:nowrap}
+  .rankempty{padding:14px 10px;text-align:center;font-size:11px;color:var(--mute2);line-height:1.7}
+
+  /* ── footer controls ── */
+  .hfoot{display:flex;align-items:stretch;gap:clamp(5px,.7vw,10px);flex:none}
+  .hbtn{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;font-family:inherit;
+    padding:clamp(7px,1vh,12px) 6px;border-radius:13px;border:1px solid var(--line2);
+    background:rgba(255,255,255,.045);color:var(--ink);font-size:clamp(12px,.95vw,15px);font-weight:900;letter-spacing:-.02em;
+    transition:.14s;min-width:0;white-space:nowrap;
+  }
+  .hbtn small{font-size:clamp(8.5px,.62vw,10px);font-weight:700;color:var(--mute2);letter-spacing:.04em}
+  .hbtn:hover{transform:translateY(-1px)}
+  .hbtn:active{transform:scale(.985)}
+  .hbtn.start{background:linear-gradient(135deg,#FFE7A6,#F7CB5C 52%,#E9A93B);color:#20160A;border-color:transparent;
+              box-shadow:0 12px 26px -16px rgba(247,203,92,.9)}
+  .hbtn.start small{color:rgba(32,22,10,.6)}
+  .hbtn.reveal{background:linear-gradient(135deg,#2FD57F,#1C9C5A);color:#04150C;border-color:transparent;
+               box-shadow:0 12px 26px -16px rgba(43,174,104,.9)}
+  .hbtn.reveal small{color:rgba(4,21,12,.58)}
+  .hbtn.reveal.armed{animation:armGold 1s infinite}
+  @keyframes armGold{0%,100%{box-shadow:0 0 0 0 rgba(247,203,92,0)}50%{box-shadow:0 0 0 7px rgba(247,203,92,.18)}}
+  .hbtn.next{background:linear-gradient(135deg,#3D7BE8,#2456AE);color:#F2F7FF;border-color:transparent}
+  .hbtn.draw{background:linear-gradient(135deg,#A66BFF,#7B3FDC);color:#F7F2FF;border-color:transparent}
+  .hbtn.clear{background:rgba(220,60,80,.10);border-color:rgba(220,60,80,.32);color:#FFA9B6}
+  .hbtn:disabled{opacity:.32;cursor:default;filter:grayscale(.55);animation:none;box-shadow:none}
+  .hbtn:disabled:hover{transform:none}
+  .keyhint{flex:none;display:flex;flex-direction:column;justify-content:center;gap:2px;padding-left:6px;font-size:9.5px;color:var(--mute2);line-height:1.5}
+  .keyhint kbd{display:inline-block;padding:0 4px;border-radius:4px;border:1px solid var(--line2);background:#152039;color:var(--mute);font-family:ui-monospace,Menlo,monospace;font-size:9px}
+
+  /* ── overlays ── */
+  .modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px;
+         background:rgba(4,8,15,.86);backdrop-filter:blur(6px)}
+  .modal.on{display:flex}
+  .qrcard{
+    width:min(88vw,520px);background:linear-gradient(160deg,#101A2C,#0B1322);border:1px solid rgba(247,203,92,.28);
+    border-radius:26px;padding:26px 26px 20px;text-align:center;box-shadow:0 40px 90px -40px #000;
+  }
+  .qrcard .qk{font-size:11px;letter-spacing:.2em;color:var(--gold);font-weight:900}
+  .qrcard h3{margin:6px 0 2px;font-size:24px;font-weight:900;letter-spacing:-.03em}
+  .qrcard p{margin:0 0 14px;font-size:12.5px;color:var(--mute)}
+  .qrbox{width:min(58vw,300px);aspect-ratio:1;margin:0 auto;background:#fff;border-radius:18px;padding:12px}
+  .qrbox img{width:100%;height:100%;display:block;border-radius:8px}
+  .qurl{margin:14px 0 0;font-size:11.5px;color:var(--mute);font-family:ui-monospace,Menlo,monospace;word-break:break-all}
+  .qcode{margin:8px 0 0;font-size:15px;font-weight:900;color:var(--gold);letter-spacing:.06em}
+  .qcode b{font-family:ui-monospace,Menlo,monospace;font-size:19px}
+  .qclose{margin-top:16px;width:100%;padding:12px;border-radius:12px;border:1px solid var(--line2);background:rgba(255,255,255,.05);
+          color:var(--ink);font-family:inherit;font-weight:800;font-size:14px;cursor:pointer}
+
+  .drawbox{
+    width:min(90vw,760px);text-align:center;background:linear-gradient(160deg,rgba(18,28,47,.98),rgba(10,17,29,.98));
+    border:1px solid rgba(247,203,92,.30);border-radius:26px;padding:clamp(18px,3vw,34px);
+    box-shadow:0 44px 100px -44px #000;
+  }
+  .drawbox .dk{font-size:11px;letter-spacing:.22em;color:var(--gold);font-weight:900}
+  .drawbox h3{margin:8px 0 4px;font-size:clamp(17px,2vw,24px);font-weight:900;letter-spacing:-.03em}
+  .drawbox p{margin:0 0 10px;font-size:12.5px;color:var(--mute)}
+  .droll{
+    font-size:clamp(38px,6vw,86px);font-weight:900;letter-spacing:-.05em;line-height:1.15;min-height:1.2em;
+    background:linear-gradient(180deg,#FFF6DA,#F7CB5C 58%,#D79A2E);-webkit-background-clip:text;background-clip:text;color:transparent;
+    padding:6px 0;
+  }
+  .dsub{font-size:clamp(12px,1.1vw,16px);color:#CFE0F3;font-weight:800;min-height:1.4em}
+  .dbtns{display:flex;gap:9px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+  .dbtn{padding:12px 20px;border-radius:12px;border:1px solid var(--line2);background:rgba(255,255,255,.06);
+        color:var(--ink);font-family:inherit;font-weight:900;font-size:14px;cursor:pointer}
+  .dbtn.pri{background:linear-gradient(135deg,#FFE7A6,#F7CB5C 55%,#E9A93B);color:#20160A;border-color:transparent}
+
+  .toast{
+    position:fixed;left:50%;bottom:78px;transform:translate(-50%,16px);z-index:300;max-width:86vw;
+    padding:12px 20px;border-radius:999px;background:#F5F8FD;color:#0A1220;font-size:14px;font-weight:900;text-align:center;
+    box-shadow:0 18px 44px -18px rgba(0,0,0,.9);opacity:0;pointer-events:none;transition:.2s;
+  }
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+  .conn{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:400;display:none;
+        font-size:11px;font-weight:900;color:#0A1220;background:#F7CB5C;padding:5px 12px;border-radius:999px}
+  .conn.on{display:block}
+
+  @media (max-width:900px){
+    .side{display:none}
+    .brow{grid-template-columns:34px 1fr 46px 1.3fr 52px;}
+    .brow .bmoney{display:none}
+    .keyhint{display:none}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="hbar">
+    <div class="hbrand">
+      <span class="logo" aria-hidden="true">🐎</span>
+      <div><b>은밀한 경마장</b><small>강연 크리에이터 · 정진영</small></div>
+    </div>
+    <div class="statepill" id="statePill"><span class="dot"></span><span id="stateText">배팅 받는 중</span></div>
+    <div class="hstats">
+      <div class="stat"><small>ROUND</small><b id="hRound">1</b></div>
+      <div class="stat"><small>참가자</small><b id="hPeople">0</b><i>명</i></div>
+      <div class="stat"><small>배팅 완료</small><b id="hBettors">0</b><i>명</i></div>
+      <div class="stat gold"><small>총 배팅</small><b id="hPool">0</b></div>
+    </div>
+    <div class="htools">
+      <button class="tool" id="btnSound" type="button" title="소리 켜기/끄기 (M)">🔊 소리 ON</button>
+      <button class="tool" id="btnQR" type="button" title="QR 입장 (Q)">📱 QR 입장</button>
+    </div>
+  </header>
+
+  <main class="hmain">
+    <section class="stage">
+    <div class="confetti" id="confetti" aria-hidden="true"></div>
+      <!-- ① 배팅 현황판 -->
+      <div class="pane on" id="board">
+        <div class="bhead">
+          <div>
+            <h2>📊 지금 배팅 현황 <span id="betRoundTag" style="font-size:.62em;color:var(--gold);font-weight:900">ROUND 1</span></h2>
+            <p>어느 말에 몰리는지 실시간으로 보여 주세요 — 분위기 띄우기용</p>
+          </div>
+          <div class="bsum">
+            <div><small>참가</small><b id="bPeople">0<em>명</em></b></div>
+            <div><small>배팅 완료</small><b id="bBettors">0<em>명</em></b></div>
+            <div><small>총 배팅액</small><b id="bPool">0</b></div>
+          </div>
+        </div>
+        <div class="brows" id="brows"></div>
+        <div class="bfoot">
+          <span id="bFootLeft">아직 배팅한 사람이 없습니다.</span>
+          <span>배당률 <b>고정</b> · 1번 2배 / 2번 3배 / 3번 5배 / 4번 8배 / 5번 10배</span>
+        </div>
+      </div>
+
+      <!-- ② 트랙 -->
+      <div class="pane" id="track">
+        <div class="tcomment" id="tcomment">출발 준비 — [🏁 경주 시작]을 눌러 주세요</div>
+        <div class="lanes" id="lanes"></div>
+        <div class="racefoot">
+          <span>배당 <b>2 · 3 · 5 · 8 · 10배</b></span>
+          <span>·</span>
+          <span>말발굽 소리는 이 노트북에서만 납니다</span>
+        </div>
+        <div class="awaitbar" id="awaitbar">📸 결승선 통과 — [🏆 결과보기]를 누르면 공개됩니다</div>
+        <div class="cd" id="cd"><div class="n" id="cdNum">3</div><div class="t">말들이 출발선에 섰습니다</div></div>
+      </div>
+
+      <!-- ③ 결과 -->
+      <div class="pane" id="podium">
+        <div class="pod-head">
+          <div class="pod-cup" id="podCup">🏆</div>
+          <div class="pod-tt">
+            <small>ROUND <b id="podRound">1</b> · 1등</small>
+            <h2 id="podWinner">—</h2>
+          </div>
+        </div>
+        <div class="pod-grid">
+          <div class="pcard"><small>당첨자</small><b id="podWinners">0명</b><span id="podWinRate">참가 0명 중</span></div>
+          <div class="pcard"><small>최고 배당 당첨</small><b id="podBest">—</b><span id="podBestSub">—</span></div>
+          <div class="pcard"><small>이번 라운드 총 배팅</small><b id="podPool">0만 원</b><span id="podPoolSub">—</span></div>
+        </div>
+        <div class="pod-body">
+          <div class="pod-rankbox">
+            <h3>👑 누적 자산 · 오늘의 큰손 TOP 5</h3>
+            <div id="podRank"></div>
+          </div>
+          <div class="pod-winners">
+            <h3 style="margin:0;font-size:clamp(11px,.9vw,14px);letter-spacing:.1em;color:var(--mute);font-weight:900">🎯 이번 라운드 당첨자 <span id="podWinCnt" style="color:var(--gold)"></span></h3>
+            <div class="wlist" id="podWinList"></div>
+          </div>
+        </div>
+        <div class="pod-foot">다음 라운드는 <b>[🔄 다음 라운드]</b> → 청중 폰에 새 배팅 화면이 자동으로 뜹니다</div>
+      </div>
+    </section>
+
+    <aside class="side">
+      <div class="side-sec grow">
+        <h3>참가자 명단 <span><b id="sideCount">0</b> 명</span></h3>
+        <div class="plist" id="plist"></div>
+      </div>
+      <div class="side-sec">
+        <h3>👑 오늘의 큰손 TOP 5</h3>
+        <div class="ranklist" id="rankList"></div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="hfoot">
+    <button class="hbtn start" id="btnStart" type="button">🏁 경주 시작<small>Space</small></button>
+    <button class="hbtn reveal" id="btnReveal" type="button" disabled>🏆 결과보기<small>R</small></button>
+    <button class="hbtn next" id="btnNext" type="button" disabled>🔄 다음 라운드<small>N</small></button>
+    <button class="hbtn draw" id="btnDraw" type="button" disabled>🎁 당첨자 추첨<small>D</small></button>
+    <button class="hbtn clear" id="btnClear" type="button">🧹 참가자 비우기<small>Del</small></button>
+    <div class="keyhint">
+      <span><kbd>Space</kbd> 경주 시작</span>
+      <span><kbd>R</kbd> 결과 · <kbd>N</kbd> 다음 · <kbd>M</kbd> 소리</span>
+    </div>
+  </footer>
+</div>
+
+<div class="modal" id="qrModal">
+  <div class="qrcard">
+    <div class="qk">SCAN TO JOIN</div>
+    <h3>📱 청중 입장 QR</h3>
+    <p>카메라로 스캔하면 바로 입장합니다</p>
+    <div class="qrbox"><img id="qrImg" src="data:image/png;base64,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" alt="청중 입장 QR"></div>
+    <p class="qurl" id="qrUrl">—</p>
+    <p class="qcode">방 코드 <b id="qrCode">JY79</b></p>
+    <button class="qclose" id="btnQRClose" type="button">닫기 (Esc)</button>
+  </div>
+</div>
+
+<div class="modal" id="drawModal">
+  <div class="drawbox">
+    <div class="dk">LUCKY DRAW</div>
+    <h3>🎁 당첨자 중 1명 추첨</h3>
+    <p id="drawSub">이번 라운드에 맞힌 분들 중에서 뽑습니다</p>
+    <div class="droll" id="drawName">—</div>
+    <div class="dsub" id="drawNote">준비되면 [추첨 시작]을 눌러 주세요</div>
+    <div class="dbtns">
+      <button class="dbtn pri" id="btnDrawGo" type="button">🎲 추첨 시작</button>
+      <button class="dbtn" id="btnDrawClose" type="button">닫기</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="conn" id="conn">연결 중…</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  var HORSES = [
+    {id:1, name:'번개호',    odds:2,  color:'#3B82F6'},
+    {id:2, name:'황금호',    odds:3,  color:'#F5C451'},
+    {id:3, name:'꼴찌반란호', odds:5,  color:'#B074F5'},
+    {id:4, name:'청춘호',    odds:8,  color:'#34D399'},
+    {id:5, name:'로또호',    odds:10, color:'#FB7185'}
+  ];
+  var FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "72674304952",
+    appId: "1:72674304952:web:6d0ba7e0b3b8a5f6a19a8d"
+  };
+  var qs = new URLSearchParams(location.search);
+  var ROOM = (qs.get('room') || 'JY79').toUpperCase().replace(/[^A-Z0-9]/g,'') || 'JY79';
+  var ROOT = 'rooms/horse-betting/' + ROOM;
+  var VIEW_URL = 'https://jungjinyoung3512.github.io/jungjinyoung3512/horse-betting/?room=' + ROOM;
+  var RACE_MS = 17000;
+
+  var db = null, metaRef = null;
+  var meta = { round:1, state:'betting', raceId:0 };
+  var players = [];
+  var raceResult = null;          // {order:[1..5], winner}
+  var animating = false, revealing = false, raceStarting = false, rafId = 0, drawnName = null;
+  var armed = false;              // 결승선 통과 후 결과보기 대기
+
+  function $(id){ return document.getElementById(id); }
+  function el(tag, cls, txt){ var n=document.createElement(tag); if(cls) n.className=cls; if(txt!=null) n.textContent=txt; return n; }
+  function shortMan(n){
+    n = Math.round(Number(n)||0);
+    if (n <= 0) return '0';
+    if (n >= 100000000){ var e=Math.floor(n/100000000), r=Math.round((n%100000000)/10000); return e+'억'+(r?' '+r.toLocaleString('ko-KR')+'만':''); }
+    return Math.round(n/10000).toLocaleString('ko-KR')+'만';
+  }
+  function man(n){
+    n = Math.round(Number(n)||0);
+    if (n <= 0) return '0원';
+    if (n >= 100000000){ var e=Math.floor(n/100000000), r=Math.round((n%100000000)/10000); return e+'억'+(r?' '+r.toLocaleString('ko-KR')+'만':'')+' 원'; }
+    return Math.round(n/10000).toLocaleString('ko-KR')+'만 원';
+  }
+  var oddsOf = function(id){ var h=HORSES[Number(id)-1]; return h?h.odds:0; };
+  var horseOf = function(id){ return HORSES[Number(id)-1] || HORSES[0]; };
+
+  var toastTimer=null;
+  function toast(msg){
+    var t=$('toast'); t.textContent=msg; t.classList.add('on');
+    clearTimeout(toastTimer); toastTimer=setTimeout(function(){t.classList.remove('on');},2400);
+  }
+
+  /* ══════════ AUDIO ══════════ */
+  var A = { ctx:null, master:null, music:null, sfx:null, noiseBuf:null, muted:false,
+            bgmOn:false, bgmTimer:null, step:0, nextT:0, crowdSrc:null, crowdGain:null, crowdLfo:null };
+
+  function audioInit(){
+    if (A.ctx){ if (A.ctx.state==='suspended'){ try{A.ctx.resume();}catch(e){} } return A.ctx; }
+    var Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return null;
+    var ctx = new Ctx();
+    A.ctx = ctx;
+    A.master = ctx.createGain(); A.master.gain.value = A.muted ? 0.0001 : 0.9;
+    var comp = ctx.createDynamicsCompressor();
+    comp.threshold.value=-16; comp.knee.value=20; comp.ratio.value=5; comp.attack.value=.004; comp.release.value=.24;
+    A.master.connect(comp); comp.connect(ctx.destination);
+    A.music = ctx.createGain(); A.music.gain.value = 0.30; A.music.connect(A.master);
+    A.sfx   = ctx.createGain(); A.sfx.gain.value = 0.95;  A.sfx.connect(A.master);
+    var len = Math.floor(ctx.sampleRate*2.2);
+    var buf = ctx.createBuffer(1, len, ctx.sampleRate);
+    var d = buf.getChannelData(0);
+    for (var i=0;i<len;i++) d[i] = (Math.random()*2-1);
+    A.noiseBuf = buf;
+    return ctx;
+  }
+  function bgmGain(v,t){ if(!A.music) return; A.music.gain.setTargetAtTime(v, A.ctx.currentTime, t||.08); }
+  function setMuted(m){
+    A.muted = m;
+    if (A.master) A.master.gain.setTargetAtTime(m?0.0001:0.9, A.ctx.currentTime, .05);
+    try{ localStorage.setItem('hb_host_muted', m?'1':'0'); }catch(e){}
+    paintSound();
+  }
+  function paintSound(){
+    var b=$('btnSound');
+    b.textContent = A.muted ? '🔇 소리 OFF' : '🔊 소리 ON';
+    b.classList.toggle('off', A.muted);
+  }
+  function tone(freq, dur, opt){
+    if (!A.ctx) return;
+    var ctx=A.ctx, o=opt||{};
+    var t0 = (o.when!=null)?o.when:ctx.currentTime;
+    var osc=ctx.createOscillator(), g=ctx.createGain();
+    osc.type = o.type||'sine';
+    osc.frequency.setValueAtTime(Math.max(20,freq), t0);
+    if (o.to) osc.frequency.exponentialRampToValueAtTime(Math.max(20,o.to), t0+dur);
+    var peak = (o.gain==null?0.2:o.gain);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(peak, t0+Math.min(0.02, dur*0.25));
+    g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+    osc.connect(g);
+    if (o.filter){
+      var bp=ctx.createBiquadFilter(); bp.type=o.filter; bp.frequency.value=o.ffreq||900; bp.Q.value=o.q||1;
+      g.connect(bp); bp.connect(o.dest||A.sfx);
+    } else g.connect(o.dest||A.sfx);
+    osc.start(t0); osc.stop(t0+dur+0.02);
+  }
+  function noiseHit(dur, opt){
+    if (!A.ctx || !A.noiseBuf) return;
+    var ctx=A.ctx, o=opt||{};
+    var t0=(o.when!=null)?o.when:ctx.currentTime;
+    var s=ctx.createBufferSource(); s.buffer=A.noiseBuf;
+    s.playbackRate.value = o.rate||1;
+    var bp=ctx.createBiquadFilter(); bp.type=o.type||'bandpass';
+    bp.frequency.value=o.freq||800; bp.Q.value=o.q||1.2;
+    var g=ctx.createGain();
+    g.gain.setValueAtTime(0.0001,t0);
+    g.gain.exponentialRampToValueAtTime(o.gain==null?0.18:o.gain, t0+0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+    s.connect(bp); bp.connect(g); g.connect(o.dest||A.sfx);
+    s.start(t0); s.stop(t0+dur+0.03);
+  }
+  function hoof(when, gain){
+    noiseHit(0.085, {when:when, gain:gain||0.10, freq:520, q:1.5, type:'bandpass'});
+    tone(96, 0.09, {when:when, gain:(gain||0.10)*0.9, type:'sine', to:52});
+  }
+  function beep(freq, when, dur, gain){
+    tone(freq, dur||0.16, {when:when, gain:gain==null?0.22:gain, type:'triangle'});
+  }
+  /* BGM — 경마장 갤럽 그루브 */
+  var BASS = [0,0,0,0, 3,0,0,0, 5,0,0,0, 3,0,7,0];
+  var BRASS = [0,0,0,3, 0,0,4,0, 0,0,0,3, 5,0,2,0];
+  var F = {0:110.00, 2:130.81, 3:146.83, 5:164.81, 7:196.00, 4:174.61};
+  function bgmStep(i, t){
+    var b = BASS[i];
+    if (b) tone(F[b]||110, 0.20, {when:t, gain:0.16, type:'triangle', dest:A.music, filter:'lowpass', ffreq:520});
+    if (i===0 || i===8) tone(F[0]/2, 0.34, {when:t, gain:0.13, type:'sine', dest:A.music});
+    var br = BRASS[i];
+    if (br) {
+      for (var k=0;k<2;k++){
+        tone((F[br]||130)*2*(k?1.25:1), 0.13, {when:t, gain:0.055, type:'sawtooth', dest:A.music, filter:'lowpass', ffreq:1800});
+      }
+    }
+    if (i%2===0) noiseHit(0.035, {when:t, gain:i%4===0?0.075:0.045, freq:6200, q:1, type:'highpass', dest:A.music});
+    if (i===4 || i===12) noiseHit(0.10, {when:t, gain:0.10, freq:1800, q:1.1, type:'bandpass', dest:A.music});
+  }
+  function bgmStart(){
+    var ctx = audioInit(); if (!ctx || A.bgmOn) return;
+    A.bgmOn = true; A.step = 0; A.nextT = ctx.currentTime + 0.06;
+    bgmGain(0.30, .1);
+    A.bgmTimer = setInterval(function(){
+      if (!A.ctx || !A.bgmOn) return;
+      var spb = 60/128/4;
+      while (A.nextT < A.ctx.currentTime + 0.20){
+        bgmStep(A.step, A.nextT);
+        A.nextT += spb;
+        A.step = (A.step + 1) % 16;
+      }
+    }, 55);
+    crowdStart();
+  }
+  function bgmStop(fade){
+    if (!A.bgmOn) return;
+    A.bgmOn = false;
+    if (A.music && A.ctx) bgmGain(0.0001, fade==null?0.35:fade);
+    clearInterval(A.bgmTimer); A.bgmTimer=null;
+    crowdStop();
+  }
+  function crowdStart(){
+    if (!A.ctx || A.crowdSrc) return;
+    var ctx=A.ctx;
+    var s=ctx.createBufferSource(); s.buffer=A.noiseBuf; s.loop=true;
+    var bp=ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=760; bp.Q.value=0.6;
+    var g=ctx.createGain(); g.gain.value=0.05;
+    s.connect(bp); bp.connect(g); g.connect(A.music);
+    var lfo=ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value=0.13;
+    var lg=ctx.createGain(); lg.gain.value=0.02;
+    lfo.connect(lg); lg.connect(g.gain);
+    s.start(); lfo.start();
+    A.crowdSrc=s; A.crowdGain=g; A.crowdLfo=lfo;
+  }
+  function crowdStop(){
+    try{ if (A.crowdSrc){ var s=A.crowdSrc; A.crowdSrc=null; s.stop(A.ctx.currentTime+0.6); } }catch(e){}
+    try{ if (A.crowdLfo){ var l=A.crowdLfo; A.crowdLfo=null; l.stop(A.ctx.currentTime+0.6); } }catch(e){}
+    A.crowdGain=null;
+  }
+  function crowdSwell(to, dur){
+    if (!A.crowdGain || !A.ctx) return;
+    var t=A.ctx.currentTime;
+    A.crowdGain.gain.cancelScheduledValues(t);
+    A.crowdGain.gain.setValueAtTime(A.crowdGain.gain.value, t);
+    A.crowdGain.gain.linearRampToValueAtTime(to, t+0.25);
+    A.crowdGain.gain.linearRampToValueAtTime(0.05, t+0.25+(dur||2.2));
+  }
+  function fanfare(){
+    var ctx=audioInit(); if (!ctx) return;
+    var t=ctx.currentTime+0.03;
+    var notes=[523.25, 659.25, 783.99, 1046.50];
+    notes.forEach(function(f,i){
+      tone(f, 0.28, {when:t+i*0.13, gain:0.20, type:'triangle'});
+      tone(f*2, 0.24, {when:t+i*0.13, gain:0.06, type:'sine'});
+    });
+    [523.25,659.25,783.99,1046.5].forEach(function(f){
+      tone(f, 0.85, {when:t+0.56, gain:0.11, type:'sawtooth', filter:'lowpass', ffreq:2600});
+    });
+    noiseHit(0.5, {when:t+0.55, gain:0.16, freq:2600, q:0.7, type:'highpass'});
+    crowdSwell(0.20, 2.4);
+  }
+
+  /* ══════════ FIREBASE ══════════ */
+  function initFB(){
+    try{
+      if (typeof firebase === 'undefined' || !firebase.initializeApp) return false;
+      firebase.initializeApp(FB_CONFIG);
+      db = firebase.database();
+      return true;
+    }catch(e){ console.warn('[fb]', e); return false; }
+  }
+  function watch(){
+    if (!db) return;
+    db.ref('.info/connected').on('value', function(s){
+      $('conn').classList.toggle('on', !s.val());
+    });
+    metaRef = db.ref(ROOT + '/meta');
+    metaRef.on('value', function(s){
+      var v = s.val() || {};
+      var prev = meta;
+      meta = {
+        round: Number(v.round)||1,
+        state: v.state||'betting',
+        raceId: Number(v.raceId)||0,
+        winner: v.winner||null,
+        startedAt: v.startedAt||null
+      };
+      if (prev.state !== meta.state || prev.round !== meta.round) onMetaChange(prev, meta);
+      paint();
+    });
+    db.ref(ROOT + '/players').on('value', function(s){
+      var v = s.val() || {};
+      players = Object.keys(v).map(function(id){
+        var p = v[id]||{};
+        return { id:id, name:p.name||'이름없음', coins:Number(p.coins)||0,
+                 bet:p.bet||null, last:p.last||null, joinedAt:Number(p.joinedAt)||0 };
+      });
+      players.sort(function(a,b){ return (b.coins-a.coins) || (a.joinedAt-b.joinedAt); });
+      paint();
+    });
+    db.ref(ROOT + '/race').on('value', function(s){
+      var v = s.val()||{};
+      var cur = v[String(meta.raceId)];
+      if (cur && !raceResult && meta.state==='racing'){
+        raceResult = { order: (cur.order||[]).map(Number), winner: Number(cur.winner) };
+      }
+    });
+  }
+  function onMetaChange(prev, now){
+    if (now.state === 'racing' && prev.state !== 'racing'){
+      // 다른 창(호스트 새로고침 등)에서 시작된 경우 → 애니메이션 재개
+      if (!animating) { loadRaceAndAnimate(); }
+    }
+    if (now.state === 'betting' && prev.state !== 'betting'){
+      raceResult = null; armed = false; animating = false; cancelAnimationFrame(rafId);
+      $('cd').classList.remove('on');
+      bgmStop();
+      resetLanes();
+    }
+    if (now.state === 'revealed' && prev.state !== 'revealed'){
+      armed = false; animating = false; cancelAnimationFrame(rafId);
+      paint();
+    }
+  }
+
+  /* ══════════ PAINT ══════════ */
+  function paint(){
+    var round = meta.round||1;
+    var bettors = players.filter(function(p){ return p.bet && Number(p.bet.round)===round; });
+    var pool = bettors.reduce(function(a,p){ return a + (Number(p.bet.amount)||0); }, 0);
+
+    $('hRound').textContent = round;
+    $('hPeople').textContent = players.length;
+    $('hBettors').textContent = bettors.length;
+    $('hPool').textContent = shortMan(pool);    $('betRoundTag').textContent = 'ROUND ' + round;
+
+    var sp=$('statePill'), st=$('stateText');
+    sp.classList.remove('race','res');
+    if (meta.state === 'racing'){ sp.classList.add('race'); st.textContent='경주 진행 중'; }
+    else if (meta.state === 'revealing'){ sp.classList.add('race'); st.textContent='결과 집계 중'; }
+    else if (meta.state === 'revealed'){ sp.classList.add('res'); st.textContent='결과 공개됨'; }
+    else st.textContent = '배팅 받는 중';
+
+    // panes
+    var showPane = (meta.state === 'racing' || meta.state === 'revealing') ? 'track'
+                 : (meta.state === 'revealed' ? 'podium' : 'board');
+    ['board','track','podium'].forEach(function(id){ $(id).classList.toggle('on', id===showPane); });
+
+    paintBoard(bettors, pool);
+    paintSide();
+    paintRank();
+    if (meta.state === 'revealed') paintPodium(bettors, pool);
+    paintButtons();
+  }
+
+  function paintBoard(bettors, pool){
+    var round = meta.round||1;
+    var counts = [0,0,0,0,0], sums = [0,0,0,0,0];
+    bettors.forEach(function(p){
+      var h = Number(p.bet.horse)||0;
+      if (h>=1 && h<=5){ counts[h-1]++; sums[h-1] += Number(p.bet.amount)||0; }
+    });
+    $('bPeople').innerHTML = players.length + '<em>명</em>';
+    $('bBettors').innerHTML = bettors.length + '<em>명</em>';
+    $('bPool').textContent = shortMan(pool);
+
+    var maxC = Math.max.apply(null, counts) || 1;
+    var rows = $('brows');
+    if (rows.children.length !== 5){
+      var html = '';
+      HORSES.forEach(function(h, i){
+        html += '<div class="brow" data-i="'+i+'" style="--c:'+h.color+'">'
+          +   '<span class="bnum">'+h.id+'</span>'
+          +   '<span class="bname">'+h.name+'</span>'
+          +   '<span class="bodds">'+h.odds+'배</span>'
+          +   '<div class="bbar"><i></i><span></span></div>'
+          +   '<span class="bpeople">0<em>명</em></span>'
+          +   '<span class="bmoney">—</span>'
+          + '</div>';
+      });
+      rows.innerHTML = html;
+    }
+    HORSES.forEach(function(h, i){
+      var row = rows.children[i]; if (!row) return;
+      var pct = counts[i] ? Math.max(6, Math.round(counts[i]/maxC*100)) : 0;
+      var lead = counts[i] > 0 && counts[i] === maxC;
+      row.classList.toggle('lead', lead);
+      var bar = row.querySelector('.bbar i');
+      if (bar) bar.style.width = pct + '%';
+      var lab = row.querySelector('.bbar span');
+      if (lab) lab.textContent = counts[i] ? Math.round(counts[i]/Math.max(1,bettors.length)*100) + '%' : '';
+      var pep = row.querySelector('.bpeople');
+      if (pep) pep.innerHTML = counts[i] + '<em>명</em>';
+      var mon = row.querySelector('.bmoney');
+      if (mon) mon.textContent = sums[i] ? shortMan(sums[i]) + ' 원' : '—';
+    });
+
+    var waiting = players.length - bettors.length;
+    $('bFootLeft').innerHTML = players.length === 0
+      ? '<b>아직 참가자가 없습니다.</b> [📱 QR 입장]으로 청중을 받아 주세요.'
+      : (bettors.length === 0
+          ? '<b>아직 배팅한 사람이 없습니다.</b> 청중 폰에서 말을 골라 주세요.'
+          : '배팅 완료 <b>'+bettors.length+'명</b> · 아직 안 건 사람 <b class="wait">'+waiting+'명</b>');
+  }
+
+  function paintSide(){
+    var round = meta.round||1;
+    var box = $('plist');
+    $('sideCount').textContent = players.length;
+    if (!players.length){
+      box.innerHTML = '<div class="rankempty">참가자가 없습니다.<br>[📱 QR 입장]으로 청중을 받아 주세요.</div>';
+      return;
+    }
+    var html = '';
+    players.forEach(function(p, i){
+      var b = (p.bet && Number(p.bet.round)===round) ? p.bet : null;
+      var chip = b ? (b.horse + '번 ' + shortMan(b.amount)) : '대기';
+      html += '<div class="pitem'+(i<3?' top':'')+'">'
+        + '<span class="prank">'+(i+1)+'</span>'
+        + '<span class="pnm2">'+esc(p.name)+'</span>'
+        + '<span class="pbet'+(b?' done':'')+'">'+chip+'</span>'
+        + '<span class="pcoin">'+shortMan(p.coins)+'</span>'
+        + '</div>';
+    });
+    box.innerHTML = html;
+  }
+  function paintRank(){
+    var arr = players.slice(0,5);
+    var box = $('rankList');
+    var medals = ['🥇','🥈','🥉','4','5'];
+    if (!arr.length){ box.innerHTML='<div class="rankempty">아직 참가자가 없습니다.</div>'; return; }    box.innerHTML = arr.map(function(p,i){
+      return '<div class="rankrow'+(i===0?' g1':'')+'">'
+        + '<span class="m">'+medals[i]+'</span>'
+        + '<span class="n">'+esc(p.name)+'</span>'
+        + '<span class="v">'+shortMan(p.coins)+'</span>'
+        + '</div>';
+    }).join('');
+  }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
+
+  function paintPodium(bettors, pool){
+    var round = meta.round||1;
+    var winner = meta.winner ? Number(meta.winner) : (raceResult ? raceResult.winner : null);
+    $('podRound').textContent = round;
+    if (!winner){ $('podWinner').textContent = '결과 없음'; return; }
+    var h = horseOf(winner);
+    $('podWinner').innerHTML = h.id + '번 ' + h.name + '<em>' + h.odds + '배</em>';
+    $('podCup').textContent = '🏆';
+
+    var wins = [], best = null;
+    players.forEach(function(p){
+      var last = p.last;
+      if (!last || Number(last.round)!==round || last.none || !last.win) return;
+      wins.push(p);
+      if (!best || Number(last.payout) > Number(best.last.payout)) best = p;
+    });
+    $('podWinners').textContent = wins.length + '명';
+    $('podWinRate').textContent = '참가 ' + players.length + '명 중 · 배팅 ' + bettors.length + '명';
+    if (best){
+      $('podBest').textContent = best.name;
+      $('podBestSub').textContent = shortMan(best.last.amount) + ' → ' + shortMan(best.last.payout + best.last.amount);
+    } else {
+      $('podBest').textContent = '없음';
+      $('podBestSub').textContent = '이번 라운드 당첨자 0명';
+    }
+    $('podPool').textContent = man(pool);
+    $('podPoolSub').textContent = bettors.length + '명이 건 금액';
+
+    var top = players.slice(0,5);
+    var medals = ['🥇','🥈','🥉','4','5'];
+    $('podRank').innerHTML = top.length
+      ? top.map(function(p,i){
+          return '<div class="prow'+(i===0?' top':'')+'" style="margin-bottom:5px">'
+            + '<span class="medal">'+medals[i]+'</span>'
+            + '<span class="pnm">'+esc(p.name)+(p.last && p.last.revived ? '<i>부활</i>' : '')+'</span>'
+            + '<span class="pmoney">'+shortMan(p.coins)+' 원</span>'
+            + '</div>';
+        }).join('')
+      : '<div class="pod-empty">참가자가 없습니다</div>';
+
+    // 이번 라운드 당첨자 목록 (배당 큰 순)
+    var winners = players.filter(function(p){
+      return p.last && Number(p.last.round)===round && !p.last.none && p.last.win;
+    }).sort(function(a,b){ return Number(b.last.payout) - Number(a.last.payout); });
+    $('podWinCnt').textContent = winners.length ? '(' + winners.length + '명)' : '';
+    $('podWinList').innerHTML = winners.length
+      ? winners.slice(0,16).map(function(p){
+          return '<div class="wrow"><span class="wh">'+p.last.horse+'번</span>'
+            + '<span class="wn">'+esc(p.name)+'</span>'
+            + '<span class="wv">+'+shortMan(p.last.payout)+'</span></div>';
+        }).join('')
+      : '<div class="pod-empty" style="grid-column:1/-1">이번 라운드 당첨자가 없습니다 — 다음 라운드에 다시!</div>';  }
+
+  function confetti(){
+    var box = $('confetti'); if (!box) return;
+    var colors = ['#F7CB5C','#3B82F6','#B074F5','#34D399','#FB7185','#F8FAFC'];
+    for (var i=0;i<40;i++){
+      var s=document.createElement('i');
+      s.style.left = (Math.random()*100) + '%';
+      s.style.background = colors[Math.floor(Math.random()*colors.length)];
+      s.style.animationDuration = (1.6 + Math.random()*1.6) + 's';
+      s.style.animationDelay = (Math.random()*0.5) + 's';
+      s.style.width = (6 + Math.random()*6) + 'px';
+      s.style.height = (10 + Math.random()*10) + 'px';
+      box.appendChild(s);
+    }
+    setTimeout(function(){ box.innerHTML=''; }, 4200);
+  }
+
+  function paintButtons(){
+    var st = meta.state;
+    var round = meta.round||1;
+    var bettors = players.filter(function(p){ return p.bet && Number(p.bet.round)===round; });
+    $('btnStart').disabled = !(st==='betting' && players.length>0);
+    $('btnReveal').disabled = !(st==='racing');
+    $('btnReveal').classList.toggle('armed', st==='racing' && armed);
+    $('btnNext').disabled = !(st==='revealed');
+    $('btnDraw').disabled = !(st==='revealed');
+    $('btnClear').disabled = players.length===0 && st==='betting' && round===1;
+    $('awaitbar').style.display = (st==='racing' && armed) ? 'flex' : 'none';
+    $('awaitbar').classList.toggle('armed', armed);
+  }
+
+  /* ══════════ LANES ══════════ */
+  function buildLanes(){
+    var wrap = $('lanes');
+    var html = '';
+    HORSES.forEach(function(h,i){
+      html += '<div class="lane" data-i="'+i+'" style="--c:'+h.color+'">'
+        +  '<div class="lsinfo">'
+        +    '<span class="lnum">'+h.id+'</span>'
+        +    '<span class="lname">'+h.name+'</span>'
+        +    '<span class="lmeta" id="lm'+i+'">'+h.odds+'배</span>'
+        +  '</div>'
+        +  '<div class="ltrack"><div class="runner" id="rn'+i+'">'
+        +    '<span class="dust"></span><span class="rn">'+h.id+'</span><span class="re">🐎</span>'
+        +  '</div></div>'
+        + '</div>';
+    });
+    wrap.innerHTML = html;
+  }
+  function resetLanes(){
+    for (var i=0;i<5;i++){
+      var r=$('rn'+i); if(!r) continue;
+      r.style.left='2%'; r.classList.remove('run');
+      var m=$('lm'+i); if(m) m.textContent = HORSES[i].odds+'배';
+    }
+    $('tcomment').textContent = '출발 준비 — [🏁 경주 시작]을 눌러 주세요';
+    $('awaitbar').style.display='none';
+    $('awaitbar').classList.remove('armed');
+  }
+  function setLaneMeta(){
+    var round = meta.round||1;
+    var counts=[0,0,0,0,0];
+    players.forEach(function(p){ if (p.bet && Number(p.bet.round)===round){ var h=Number(p.bet.horse); if(h>=1&&h<=5) counts[h-1]++; } });
+    HORSES.forEach(function(h,i){
+      var m=$('lm'+i); if(m) m.textContent = h.odds+'배 · '+counts[i]+'명';
+    });
+  }
+
+  function pickWinnerIdx(){
+    var w = HORSES.map(function(h){ return 1/h.odds; });
+    var sum = w.reduce(function(a,b){return a+b;},0);
+    var r = Math.random()*sum;
+    for (var i=0;i<w.length;i++){ r -= w[i]; if (r<=0) return i; }
+    return 0;
+  }
+
+  function startRace(){
+    if (animating || raceStarting) return;
+    if (meta.state === 'racing') return;
+    if (!db) { toast('연결 중입니다'); return; }
+    if (!players.length){ toast('참가자가 없습니다 — [📱 QR 입장]으로 먼저 받아 주세요'); return; }
+    var round = meta.round||1;
+    var bettors = players.filter(function(p){ return p.bet && Number(p.bet.round)===round; });
+    if (!bettors.length){ toast('아직 배팅한 사람이 없습니다. 청중이 말을 고를 때까지 기다려 주세요'); return; }
+
+    var wi = pickWinnerIdx();
+    var rest = [0,1,2,3,4].filter(function(i){ return i!==wi; });
+    rest.sort(function(){ return Math.random()-0.5; });
+    var order = [wi].concat(rest);
+    var raceId = (Number(meta.raceId)||0)+1;
+
+    raceStarting = true;
+    raceResult = { order: order.map(function(i){ return i+1; }), winner: wi+1 };
+    armed = false;
+    bgmStart();
+
+    var upd = {};
+    upd['meta/state'] = 'racing';
+    upd['meta/raceId'] = raceId;
+    upd['meta/winner'] = null;
+    upd['meta/startedAt'] = Date.now();
+    upd['race/' + raceId] = { order: raceResult.order, winner: raceResult.winner, at: Date.now() };
+    db.ref(ROOT).update(upd).catch(function(e){ console.warn(e); })
+      .then(function(){ raceStarting = false; }, function(){ raceStarting = false; });
+
+    runRace(order);
+  }
+
+  async function loadRaceAndAnimate(){
+    // 새로고침 후 경주 중으로 복구된 경우
+    try{
+      var snap = await db.ref(ROOT + '/race/' + meta.raceId).get();
+      var v = snap.val();
+      if (v && v.order){
+        raceResult = { order: v.order.map(Number), winner: Number(v.winner) };
+        var order = raceResult.order.map(function(n){ return n-1; });
+        runRace(order);
+        return;
+      }
+    }catch(e){ console.warn(e); }
+    $('tcomment').textContent = '경주 진행 중 — [🏆 결과보기]로 결과를 공개하세요';
+    armed = true; paint();
+  }
+
+  function runRace(order){
+    animating = true; armed = false;
+    ['board','track','podium'].forEach(function(id){ $(id).classList.toggle('on', id==='track'); });
+    setLaneMeta();
+    for (var i=0;i<5;i++){ var r=$('rn'+i); if(r){ r.style.left='2%'; r.classList.remove('run'); } }
+    paintButtons();
+
+    var ctx = audioInit();
+    var startAt = 0;
+
+    // 3-2-1 카운트다운
+    var cd = $('cd'), cdNum = $('cdNum');
+    cd.classList.add('on');
+    var t0 = performance.now();
+    var cdTimer = setInterval(function(){
+      var elapsed = performance.now() - t0;
+      var n = 3 - Math.floor(elapsed/700);
+      if (n > 0){
+        if (cdNum.textContent !== String(n)){
+          cdNum.textContent = String(n);
+          cdNum.style.animation='none'; void cdNum.offsetWidth; cdNum.style.animation='';
+          beep(520, null, 0.14, 0.24);
+        }
+      } else if (n === 0){
+        if (cdNum.textContent !== '출발'){
+          cdNum.textContent = '출발!';
+          beep(880, null, 0.30, 0.26);
+          cdNum.style.animation='none'; void cdNum.offsetWidth; cdNum.style.animation='';
+        }
+      }
+    }, 60);
+
+    setTimeout(function(){
+      clearInterval(cdTimer);
+      cd.classList.remove('on');
+      startAt = performance.now();
+      for (var i=0;i<5;i++){ var r=$('rn'+i); if(r) r.classList.add('run'); }
+      raceLoop(order, startAt);
+    }, 700*3 + 650);
+  }
+
+  function raceLoop(order, startAt){
+    // order: [winnerIdx, 2nd, 3rd, 4th, 5th] (0-based)
+    var finishFactor = [1.0, 1.045, 1.095, 1.15, 1.21];
+    var factor = new Array(5);
+    var phase = new Array(5);
+    var k = new Array(5);
+    for (var pos=0; pos<5; pos++){
+      var idx = order[pos];
+      factor[idx] = finishFactor[pos];
+      phase[idx] = Math.random()*Math.PI*2;
+      k[idx] = 1.6 + Math.random()*1.6;
+    }
+    var lastComment = '', nextHoof = 0;
+    var comments = [
+      {t:0.00, s:'출발! 다섯 마리가 힘차게 튀어나갑니다!'},
+      {t:0.22, s:'선두 다툼이 치열합니다! 관중석이 뜨겁습니다!'},
+      {t:0.45, s:'중반 승부! 아직 순위를 알 수 없습니다!'},
+      {t:0.68, s:'막판입니다! 뒤에서 무서운 말이 치고 올라옵니다!'},
+      {t:0.86, s:'결승선이 보입니다! 손에 땀을 쥐세요!'}
+    ];
+
+    function frame(){
+      if (!animating) return;
+      var el2 = performance.now() - startAt;
+      var tn = Math.min(1, el2 / RACE_MS);
+
+      var leaderPos = 0, leaderP = -1;
+      for (var i=0;i<5;i++){
+        var x = Math.min(1, tn / factor[i]);
+        var ease = Math.pow(x, 1.12);
+        var wobble = Math.sin(Math.PI*tn) * Math.sin(phase[i] + k[i]*Math.PI*2*tn) * 0.035;
+        var p = Math.max(0, Math.min(1, ease + wobble));
+        if (tn >= 1) p = 1;
+        var r = $('rn'+i);
+        if (r) r.style.left = (2 + p*91) + '%';
+        if (p > leaderP){ leaderP = p; leaderPos = i; }
+      }
+
+      var c = '';
+      for (var j=0;j<comments.length;j++){ if (tn >= comments[j].t) c = comments[j].s; }
+      if (tn > 0.5 && tn < 0.68){
+        c = '지금 선두는 ' + HORSES[leaderPos].id + '번 ' + HORSES[leaderPos].name + '!';
+      }
+      if (c && c !== lastComment){
+        lastComment = c;
+        var tc = $('tcomment'); tc.textContent = c;
+        tc.classList.remove('pop'); void tc.offsetWidth; tc.classList.add('pop');
+      }
+
+      // 말발굽 소리 (점점 빨라짐)
+      if (el2 >= nextHoof){
+        var interval = 260 - 110*tn;
+        hoof(null, 0.05 + 0.06*Math.sin(Math.PI*tn));
+        nextHoof = el2 + interval;
+      }
+
+      if (tn >= 1){
+        finishRace();
+        return;
+      }
+      rafId = requestAnimationFrame(frame);
+    }
+    rafId = requestAnimationFrame(frame);
+  }
+
+  function finishRace(){
+    animating = false;
+    cancelAnimationFrame(rafId);
+    for (var i=0;i<5;i++){ var r=$('rn'+i); if(r) r.classList.remove('run'); }
+    $('tcomment').textContent = '📸 결승선 통과! 사진 판독 중…';
+    noiseHit(1.0, {gain:0.20, freq:1400, q:0.6, type:'bandpass'});
+    crowdSwell(0.22, 2.6);
+    setTimeout(function(){
+      armed = true;
+      $('tcomment').textContent = '🏁 결승선 통과! [🏆 결과보기]를 누르면 결과가 공개됩니다';
+      $('awaitbar').style.display = 'flex';
+      $('awaitbar').classList.add('armed');
+      paintButtons();
+      beep(660, null, 0.12, 0.16); setTimeout(function(){ beep(880, null, 0.18, 0.16); }, 160);
+    }, 1400);
+  }
+
+  /* ══════════ REVEAL / SETTLE ══════════ */
+  async function reveal(){
+    if (meta.state !== 'racing' && meta.state !== 'revealing'){ toast('먼저 [🏁 경주 시작]을 눌러 주세요'); return; }
+    if (revealing) return;
+    revealing = true;
+    var wrote = false;
+    try{
+      var round = Number(meta.round)||1;
+      var res = raceResult;
+      if (!res && db){
+        var snap = await db.ref(ROOT + '/race/' + meta.raceId).get();
+        var v = snap.val();
+        if (v && v.order) res = { order: v.order.map(Number), winner: Number(v.winner) };
+      }
+      if (!res){ toast('경주 결과를 찾을 수 없습니다. [🏁 경주 시작]부터 다시 해 주세요'); revealing=false; return; }
+
+      var tr = await metaRef.transaction(function(m){
+        if (!m) return;
+        if (m.state !== 'racing' && m.state !== 'revealing') return; // abort
+        m.state = 'revealing';
+        return m;
+      });
+      if (!tr.committed){
+        toast('이미 공개되었습니다');
+        revealing = false;
+        return;
+      }
+
+      var winner = Number(res.order[0]);
+      var now = Date.now();
+      var upd = {};
+      var winCount = 0, pool = 0;
+      players.forEach(function(p){
+        // 이미 정산된 참가자는 건너뛴다 (재시도 안전장치)
+        if (p.last && Number(p.last.round) === round) return;
+        var b = (p.bet && Number(p.bet.round)===round) ? p.bet : null;
+        var oldCoins = Number(p.coins)||0;
+        var win = false, payout = 0, amount = 0;
+        if (b){
+          amount = Number(b.amount)||0;
+          pool += amount;
+          win = Number(b.horse) === winner;
+          if (win) payout = amount * oddsOf(b.horse);
+        }
+        var coins = oldCoins - amount + payout;
+        var revived = false;
+        if (coins < 100000){ coins = 1000000; revived = true; }
+        if (win) winCount++;
+        upd['players/' + p.id + '/coins'] = coins;
+        upd['players/' + p.id + '/last'] = b
+          ? { round:round, horse:Number(b.horse), amount:amount, win:win, payout:payout, coins:coins, revived:revived, none:false }
+          : { round:round, none:true, coins:coins, revived:revived };
+        if (revived) upd['players/' + p.id + '/revivedAt'] = now;
+      });
+      upd['meta/state'] = 'revealed';
+      upd['meta/winner'] = winner;
+      upd['meta/order'] = res.order;
+      upd['meta/revealedAt'] = now;
+
+      await db.ref(ROOT).update(upd);
+      wrote = true;
+      armed = false;
+      bgmStop(0.6);
+      fanfare();
+      confetti();
+      toast('🏆 ' + winner + '번 ' + horseOf(winner).name + ' 우승!');
+    }catch(e){
+      console.warn('[reveal]', e);
+      toast('결과 공개에 실패했어요. 다시 눌러 주세요.');
+      if (!wrote){ try{ await metaRef.update({state:'racing'}); }catch(e2){} }
+    }finally{
+      revealing = false;
+      paint();
+    }
+  }
+
+  function nextRound(){
+    if (meta.state !== 'revealed'){ toast('먼저 [🏆 결과보기]로 결과를 공개해 주세요'); return; }
+    var round = (Number(meta.round)||1) + 1;
+    bgmStop();
+    raceResult = null; armed = false; animating = false;
+    db.ref(ROOT + '/meta').update({
+      state:'betting', round: round, winner: null, order: null, revealedAt: null, startedAt: null
+    }).then(function(){
+      resetLanes();
+      toast('ROUND ' + round + ' — 청중 폰에 새 배팅 화면이 떴습니다');
+    }).catch(function(){ toast('라운드 전환에 실패했어요'); });
+  }
+
+  function clearPlayers(){
+    if (!confirm('참가자 명단과 자산을 모두 지우고 ROUND 1부터 다시 시작합니다.\n계속할까요?')) return;
+    bgmStop(); animating=false; cancelAnimationFrame(rafId); armed=false; raceResult=null;
+    var p = db.ref(ROOT + '/players').remove();
+    var m = db.ref(ROOT + '/meta').set({ round:1, state:'betting', raceId:0, winner:null, order:null, startedAt:null, revealedAt:null });
+    Promise.all([p,m]).then(function(){
+      resetLanes(); toast('참가자 명단을 비웠습니다 — 새로 입장시켜 주세요');
+    }).catch(function(){ toast('비우기에 실패했어요'); });
+  }
+
+  /* ══════════ DRAW ══════════ */
+  var drawTimer = null, drawPool = [];
+  function openDraw(){
+    if (meta.state !== 'revealed'){ toast('결과를 먼저 공개해 주세요'); return; }
+    var round = meta.round||1;
+    drawPool = players.filter(function(p){ return p.last && Number(p.last.round)===round && !p.last.none && p.last.win; });
+    var fallback = false;
+    if (!drawPool.length){ drawPool = players.slice(); fallback = true; }
+    if (!drawPool.length){ toast('추첨할 참가자가 없습니다'); return; }
+    $('drawModal').classList.add('on');
+    $('drawName').textContent = '—';
+    $('drawNote').textContent = '준비되면 [추첨 시작]을 눌러 주세요';
+    $('drawSub').textContent = fallback
+      ? '이번 라운드 당첨자가 없어 전체 참가자 중에서 뽑습니다 (' + drawPool.length + '명)'
+      : '이번 라운드에 맞힌 분들 중에서 뽑습니다 (' + drawPool.length + '명)';
+    $('btnDrawGo').disabled = false;
+  }
+  function drawGo(){
+    if (!drawPool.length) return;
+    if (drawTimer){ clearInterval(drawTimer); drawTimer=null; }
+    var ctx = audioInit();
+    var started = performance.now(), DUR = 2600;
+    $('btnDrawGo').disabled = true;
+    $('drawNote').textContent = '두구두구두구…';
+    var tick = 0;
+    drawTimer = setInterval(function(){
+      var elapsed = performance.now() - started;
+      var p = drawPool[Math.floor(Math.random()*drawPool.length)];
+      $('drawName').textContent = p.name;
+      if (tick % 3 === 0) beep(1200 + Math.random()*400, null, 0.05, 0.10);
+      tick++;
+      if (elapsed > DUR){
+        clearInterval(drawTimer); drawTimer=null;
+        var win = drawPool[Math.floor(Math.random()*drawPool.length)];
+        drawnName = win.name;
+        $('drawName').textContent = win.name;
+        $('drawNote').innerHTML = '🎉 <b>' + esc(win.name) + '</b> 님 당첨! (누적 ' + shortMan(win.coins) + ' 원)';
+        $('btnDrawGo').disabled = false;
+        $('btnDrawGo').textContent = '🎲 다시 추첨';
+        fanfare();
+      }
+    }, 70);
+  }
+  function closeDraw(){
+    if (drawTimer){ clearInterval(drawTimer); drawTimer=null; }
+    $('drawModal').classList.remove('on');
+    $('btnDrawGo').textContent = '🎲 추첨 시작';
+  }
+
+  /* ══════════ EVENTS ══════════ */
+  function boot(){
+    $('qrUrl').textContent = VIEW_URL;
+    $('qrCode').textContent = ROOM;
+    buildLanes();
+    try{ A.muted = localStorage.getItem('hb_host_muted') === '1'; }catch(e){}
+    paintSound();
+
+    $('btnStart').addEventListener('click', function(){ audioInit(); startRace(); });
+    $('btnReveal').addEventListener('click', function(){ audioInit(); reveal(); });
+    $('btnNext').addEventListener('click', nextRound);
+    $('btnDraw').addEventListener('click', openDraw);
+    $('btnClear').addEventListener('click', clearPlayers);
+    $('btnSound').addEventListener('click', function(){ audioInit(); setMuted(!A.muted); });
+    $('btnQR').addEventListener('click', function(){ $('qrModal').classList.add('on'); });
+    $('btnQRClose').addEventListener('click', function(){ $('qrModal').classList.remove('on'); });
+    $('btnDrawGo').addEventListener('click', drawGo);
+    $('btnDrawClose').addEventListener('click', closeDraw);
+    $('qrModal').addEventListener('click', function(e){ if (e.target === $('qrModal')) $('qrModal').classList.remove('on'); });
+    $('drawModal').addEventListener('click', function(e){ if (e.target === $('drawModal')) closeDraw(); });
+
+    document.addEventListener('keydown', function(e){
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      var tag = (e.target && e.target.tagName || '').toLowerCase();
+      if (tag === 'input' || tag === 'textarea') return;
+      var k = e.key;
+      if (k === ' ' || k === 'Spacebar'){ e.preventDefault(); if (!$('btnStart').disabled) { audioInit(); startRace(); } return; }
+      if (k === 'r' || k === 'R'){ if (!$('btnReveal').disabled) reveal(); return; }
+      if (k === 'n' || k === 'N'){ if (!$('btnNext').disabled) nextRound(); return; }
+      if (k === 'm' || k === 'M' || k === 'b' || k === 'B'){ audioInit(); setMuted(!A.muted); return; }
+      if (k === 'q' || k === 'Q'){ $('qrModal').classList.add('on'); return; }
+      if (k === 'd' || k === 'D'){ if (!$('btnDraw').disabled) openDraw(); return; }
+      if (k === 'Escape'){ $('qrModal').classList.remove('on'); closeDraw(); return; }
+    });
+
+    if (!initFB()){ $('conn').classList.add('on'); setTimeout(function(){ if(!db && initFB()) watch(); }, 1200); }
+    watch();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
+</body>
+</html>
