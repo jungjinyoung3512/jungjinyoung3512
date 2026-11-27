@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0B0A12">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script>
+  /* ──────────────────────────────────────────────────────────
+     강연 종료 잠금 스위치 (LECTURE_CLOSED)
+     · 지금은 열림(false) — 강연에서 바로 사용합니다.
+     · 강연이 끝나면 work/lecture-lock/toggle.py 로 true 로 바꿉니다.
+     ────────────────────────────────────────────────────────── */
+  const LECTURE_CLOSED = false;
+  if (!LECTURE_CLOSED) document.documentElement.classList.add("lecture-open");
+</script>
+<title>보이스피싱 역관광 챌린지 | 강연 크리에이터 · 정진영</title>
+<meta name="description" content="사기꾼의 말에 통쾌하게 역관광을 먹이는 시니어 사기예방 체험 게임 — 강연 크리에이터 · 정진영">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🕵️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --bg:#0B0A12; --bg2:#12111C; --panel:#181725; --panel2:#1F1E2F;
+    --line:rgba(255,214,74,.16); --line2:rgba(255,214,74,.34);
+    --gold:#FFD64A; --gold2:#FFE9A3; --amber:#FFB020;
+    --kakao:#FEE500; --ink:#111111;
+    --ok:#34F5A8; --bad:#FF5C6E; --sky:#6FC3FF;
+    --text:#F7F4EA; --muted:#A9A4B8; --dim:#6F6A80;
+    --sans:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+    --serif:'Noto Serif KR',Georgia,serif;
+  }
+  html,body{margin:0;padding:0;min-height:100%}
+  body{
+    background:
+      radial-gradient(760px 420px at 50% -12%, rgba(255,214,74,.14), transparent 66%),
+      radial-gradient(620px 420px at 92% 108%, rgba(111,195,255,.08), transparent 68%),
+      var(--bg);
+    color:var(--text);font-family:var(--sans);letter-spacing:-.01em;
+    -webkit-font-smoothing:antialiased;word-break:keep-all;
+  }
+  button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer;touch-action:manipulation}
+  .wrap{max-width:520px;margin:0 auto;padding:0 16px 34px;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+
+  /* ── 상단 ── */
+  .top{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 2px 10px}
+  .brand{display:flex;align-items:center;gap:8px;min-width:0}
+  .brand .bl{font-size:17px;line-height:1}
+  .brand b{display:block;font-size:11.5px;font-weight:800;letter-spacing:-.2px;white-space:nowrap}
+  .brand small{display:block;font-size:8.5px;letter-spacing:.14em;color:var(--dim);margin-top:2px;white-space:nowrap}
+  .chips{display:flex;align-items:center;gap:6px;flex:none}
+  .chip{font-size:10.5px;font-weight:800;letter-spacing:.04em;color:var(--muted);
+    border:1px solid var(--line);background:rgba(255,214,74,.06);padding:6px 9px;border-radius:999px;white-space:nowrap}
+  .chip b{color:var(--gold);letter-spacing:.08em;font-weight:900}
+  .chip.money{color:#0E0D14;background:linear-gradient(180deg,var(--gold2),var(--gold));border-color:transparent}
+  .chip.money b{color:#0E0D14}
+
+  main{flex:1;display:flex;flex-direction:column}
+  .view{display:none;animation:rise .34s cubic-bezier(.22,.9,.3,1) both}
+  .view.on{display:flex;flex-direction:column;flex:1}
+  @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  /* ── 입장 ── */
+  .joinHero{text-align:center;padding:22px 0 6px}
+  .joinIcon{font-size:56px;line-height:1;filter:drop-shadow(0 8px 22px rgba(255,214,74,.4))}
+  .joinKicker{display:inline-block;margin:14px 0 10px;font-size:10px;font-weight:900;letter-spacing:.22em;color:var(--amber)}
+  .joinTitle{font-family:var(--serif);font-size:30px;line-height:1.3;font-weight:900;letter-spacing:-.04em;margin:0 0 10px}
+  .joinTitle .hl{color:var(--gold)}
+  .joinSub{font-size:16.5px;line-height:1.62;color:#DCD6C8;margin:0 0 4px;font-weight:600}
+  .joinSub b{color:var(--gold);font-weight:900}
+  .card{margin-top:16px;border:1px solid var(--line);border-radius:22px;
+    background:linear-gradient(180deg,rgba(31,30,47,.92),rgba(24,23,37,.92));
+    padding:20px 18px;box-shadow:0 20px 46px -34px #000}
+  .lab{font-size:12.5px;font-weight:900;letter-spacing:.02em;color:var(--muted);margin:0 0 9px;display:block}
+  input.name{width:100%;height:64px;border-radius:16px;background:#0F0E18;border:1.5px solid rgba(255,255,255,.16);
+    color:#fff;font-size:23px;font-weight:800;padding:0 16px;letter-spacing:-.02em;text-align:center;outline:none}
+  input.name::placeholder{color:#5B576B;font-weight:700;font-size:19px}
+  input.name:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(255,214,74,.13)}
+  .bigBtn{width:100%;margin-top:12px;height:66px;border-radius:18px;font-size:20.5px;font-weight:900;letter-spacing:-.02em;
+    color:#14120A;background:linear-gradient(180deg,var(--gold2),var(--gold));
+    box-shadow:0 14px 30px -16px rgba(255,214,74,.9);transition:transform .12s ease,filter .2s ease}
+  .bigBtn:active{transform:scale(.985);filter:brightness(1.06)}
+  .bigBtn:disabled{filter:grayscale(.7) brightness(.72);box-shadow:none}
+  .tiny{margin:12px 2px 0;font-size:12px;line-height:1.7;color:var(--dim);text-align:center}
+
+  /* ── 대기 ── */
+  .waitBox{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:34px 6px}
+  .radar{position:relative;width:150px;height:150px;margin-bottom:26px;border-radius:50%;
+    border:1.5px solid rgba(255,214,74,.28);display:grid;place-items:center;overflow:hidden}
+  .radar::after{content:"";position:absolute;inset:0;border-radius:50%;
+    background:conic-gradient(from 0deg, rgba(255,214,74,.36), rgba(255,214,74,0) 42%);
+    animation:spin 2.6s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .radar span{position:relative;z-index:1;font-size:44px}
+  .waitTitle{font-family:var(--serif);font-size:25px;font-weight:900;letter-spacing:-.03em;margin:0 0 10px}
+  .waitMsg{font-size:16px;color:#C9C3D6;line-height:1.7;margin:0}
+  .namePill{display:inline-flex;align-items:center;gap:7px;margin-top:18px;padding:9px 16px;border-radius:999px;
+    font-size:14px;font-weight:800;color:var(--gold);background:rgba(255,214,74,.09);border:1px solid var(--line)}
+
+  /* ── 채팅(사기꾼) ── */
+  .round{display:flex;align-items:center;gap:8px;margin:2px 0 10px;flex-wrap:wrap}
+  .roundNo{font-size:10.5px;font-weight:900;letter-spacing:.14em;color:var(--amber)}
+  .roundTitle{font-size:13px;font-weight:800;color:#E9E3D3;letter-spacing:-.02em}
+  .phone{border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.12);
+    background:#0F0E16;box-shadow:0 22px 50px -34px #000}
+  .chatTop{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#1B1B24;border-bottom:1px solid rgba(255,255,255,.07)}
+  .avatar{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;font-size:19px;flex:none;
+    background:linear-gradient(150deg,#2C2B3A,#191825);border:1px solid rgba(255,255,255,.12)}
+  .who{min-width:0;flex:1}
+  .who b{display:block;font-size:15px;font-weight:900;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .who small{display:block;font-size:10.5px;color:var(--dim);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .warnPill{font-size:9.5px;font-weight:900;letter-spacing:.06em;color:#FFD2D6;background:rgba(255,92,110,.16);
+    border:1px solid rgba(255,92,110,.36);padding:4px 7px;border-radius:6px;flex:none}
+  .chatBody{padding:16px 12px 18px;display:flex;flex-direction:column;gap:9px;min-height:210px}
+  .bubble{max-width:88%;padding:13px 15px;border-radius:16px 16px 16px 4px;font-size:17.5px;line-height:1.5;
+    font-weight:700;letter-spacing:-.02em;background:#26252F;color:#F4F0E7;border:1px solid rgba(255,255,255,.07);
+    animation:bpop .26s cubic-bezier(.2,.9,.3,1) both;word-break:keep-all}
+  .bubble.link{color:#8FD0FF;text-decoration:underline;text-underline-offset:2px}
+  @keyframes bpop{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+
+  .ask{margin:16px 0 8px;font-size:19px;font-weight:900;letter-spacing:-.03em;color:#fff;text-align:center}
+  .ask small{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin-top:5px;letter-spacing:-.01em}
+
+  .opt{width:100%;text-align:left;display:flex;gap:11px;align-items:flex-start;
+    border:1.5px solid rgba(255,255,255,.14);background:linear-gradient(180deg,#1D1C2A,#171623);
+    border-radius:18px;padding:15px 14px;margin-top:10px;transition:transform .12s ease,border-color .16s ease,background .16s ease}
+  .opt:active{transform:scale(.985);border-color:var(--gold);background:#242232}
+  .opt .oe{font-size:26px;line-height:1.15;flex:none}
+  .opt .ot{min-width:0}
+  .opt .ot b{display:block;font-size:17px;font-weight:900;line-height:1.42;letter-spacing:-.03em;color:#fff}
+  .opt .ot small{display:block;font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.5;font-weight:600}
+  .opt.t-naive{border-color:rgba(255,92,110,.28)}
+  .opt.t-stall{border-color:rgba(111,195,255,.26)}
+  .opt.t-destroy{border-color:rgba(255,214,74,.34)}
+  .silentNote{margin:14px 0 0;text-align:center;font-size:12px;font-weight:700;color:var(--dim);line-height:1.6}
+
+  /* ── 선택 완료 / 결과 ── */
+  .centerBox{flex:1;display:flex;flex-direction:column;justify-content:center;text-align:center;padding:20px 2px 10px}
+  .bigEmoji{font-size:60px;line-height:1;margin-bottom:14px;filter:drop-shadow(0 10px 26px rgba(0,0,0,.6))}
+  .resKicker{font-size:10.5px;font-weight:900;letter-spacing:.2em;color:var(--amber);margin-bottom:9px}
+  .resTitle{font-family:var(--serif);font-size:27px;line-height:1.34;font-weight:900;letter-spacing:-.035em;margin:0 0 10px}
+  .resTitle.hit{color:var(--bad)}
+  .resTitle.cool{color:var(--sky)}
+  .resTitle.fire{color:var(--gold)}
+  .resMsg{font-size:15.5px;line-height:1.72;color:#D5CFC2;margin:0;font-weight:600}
+  .resMsg b{color:#fff;font-weight:900}
+  .assetBox{margin:18px 0 0;padding:15px 16px;border-radius:18px;border:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(255,214,74,.1),rgba(255,214,74,.03))}
+  .assetBox small{display:block;font-size:11px;font-weight:900;letter-spacing:.14em;color:var(--amber);margin-bottom:6px}
+  .assetBox b{font-size:29px;font-weight:900;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+  .assetBox .delta{display:block;font-size:12.5px;font-weight:800;margin-top:4px;color:var(--muted)}
+  .chosenEcho{margin:16px 0 0;padding:13px 14px;border-radius:16px;border:1px dashed rgba(255,255,255,.18);
+    background:rgba(255,255,255,.03);font-size:14px;line-height:1.6;color:#CFC9BC;font-weight:700}
+
+  /* ── 최종 ── */
+  .finalBox{flex:1;display:flex;flex-direction:column;justify-content:center;padding:16px 0 0}
+  .trophy{text-align:center;font-size:62px;line-height:1;margin-bottom:12px;filter:drop-shadow(0 12px 30px rgba(255,214,74,.45))}
+  .finalTitle{text-align:center;font-family:var(--serif);font-size:27px;font-weight:900;letter-spacing:-.04em;margin:0 0 6px}
+  .finalSub{text-align:center;font-size:13.5px;color:var(--muted);margin:0 0 18px;font-weight:700}
+  .statRow{display:flex;gap:8px;margin-top:12px}
+  .stat{flex:1;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:#171623;padding:12px 8px;text-align:center}
+  .stat span{display:block;font-size:10.5px;font-weight:900;letter-spacing:.08em;color:var(--dim);margin-bottom:5px}
+  .stat b{font-size:17px;font-weight:900;letter-spacing:-.02em}
+  .stat.good b{color:var(--gold)}
+  .ctaHub{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:18px 0 0}
+  .ctaHub a{display:flex;align-items:center;justify-content:center;gap:6px;height:44px;border-radius:13px;
+    font-size:12.5px;font-weight:800;letter-spacing:-.02em;color:#EAF1FA;text-decoration:none;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);transition:transform .12s ease}
+  .ctaHub a:active{transform:scale(.97);filter:brightness(1.12)}
+  .ctaHub a .ci{font-size:14px}
+  .ctaHub a.hot{color:#15130A;background:linear-gradient(180deg,var(--gold2),var(--gold));border-color:transparent;font-weight:900}
+  .ctaHub a.book{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22)}
+  .foot{margin-top:auto;padding-top:22px;text-align:center;font-size:10.5px;letter-spacing:.1em;color:#565266}
+
+  /* ── 강연 종료 잠금 ── */
+  html:not(.lecture-open) #gameRoot{display:none !important}
+  html.lecture-open #closedView{display:none !important}
+  .closedCard{margin-top:14vh;text-align:center;border:1px solid var(--line);border-radius:24px;
+    background:linear-gradient(180deg,rgba(31,30,47,.94),rgba(24,23,37,.94));padding:34px 20px 30px}
+  .closedIcon{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 16px;border-radius:19px;font-size:25px;
+    background:radial-gradient(120% 130% at 50% 0%,rgba(255,214,74,.24),rgba(255,214,74,.06));border:1px solid var(--line2)}
+  .closedKicker{display:block;font-size:10.5px;font-weight:800;letter-spacing:.22em;color:var(--amber);margin:0 0 12px}
+  .closedTitle{font-family:var(--serif);font-weight:900;font-size:25px;line-height:1.34;letter-spacing:-.035em;margin:0 0 15px;color:#fff}
+  .closedTitle .hl{color:var(--gold)}
+  .closedMsg{font-size:13.5px;color:#C9D5E4;line-height:1.78;margin:0}
+  .closedNote{font-size:11.5px;color:#94A3B8;line-height:1.75;margin:18px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">
+      <span class="bl">🕵️‍♂️</span>
+      <span>
+        <b>보이스피싱 역관광 챌린지</b>
+        <small>강연 크리에이터 · 정진영</small>
+      </span>
+    </div>
+    <div class="chips">
+      <span class="chip" id="roomChip">ROOM <b id="roomCode">JY72</b></span>
+      <span class="chip money" id="assetChip" style="display:none">💰 <b id="assetTop">1억 원</b></span>
+    </div>
+  </div>
+
+  <div id="closedView">
+    <div class="closedCard">
+      <div class="closedIcon">🕵️</div>
+      <span class="closedKicker">LECTURE CLOSED</span>
+      <h1 class="closedTitle">오늘 강연은 <span class="hl">종료</span>되었습니다</h1>
+      <p class="closedMsg">현장에서 함께해 주신 모든 분께 감사드립니다.<br>사기꾼의 말에는 늘 한 발짝 뒤에서 되물어 보세요.</p>
+      <p class="closedNote">다음 강연에서 다시 열립니다.<br>강연 크리에이터 · 정진영</p>
+    </div>
+  </div>
+
+  <div id="gameRoot" style="display:flex;flex-direction:column;flex:1">
+    <main>
+      <!-- 입장 -->
+      <section class="view" id="v-join">
+        <div class="joinHero">
+          <div class="joinIcon">🕵️‍♂️</div>
+          <span class="joinKicker">SENIOR SAFE MONEY</span>
+          <h1 class="joinTitle">사기꾼을 <span class="hl">역관광</span> 시키는<br>5가지 사기 수법</h1>
+          <p class="joinSub">사기꾼의 말에 <b>가장 통쾌한 한 방</b>을 날려<br>내 <b>1억 원</b>을 지켜내세요!</p>
+        </div>
+        <div class="card">
+          <label class="lab" for="nameInput">이름을 입력해 주세요</label>
+          <input class="name" id="nameInput" type="text" inputmode="text" autocomplete="name" maxlength="10" placeholder="예) 김순자">
+          <button class="bigBtn" id="joinBtn">💰 1억 원 들고 입장하기</button>
+          <p class="tiny">이름만 입력하면 바로 시작합니다 · 개인정보는 저장하지 않습니다</p>
+        </div>
+      </section>
+
+      <!-- 대기 -->
+      <section class="view" id="v-wait">
+        <div class="waitBox">
+          <div class="radar"><span>🕵️</span></div>
+          <h2 class="waitTitle" id="waitTitle">수사 준비 중입니다</h2>
+          <p class="waitMsg" id="waitMsg">강사님이 첫 시나리오를 여는 순간<br>사기꾼의 문자가 도착합니다.</p>
+          <div class="namePill" id="namePill">👤 참가자</div>
+        </div>
+      </section>
+
+      <!-- 시나리오 -->
+      <section class="view" id="v-play">
+        <div class="round">
+          <span class="roundNo" id="roundNo">SCENARIO 1 / 5</span>
+          <span class="roundTitle" id="roundTitle"></span>
+        </div>
+        <div class="phone">
+          <div class="chatTop">
+            <div class="avatar" id="chatAvatar">📱</div>
+            <div class="who"><b id="chatWho">발신자</b><small id="chatNote">카카오톡</small></div>
+            <span class="warnPill">의심</span>
+          </div>
+          <div class="chatBody" id="chatBody"></div>
+        </div>
+        <p class="ask">어떻게 대응할까요?<small>읽고, 가장 통쾌한 한 방을 고르세요</small></p>
+        <div id="options"></div>
+        <p class="silentNote">🤫 결과는 강사님이 공개합니다 · 폰은 조용히</p>
+      </section>
+
+      <!-- 선택 완료 -->
+      <section class="view" id="v-done">
+        <div class="centerBox">
+          <div class="bigEmoji">✅</div>
+          <span class="resKicker">CHOICE LOCKED</span>
+          <h2 class="resTitle">선택 완료!</h2>
+          <p class="resMsg">결과는 <b>강사님이 공개</b>할 때까지<br>비밀로 기다려 주세요.</p>
+          <div class="chosenEcho" id="doneEcho"></div>
+          <div class="assetBox">
+            <small>내 자산</small>
+            <b id="doneAsset">1억 원</b>
+          </div>
+        </div>
+      </section>
+
+      <!-- 결과 공개 -->
+      <section class="view" id="v-result">
+        <div class="centerBox">
+          <div class="bigEmoji" id="resEmoji">🔥</div>
+          <span class="resKicker" id="resKicker">ROUND RESULT</span>
+          <h2 class="resTitle" id="resTitle">역관광 성공!</h2>
+          <p class="resMsg" id="resMsg"></p>
+          <div class="assetBox">
+            <small>내 자산</small>
+            <b id="resAsset">1억 원</b>
+            <span class="delta" id="resDelta"></span>
+          </div>
+          <p class="silentNote" id="resNote">다음 시나리오를 기다려 주세요</p>
+        </div>
+      </section>
+
+      <!-- 최종 -->
+      <section class="view" id="v-final">
+        <div class="finalBox">
+          <div class="trophy">🏆</div>
+          <h2 class="finalTitle">수사 종료</h2>
+          <p class="finalSub">사기꾼 퇴치왕 발표는 강사님 화면에서!</p>
+          <div class="assetBox" style="margin-top:0">
+            <small>나의 최종 자산</small>
+            <b id="finalAsset">1억 원</b>
+            <span class="delta" id="finalDelta">사기꾼을 5번 중 0번 역관광</span>
+          </div>
+          <div class="statRow">
+            <div class="stat good"><span>🔥 역관광</span><b id="statDestroy">0</b></div>
+            <div class="stat"><span>😎 방어</span><b id="statStall">0</b></div>
+            <div class="stat"><span>😇 당함</span><b id="statNaive">0</b></div>
+          </div>
+          <div class="ctaHub">
+            <a href="https://www.instagram.com/_j_jin0/" target="_blank" rel="noopener noreferrer"><span class="ci">📸</span>인스타</a>
+            <a href="https://www.threads.com/@_j_jin0" target="_blank" rel="noopener noreferrer"><span class="ci">🧵</span>스레드</a>
+            <a class="hot" href="https://docs.google.com/forms/d/e/1FAIpQLSfjzdgHSEgqiwC_E_or_w7x2GKX-bpf-qSbQH5oGeAdjBwnQA/viewform" target="_blank" rel="noopener noreferrer"><span class="ci">🌙</span>1월 리셋밤</a>
+            <a class="book" href="https://kmong.com/gig/536319" target="_blank" rel="noopener noreferrer"><span class="ci">📘</span>책 보러가기</a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div class="foot">강연 크리에이터 · 정진영</div>
+  </div>
+</div>
+
+<script src="defaults.js?v=1127a"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  const FB_CONFIG = {
+    apiKey: "AIzaSyATHgKSeMI0Xmw1sC01FuQXbnXeS9zkTYA",
+    authDomain: "jy-run-100m.firebaseapp.com",
+    databaseURL: "https://jy-run-100m-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "jy-run-100m",
+    storageBucket: "jy-run-100m.firebasestorage.app",
+    messagingSenderId: "977342156141",
+    appId: "1:977342156141:web:f9842fcc67a819ce621e64"
+  };
+
+  const QS = new URLSearchParams(location.search);
+  const ROOM = (QS.get("room") || "JY72").replace(/[^A-Za-z0-9_-]/g, "").slice(0,12).toUpperCase() || "JY72";
+  const BASE = "rooms/phishing-counter/" + ROOM;
+  const START_ASSET = 100000000;
+  const MULTI = QS.get("multi") === "1";
+  const FORCE_NAME = QS.get("name") || "";
+  const AUTO = QS.get("auto") === "1";
+
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+  function fmtWon(n){
+    n = Math.max(0, Math.round(Number(n) || 0));
+    if(n === 0) return "0원";
+    const eok = Math.floor(n / 1e8);
+    const man = Math.round((n % 1e8) / 1e4);
+    let out = "";
+    if(eok) out += eok.toLocaleString("ko-KR") + "억";
+    if(man) out += (out ? " " : "") + man.toLocaleString("ko-KR") + "만";
+    return out + "원";
+  }
+
+  /* ── 참가자 신원 ── */
+  const storeKey = "pc_pid_" + ROOM;
+  const bag = MULTI ? sessionStorage : localStorage;
+  let pid = bag.getItem(storeKey);
+  if(!pid){
+    pid = "p" + Math.random().toString(36).slice(2, 10);
+    bag.setItem(storeKey, pid);
+  }
+
+  let db = null, live = false, seeded = false;
+  let scenarios = (window.PC_DEFAULT_SCENARIOS || []).map(s => JSON.parse(JSON.stringify(s)));
+  let state = { open:false, sidx:0, reveal:false, finished:false };
+  let me = null;              // {name, asset, naive, stall, destroy, answered}
+  let joined = false;
+  let lastRenderKey = "";
+  let revealShown = null;
+
+  $("roomCode").textContent = ROOM;
+
+  /* ── 화면 전환 ── */
+  const VIEWS = ["v-join","v-wait","v-play","v-done","v-result","v-final"];
+  let curView = "";
+  function show(v){
+    if(curView === v) return;
+    curView = v;
+    VIEWS.forEach(id => $(id).classList.toggle("on", id === v));
+    window.scrollTo(0, 0);
+  }
+
+  function scenAt(i){
+    return (i >= 0 && i < scenarios.length) ? scenarios[i] : null;
+  }
+  function currentScen(){ return scenAt(state.sidx); }
+
+  /* ── Firebase ── */
+  function initFB(){
+    if(typeof firebase === "undefined" || !firebase.initializeApp){
+      $("waitTitle").textContent = "연결을 확인해 주세요";
+      $("waitMsg").innerHTML = "실시간 연결에 실패했습니다.<br>와이파이를 확인하고 새로고침해 주세요.";
+      return;
+    }
+    firebase.initializeApp(FB_CONFIG);
+    db = firebase.database();
+    db.ref(".info/connected").on("value", s => { live = !!s.val(); });
+
+    db.ref(BASE + "/scenarios").on("value", s => {
+      const arr = normScen(s.val());
+      if(arr){ scenarios = arr; }
+      else if(!seeded){ seeded = true;
+        db.ref(BASE + "/scenarios").set(scenarios).catch(()=>{});
+      }
+      render();
+    });
+
+    db.ref(BASE + "/state").on("value", s => {
+      const v = s.val();
+      if(!v){
+        state = { open:false, sidx:0, reveal:false, finished:false };
+        db.ref(BASE + "/state").set({ open:false, sidx:0, reveal:false, finished:false, ts:Date.now() }).catch(()=>{});
+      } else {
+        state = {
+          open: !!v.open, sidx: Number(v.sidx) || 0,
+          reveal: !!v.reveal, finished: !!v.finished
+        };
+      }
+      render();
+    });
+
+    if(pid){
+      db.ref(BASE + "/players/" + pid).on("value", s => {
+        const v = s.val();
+        if(!v){
+          if(joined){ joined = false; me = null; curView = ""; }
+          render(); return;
+        }
+        me = v;
+        if(!joined && me.name) joined = true;
+        render();
+      });
+    }
+  }
+
+  function normScen(v){
+    if(!Array.isArray(v) || !v.length) return null;
+    return v.map(s => ({
+      id: String(s.id || "s"),
+      icon: String(s.icon || "📱"),
+      sender: String(s.sender || "발신자"),
+      senderNote: String(s.senderNote || ""),
+      title: String(s.title || "시나리오"),
+      msgs: Array.isArray(s.msgs) ? s.msgs.map(String) : [],
+      tip: String(s.tip || ""),
+      run: String(s.run || ""),
+      patience: String(s.patience || ""),
+      jackpot: String(s.jackpot || ""),
+      options: Array.isArray(s.options) ? s.options.map(o => ({
+        t: ["naive","stall","destroy"].includes(o.t) ? o.t : "stall",
+        label: String(o.label || ""),
+        sub: String(o.sub || "")
+      })) : [],
+      bonus: Number(s.bonus) || 0,
+      bonusLabel: String(s.bonusLabel || "")
+    }));
+  }
+
+  /* ── 입장 ── */
+  function join(){
+    const name = ($("nameInput").value || "").trim().slice(0, 10);
+    if(!name){ $("nameInput").focus(); return; }
+    if(!db){ $("joinBtn").textContent = "연결 중입니다…"; return; }
+    $("joinBtn").disabled = true;
+    db.ref(BASE + "/players/" + pid).transaction(p => {
+      p = p || {};
+      if(!p.asset && p.asset !== 0) p.asset = START_ASSET;
+      p.name = name;
+      p.joined = p.joined || Date.now();
+      p.naive = p.naive || 0; p.stall = p.stall || 0; p.destroy = p.destroy || 0;
+      p.answered = p.answered || {};
+      return p;
+    }).then(() => {
+      me = Object.assign({ name, asset: START_ASSET, naive:0, stall:0, destroy:0, answered:{} }, me || {});
+      me.name = name;
+      joined = true;
+      render();
+    }).catch(() => {
+      $("joinBtn").disabled = false;
+      $("joinBtn").textContent = "다시 시도해 주세요";
+    });
+  }
+
+  $("joinBtn").addEventListener("click", join);
+  $("nameInput").addEventListener("keydown", e => { if(e.key === "Enter") join(); });
+
+  /* ── 선택 ── */
+  let tapping = false;
+  function choose(opt, sid){
+    if(tapping || !db || !me) return;
+    if(me.answered && me.answered[sid]) return;
+    tapping = true;
+    const sc = currentScen();
+    const bonus = sc ? (Number(sc.bonus) || 0) : 0;
+    const t = opt.t;
+    const ref = db.ref(BASE + "/players/" + pid);
+    ref.transaction(p => {
+      p = p || { name: me.name, asset: START_ASSET };
+      if(!p.asset && p.asset !== 0) p.asset = START_ASSET;
+      p.answered = p.answered || {};
+      if(p.answered[sid]) return p;   // 이미 응답
+      const before = Number(p.asset) || 0;
+      let after = before, lost = 0, gain = 0;
+      if(t === "naive"){ after = 0; lost = before; }
+      else if(t === "destroy"){ after = before + bonus; gain = bonus; }
+      p.asset = after;
+      p.answered[sid] = Date.now();
+      p.lastSid = sid; p.lastType = t; p.lastLost = lost; p.lastGain = gain;
+      p[t] = (p[t] || 0) + 1;
+      return p;
+    }).then(res => {
+      tapping = false;
+      if(!res.committed) return;
+      const p = res.snapshot.val() || {};
+      db.ref(BASE + "/choices/" + sid + "/" + pid).set({
+        t: t, name: p.name || me.name, lost: p.lastLost || 0, gain: p.lastGain || 0, ts: Date.now()
+      }).catch(()=>{});
+      render();
+    }).catch(() => {
+      tapping = false;
+      alert("저장에 실패했습니다. 다시 눌러 주세요.");
+    });
+  }
+
+  /* ── 렌더 ── */
+  function render(){
+    if(!joined){ show("v-join"); syncAssetChip(); return; }
+    syncAssetChip();
+    if(state.finished){ renderFinal(); return; }
+    const sc = currentScen();
+    if(state.reveal && sc){
+      if(me && me.lastSid === sc.id) renderResult(sc);
+      else renderMissed(sc);
+      return;
+    }
+    if(state.open && sc){
+      if(me && me.answered && me.answered[sc.id]) renderDone(sc);
+      else renderPlay(sc);
+      return;
+    }
+    renderWait();
+  }
+
+  function syncAssetChip(){
+    const chip = $("assetChip");
+    if(!joined || !me){ chip.style.display = "none"; return; }
+    chip.style.display = "";
+    $("assetTop").textContent = fmtWon(me.asset);
+  }
+
+  function renderWait(){
+    $("namePill").textContent = "👤 " + (me ? me.name : "참가자");
+    if(state.sidx > 0){
+      $("waitTitle").textContent = "다음 시나리오 준비 중";
+      $("waitMsg").innerHTML = "잠시 후 사기꾼의 새 문자가 도착합니다.<br>폰은 조용히, 화면만 보고 계세요.";
+    } else {
+      $("waitTitle").textContent = "수사 준비 중입니다";
+      $("waitMsg").innerHTML = "강사님이 첫 시나리오를 여는 순간<br>사기꾼의 문자가 도착합니다.";
+    }
+    show("v-wait");
+  }
+
+  function renderPlay(sc){
+    const key = "play:" + sc.id + ":" + state.sidx;
+    $("roundNo").textContent = "SCENARIO " + (state.sidx + 1) + " / " + scenarios.length;
+    $("roundTitle").textContent = sc.title;
+    $("chatAvatar").textContent = sc.icon;
+    $("chatWho").textContent = sc.sender;
+    $("chatNote").textContent = sc.senderNote || "문자";
+    if(lastRenderKey !== key){
+      lastRenderKey = key;
+      const body = $("chatBody");
+      body.innerHTML = "";
+      sc.msgs.forEach((m, i) => {
+        const d = document.createElement("div");
+        d.className = "bubble" + (/https?:\/\//.test(m) ? " link" : "");
+        d.textContent = m;
+        d.style.animationDelay = (i * 0.14) + "s";
+        body.appendChild(d);
+      });
+      const box = $("options");
+      box.innerHTML = "";
+      sc.options.forEach(o => {
+        const b = document.createElement("button");
+        b.className = "opt t-" + o.t;
+        const full = o.label.trim();
+        const head = full.split(/\s+/)[0] || "";
+        const rest = full.slice(head.length).trim();
+        b.innerHTML = '<span class="oe">' + esc(head) + '</span>' +
+          '<span class="ot"><b>' + esc(rest || full) + '</b>' +
+          (o.sub ? '<small>' + esc(o.sub) + '</small>' : '') + '</span>';
+        b.addEventListener("click", () => choose(o, sc.id));
+        box.appendChild(b);
+      });
+    }
+    show("v-play");
+  }
+
+  function renderDone(sc){
+    const opt = sc.options.find(o => o.t === (me.lastType || "")) ;
+    $("doneEcho").textContent = opt ? ("내 선택 · " + opt.label) : "선택을 저장했습니다.";
+    $("doneAsset").textContent = fmtWon(me.asset);
+    show("v-done");
+  }
+
+  function renderResult(sc){
+    const t = me.lastType || "stall";
+    const gain = Number(me.lastGain) || 0;
+    const lost = Number(me.lastLost) || 0;
+    $("resAsset").textContent = fmtWon(me.asset);
+    if(t === "naive"){
+      $("resEmoji").textContent = "💀";
+      $("resKicker").textContent = "SCAMMED";
+      $("resTitle").textContent = "자산 전액 털렸습니다";
+      $("resTitle").className = "resTitle hit";
+      $("resMsg").innerHTML = "사기꾼의 말 한마디에 <b>" + fmtWon(lost) + "</b>이 그대로 넘어갔습니다.<br>실제라면 되돌릴 수 없습니다.";
+      $("resDelta").textContent = "-" + fmtWon(lost) + " (전액)";
+    } else if(t === "destroy"){
+      $("resEmoji").textContent = "🔥";
+      $("resKicker").textContent = "COUNTER ATTACK";
+      $("resTitle").textContent = "역관광 성공!";
+      $("resTitle").className = "resTitle fire";
+      $("resMsg").innerHTML = "사기꾼이 멘탈이 붕괴되고 줄행랑 쳤습니다.<br>현상금 <b>" + fmtWon(gain) + "</b>을 받았습니다!";
+      $("resDelta").textContent = "+" + fmtWon(gain);
+    } else {
+      $("resEmoji").textContent = "😎";
+      $("resKicker").textContent = "DEFENDED";
+      $("resTitle").textContent = "방어 성공!";
+      $("resTitle").className = "resTitle cool";
+      $("resMsg").innerHTML = "시간을 끌어 사기꾼 혈압만 올렸습니다.<br>한 푼도 잃지 않았습니다.";
+      $("resDelta").textContent = "변동 없음 · 사기꾼 혈압 +50";
+    }
+    $("resNote").textContent = "다음 시나리오를 기다려 주세요";
+    show("v-result");
+  }
+
+  function renderMissed(sc){
+    $("resEmoji").textContent = "🙈";
+    $("resKicker").textContent = "NOT ANSWERED";
+    $("resTitle").textContent = "이번 라운드는 넘어갔습니다";
+    $("resTitle").className = "resTitle";
+    $("resMsg").innerHTML = "다음 시나리오부터 다시 참여할 수 있습니다.";
+    $("resAsset").textContent = fmtWon(me ? me.asset : 0);
+    $("resDelta").textContent = "변동 없음";
+    $("resNote").textContent = "잠시 후 다음 시나리오가 열립니다";
+    show("v-result");
+  }
+
+  function renderFinal(){
+    $("finalAsset").textContent = fmtWon(me ? me.asset : 0);
+    const d = me ? Number(me.destroy) || 0 : 0;
+    $("finalDelta").textContent = "사기꾼을 " + scenarios.length + "번 중 " + d + "번 역관광";
+    $("statDestroy").textContent = d;
+    $("statStall").textContent = me ? (Number(me.stall) || 0) : 0;
+    $("statNaive").textContent = me ? (Number(me.naive) || 0) : 0;
+    show("v-final");
+  }
+
+  /* ── 시작 ── */
+  if(FORCE_NAME){
+    $("nameInput").value = FORCE_NAME;
+    if(AUTO) setTimeout(() => join(), 550);
+  }
+  if(LECTURE_CLOSED) document.title = "오늘 강연이 종료되었습니다 | 강연 크리에이터 · 정진영";
+  initFB();
+})();
+</script>
+</body>
+</html>
