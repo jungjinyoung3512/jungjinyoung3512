@@ -433,7 +433,11 @@
       db.ref(BASE + "/players/" + pid).on("value", s => {
         const v = s.val();
         if(!v){
-          if(joined){ joined = false; me = null; curView = ""; }
+          if(joined){
+            joined = false; me = null; curView = "";
+            $("joinBtn").disabled = false;
+            $("joinBtn").textContent = "💰 1억 원 들고 입장하기";
+          }
           render(); return;
         }
         me = v;
