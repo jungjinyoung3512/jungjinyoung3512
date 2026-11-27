@@ -366,8 +366,8 @@
   <section class="view" id="vLocked">
     <div class="locked">
       <div class="ic">✅</div>
-      <h2>제출 완료!</h2>
-      <p>정답 발표를 기다리는 중입니다<span class="dot3"> ···</span></p>
+      <h2 id="lockedTitle">제출 완료!</h2>
+      <p id="lockedMsg">정답 발표를 기다리는 중입니다<span class="dot3"> ···</span></p>
       <div class="mypick" id="myPick"></div>
       <div class="cap" style="margin-top:16px;font-size:12.5px;font-weight:800;color:var(--amber-lt);background:rgba(245,165,36,.12);border:1px solid rgba(245,165,36,.3);border-radius:11px;padding:9px 14px">진행자의 <b>[🏆 검거 결과보기]</b>를 기다려 주세요</div>
     </div>
@@ -546,7 +546,7 @@
     meRef = db.ref(base + "/players/" + S.pid);
     metaRef.on("value", s => onMeta(s.val() || {}));
     revealRef.on("value", s => { S.reveal = s.val() || null; onReveal(); });
-    keysRef.on("value", s => { S.keys = s.val() || {}; paintTotals(); });
+    keysRef.on("value", s => { S.keys = s.val() || {}; paintTotals(); $("revTotal").textContent = fmtWon(S.total || 0); if (S.view === "vReveal") paintReveal(); });
     boardRef.on("value", s => { S.board = s.val() || null; if (S.view === "vReveal") paintTop(); });
     $("roomTag").textContent = ROOM;
   }
@@ -793,9 +793,13 @@
     const opts = (S.meta || {}).options || [];
     const box = $("myPick");
     if (!mine || !opts[mine.c]){
+      $("lockedTitle").textContent = "놓쳤어요 😅";
+      $("lockedMsg").textContent = "이번 라운드는 응답이 없었습니다. 다음 라운드에 도전!";
       box.innerHTML = '<span class="t">이번 라운드는 응답하지 않았습니다</span>';
       return;
     }
+    $("lockedTitle").textContent = "제출 완료!";
+    $("lockedMsg").innerHTML = '정답 발표를 기다리는 중입니다<span class="dot3"> ···</span>';
     const o = opts[mine.c];
     box.innerHTML = '<span class="no">' + (mine.c + 1) + '</span>' +
       '<span><span class="plate">' + esc(o.p) + '</span><br>' +
@@ -805,7 +809,7 @@
   function paintTotals(){
     let total = 0;
     for (let r = 1; r <= 5; r++){
-      const key = S.keys ? S.keys[r] : null;
+      const key = S.keys ? S.keys["r" + r] : null;
       if (key === null || key === undefined) continue;
       const mine = S.myAnswers[r];
       if (mine && Number(mine.c) === Number(key)) total += ROUND_BOUNTY[r - 1];
@@ -839,9 +843,8 @@
     title.className = got ? "ok" : "no";
     title.textContent = got ? (final ? "최종 검거 성공! 🏆" : "검거 성공! 🎯") : (mine ? "아쉽게 놓쳤습니다 😢" : "이번 라운드 미응답 😴");
     $("revGain").textContent = got ? "+" + fmtWon(ROUND_BOUNTY[rd - 1]) : "+0만 원";
-    $("revCap").textContent = got
-      ? "현상금 " + fmtWon(ROUND_BOUNTY[rd - 1]) + " 적립!"
-      : (mine ? "정답은 " + (correct + 1) + "번입니다" : "정답은 " + (correct + 1) + "번입니다");
+    $("revCap").textContent = (got ? "현상금 " + fmtWon(ROUND_BOUNTY[rd - 1]) + " 적립!" : "정답은 " + (correct + 1) + "번")
+      + (mine ? " · 내 선택 " + (Number(mine.c) + 1) + "번" : " · 이번 라운드 미응답");
 
     $("revPlate").textContent = car.p || "-";
     $("revSw").style.background = colorHex(car.c);
