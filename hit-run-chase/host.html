@@ -1171,6 +1171,7 @@
       paintAnswers(remain);
       if (remain <= 0 && H.phaseKey !== "lock"){
         H.phaseKey = "lock";
+        $("btnReveal").classList.add("pulse");
         $("ansOverlay").classList.add("on");
         $("aoFoot").innerHTML = remain <= 0
           ? "응답 마감 · <b>[🏆 검거 결과보기]</b>를 눌러 정답과 TOP 5를 공개하세요"
@@ -1224,6 +1225,7 @@
     ).join("");
 
     $("revChip").innerHTML = '정답 <b>' + (correct + 1) + '</b>번 · ' + esc(car.p || '');
+    $("btnNext").innerHTML = (H.round >= 5) ? "🔄 처음부터" : "🔄 다음 라운드";
     $("revNext").textContent = H.round >= 5
       ? "모든 라운드 종료 — [다음 라운드] → [처음부터]로 새 게임을 시작할 수 있습니다"
       : "[다음 라운드]를 눌러 계속하세요";
@@ -1298,6 +1300,7 @@
     const startAt = nowMs() + COUNT_MS;
     const sightMs = H.speedMs;
     const opts = R.opts.map(o => ({ c:o.c, t:o.t, p:o.p, f:o.f }));
+    $("btnNext").innerHTML = "🔄 다음 라운드";
     const wrap = $("carWrap");
     wrap.dataset.screeched = "";
     H.phaseKey = "";
