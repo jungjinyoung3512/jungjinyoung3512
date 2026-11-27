@@ -547,7 +547,9 @@ const LECTURE_CLOSED = false;
     if (meRef) meRef.off();
     meRef = db.ref(ROOT + '/players/' + pid);
     meRef.on('value', function(s){
-      me = s.val();
+      var v = s.val();
+      // 이름·자산이 없는 노드(진행자가 비운 뒤 남은 seen 흔적)는 '입장 전'으로 본다
+      me = (v && v.name && typeof v.coins === 'number') ? v : null;
       if (!me) { selected = -1; }
       render();
     });
