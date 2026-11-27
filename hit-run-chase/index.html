@@ -16,7 +16,7 @@
   if (!LECTURE_CLOSED) document.documentElement.classList.add("lecture-open");
 </script>
 <title>🚗 현상금 5천만! 뺑소니범 차량 검거 | 강연 크리에이터 · 정진영</title>
-<meta name="description" content="강연장 참여 게임 — 스크린에 휙 지나간 뺑소니 차량의 색·차종·번호판·특징을 기억해 5지선다로 검거하라!">
+<meta name="description" content="강연장 참여 게임 — 스크린에 휙 지나간 뺑소니 차량의 색·차종·번호판·유리창을 기억해 5지선다로 검거하라!">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
@@ -144,8 +144,12 @@
   @keyframes eyePulse{0%,100%{transform:scale(1);opacity:.92}50%{transform:scale(1.09);opacity:1}}
   .sight h2{font-family:var(--serif);font-size:32px;font-weight:900;margin:18px 0 8px;color:#FFF6E4;letter-spacing:-.03em}
   .sight p{font-size:16px;font-weight:800;color:#D2DEEE;margin:0;line-height:1.55}
-  .sight .tleft{margin-top:22px;font-family:var(--mono);font-size:52px;font-weight:800;color:var(--amber-lt);line-height:1;font-variant-numeric:tabular-nums}
-  .sight .tleft small{font-size:16px;color:var(--muted);margin-left:4px;font-family:var(--sans)}
+  .watchTag{
+    margin-top:20px;font-size:12.5px;font-weight:800;color:#B6C6D9;
+    background:rgba(255,255,255,.06);border:1px solid var(--line2);border-radius:12px;
+    padding:9px 14px;line-height:1.45;
+  }
+  .watchTag.live{color:#04201A;background:linear-gradient(180deg,#8DF3C0,#34D399);border-color:transparent;font-weight:900}
   .cdbig{font-family:var(--serif);font-size:132px;font-weight:900;line-height:.95;color:var(--amber-lt);text-shadow:0 8px 44px rgba(245,165,36,.5);animation:cdIn .6s ease-out}
   @keyframes cdIn{0%{opacity:0;transform:scale(1.45)}45%{opacity:1;transform:scale(.95)}100%{transform:scale(1)}}
 
@@ -160,6 +164,7 @@
   .tline .bar i.hot{background:linear-gradient(90deg,#F5A524,#FB7185)}
   .tline .num{font-family:var(--mono);font-size:24px;font-weight:800;color:#EAF1FA;min-width:52px;text-align:right;font-variant-numeric:tabular-nums}
   .tline .num.hot{color:var(--rose)}
+  .replayNote{flex:none;text-align:center;font-size:12.5px;font-weight:900;color:#04201A;background:linear-gradient(180deg,#8DF3C0,#34D399);border-radius:11px;padding:8px 10px}
   .opts{flex:1;min-height:0;display:flex;flex-direction:column;gap:7px;overflow-y:auto;padding-bottom:2px}
   .opt{
     flex:1 1 0;min-height:66px;display:flex;align-items:center;gap:10px;
@@ -179,7 +184,10 @@
   .opt .txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
   .opt .l1{font-size:14px;font-weight:800;color:#C9D7E8;letter-spacing:-.01em;line-height:1.2}
   .opt .plate{font-family:var(--mono);font-size:23px;font-weight:800;color:#FFFFFF;letter-spacing:.02em;line-height:1.18;white-space:nowrap}
-  .opt .feat{font-size:11.5px;font-weight:700;color:#8FA3BC;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .opt .feat{display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:#8FA3BC;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .opt .wi{width:14px;height:10px;border-radius:3px;border:1px solid rgba(255,255,255,.35);flex:none;display:inline-block}
+  .opt .wt{display:inline-flex;align-items:center;gap:4px;margin-left:6px;font-size:11.5px;font-weight:800;color:#A9C0D8;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:7px;padding:1px 6px;vertical-align:1px}
+  .opt.sel .wt{color:#9BF0C6;border-color:rgba(52,211,153,.5)}
   .opt.sel{border-color:rgba(52,211,153,.9);background:linear-gradient(180deg,rgba(52,211,153,.2),rgba(52,211,153,.06));box-shadow:0 0 0 2px rgba(52,211,153,.28)}
   .opt.sel .no{background:linear-gradient(180deg,#8EF0C0,#34D399);color:#06221A}
   .opt.sel .feat{color:#9BF0C6}
@@ -255,7 +263,7 @@
   }
   .toast.on{opacity:1;transform:translate(-50%,0)}
 
-  /* ── 강연 종료 잠금 화면 ─이 */
+  /* ── 강연 종료 잠금 화면 ── */
   html:not(.lecture-open) #gameRoot{display:none !important}
   html.lecture-open #closedView{display:none !important}
   #closedView{padding:6px 0 0;flex:1;display:flex;flex-direction:column;justify-content:center}
@@ -294,7 +302,7 @@
     <div class="entry-top">
       <div class="logo">🕵️</div>
       <h1 class="title">현상금 <em>5천만</em>!<br>뺑소니범 차량 검거</h1>
-      <p class="sub">휙 지나간 차량의 <b>색·차종·번호판·특징</b>을 기억하라<br>5라운드, 5지선다 명탐정 대결</p>
+      <p class="sub">휙 지나간 차량의 <b>색·차종·번호판·유리창</b>을 기억하라<br>10문제 · 3단계 난이도 · 5지선다 명탐정 대결</p>
     </div>
 
     <div class="entry-form">
@@ -316,7 +324,7 @@
   <section class="view" id="vWait">
     <div class="hud">
       <div class="cell"><span class="k">내 현상금</span><span class="money" id="hudMoney">0만 원</span></div>
-      <div class="cell mid"><span class="k">라운드</span><span class="v" id="hudRound">- / 5</span></div>
+      <div class="cell mid"><span class="k">라운드</span><span class="v" id="hudRound">- / 10</span></div>
       <div class="cell right"><span class="k">참여</span><span class="v" id="hudCount">0명</span></div>
     </div>
     <div class="wait">
@@ -335,15 +343,15 @@
   <section class="view" id="vSight">
     <div class="hud">
       <div class="cell"><span class="k">내 현상금</span><span class="money" id="sightMoney">0만 원</span></div>
-      <div class="cell mid"><span class="k">라운드</span><span class="v" id="sightRound">1 / 5</span></div>
+      <div class="cell mid"><span class="k">라운드</span><span class="v" id="sightRound">1 / 10</span></div>
       <div class="cell right"><span class="k">참여</span><span class="v" id="sightCount">0명</span></div>
     </div>
     <div class="sight">
       <div id="sightBody">
         <div class="eye">👀</div>
         <h2>스크린을 집중!</h2>
-        <p>지금 도주 차량이 지나갑니다<br><b>색 · 차종 · 번호판 · 특징</b>을 외우세요!</p>
-        <div class="tleft"><span id="sightLeft">3</span><small>초</small></div>
+        <p>지금 도주 차량이 지나갑니다<br><b>색 · 차종 · 번호판 · 유리창</b>을 외우세요!</p>
+        <div class="watchTag">관찰 중 · 타이머는 차량이 다 지나간 뒤 시작됩니다</div>
       </div>
     </div>
   </section>
@@ -358,6 +366,7 @@
         <div class="num" id="ansNum">10.0</div>
       </div>
     </div>
+    <div class="replayNote" id="replayNote" style="display:none">🔁 한 번 더 지나갑니다 — 시간은 멈춰 있어요</div>
     <div class="opts" id="optList"></div>
     <div class="note">정답과 현상금은 진행자가 공개합니다</div>
   </section>
@@ -385,8 +394,8 @@
 
       <div class="carCard">
         <div class="ct">범인 차량 · 실제 목격 정보</div>
-        <div class="plateBox"><b id="revPlate">48거 7924</b></div>
-        <div class="spec"><span class="sw" id="revSw"></span><span id="revSpec">빨간 승용차</span><span class="feat" id="revFeat">특징 없음</span></div>
+        <div class="plateBox"><b id="revPlate">24가 3571</b></div>
+        <div class="spec"><span class="sw" id="revSw"></span><span id="revSpec">빨간 승용차</span><span class="feat" id="revFeat">투명 유리창</span></div>
       </div>
 
       <div class="dist" id="revDist"></div>
@@ -440,15 +449,20 @@
   const QS = new URLSearchParams(location.search);
   const DEFAULT_ROOM = "JY73";
   const MAX_PLAYERS = 80;
-  const ROUND_BOUNTY = [5000000, 7000000, 10000000, 13000000, 15000000];
-  const FEAT_NAME = {
-    none:"특징 없음",
-    headlight:"한쪽 헤드라이트 꺼짐",
-    sticker:"뒷면에 노란 스티커",
-    roofbox:"지붕에 짐칸",
-    crack:"뒷유리에 금 간 자국"
-  };
+  const TOTAL_ROUNDS = 10;
+  const ANSWER_MS = 10000;
+  const ANSWER_PAD_MS = 350;
+  const ROUND_BOUNTY = [
+    5000000, 7000000, 10000000, 13000000, 15000000,
+    20000000, 25000000, 30000000, 40000000, 50000000
+  ];
   const TYPE_NAME = { sedan:"승용차", suv:"SUV", van:"승합차", truck:"트럭" };
+  const WINDOW_STYLE = {
+    clear:{name:"투명 유리창", short:"투명", main:"#D6EFFC", edge:"#8FC0DE"},
+    black:{name:"짙은 블랙 선팅", short:"블랙 선팅", main:"#0B1118", edge:"#04070A"},
+    blue:{name:"파란 미러 선팅", short:"미러 선팅", main:"#5C93FF", edge:"#1E3EA0"},
+    cracked:{name:"금 간 유리창", short:"금 간 유리", main:"#DDF2FE", edge:"#9BC9E5"}
+  };
   const COLORS = {
     red:{name:"빨간", hex:"#E5383B"},
     blue:{name:"파란", hex:"#2F6BFF"},
@@ -479,7 +493,8 @@
   const S = {
     joined:false, name:"", pid:"", round:0, choice:-1, submitted:false,
     offset:0, connected:false, count:0, meta:{}, reveal:null, keys:{}, board:null,
-    myAnswers:{}, view:"vEntry", optSig:"", raf:0, lastLeft:-1, revealSig:""
+    myAnswers:{}, view:"vEntry", optSig:"", raf:0, lastLeft:-1, revealSig:"",
+    cdSig:"", choiceLocked:false
   };
   let db = null, metaRef = null, playersRef = null, meRef = null, revealRef = null, keysRef = null, boardRef = null;
 
@@ -496,6 +511,35 @@
   function colorHex(id){ return (COLORS[id] || {}).hex || "#9AA9BF"; }
   function colorName(id){ return (COLORS[id] || {}).name || ""; }
   function typeName(id){ return TYPE_NAME[id] || "차량"; }
+  function windowName(id){ return (WINDOW_STYLE[id] || {}).name || "유리창"; }
+  function windowShort(id){ return (WINDOW_STYLE[id] || {}).short || "유리"; }
+  function winBg(id){
+    return (id === "blue") ? "linear-gradient(135deg,#8FE0FF,#2E63D8)" : ((WINDOW_STYLE[id] || {}).main || "#D6EFFC");
+  }
+  function winEdge(id){ return (WINDOW_STYLE[id] || {}).edge || "#8FC0DE"; }
+
+  /* 차량 통과 후부터 흐르는 답안 타이머 (진행자 화면과 같은 규칙) */
+  function pausedTotal(m, now){
+    let p = Number(m.pausedMs) || 0;
+    const pa = Number(m.pauseAt) || 0, pm = Number(m.pauseMs) || 0;
+    if (pa && pm){
+      const d = now - pa;
+      if (d > 0) p += Math.min(d, pm);
+    }
+    return p;
+  }
+  function isPausing(m, now){
+    const pa = Number(m.pauseAt) || 0, pm = Number(m.pauseMs) || 0;
+    if (!pa || !pm) return false;
+    const d = now - pa;
+    return d >= 0 && d < pm;
+  }
+  function answerAtOf(m, now){
+    const startAt = Number(m.startAt) || 0;
+    const sight = Number(m.sightMs) || 4000;
+    const base = Number(m.answerAt) || (startAt + sight + ANSWER_PAD_MS);
+    return base + pausedTotal(m, now);
+  }
 
   let toastT = 0;
   function toast(msg, ms){
@@ -618,6 +662,8 @@
       S.choice = -1;
       S.submitted = false;
       S.optSig = "";
+      S.choiceLocked = false;
+      S.cdSig = "";
     }
     if (st === "reveal"){ setView("vReveal"); paintReveal(); return; }
     if (!S.joined) return;
@@ -652,24 +698,32 @@
 
     const startAt = Number(m.startAt) || 0;
     const sight = Number(m.sightMs) || 4000;
-    const answer = Number(m.answerMs) || 10000;
+    const ansMs = Number(m.answerMs) || ANSWER_MS;
     const rd = Number(m.round) || 1;
-    const el = nowMs() - startAt;
+    const now = nowMs();
+    const el = now - startAt;
+    const answerAt = answerAtOf(m, now);
+    const replaying = isPausing(m, now);
 
     if (el < 0){
       setView("vSight");
       paintCd(Math.ceil(-el / 1000), rd);
     } else if (el < sight){
+      /* 차량 통과 중 — 관찰만. 답안 타이머는 아직 시작하지 않음 */
       setView("vSight");
-      paintSight(Math.max(0, sight - el), rd);
-    } else if (el < sight + answer){
+      paintWatch(rd, false);
+    } else if (now < answerAt){
+      setView("vSight");
+      paintWatch(rd, true);
+    } else if (now < answerAt + ansMs){
       if (S.submitted){
         setView("vLocked");
         if (!S.choiceLocked){ paintMyPick(); S.choiceLocked = true; }
       } else {
         setView("vAnswer");
-        buildOptions(m.options || [], rd);
-        paintAnswer(sight + answer - el, answer);
+        buildOptions(m.options || [], rd, m.vary);
+        paintAnswer(answerAt + ansMs - now, ansMs);
+        $("replayNote").style.display = replaying ? "" : "none";
       }
     } else {
       setView("vLocked");
@@ -681,16 +735,16 @@
 
   function paintWait(){
     const rd = Number((S.meta || {}).round) || 0;
-    const next = Math.min(5, rd + 1);
-    const finished = rd >= 5;
+    const next = Math.min(TOTAL_ROUNDS, rd + 1);
+    const finished = rd >= TOTAL_ROUNDS;
     $("waitIc").textContent = finished ? "🏁" : "🕵️";
     $("waitTitle").textContent = finished ? "모든 라운드 종료!" : "제" + next + "의 목격을 기다리는 중";
     $("waitMsg").innerHTML = finished
       ? "수고하셨습니다! <b>최고의 명탐정</b> 발표를 기다려 주세요."
       : "잠시 후 스크린에 도주 차량이 지나갑니다.<br>준비되셨나요?";
-    $("waitRound").textContent = String(finished ? 5 : next);
-    $("waitBounty").textContent = fmtWon(ROUND_BOUNTY[(finished ? 4 : next - 1)]);
-    $("hudRound").textContent = (rd ? String(rd) : "-") + " / 5";
+    $("waitRound").textContent = String(finished ? TOTAL_ROUNDS : next);
+    $("waitBounty").textContent = fmtWon(ROUND_BOUNTY[(finished ? TOTAL_ROUNDS - 1 : next - 1)]);
+    $("hudRound").textContent = (rd ? String(rd) : "-") + " / " + TOTAL_ROUNDS;
     paintTotals();
   }
 
@@ -701,27 +755,25 @@
     S.cdSig = sig;
     body.innerHTML = '<div class="cdbig">' + Math.max(1, Math.min(3, n)) + '</div>' +
       '<p style="margin-top:16px">제' + rd + '의 목격 준비</p>';
-    $("sightRound").textContent = rd + " / 5";
-    $("sightRound").textContent = rd + " / 5";
+    $("sightRound").textContent = rd + " / " + TOTAL_ROUNDS;
   }
 
-  function paintSight(remain, rd){
-    const sig = "sg" + rd;
+  /* 차량 통과/재생 안내 — 여기에는 카운트다운 숫자가 없습니다 */
+  function paintWatch(rd, replaying){
+    const sig = "wt" + rd + (replaying ? "r" : "");
     if (S.cdSig !== sig){
       S.cdSig = sig;
       $("sightBody").innerHTML =
         '<div class="eye">👀</div>' +
-        '<h2>스크린을 집중!</h2>' +
-        '<p>지금 도주 차량이 지나갑니다<br><b>색 · 차종 · 번호판 · 특징</b>을 외우세요!</p>' +
-        '<div class="tleft"><span id="sightLeft">3</span><small>초</small></div>';
+        '<h2>' + (replaying ? "한 번 더 지나갑니다!" : "스크린을 집중!") + '</h2>' +
+        '<p>' + (replaying
+          ? "지금 한 번 더 지나가는 중입니다<br><b>색 · 차종 · 번호판 · 유리창</b>을 다시 확인하세요!"
+          : "지금 도주 차량이 지나갑니다<br><b>색 · 차종 · 번호판 · 유리창</b>을 외우세요!") + '</p>' +
+        '<div class="watchTag' + (replaying ? " live" : "") + '">' +
+          (replaying ? "답안 타이머 일시정지 — 차량이 지나간 뒤 다시 시작" : "관찰 중 · 타이머는 차량이 다 지나간 뒤 시작됩니다") +
+        '</div>';
     }
-    const left = Math.max(0, Math.ceil(remain / 1000));
-    if (S.lastLeft !== left){
-      S.lastLeft = left;
-      const el = $("sightLeft");
-      if (el) el.textContent = String(left);
-    }
-    $("sightRound").textContent = rd + " / 5";
+    $("sightRound").textContent = rd + " / " + TOTAL_ROUNDS;
   }
 
   function paintAnswer(remain, total){
@@ -735,8 +787,9 @@
     $("ansBar").classList.toggle("hot", hot);
   }
 
-  function buildOptions(opts, rd){
-    const sig = rd + "|" + JSON.stringify(opts);
+  function buildOptions(opts, rd, vary){
+    const v = vary || { c:true, t:true, p:true, w:true };
+    const sig = rd + "|" + JSON.stringify(opts) + "|" + JSON.stringify(v);
     if (S.optSig === sig) return;
     S.optSig = sig;
     const box = $("optList");
@@ -750,9 +803,10 @@
         '<span class="no">' + (i + 1) + '</span>' +
         '<span class="sw" style="background:' + colorHex(o.c) + '"></span>' +
         '<span class="txt">' +
-          '<span class="l1">' + esc(colorName(o.c) + " " + typeName(o.t)) + '</span>' +
+          '<span class="l1">' + esc(colorName(o.c) + " " + typeName(o.t)) +
+            (v.w ? '<span class="wt"><i class="wi" style="background:' + winBg(o.w) + ';border-color:' + winEdge(o.w) + '"></i>' + esc(windowShort(o.w)) + '</span>' : '') +
+          '</span>' +
           '<span class="plate">' + esc(o.p || "") + '</span>' +
-          '<span class="feat">' + esc(FEAT_NAME[o.f] || "특징 없음") + '</span>' +
         '</span>';
       b.addEventListener("click", () => submit(i));
       box.appendChild(b);
@@ -763,18 +817,23 @@
     if (S.submitted) return;
     const m = S.meta || {};
     if (m.state !== "sighting") return;
-    const startAt = Number(m.startAt) || 0;
     const sight = Number(m.sightMs) || 4000;
-    const answer = Number(m.answerMs) || 10000;
-    const el = nowMs() - startAt;
-    if (el < sight || el > sight + answer){
-      toast("제출 시간이 지났습니다.", 1800);
+    const ansMs = Number(m.answerMs) || ANSWER_MS;
+    const now = nowMs();
+    const el = now - Number(m.startAt || 0);
+    const answerAt = answerAtOf(m, now);
+    if (el < sight || now < answerAt){
+      toast("차량이 완전히 지나간 뒤부터 선택할 수 있어요!", 1800);
+      return;
+    }
+    if (now > answerAt + ansMs){
+      toast("제한시간이 지났습니다.", 1600);
       return;
     }
     S.submitted = true;
     S.choice = i;
     S.choiceLocked = false;
-    const ms = Math.max(0, Math.round(el - sight));
+    const ms = Math.max(0, Math.round(now - answerAt));
     const rd = Number(m.round) || 1;
     S.myAnswers[rd] = { c: i, ms: ms };
     const nodes = document.querySelectorAll("#optList .opt");
@@ -808,7 +867,7 @@
 
   function paintTotals(){
     let total = 0;
-    for (let r = 1; r <= 5; r++){
+    for (let r = 1; r <= TOTAL_ROUNDS; r++){
       const key = S.keys ? S.keys["r" + r] : null;
       if (key === null || key === undefined) continue;
       const mine = S.myAnswers[r];
@@ -836,7 +895,7 @@
     const car = rev.car || {};
     const mine = S.myAnswers[rd];
     const got = mine && Number(mine.c) === correct;
-    const final = rd >= 5;
+    const final = rd >= TOTAL_ROUNDS;
 
     $("revBadge").textContent = final ? "FINAL · ALL ROUNDS" : "ROUND " + rd + " 결과";
     const title = $("revTitle");
@@ -849,7 +908,7 @@
     $("revPlate").textContent = car.p || "-";
     $("revSw").style.background = colorHex(car.c);
     $("revSpec").textContent = colorName(car.c) + " " + typeName(car.t);
-    $("revFeat").textContent = FEAT_NAME[car.f] || "특징 없음";
+    $("revFeat").textContent = windowName(car.w);
 
     const dist = rev.dist || [];
     $("revDist").innerHTML = [0,1,2,3,4].map(i =>
@@ -888,7 +947,7 @@
       ? ("참가 " + total + "명 · 내 순위 " + (myIdx >= 0 ? (myIdx + 1) + "위" : "-"))
       : "참가 0명";
     const rd = Number((S.reveal || {}).round) || 0;
-    if (rd >= 5){
+    if (rd >= TOTAL_ROUNDS){
       const foot = $("revFoot");
       if (myIdx === 0) foot.innerHTML = "🏆 <b>최고의 명탐정 1위!</b> 완벽한 기억력입니다!";
       else if (myIdx >= 0 && myIdx < 5) foot.innerHTML = "🎉 <b>명탐정 TOP 5</b> 진입! 대단합니다!";

@@ -66,6 +66,7 @@
   }
   .seg button:hover{background:rgba(255,255,255,.06)}
   .seg button.on{background:linear-gradient(180deg,#FFC94A,#EF9B12);color:#241703;border-color:transparent;box-shadow:0 4px 12px rgba(245,165,36,.25)}
+  .seg.time button.on{background:linear-gradient(180deg,#4FE1F5,#12A6BC);color:#032027;box-shadow:0 4px 12px rgba(34,211,238,.3)}
   .spacer{flex:1}
   .hintk{font-size:11px;font-weight:700;color:#5E7189;white-space:nowrap}
 
@@ -85,15 +86,15 @@
   .qrCard .qrHero{width:min(78%,260px);margin-bottom:10px;filter:drop-shadow(0 10px 18px rgba(0,0,0,.5))}
   .qrCard .qrHero svg{width:100%;height:auto;display:block}
   .qrCard .qrFoot{margin-top:14px;font-size:11.5px;font-weight:900;letter-spacing:.06em;color:#8FA3BC;border-top:1px solid var(--line);padding-top:12px;width:100%}
-  .idleRight{min-height:0;display:flex;flex-direction:column;gap:14px}
-  .plan{background:linear-gradient(180deg,#101D31,#0C1626);border:1px solid var(--line);border-radius:18px;padding:14px 16px}
-  .plan h3{margin:0 0 10px;font-family:var(--serif);font-size:20px;font-weight:900;letter-spacing:-.03em;color:#FFEFD2}
+  .idleRight{min-height:0;display:flex;flex-direction:column;gap:12px}
+  .plan{background:linear-gradient(180deg,#101D31,#0C1626);border:1px solid var(--line);border-radius:18px;padding:12px 14px}
+  .plan h3{margin:0 0 8px;font-family:var(--serif);font-size:19px;font-weight:900;letter-spacing:-.03em;color:#FFEFD2}
   .plan h3 em{font-style:normal;color:var(--amber-lt)}
-  .plan table{width:100%;border-collapse:collapse;font-size:13.5px}
-  .plan th{font-size:11px;font-weight:900;letter-spacing:.1em;color:#6E8299;text-align:left;padding:0 8px 6px}
-  .plan td{padding:7px 8px;border-top:1px solid rgba(255,255,255,.06);font-weight:800;color:#D6E2F0}
+  .plan table{width:100%;border-collapse:collapse;font-size:12.5px}
+  .plan th{font-size:10.5px;font-weight:900;letter-spacing:.1em;color:#6E8299;text-align:left;padding:0 8px 5px}
+  .plan td{padding:4px 8px;border-top:1px solid rgba(255,255,255,.06);font-weight:800;color:#D6E2F0}
   .plan td.b{font-family:var(--mono);color:var(--amber-lt);text-align:right;white-space:nowrap}
-  .plan td.n{color:#8CA0B8;font-weight:700;font-size:12.5px}
+  .plan td.n{color:#8CA0B8;font-weight:700;font-size:12px}
   .rosterCard{flex:1;min-height:0;background:linear-gradient(180deg,#101D31,#0C1626);border:1px solid var(--line);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column}
   .rh{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:900;letter-spacing:.1em;color:#7E90A8;margin-bottom:8px}
   .rh b{color:var(--cyan);font-size:15px;letter-spacing:0}
@@ -147,6 +148,8 @@
   .bigTimer{background:rgba(10,17,29,.78);border:1px solid var(--line2);border-radius:14px;padding:8px 18px;backdrop-filter:blur(4px);font-family:var(--mono);font-size:40px;font-weight:800;line-height:1;color:#EAF1FA;text-align:right}
   .bigTimer small{font-size:15px;color:var(--muted);font-family:var(--sans);margin-left:4px}
   .bigTimer.hot{color:var(--rose);border-color:rgba(251,113,133,.5)}
+  .bigTimer.paused{color:var(--cyan);border-color:rgba(34,211,238,.55);box-shadow:0 0 0 2px rgba(34,211,238,.14)}
+  .bigTimer .lab{display:block;font-family:var(--sans);font-size:10.5px;font-weight:900;letter-spacing:.08em;color:#7E90A8;margin-bottom:3px;text-align:right}
   .phaseMsg{position:absolute;left:50%;top:104px;transform:translateX(-50%);font-size:16px;font-weight:900;color:#FFE9BE;background:rgba(10,17,29,.72);border:1px solid rgba(245,165,36,.3);border-radius:12px;padding:9px 18px;white-space:nowrap;pointer-events:none}
   .phaseMsg.hide{display:none}
 
@@ -173,7 +176,8 @@
   .aoCard .l1{font-size:12.5px;font-weight:800;color:#AEBDD0;display:flex;align-items:center;gap:6px}
   .aoCard .sw{width:14px;height:14px;border-radius:4px;border:1px solid rgba(255,255,255,.4)}
   .aoCard .plate{font-family:var(--mono);font-size:23px;font-weight:800;color:#fff;line-height:1.15;white-space:nowrap}
-  .aoCard .feat{font-size:11.5px;font-weight:800;color:#8FA3BC}
+  .aoCard .feat{font-size:11.5px;font-weight:800;color:#8FA3BC;display:flex;align-items:center;gap:5px}
+  .aoCard .wchip{width:16px;height:11px;border-radius:3px;border:1px solid rgba(255,255,255,.4);flex:none}
   .aoCard .cnt{margin-top:auto;display:flex;align-items:center;gap:7px}
   .aoCard .cnt b{font-family:var(--mono);font-size:20px;color:var(--cyan);line-height:1}
   .aoCard .cnt .bar{flex:1;height:5px;border-radius:99px;background:rgba(255,255,255,.09);overflow:hidden}
@@ -232,6 +236,23 @@
   .modal .roomline b{display:block;font-family:var(--mono);font-size:34px;letter-spacing:.16em;color:#fff;margin-top:4px}
   .modal .url{margin-top:8px;font-size:11.5px;font-weight:700;color:#7E90A8;word-break:break-all}
   .modal .close{margin-top:16px;width:100%}
+
+  /* ---------- 문제 편집 ---------- */
+  .modal .card.edit{max-width:1040px;width:100%;text-align:left;padding:16px 16px 12px;display:flex;flex-direction:column;max-height:92vh}
+  .edit .eh{display:flex;align-items:baseline;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+  .edit .eh b{font-family:var(--serif);font-size:20px;color:#FFEFD2}
+  .edit .eh span{font-size:11.5px;font-weight:800;color:#7E90A8}
+  .elist{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-right:4px}
+  .eround{border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:#0C1626}
+  .eround .rh2{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .eround .rh2 b{font-size:13px;color:var(--amber-lt)}
+  .eround .rh2 span{font-size:11px;font-weight:800;color:#7E90A8}
+  .eopt{display:grid;grid-template-columns:24px 84px 84px 1fr 118px;gap:6px;align-items:center;margin-bottom:4px}
+  .eopt input[type=radio]{width:16px;height:16px;accent-color:#F5A524;margin:0}
+  .eopt select,.eopt input[type=text]{appearance:none;font-family:inherit;font-size:12px;font-weight:800;color:#EAF1FA;background:#0A1424;border:1px solid var(--line2);border-radius:7px;padding:6px 6px;min-width:0;width:100%}
+  .eopt input[type=text]{font-family:var(--mono);letter-spacing:.02em}
+  .efoot{flex:none;display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+
   .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,18px);z-index:90;background:#17253C;border:1px solid var(--line2);color:#EAF1FA;font-size:14px;font-weight:800;padding:12px 20px;border-radius:13px;box-shadow:0 16px 44px rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;text-align:center;max-width:80vw}
   .toast.on{opacity:1;transform:translate(-50%,0)}
   .flash{position:fixed;inset:0;z-index:70;background:radial-gradient(circle,rgba(255,255,255,.92),rgba(255,201,74,.35) 45%,rgba(255,201,74,0) 70%);opacity:0;pointer-events:none}
@@ -253,7 +274,7 @@
       <span class="pill off" id="netPill"><span class="live"></span><span id="netTxt">연결 중</span></span>
       <span class="pill">방 코드 <b id="roomTag">JY73</b></span>
       <span class="pill count"><b id="headCount">0</b> 명</span>
-      <span class="pill round">라운드 <b id="roundNum">-</b> / 5</span>
+      <span class="pill round">라운드 <b id="roundNum">-</b> / 10</span>
     </div>
   </div>
 
@@ -262,6 +283,7 @@
     <button class="btn" id="btnReplay">🔁 한 번 더 지나가기</button>
     <button class="btn res" id="btnReveal">🏆 검거 결과보기</button>
     <button class="btn" id="btnNext">🔄 다음 라운드</button>
+    <button class="btn" id="btnEdit">📝 문제 편집</button>
     <button class="btn danger" id="btnClear">🧹 참가자 비우기</button>
     <button class="btn" id="btnSound">🔊 소리 ON</button>
     <button class="btn" id="btnQR">📱 QR 입장</button>
@@ -278,8 +300,14 @@
       <button data-ms="1800">🏎️ 아주 빠르게 · 1.8초</button>
       <button data-ms="1000">⚡ 번개 · 1.0초</button>
     </span>
+    <span class="seg time" id="segTime" aria-label="답안 제한시간">
+      <span class="lab">답안 시간</span>
+      <button data-sec="10" class="on">⏱ 10초</button>
+      <button data-sec="15">⏱ 15초</button>
+      <button data-sec="20">⏱ 20초</button>
+    </span>
     <span class="spacer"></span>
-    <span class="hintk" id="speedHint">기본 ‘빠르게 · 3초’ — 어르신은 ‘아주 느리게’를 권장합니다</span>
+    <span class="hintk" id="speedHint">차량이 화면을 완전히 빠져나간 뒤부터 답안 시간이 흐릅니다</span>
   </div>
 
   <main>
@@ -296,16 +324,10 @@
         </div>
         <div class="idleRight">
           <div class="plan">
-            <h3>현상금 <em>5천만</em> 사냥 · 5라운드</h3>
+            <h3>현상금 <em>5천만</em> 사냥 · 10문제 3단계</h3>
             <table>
-              <thead><tr><th>라운드</th><th>상황</th><th style="text-align:right">현상금</th></tr></thead>
-              <tbody>
-                <tr><td>1R</td><td class="n">빨간 승용차 · 번호판 함정</td><td class="b">500만</td></tr>
-                <tr><td>2R</td><td class="n">흰색 SUV · 색·숫자 함정</td><td class="b">700만</td></tr>
-                <tr><td>3R</td><td class="n">파란 트럭 · 특징 함정</td><td class="b">1,000만</td></tr>
-                <tr><td>4R</td><td class="n">검정 승용차 · 헤드라이트</td><td class="b">1,300만</td></tr>
-                <tr><td>5R</td><td class="n">초록 승합차 · 금 간 유리</td><td class="b">1,500만</td></tr>
-              </tbody>
+              <thead><tr><th>라운드</th><th>출제 포인트</th><th style="text-align:right">현상금</th></tr></thead>
+              <tbody id="planBody"></tbody>
             </table>
           </div>
           <div class="rosterCard">
@@ -335,11 +357,11 @@
 
         <div class="hudTop">
           <div class="roundTag"><b id="runRound">제 1 의 목격</b><span id="runBounty">현상금 500만 원</span></div>
-          <div class="bigTimer" id="bigTimer"><span id="bigTimerNum">3.0</span><small>초</small></div>
+          <div class="bigTimer" id="bigTimer"><span class="lab" id="bigTimerLab">관찰</span><span id="bigTimerNum">3.0</span><small>초</small></div>
         </div>
         <div class="phaseMsg" id="phaseMsg">목격 준비 — 차량이 곧 지나갑니다</div>
         <div class="countOverlay" id="countOverlay"><div class="cdNum" id="cdNum">3</div></div>
-        <div class="replayBadge" id="replayBadge">🔁 한 번 더 지나갑니다 — 놓치지 마세요!</div>
+        <div class="replayBadge" id="replayBadge">🔁 한 번 더 지나갑니다 — 타이머는 멈춰 있습니다</div>
 
         <div class="ansOverlay" id="ansOverlay">
           <div class="aoHead">
@@ -361,7 +383,7 @@
           <div class="stamp" id="revStamp">검거!</div>
           <div class="revCar" id="revCar"></div>
           <div class="revPlate"><b id="revPlate">48거 7924</b></div>
-          <div class="revSpec"><span class="sw" id="revSw"></span><span id="revSpec">빨간 승용차</span><span class="feat" id="revFeat">특징 없음</span></div>
+          <div class="revSpec"><span class="sw" id="revSw"></span><span id="revSpec">빨간 승용차</span><span class="feat" id="revFeat">투명 유리창</span></div>
           <div class="revDist" id="revDist"></div>
         </div>
         <div class="revRight">
@@ -385,6 +407,21 @@
   </div>
 </div>
 
+<div class="modal" id="editModal">
+  <div class="card edit">
+    <div class="eh">
+      <b>📝 문제 편집</b>
+      <span>1~3번 번호판만 · 4~6번 번호판+색 · 7~10번 번호판+색+유리창 · 왼쪽 동그라미가 정답</span>
+    </div>
+    <div class="elist" id="editList"></div>
+    <div class="efoot">
+      <button class="btn ghost" id="btnEditClose">닫기</button>
+      <button class="btn ghost" id="btnEditReset">기본 문제로</button>
+      <button class="btn gold" id="btnEditSave">저장하고 적용</button>
+    </div>
+  </div>
+</div>
+
 <div class="flash" id="flash"></div>
 <div class="toast" id="toast"></div>
 
@@ -400,7 +437,9 @@
   const QS = new URLSearchParams(location.search);
   const DEFAULT_ROOM = "JY73";
   const MAX_PLAYERS = 80;
-  const ANSWER_MS = 10000;
+  const TOTAL_ROUNDS = 10;
+  const ANSWER_MS = 10000;      /* 기본 답안 제한시간 10초 */
+  const ANSWER_PAD_MS = 350;    /* 차량이 화면을 완전히 빠져나간 뒤 여유 */
   const COUNT_MS = 3400;
   const BASE_URL = "https://jungjinyoung3512.github.io/jungjinyoung3512/hit-run-chase/";
 
@@ -428,63 +467,143 @@
     teal:{name:"청록", hex:"#1FA9A0"}
   };
   const TYPE_NAME = { sedan:"승용차", suv:"SUV", van:"승합차", truck:"트럭" };
-  const FEAT_NAME = { none:"특징 없음", headlight:"한쪽 헤드라이트 꺼짐", sticker:"뒷면에 노란 스티커", roofbox:"지붕에 짐칸", crack:"뒷유리에 금 간 자국" };
-  const ROUND_BOUNTY = [5000000, 7000000, 10000000, 13000000, 15000000];
-
-  /* ================= 라운드 데이터 (정답은 진행자 화면에만) ================= */
-  const ROUNDS = [
-    { no:1, bounty:ROUND_BOUNTY[0], title:"빨간 승용차 · 번호판 함정",
-      car:{c:"red", t:"sedan", p:"48거 7924", f:"none"}, correct:1,
-      opts:[
-        {c:"red",   t:"sedan", p:"48거 7942", f:"none"},
-        {c:"red",   t:"sedan", p:"48거 7924", f:"none"},
-        {c:"red",   t:"sedan", p:"48거 7294", f:"none"},
-        {c:"blue",  t:"sedan", p:"48거 7924", f:"none"},
-        {c:"red",   t:"van",   p:"48거 7924", f:"none"}
-      ]},
-    { no:2, bounty:ROUND_BOUNTY[1], title:"흰색 SUV · 색·숫자 함정",
-      car:{c:"white", t:"suv", p:"31서 5087", f:"none"}, correct:3,
-      opts:[
-        {c:"gray",  t:"suv",   p:"31서 5087", f:"none"},
-        {c:"white", t:"suv",   p:"31서 5807", f:"none"},
-        {c:"white", t:"sedan", p:"31서 5087", f:"none"},
-        {c:"white", t:"suv",   p:"31서 5087", f:"none"},
-        {c:"white", t:"suv",   p:"31서 5078", f:"none"}
-      ]},
-    { no:3, bounty:ROUND_BOUNTY[2], title:"파란 트럭 · 특징 함정",
-      car:{c:"blue", t:"truck", p:"72무 2136", f:"sticker"}, correct:0,
-      opts:[
-        {c:"blue",  t:"truck", p:"72무 2136", f:"sticker"},
-        {c:"blue",  t:"truck", p:"72무 2136", f:"none"},
-        {c:"blue",  t:"truck", p:"72무 2163", f:"sticker"},
-        {c:"blue",  t:"van",   p:"72무 2136", f:"sticker"},
-        {c:"gray",  t:"truck", p:"72무 2136", f:"sticker"}
-      ]},
-    { no:4, bounty:ROUND_BOUNTY[3], title:"검정 승용차 · 헤드라이트",
-      car:{c:"black", t:"sedan", p:"05허 6639", f:"headlight"}, correct:2,
-      opts:[
-        {c:"black", t:"sedan", p:"05허 6693", f:"headlight"},
-        {c:"black", t:"sedan", p:"05허 6639", f:"roofbox"},
-        {c:"black", t:"sedan", p:"05허 6639", f:"headlight"},
-        {c:"black", t:"suv",   p:"05허 6639", f:"headlight"},
-        {c:"black", t:"sedan", p:"05허 6369", f:"headlight"}
-      ]},
-    { no:5, bounty:ROUND_BOUNTY[4], title:"초록 승합차 · 금 간 유리",
-      car:{c:"green", t:"van", p:"88소 1419", f:"crack"}, correct:4,
-      opts:[
-        {c:"green", t:"van",   p:"88소 1491", f:"crack"},
-        {c:"green", t:"van",   p:"88소 1419", f:"none"},
-        {c:"green", t:"truck", p:"88소 1419", f:"crack"},
-        {c:"teal",  t:"van",   p:"88소 1419", f:"crack"},
-        {c:"green", t:"van",   p:"88소 1419", f:"crack"}
-      ]}
+  const WINDOW_STYLE = {
+    clear:{name:"투명 유리창", short:"투명", main:"#D6EFFC", edge:"#8FC0DE", op:.62},
+    black:{name:"짙은 블랙 선팅", short:"블랙 선팅", main:"#0B1118", edge:"#04070A", op:.98},
+    blue:{name:"파란 미러 선팅", short:"미러 선팅", main:"#5C93FF", edge:"#1E3EA0", op:.95},
+    cracked:{name:"금 간 유리창", short:"금 간 유리", main:"#DDF2FE", edge:"#9BC9E5", op:.7}
+  };
+  const TIER_LABEL = ["번호판만","번호판+색","번호판+색+유리창"];
+  const ROUND_BOUNTY = [
+    5000000, 7000000, 10000000, 13000000, 15000000,
+    20000000, 25000000, 30000000, 40000000, 50000000
   ];
+
+  /* ================= 기본 문제 (10문제 · 3단계) ================= */
+  const DEFAULT_ROUNDS = [
+    /* 1~3 : 똑같은 차량 — 번호판만 다르게 */
+    { car:{c:"red",t:"sedan",p:"24가 3571",w:"clear"}, correct:1, opts:[
+      {c:"red",t:"sedan",p:"24가 3751",w:"clear"},
+      {c:"red",t:"sedan",p:"24가 3571",w:"clear"},
+      {c:"red",t:"sedan",p:"24거 3571",w:"clear"},
+      {c:"red",t:"sedan",p:"24가 3517",w:"clear"},
+      {c:"red",t:"sedan",p:"24가 5371",w:"clear"}
+    ]},
+    { car:{c:"white",t:"suv",p:"31서 5087",w:"black"}, correct:2, opts:[
+      {c:"white",t:"suv",p:"31서 5807",w:"black"},
+      {c:"white",t:"suv",p:"13서 5087",w:"black"},
+      {c:"white",t:"suv",p:"31서 5087",w:"black"},
+      {c:"white",t:"suv",p:"31서 5078",w:"black"},
+      {c:"white",t:"suv",p:"31서 8507",w:"black"}
+    ]},
+    { car:{c:"blue",t:"truck",p:"72무 2136",w:"clear"}, correct:3, opts:[
+      {c:"blue",t:"truck",p:"72무 2163",w:"clear"},
+      {c:"blue",t:"truck",p:"72무 2316",w:"clear"},
+      {c:"blue",t:"truck",p:"72무 1236",w:"clear"},
+      {c:"blue",t:"truck",p:"72무 2136",w:"clear"},
+      {c:"blue",t:"truck",p:"72무 2631",w:"clear"}
+    ]},
+    /* 4~6 : 번호판 + 색깔 */
+    { car:{c:"red",t:"suv",p:"48거 7924",w:"black"}, correct:0, opts:[
+      {c:"red",t:"suv",p:"48거 7924",w:"black"},
+      {c:"blue",t:"suv",p:"48거 7924",w:"black"},
+      {c:"red",t:"suv",p:"48거 7942",w:"black"},
+      {c:"white",t:"suv",p:"48거 7924",w:"black"},
+      {c:"gray",t:"suv",p:"48거 7942",w:"black"}
+    ]},
+    { car:{c:"white",t:"sedan",p:"05허 6639",w:"blue"}, correct:2, opts:[
+      {c:"white",t:"sedan",p:"05허 6693",w:"blue"},
+      {c:"gray",t:"sedan",p:"05허 6639",w:"blue"},
+      {c:"white",t:"sedan",p:"05허 6639",w:"blue"},
+      {c:"teal",t:"sedan",p:"05허 6639",w:"blue"},
+      {c:"blue",t:"sedan",p:"05허 6369",w:"blue"}
+    ]},
+    { car:{c:"black",t:"van",p:"88소 1419",w:"clear"}, correct:3, opts:[
+      {c:"black",t:"van",p:"88소 1491",w:"clear"},
+      {c:"green",t:"van",p:"88소 1419",w:"clear"},
+      {c:"black",t:"van",p:"88소 4191",w:"clear"},
+      {c:"black",t:"van",p:"88소 1419",w:"clear"},
+      {c:"white",t:"van",p:"88소 1491",w:"clear"}
+    ]},
+    /* 7~10 : 번호판 + 색깔 + 유리창 */
+    { car:{c:"red",t:"sedan",p:"12가 3456",w:"black"}, correct:1, opts:[
+      {c:"red",t:"sedan",p:"12가 3465",w:"black"},
+      {c:"red",t:"sedan",p:"12가 3456",w:"black"},
+      {c:"blue",t:"sedan",p:"12가 3456",w:"black"},
+      {c:"red",t:"sedan",p:"12거 3456",w:"clear"},
+      {c:"red",t:"sedan",p:"12가 3456",w:"clear"}
+    ]},
+    { car:{c:"white",t:"suv",p:"39허 7712",w:"blue"}, correct:3, opts:[
+      {c:"white",t:"suv",p:"39허 7712",w:"black"},
+      {c:"gray",t:"suv",p:"39허 7712",w:"blue"},
+      {c:"white",t:"suv",p:"39허 7721",w:"blue"},
+      {c:"white",t:"suv",p:"39허 7712",w:"blue"},
+      {c:"white",t:"suv",p:"39허 7217",w:"clear"}
+    ]},
+    { car:{c:"black",t:"sedan",p:"61보 4820",w:"cracked"}, correct:2, opts:[
+      {c:"black",t:"sedan",p:"61보 4820",w:"clear"},
+      {c:"black",t:"sedan",p:"61보 4802",w:"cracked"},
+      {c:"black",t:"sedan",p:"61보 4820",w:"cracked"},
+      {c:"gray",t:"sedan",p:"61보 4820",w:"cracked"},
+      {c:"black",t:"sedan",p:"61보 4820",w:"black"}
+    ]},
+    { car:{c:"teal",t:"suv",p:"77허 9042",w:"blue"}, correct:4, opts:[
+      {c:"teal",t:"suv",p:"77허 9042",w:"black"},
+      {c:"teal",t:"suv",p:"77허 9402",w:"blue"},
+      {c:"green",t:"suv",p:"77허 9042",w:"blue"},
+      {c:"teal",t:"suv",p:"77허 9042",w:"cracked"},
+      {c:"teal",t:"suv",p:"77허 9042",w:"blue"}
+    ]}
+  ];
+
+  function colorHex(id){ return (COLORS[id] || {}).hex || "#9AA9BF"; }
+  function colorName(id){ return (COLORS[id] || {}).name || ""; }
+  function typeName(id){ return TYPE_NAME[id] || "차량"; }
+  function windowName(id){ return (WINDOW_STYLE[id] || {}).name || "유리창"; }
+  function esc(s){
+    return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+  function fmtWon(v){
+    const n = Math.max(0, Math.round((Number(v)||0)/10000));
+    return n.toLocaleString("ko-KR") + "만 원";
+  }
+  function fmtWonShort(v){
+    const n = Math.max(0, Math.round((Number(v)||0)/10000));
+    return n.toLocaleString("ko-KR") + "만";
+  }
+  function tierOf(i){ return i < 3 ? 0 : (i < 6 ? 1 : 2); }
+  function plateOf(r){ return (r && r.car && r.car.p) || ""; }
+
+  function cloneRounds(arr){
+    return arr.map(r => ({
+      car:{c:r.car.c,t:r.car.t,p:r.car.p,w:r.car.w},
+      correct:Number(r.correct)||0,
+      opts:(r.opts||[]).map(o => ({c:o.c,t:o.t,p:o.p,w:o.w}))
+    }));
+  }
+  function validRound(r){
+    if (!r || !r.car || !Array.isArray(r.opts) || r.opts.length !== 5) return false;
+    const c = r.car;
+    if (!COLORS[c.c] || !TYPE_NAME[c.t] || !WINDOW_STYLE[c.w] || !String(c.p||"").trim()) return false;
+    if (r.opts.some(o => !COLORS[o.c] || !TYPE_NAME[o.t] || !WINDOW_STYLE[o.w])) return false;
+    return Number(r.correct) >= 0 && Number(r.correct) < 5;
+  }
+  let ROUNDS = (function(){
+    try{
+      const raw = localStorage.getItem("hrc_rounds");
+      if (!raw) return cloneRounds(DEFAULT_ROUNDS);
+      const arr = JSON.parse(raw);
+      if (!Array.isArray(arr) || arr.length !== TOTAL_ROUNDS || !arr.every(validRound)) return cloneRounds(DEFAULT_ROUNDS);
+      return cloneRounds(arr);
+    }catch(e){ return cloneRounds(DEFAULT_ROUNDS); }
+  })();
 
   /* ================= 상태 ================= */
   const H = {
-    state:"idle", round:0, startAt:0, sightMs:3000, meta:{}, players:{}, keys:{}, reveal:null,
+    state:"idle", round:0, startAt:0, sightMs:3000, answerMs:ANSWER_MS, meta:{}, players:{}, keys:{}, reveal:null,
     count:0, offset:0, connected:false, clearArmed:0, raf:0, lastCount:-1,
-    speedMs:3000, replay:{active:false, start:0, ms:3000}, soundKey:"", phaseKey:"", lastAnsPaint:0, rosterSig:""
+    speedMs:3000, replay:{active:false, start:0, ms:3000}, soundKey:"", phaseKey:"", lastAnsPaint:0, rosterSig:"",
+    pauseAt:0, pauseMs:0
   };
   let db = null, roomRef = null, metaRef = null, playersRef = null, revealRef = null, keysRef = null, boardRef = null;
 
@@ -499,20 +618,6 @@
     clearTimeout(toastT);
     toastT = setTimeout(() => el.classList.remove("on"), ms || 2400);
   }
-  function esc(s){
-    return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  }
-  function fmtWon(v){
-    const n = Math.max(0, Math.round((Number(v)||0)/10000));
-    return n.toLocaleString("ko-KR") + "만 원";
-  }
-  function fmtWonShort(v){
-    const n = Math.max(0, Math.round((Number(v)||0)/10000));
-    return n.toLocaleString("ko-KR") + "만";
-  }
-  function colorHex(id){ return (COLORS[id] || {}).hex || "#9AA9BF"; }
-  function colorName(id){ return (COLORS[id] || {}).name || ""; }
-  function typeName(id){ return TYPE_NAME[id] || "차량"; }
 
   function shade(hex, p){
     const n = parseInt(String(hex).replace("#",""), 16);
@@ -521,84 +626,144 @@
     return "#" + ((1 << 24) + (f(r) << 16) + (f(g) << 8) + f(b)).toString(16).slice(1);
   }
 
-  /* ================= 차량 SVG ================= */
+  /* ================= 차량 SVG (승용차·SUV·승합차·트럭 확연히 구분) ================= */
   const GEO = {
-    sedan:{ roofY:88, body:"M16,158 C16,144 28,137 48,134 L106,128 C122,102 144,90 172,88 L252,88 C284,90 308,106 322,128 L382,134 C402,137 414,146 414,160 L414,178 L16,178 Z",
-      winR:"M112,124 L168,92 L204,92 L204,124 Z", winF:"M212,92 L250,92 L304,124 L212,124 Z", wheels:[108,330] },
-    suv:{ roofY:78, body:"M14,156 C14,140 26,132 46,130 L96,124 C104,92 118,80 146,78 L288,78 C316,80 334,94 342,124 L390,130 C404,133 414,142 414,156 L414,178 L14,178 Z",
-      winR:"M102,120 L136,86 L206,86 L206,120 Z", winF:"M214,86 L282,86 L310,120 L214,120 Z", wheels:[110,332] },
-    van:{ roofY:82, body:"M14,150 C14,136 22,128 40,126 L74,98 C82,88 92,82 106,82 L360,82 C386,84 402,96 408,120 L414,150 L414,178 L14,178 Z",
-      winR:"M84,120 L102,92 L198,92 L198,120 Z", winF:"M206,92 L300,92 L300,120 Z", wheels:[106,332] },
-    truck:{ roofY:88, body:"M262,168 L262,118 C262,102 274,94 292,90 L352,88 C382,88 402,102 408,124 L414,168 Z",
-      winR:"", winF:"M278,114 L344,108 L344,140 L278,140 Z", wheels:[86,332] }
+    /* 승용차: 낮은 차체 · 낮은 지상고 · 긴 본넷 · 낮게 떨어지는 루프 · 돌출된 3박스 트렁크 */
+    sedan:{
+      body:"M 8,200 L 8,168 Q 8,157 20,155 L 118,147 C 131,146 141,142 149,135 L 203,108 Q 210,104 219,104 L 296,104 Q 309,104 319,112 L 372,148 L 442,155 Q 462,158 470,169 L 470,196 Q 470,203 463,203 L 424,203 C 424,179 406,165 382,165 C 358,165 340,179 340,203 L 148,203 C 148,179 130,165 106,165 C 82,165 64,179 64,203 L 15,203 Q 8,203 8,200 Z",
+      win:["M 152,141 L 201,111 Q 203,109 207,109 L 232,109 L 232,141 Z",
+           "M 242,109 L 291,109 L 316,116 L 337,141 L 242,141 Z"],
+      wheels:[106,382], wr:32, wy:198, mirror:{x:322,y:116},
+      plate:{x:182,y:150,w:130,h:38,fs:21,tx:247,ty:177},
+      crack:"M 200,111 L 209,124 L 202,131 M 209,124 L 220,119 M 209,124 L 213,136 M 276,111 L 287,127 L 280,134 M 287,127 L 298,122",
+      trunk:"M 22,153 L 112,146"
+    },
+    /* SUV: 높은 차체 · 높은 지상고 · 큰 휠아치 · 뒤까지 수평 박스형 루프 · 루프랙 · 수직 테일게이트 */
+    suv:{
+      body:"M 34,200 L 34,96 Q 34,72 54,70 L 296,70 Q 314,70 324,80 L 352,108 L 446,114 Q 466,117 468,134 L 468,200 Q 468,205 461,205 L 428,205 C 428,177 406,160 380,160 C 354,160 332,177 332,205 L 156,205 C 156,177 134,160 108,160 C 82,160 60,177 60,205 L 41,205 Q 34,205 34,200 Z",
+      win:["M 62,92 L 188,92 L 188,128 L 84,128 Z",
+           "M 202,92 L 290,92 Q 300,92 306,97 L 326,120 L 326,128 L 202,128 Z"],
+      wheels:[108,380], wr:38, wy:198, mirror:{x:326,y:102},
+      plate:{x:170,y:140,w:136,h:38,fs:21,tx:238,ty:167},
+      crack:"M 132,96 L 141,116 L 134,126 M 141,116 L 154,111 M 141,116 L 145,132 M 248,96 L 261,118 L 252,130 M 261,118 L 274,112",
+      rails:true
+    },
+    /* 승합차: 원박스 · 긴 루프 · 슬라이딩 도어 창 3열 */
+    van:{
+      body:"M 14,198 L 14,94 Q 14,78 31,76 L 348,76 Q 368,77 380,95 L 402,124 L 447,128 Q 466,131 470,146 L 470,198 Q 470,204 463,204 L 430,204 C 430,176 408,158 382,158 C 356,158 334,176 334,204 L 158,204 C 158,176 136,158 110,158 C 84,158 62,176 62,204 L 21,204 Q 14,204 14,198 Z",
+      win:["M 44,94 L 126,94 L 126,140 L 44,140 Z",
+           "M 140,94 L 198,94 L 198,140 L 140,140 Z",
+           "M 212,94 L 326,94 L 352,140 L 212,140 Z"],
+      wheels:[110,382], wr:36, wy:196, mirror:{x:340,y:100},
+      plate:{x:182,y:148,w:130,h:36,fs:21,tx:247,ty:175},
+      crack:"M 82,98 L 91,116 L 84,126 M 91,116 L 104,111 M 91,116 L 95,132 M 262,98 L 274,118 L 266,128"
+    },
+    /* 트럭: 적재함 + 캡 */
+    truck:{
+      box:"M 10,198 L 10,106 Q 10,96 20,96 L 258,96 Q 264,96 264,104 L 264,198 Z",
+      body:"M 268,198 L 268,142 Q 270,120 292,118 L 356,112 Q 372,111 380,124 L 406,158 L 446,162 Q 464,165 468,177 L 468,198 Q 468,204 461,204 L 428,204 C 428,176 406,158 380,158 C 354,158 332,176 332,204 L 273,204 Q 268,204 268,198 Z",
+      win:["M 292,124 L 352,118 L 366,148 L 292,148 Z"],
+      wheels:[124,382], wr:36, wy:196, mirror:{x:352,y:128},
+      plate:{x:118,y:126,w:130,h:36,fs:21,tx:183,ty:153},
+      crack:"M 300,126 L 312,140 L 304,150 M 312,140 L 326,136"
+    }
   };
 
   function carSVG(o){
     const g = GEO[o.t] || GEO.sedan;
-    const hex = colorHex(o.c), lt = shade(hex, 30), dk = shade(hex, -34);
-    const gid = "cg" + Math.random().toString(36).slice(2, 8);
-    let s = '<svg viewBox="0 0 440 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' +
-      esc(colorName(o.c) + " " + typeName(o.t) + " " + (o.p || "")) + '">';
+    const hex = colorHex(o.c), lt = shade(hex,34), dk = shade(hex,-38);
+    const uid = "c" + Math.random().toString(36).slice(2,8);
+    const gid = uid + "g", wid = uid + "w", sid = uid + "s";
+    const ws = WINDOW_STYLE[o.w] || WINDOW_STYLE.clear;
+    let s = '<svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' +
+      esc(colorName(o.c) + " " + typeName(o.t) + " " + windowName(o.w) + " " + (o.p || "")) + '">';
+
     s += '<defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1">' +
-      '<stop offset="0" stop-color="' + lt + '"/><stop offset=".5" stop-color="' + hex + '"/>' +
-      '<stop offset="1" stop-color="' + dk + '"/></linearGradient></defs>';
-    s += '<ellipse cx="222" cy="213" rx="198" ry="15" fill="rgba(0,0,0,.5)"/>';
+         '<stop offset="0" stop-color="' + lt + '"/><stop offset=".42" stop-color="' + hex + '"/>' +
+         '<stop offset="1" stop-color="' + dk + '"/></linearGradient>' +
+         '<linearGradient id="' + sid + '" x1="0" y1="0" x2=".35" y2="1">' +
+         '<stop offset="0" stop-color="#8FE0FF"/><stop offset=".45" stop-color="#4B86FF"/>' +
+         '<stop offset="1" stop-color="#1B3AA8"/></linearGradient>' +
+         '<clipPath id="' + wid + '">' + g.win.map(d => '<path d="' + d + '"/>').join("") + '</clipPath>' +
+         '</defs>';
+
+    s += '<ellipse cx="240" cy="234" rx="214" ry="12" fill="rgba(0,0,0,.55)"/>';
 
     if (o.t === "truck"){
-      s += '<rect x="14" y="86" width="248" height="84" rx="7" fill="url(#' + gid + ')" stroke="' + dk + '" stroke-width="3"/>';
-      s += '<rect x="24" y="96" width="228" height="40" rx="4" fill="rgba(255,255,255,.10)"/>';
+      s += '<path d="' + g.box + '" fill="url(#' + gid + ')" stroke="' + dk + '" stroke-width="2.5"/>';
+      s += '<path d="M 24,108 L 250,108 M 24,118 L 250,118" stroke="rgba(255,255,255,.16)" stroke-width="3"/>';
+      s += '<path d="M 24,124 L 250,124 M 140,108 L 140,196 M 24,150 L 120,150" stroke="rgba(0,0,0,.18)" stroke-width="2"/>';
     }
     s += '<path d="' + g.body + '" fill="url(#' + gid + ')" stroke="' + dk + '" stroke-width="2.5"/>';
 
-    /* 창문 */
-    const winFill = "#9FD8F2";
-    if (g.winR) s += '<path d="' + g.winR + '" fill="' + winFill + '" opacity=".82" stroke="' + dk + '" stroke-width="2"/>';
-    if (g.winF) s += '<path d="' + g.winF + '" fill="' + winFill + '" opacity=".82" stroke="' + dk + '" stroke-width="2"/>';
+    /* 유리창 */
+    const winFill = (o.w === "blue") ? 'url(#' + sid + ')' : ws.main;
+    s += '<g fill="' + winFill + '" fill-opacity="' + ws.op + '" stroke="' + dk + '" stroke-width="2.2">' +
+         g.win.map(d => '<path d="' + d + '"/>').join("") + '</g>';
 
-    /* 헤드/테일 램프 */
-    const off = o.f === "headlight";
-    if (o.t !== "truck"){
-      s += '<path d="M398,146 L414,150 L414,166 L398,168 Z" fill="' + (off ? "#4B5462" : "#FFE79A") + '" stroke="' + dk + '" stroke-width="1.5"/>';
-      if (!off) s += '<ellipse cx="423" cy="157" rx="16" ry="11" fill="#FFE79A" opacity=".35"/>';
-      else s += '<path d="M400,149 L411,165 M411,149 L400,165" stroke="#2A303A" stroke-width="2.4" opacity=".8"/>';
-      s += '<rect x="16" y="146" width="10" height="16" rx="3" fill="#F0665E"/>';
-    } else {
-      s += '<path d="M402,140 L414,144 L414,160 L402,162 Z" fill="' + (off ? "#4B5462" : "#FFE79A") + '" stroke="' + dk + '" stroke-width="1.5"/>';
-      if (!off) s += '<ellipse cx="424" cy="151" rx="15" ry="10" fill="#FFE79A" opacity=".32"/>';
-      s += '<rect x="16" y="140" width="9" height="14" rx="3" fill="#F0665E"/>';
+    if (o.w === "clear"){
+      s += '<g clip-path="url(#' + wid + ')">' +
+           '<path d="M 150,150 L 250,90 L 268,90 L 168,150 Z" fill="#FFFFFF" opacity=".28"/>' +
+           '<path d="M 264,150 L 340,104 L 352,104 L 284,150 Z" fill="#FFFFFF" opacity=".22"/></g>';
+    } else if (o.w === "black"){
+      s += '<g clip-path="url(#' + wid + ')">' +
+           '<path d="M 150,132 L 250,84 L 268,84 L 168,140 Z" fill="#3FD8FF" opacity=".16"/>' +
+           '<path d="M 40,116 L 330,116 M 40,124 L 330,124" stroke="#5EE7FF" stroke-width="1.4" opacity=".10"/></g>';
+    } else if (o.w === "blue"){
+      s += '<g clip-path="url(#' + wid + ')">' +
+           '<path d="M 150,150 L 250,88 L 272,88 L 172,150 Z" fill="#DFF6FF" opacity=".30"/>' +
+           '<path d="M 300,150 L 352,110 L 366,110 L 316,150 Z" fill="#DFF6FF" opacity=".22"/></g>';
+    } else if (o.w === "cracked"){
+      s += '<g clip-path="url(#' + wid + ')" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" opacity=".95">' +
+           '<path d="' + g.crack + '"/></g>' +
+           '<g clip-path="url(#' + wid + ')" fill="none" stroke="#EAF7FF" stroke-width="1.2" opacity=".7">' +
+           '<path d="M 100,112 L 116,104 M 116,104 L 124,112 M 236,104 L 252,112"/></g>';
     }
 
-    /* 특징 */
-    if (o.f === "sticker"){
-      const sx = (o.t === "truck") ? 120 : 40;
-      s += '<rect x="' + sx + '" y="132" width="40" height="28" rx="4" fill="#FFD34D" stroke="#D9A400" stroke-width="2"/>';
-      s += '<text x="' + (sx + 20) + '" y="151" font-family="sans-serif" font-size="11" font-weight="700" fill="#6B4A00" text-anchor="middle">현상금</text>';
+    if (o.t === "sedan" && g.trunk) s += '<path d="' + g.trunk + '" stroke="' + dk + '" stroke-width="2.4" fill="none" opacity=".75"/>';
+
+    if (g.rails){
+      s += '<rect x="76" y="55" width="206" height="7" rx="3.5" fill="#2C3542" stroke="#161C24" stroke-width="1.5"/>' +
+           '<rect x="92" y="61" width="7" height="11" fill="#2C3542"/><rect x="252" y="61" width="7" height="11" fill="#2C3542"/>' +
+           '<path d="M 38,80 Q 38,70 54,70 L 74,70 L 74,80 Z" fill="url(#' + gid + ')" stroke="' + dk + '" stroke-width="2"/>' +
+           '<path d="M 56,172 C 56,204 80,224 108,224 C 136,224 160,204 160,172" fill="none" stroke="#1B222B" stroke-width="8" opacity=".5"/>' +
+           '<path d="M 328,172 C 328,204 352,224 380,224 C 408,224 432,204 432,172" fill="none" stroke="#1B222B" stroke-width="8" opacity=".5"/>' +
+           '<rect x="166" y="196" width="156" height="7" rx="3.5" fill="#252C36" stroke="#141920"/>' +
+           '<path d="M 40,134 L 456,134" stroke="' + dk + '" stroke-width="2" opacity=".35"/>' +
+           '<path d="M 40,190 L 56,190 M 160,190 L 328,190 M 432,190 L 464,190" stroke="#1C232D" stroke-width="9" opacity=".5" stroke-linecap="round"/>';
     }
-    if (o.f === "crack"){
-      s += '<path d="M118,122 L132,108 L126,102 L146,96 M132,108 L150,112 M126,102 L112,96" stroke="#EAF4FF" stroke-width="2.6" fill="none" opacity=".95" stroke-linecap="round"/>';
-      s += '<path d="M150,112 L162,106" stroke="#EAF4FF" stroke-width="2" fill="none" opacity=".8" stroke-linecap="round"/>';
-    }
-    if (o.f === "roofbox"){
-      const ry = g.roofY - 40;
-      s += '<rect x="168" y="' + ry + '" width="122" height="28" rx="10" fill="#39424F" stroke="#1D232C" stroke-width="2.5"/>';
-      s += '<rect x="174" y="' + (ry + 5) + '" width="110" height="8" rx="4" fill="rgba(255,255,255,.18)"/>';
-    }
+
+    /* 램프 */
+    s += '<path d="M 454,158 L 468,164 L 468,178 L 452,176 Z" fill="#FFE79A" stroke="' + dk + '" stroke-width="1.4"/>' +
+         '<ellipse cx="478" cy="170" rx="14" ry="12" fill="#FFE79A" opacity=".30"/>' +
+         '<rect x="12" y="164" width="11" height="16" rx="3" fill="#F0665E"/>' +
+         '<rect x="12" y="164" width="11" height="16" rx="3" fill="none" stroke="' + dk + '" stroke-width="1.2"/>';
+
+    if (g.mirror) s += '<rect x="' + g.mirror.x + '" y="' + g.mirror.y + '" width="15" height="10" rx="3" fill="#1B222B" stroke="#0E1319" stroke-width="1.6"/>';
 
     /* 번호판 */
-    s += '<rect x="126" y="146" width="160" height="44" rx="6" fill="#F5F8FC" stroke="#0C1119" stroke-width="2.6"/>';
-    s += '<text x="206" y="178" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="25" font-weight="700" fill="#10151F" text-anchor="middle" letter-spacing="1">' + esc(o.p || "") + '</text>';
+    const p = g.plate;
+    s += '<rect x="' + p.x + '" y="' + p.y + '" width="' + p.w + '" height="' + p.h + '" rx="5" fill="#F5F8FC" stroke="#0C1119" stroke-width="2.6"/>' +
+         '<text x="' + p.tx + '" y="' + p.ty + '" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="' + p.fs + '" font-weight="700" fill="#10151F" text-anchor="middle" letter-spacing="0.5">' + esc(o.p || "") + '</text>';
 
     /* 바퀴 */
-    g.wheels.forEach((wx, i) => {
-      s += '<g class="wheel" style="transform-origin:' + wx + 'px 176px">' +
-        '<circle cx="' + wx + '" cy="176" r="35" fill="#141A22"/>' +
-        '<circle cx="' + wx + '" cy="176" r="20" fill="#4A5567"/>' +
-        '<circle cx="' + wx + '" cy="176" r="9" fill="#8E9AAC"/>' +
-        '<path d="M' + (wx - 18) + ',176 h36 M' + wx + ',158 v36" stroke="#20262F" stroke-width="3"/>' +
+    g.wheels.forEach(wx => {
+      s += '<g class="wheel" style="transform-origin:' + wx + 'px ' + g.wy + 'px">' +
+        '<circle cx="' + wx + '" cy="' + g.wy + '" r="' + g.wr + '" fill="#12181F"/>' +
+        '<circle cx="' + wx + '" cy="' + g.wy + '" r="' + (g.wr - 13) + '" fill="#48525F"/>' +
+        '<circle cx="' + wx + '" cy="' + g.wy + '" r="' + (g.wr - 25) + '" fill="#8E9AAC"/>' +
+        '<path d="M' + (wx - g.wr + 14) + ',' + g.wy + ' h' + (2*g.wr - 28) + ' M' + wx + ',' + (g.wy - g.wr + 14) + ' v' + (2*g.wr - 28) + '" stroke="#22282F" stroke-width="3"/>' +
         '</g>';
     });
     s += '</svg>';
     return s;
+  }
+
+  function wchip(w, size){
+    const st = WINDOW_STYLE[w] || WINDOW_STYLE.clear;
+    const bg = (w === "blue") ? "linear-gradient(135deg,#8FE0FF,#2E63D8)" : st.main;
+    const bd = st.edge;
+    return '<i class="wchip" style="background:' + bg + ';border-color:' + bd + '"></i>';
   }
 
   /* =========================================================
@@ -712,7 +877,6 @@
     src.start(t0); src.stop(t0 + dur + 0.03);
   }
 
-  /* ---------- 사이렌 / 엔진 ---------- */
   function sirenStart(){
     const ctx = unlock();
     if (!ctx || A.muted || A.siren) return;
@@ -782,7 +946,6 @@
     tone({ f:120, f2:48, dur:0.3, type:"sine", gain:0.1, t:t + 0.02 });
   }
 
-  /* ---------- 추격 BGM ---------- */
   const BGM = {
     spb(mode){ return mode === "suspense" ? 0.145 : 0.1; },
     tick(mode, step, t){
@@ -881,6 +1044,34 @@
     try{ localStorage.setItem("hrc_sound", on ? "1" : "0"); }catch(e){}
   }
 
+  /* ================= 답안 타이머 계산 ================= */
+  function pausedTotal(now){
+    let p = Number(H.meta.pausedMs) || 0;
+    const pa = Number(H.meta.pauseAt) || 0, pm = Number(H.meta.pauseMs) || 0;
+    if (pa && pm){
+      const d = now - pa;
+      if (d > 0) p += Math.min(d, pm);
+    }
+    return p;
+  }
+  function isPausing(now){
+    const pa = Number(H.meta.pauseAt) || 0, pm = Number(H.meta.pauseMs) || 0;
+    if (!pa || !pm) return false;
+    const d = now - pa;
+    return d >= 0 && d < pm;
+  }
+  function answerAtOf(now){
+    const base = Number(H.meta.answerAt) || (H.startAt + H.sightMs + ANSWER_PAD_MS);
+    return base + pausedTotal(now);
+  }
+  function settlePause(){
+    if (!H.pauseAt) return;
+    const add = H.pauseMs;
+    const cur = Number(H.meta.pausedMs) || 0;
+    H.pauseAt = 0; H.pauseMs = 0;
+    if (metaRef) metaRef.update({ pausedMs: cur + add, pauseAt: 0, pauseMs: 0 }).catch(() => {});
+  }
+
   /* ================= Firebase ================= */
   function initFirebase(){
     const joinUrl = BASE_URL + "?room=" + ROOM;
@@ -925,12 +1116,13 @@
   }
 
   function onMeta(m){
-    const prevState = H.state, prevRound = H.round, prevStart = H.startAt;
+    const prevState = H.state, prevStart = H.startAt;
     H.meta = m || {};
     H.state = m.state || "idle";
     H.round = Number(m.round) || 0;
     H.startAt = Number(m.startAt) || 0;
     H.sightMs = Number(m.sightMs) || H.sightMs;
+    if (m.answerMs) H.answerMs = Number(m.answerMs) || H.answerMs;
     H.count = Number(m.count) || 0;
 
     $("roundNum").textContent = H.round ? String(H.round) : "-";
@@ -951,15 +1143,15 @@
       stopRun();
       showBoard("reveal");
       paintReveal();
-      if (prevState !== "reveal"){ bgmStop(); sirenStop(); engineStop(); fanfare(H.round >= 5); }
+      if (prevState !== "reveal"){ bgmStop(); sirenStop(); engineStop(); fanfare(H.round >= TOTAL_ROUNDS); }
       return;
     }
-    /* idle */
     stopRun();
     showBoard("idle");
     paintIdle();
     if (prevState !== "idle"){ bgmStop(); sirenStop(); engineStop(); }
     H.soundKey = "";
+    H.pauseAt = 0; H.pauseMs = 0;
   }
 
   function onPlayers(val){
@@ -981,7 +1173,17 @@
     Object.keys(map).forEach(k => $(map[k]).classList.toggle("on", k === name));
   }
 
-  /* ================= 도시 배경 생성 ================= */
+  /* ================= 대기 화면 ================= */
+  function paintPlan(){
+    const tb = $("planBody");
+    if (!tb) return;
+    tb.innerHTML = ROUNDS.map((r, i) => {
+      const t = tierOf(i);
+      return '<tr><td>' + (i + 1) + 'R</td><td class="n">' + esc(TIER_LABEL[t]) + ' · ' +
+        esc(colorName(r.car.c) + " " + typeName(r.car.t)) + '</td><td class="b">' + fmtWonShort(ROUND_BOUNTY[i]) + '</td></tr>';
+    }).join("");
+  }
+
   function buildCity(){
     const box = $("cityline");
     if (!box || box.children.length) return;
@@ -997,15 +1199,13 @@
     box.innerHTML = html;
   }
 
-  /* ================= 대기 화면 ================= */
   function paintIdle(){
     $("idleCount").textContent = String(Object.keys(H.players || {}).length);
     paintRoster();
   }
 
   function rosterSig(){
-    const arr = Object.keys(H.players || {}).map(id => (H.players[id] || {}).n || "익명");
-    return arr.join("|");
+    return Object.keys(H.players || {}).map(id => (H.players[id] || {}).n || "익명").join("|");
   }
   function paintRoster(){
     const sig = rosterSig();
@@ -1027,18 +1227,23 @@
   }
 
   /* ================= 도로 렌더 ================= */
+  function currentRound(){
+    return ROUNDS[Math.max(0, Math.min(TOTAL_ROUNDS - 1, (H.round || 1) - 1))] || ROUNDS[0];
+  }
+
   function paintRunHead(){
-    const R = ROUNDS[Math.max(0, Math.min(4, H.round - 1))] || ROUNDS[0];
+    const R = currentRound();
     $("runRound").textContent = "제 " + (H.round || 1) + " 의 목격";
-    $("runBounty").textContent = "현상금 " + fmtWon(ROUND_BOUNTY[(H.round || 1) - 1]);
-    const car = R.car;
+    $("runBounty").textContent = "현상금 " + fmtWon(ROUND_BOUNTY[((H.round || 1) - 1) % TOTAL_ROUNDS]);
     const wrap = $("carWrap");
-    wrap.innerHTML = carSVG(car);
+    wrap.innerHTML = carSVG(R.car);
     wrap.style.opacity = "0";
     wrap.classList.remove("show");
     buildAnswerCards(R);
     $("phaseMsg").classList.remove("hide");
     $("phaseMsg").textContent = "목격 준비 — 차량이 곧 지나갑니다";
+    $("bigTimerLab").textContent = "관찰";
+    $("bigTimer").classList.remove("paused", "hot");
   }
 
   function buildAnswerCards(R){
@@ -1048,7 +1253,7 @@
         '<div class="no">' + (i + 1) + '</div>' +
         '<div class="l1"><span class="sw" style="background:' + colorHex(o.c) + '"></span>' + esc(colorName(o.c) + " " + typeName(o.t)) + '</div>' +
         '<div class="plate">' + esc(o.p) + '</div>' +
-        '<div class="feat">' + esc(FEAT_NAME[o.f] || "특징 없음") + '</div>' +
+        '<div class="feat">' + wchip(o.w) + esc(windowName(o.w)) + '</div>' +
         '<div class="cnt"><b>0</b><span class="bar"><i></i></span></div>' +
       '</div>'
     ).join("");
@@ -1056,9 +1261,7 @@
 
   function scheduleRoundSounds(){
     const wait = H.startAt - nowMs();
-    const within = nowMs() >= H.startAt;
-    const R = ROUNDS[Math.max(0, Math.min(4, H.round - 1))] || ROUNDS[0];
-    if (within){
+    if (nowMs() >= H.startAt){
       const el = nowMs() - H.startAt;
       if (el < H.sightMs){ sirenStart(); engineStart(H.sightMs - el); bgmStart("chase"); }
       else bgmStart("suspense");
@@ -1093,34 +1296,39 @@
     });
   }
 
+  /* ================= 진행 루프 (차량 통과 후 타이머 시작) ================= */
   function runLoop(){
     H.raf = 0;
     if (H.state !== "sighting") return;
     const now = nowMs();
     const el = now - H.startAt;
     const sight = H.sightMs;
-    const ans = Number(H.meta.answerMs) || ANSWER_MS;
+    const ansMs = Number(H.meta.answerMs) || H.answerMs;
     const wrap = $("carWrap");
 
-    /* 재생(한 번 더) 중이면 그것만 처리 */
+    /* 재생(한 번 더) 중 — 이 동안 답안 타이머는 멈춰 있습니다 */
     if (H.replay.active){
       const rp = Math.min(1, (now - H.replay.start) / H.replay.ms);
       wrap.classList.add("show");
       wrap.style.opacity = "1";
       placeCar(rp, H.replay.ms);
+      $("bigTimer").classList.add("paused");
+      $("bigTimerLab").textContent = "일시정지";
       if (rp >= 1){
         H.replay.active = false;
         $("runBoard").classList.remove("replay");
         $("replayBadge").classList.remove("on");
+        $("bigTimerLab").textContent = "답안 시간";
+        $("bigTimer").classList.remove("paused");
         if (el >= sight){ wrap.classList.remove("show"); wrap.style.opacity = "0"; }
         sirenStop(); engineStop();
+        settlePause();
       }
       H.raf = requestAnimationFrame(runLoop);
       return;
     }
 
     if (el < 0){
-      /* 카운트다운 */
       const n = Math.ceil(-el / 1000);
       const ov = $("countOverlay");
       ov.classList.add("on");
@@ -1132,8 +1340,9 @@
       }
       wrap.classList.remove("show");
       $("ansOverlay").classList.remove("on");
-      $("bigTimerNum").textContent = (sight / 1000).toFixed(1);
-      $("bigTimer").classList.remove("hot");
+      $("bigTimerNum").textContent = String(Math.max(1, Math.min(3, n)));
+      $("bigTimerLab").textContent = "목격 준비";
+      $("bigTimer").classList.remove("hot", "paused");
       $("phaseMsg").classList.remove("hide");
       $("phaseMsg").textContent = "목격 준비 — 차량이 곧 지나갑니다";
       H.raf = requestAnimationFrame(runLoop);
@@ -1144,39 +1353,52 @@
     $("runRound").textContent = "제 " + H.round + " 의 목격";
 
     if (el < sight){
+      /* 차량 통과 중 — 답안 타이머는 절대 줄지 않습니다 */
       wrap.classList.add("show");
       wrap.style.opacity = "1";
       placeCar(el / sight, sight);
-      const remain = (sight - el) / 1000;
-      $("bigTimerNum").textContent = remain.toFixed(1);
-      $("bigTimer").classList.toggle("hot", remain <= 1.2);
+      $("bigTimerNum").textContent = ansMs >= 1000 ? (ansMs / 1000).toFixed(0) : "10";
+      $("bigTimerLab").textContent = "관찰 중";
+      $("bigTimer").classList.remove("hot", "paused");
       $("ansOverlay").classList.remove("on");
       $("phaseMsg").classList.remove("hide");
-      $("phaseMsg").textContent = "도주 차량 — 색 · 차종 · 번호판 · 특징을 기억하세요!";
-      if (H.soundKey && !$("carWrap").dataset.screeched && el > sight - 60){
-        $("carWrap").dataset.screeched = "1";
-      }
-    } else {
-      wrap.classList.remove("show");
-      wrap.style.opacity = "0";
-      const ansEl = el - sight;
-      const remain = Math.max(0, ans - ansEl) / 1000;
-      $("ansOverlay").classList.add("on");
-      $("bigTimerNum").textContent = remain.toFixed(1);
-      $("bigTimer").classList.toggle("hot", remain <= 4);
-      $("aoTimer").textContent = remain.toFixed(1);
-      $("aoTimer").classList.toggle("hot", remain <= 4);
-      $("phaseMsg").classList.add("hide");
-      if (!A.bgmMode && !A.muted) bgmStart("suspense");
-      paintAnswers(remain);
-      if (remain <= 0 && H.phaseKey !== "lock"){
-        H.phaseKey = "lock";
-        $("btnReveal").classList.add("pulse");
-        $("ansOverlay").classList.add("on");
-        $("aoFoot").innerHTML = remain <= 0
-          ? "응답 마감 · <b>[🏆 검거 결과보기]</b>를 눌러 정답과 TOP 5를 공개하세요"
-          : "정답은 <b>[🏆 검거 결과보기]</b> 를 누르기 전까지 비공개입니다";
-      }
+      $("phaseMsg").textContent = "도주 차량 — 색 · 차종 · 번호판 · 유리창을 기억하세요!";
+      H.raf = requestAnimationFrame(runLoop);
+      return;
+    }
+
+    /* 차량이 화면을 완전히 빠져나간 뒤 */
+    wrap.classList.remove("show");
+    wrap.style.opacity = "0";
+    const answerAt = answerAtOf(now);
+    const elapsed = now - answerAt;
+
+    if (elapsed < 0){
+      /* 통과 직후 대기(수백 ms) — 여기서도 타이머는 아직 흐르지 않음 */
+      $("ansOverlay").classList.remove("on");
+      $("bigTimerNum").textContent = (ansMs / 1000).toFixed(0);
+      $("bigTimerLab").textContent = "통과 완료";
+      $("bigTimer").classList.remove("hot", "paused");
+      $("phaseMsg").classList.remove("hide");
+      $("phaseMsg").textContent = "차량 통과 완료 — 이제부터 " + (ansMs / 1000).toFixed(0) + "초 안에 선택!";
+      H.raf = requestAnimationFrame(runLoop);
+      return;
+    }
+
+    const remain = Math.max(0, ansMs - elapsed) / 1000;
+    $("ansOverlay").classList.add("on");
+    $("bigTimerNum").textContent = remain.toFixed(1);
+    $("bigTimerLab").textContent = "답안 시간";
+    $("bigTimer").classList.toggle("hot", remain <= 4);
+    $("aoTimer").textContent = remain.toFixed(1);
+    $("aoTimer").classList.toggle("hot", remain <= 4);
+    $("phaseMsg").classList.add("hide");
+    if (!A.bgmMode && !A.muted) bgmStart("suspense");
+    paintAnswers(remain);
+    if (remain <= 0 && H.phaseKey !== "lock"){
+      H.phaseKey = "lock";
+      $("btnReveal").classList.add("pulse");
+      $("aoFoot").innerHTML = "응답 마감 · <b>[🏆 검거 결과보기]</b>를 눌러 정답과 TOP 5를 공개하세요";
     }
     H.raf = requestAnimationFrame(runLoop);
   }
@@ -1207,17 +1429,17 @@
 
   /* ================= 결과 렌더 ================= */
   function paintReveal(){
-    const R = ROUNDS[Math.max(0, Math.min(4, (H.round || 1) - 1))] || ROUNDS[0];
+    const R = currentRound();
     const rev = H.reveal || {};
     const car = rev.car || R.car;
     const correct = (rev.correct != null) ? Number(rev.correct) : R.correct;
 
-    $("revStamp").textContent = H.round >= 5 ? "전원 검거!" : "검거!";
+    $("revStamp").textContent = H.round >= TOTAL_ROUNDS ? "최종 검거!" : "검거!";
     $("revCar").innerHTML = carSVG(car);
     $("revPlate").textContent = car.p || "";
     $("revSw").style.background = colorHex(car.c);
     $("revSpec").textContent = colorName(car.c) + " " + typeName(car.t);
-    $("revFeat").textContent = FEAT_NAME[car.f] || "특징 없음";
+    $("revFeat").textContent = windowName(car.w);
 
     const dist = (rev.dist && rev.dist.length) ? rev.dist : [0,0,0,0,0];
     $("revDist").innerHTML = [0,1,2,3,4].map(i =>
@@ -1225,8 +1447,8 @@
     ).join("");
 
     $("revChip").innerHTML = '정답 <b>' + (correct + 1) + '</b>번 · ' + esc(car.p || '');
-    $("btnNext").innerHTML = (H.round >= 5) ? "🔄 처음부터" : "🔄 다음 라운드";
-    $("revNext").textContent = H.round >= 5
+    $("btnNext").innerHTML = (H.round >= TOTAL_ROUNDS) ? "🔄 처음부터" : "🔄 다음 라운드";
+    $("revNext").textContent = H.round >= TOTAL_ROUNDS
       ? "모든 라운드 종료 — [다음 라운드] → [처음부터]로 새 게임을 시작할 수 있습니다"
       : "[다음 라운드]를 눌러 계속하세요";
     paintTop();
@@ -1235,7 +1457,6 @@
   function buildBoardList(){
     const baseList = (H.board && H.board.list) ? H.board.list.slice() : null;
     if (baseList && baseList.length) return baseList;
-    /* 보드가 아직 없으면 참가자+정답키로 즉석 계산 */
     const rd = H.round || 1;
     const correct = (H.reveal && H.reveal.correct != null) ? Number(H.reveal.correct) : (ROUNDS[rd - 1] || ROUNDS[0]).correct;
     const keys = Object.assign({}, H.keys || {});
@@ -1243,7 +1464,7 @@
     const arr = Object.keys(H.players || {}).map(id => {
       const p = H.players[id] || {};
       let b = 0, t = 0;
-      for (let r = 1; r <= 5; r++){
+      for (let r = 1; r <= TOTAL_ROUNDS; r++){
         if (keys["r" + r] == null) continue;
         const a = p.a && p.a[r];
         if (a && Number(a.c) === Number(keys["r" + r])){ b += ROUND_BOUNTY[r - 1]; t += Number(a.ms) || 0; }
@@ -1283,32 +1504,39 @@
     if (!db){ toast("연결 중입니다. 잠시 후 다시 시도해 주세요."); return; }
     if (!Object.keys(H.players || {}).length){ toast("참가자가 없습니다. QR로 먼저 입장시켜 주세요.", 2600); return; }
     if (H.state === "sighting"){ toast("이미 목격이 진행 중입니다."); return; }
-    if (H.state === "reveal" && H.round >= 5){ toast("5라운드가 모두 끝났습니다. [다음 라운드]를 눌러 새 게임을 시작하세요.", 3000); return; }
-    if (H.state === "reveal" && H.round < 5){
-      /* 결과 화면에서 바로 다음 라운드로 이어갈 수 있게 정리 후 진행 */
+    if (H.state === "reveal" && H.round >= TOTAL_ROUNDS){ toast("10문제가 모두 끝났습니다. [다음 라운드]를 눌러 새 게임을 시작하세요.", 3000); return; }
+    if (H.state === "reveal" && H.round < TOTAL_ROUNDS){
       try{ revealRef.remove(); boardRef.remove(); }catch(e){}
       H.state = "idle";
     }
-    if (H.round >= 5 && H.state === "idle" && Object.keys(H.keys || {}).length >= 5){
-      toast("5라운드가 모두 끝났습니다. [다음 라운드]를 눌러 새 게임을 시작하세요.", 3000);
+    if (H.round >= TOTAL_ROUNDS && H.state === "idle" && Object.keys(H.keys || {}).length >= TOTAL_ROUNDS){
+      toast("10문제가 모두 끝났습니다. [다음 라운드]를 눌러 새 게임을 시작하세요.", 3000);
       return;
     }
     unlock();
     if ("speechSynthesis" in window){ try{ window.speechSynthesis.cancel(); }catch(e){} }
-    const round = Math.min(5, (H.round || 0) + 1);
+    const round = Math.min(TOTAL_ROUNDS, (H.round || 0) + 1);
     const R = ROUNDS[round - 1];
     const startAt = nowMs() + COUNT_MS;
     const sightMs = H.speedMs;
-    const opts = R.opts.map(o => ({ c:o.c, t:o.t, p:o.p, f:o.f }));
+    const opts = R.opts.map(o => ({ c:o.c, t:o.t, p:o.p, w:o.w }));
+    const vary = {
+      c: new Set(opts.map(o => o.c)).size > 1,
+      t: new Set(opts.map(o => o.t)).size > 1,
+      p: new Set(opts.map(o => o.p)).size > 1,
+      w: new Set(opts.map(o => o.w)).size > 1
+    };
     $("btnNext").innerHTML = "🔄 다음 라운드";
     const wrap = $("carWrap");
-    wrap.dataset.screeched = "";
     H.phaseKey = "";
     H.lastAnsPaint = 0;
     H.replay.active = false;
+    H.pauseAt = 0; H.pauseMs = 0;
     metaRef.update({
       state:"sighting", round:round, startAt:startAt, sightMs:sightMs,
-      answerMs:ANSWER_MS, options:opts, count:Object.keys(H.players||{}).length,
+      answerMs:H.answerMs, answerAt: startAt + sightMs + ANSWER_PAD_MS,
+      pausedMs:0, pauseAt:0, pauseMs:0,
+      options:opts, vary:vary, count:Object.keys(H.players||{}).length,
       ts: firebase.database.ServerValue.TIMESTAMP
     }).catch(() => toast("시작 신호를 보내지 못했어요. 다시 눌러 주세요."));
     speak("제 " + round + " 라운드. 목격 시작!", { rate:1.08, pitch:1.02 });
@@ -1324,6 +1552,12 @@
     H.replay.active = true;
     H.replay.start = nowMs();
     H.replay.ms = H.speedMs;
+    /* 차량이 이미 지나간 뒤(답안 시간)라면, 다시 지나가는 동안 답안 타이머를 멈춥니다 */
+    if (el >= H.sightMs){
+      H.pauseAt = nowMs();
+      H.pauseMs = H.speedMs;
+      metaRef.update({ pauseAt: H.pauseAt, pauseMs: H.pauseMs }).catch(() => {});
+    }
     $("runBoard").classList.add("replay");
     $("replayBadge").classList.add("on");
     $("phaseMsg").classList.add("hide");
@@ -1338,6 +1572,9 @@
         sirenStop(); engineStop();
         $("runBoard").classList.remove("replay");
         $("replayBadge").classList.remove("on");
+        $("bigTimerLab").textContent = el >= H.sightMs ? "답안 시간" : "관찰 중";
+        $("bigTimer").classList.remove("paused");
+        settlePause();
       }
     }, H.replay.ms + 900);
   }
@@ -1348,7 +1585,7 @@
     const el = nowMs() - H.startAt;
     if (el < H.sightMs){ toast("차량이 아직 지나가는 중입니다. 잠시만요!"); return; }
     const round = H.round;
-    const R = ROUNDS[round - 1];
+    const R = ROUNDS[round - 1] || ROUNDS[0];
     const correct = R.correct;
     const dist = [0,0,0,0,0];
     const keys = Object.assign({}, H.keys || {});
@@ -1356,7 +1593,7 @@
     const list = Object.keys(H.players || {}).map(id => {
       const p = H.players[id] || {};
       let b = 0, t = 0;
-      for (let r = 1; r <= 5; r++){
+      for (let r = 1; r <= TOTAL_ROUNDS; r++){
         if (keys["r" + r] == null) continue;
         const a = p.a && p.a[r];
         if (a && Number(a.c) === Number(keys["r" + r])){ b += ROUND_BOUNTY[r - 1]; t += Number(a.ms) || 0; }
@@ -1381,7 +1618,7 @@
   function nextRound(){
     if (!db) return;
     if (H.state !== "reveal"){ toast("결과 공개 후에 다음 라운드로 넘어갈 수 있습니다."); return; }
-    if (H.round >= 5){ resetGame(); return; }
+    if (H.round >= TOTAL_ROUNDS){ resetGame(); return; }
     revealRef.remove(); boardRef.remove();
     metaRef.update({ state:"idle", ts: firebase.database.ServerValue.TIMESTAMP }).catch(() => {});
     $("btnReveal").classList.remove("pulse");
@@ -1394,6 +1631,10 @@
     updates["meta/state"] = "idle";
     updates["meta/round"] = 0;
     updates["meta/startAt"] = 0;
+    updates["meta/answerAt"] = 0;
+    updates["meta/pausedMs"] = 0;
+    updates["meta/pauseAt"] = 0;
+    updates["meta/pauseMs"] = 0;
     updates["meta/ts"] = firebase.database.ServerValue.TIMESTAMP;
     Object.keys(H.players || {}).forEach(id => { updates["players/" + id + "/a"] = null; });
     roomRef.update(updates).then(() => {
@@ -1422,6 +1663,7 @@
       return roomRef.update({
         keys:null, reveal:null, board:null,
         "meta/state":"cleared", "meta/startAt":0, "meta/round":0, "meta/count":0,
+        "meta/answerAt":0, "meta/pausedMs":0, "meta/pauseAt":0, "meta/pauseMs":0,
         "meta/clearedAt": firebase.database.ServerValue.TIMESTAMP
       });
     }).then(() => {
@@ -1431,7 +1673,7 @@
     }).catch(() => toast("비우기에 실패했어요. 다시 시도해 주세요."));
   }
 
-  /* ================= 속도 프리셋 ================= */
+  /* ================= 속도 / 시간 프리셋 ================= */
   function setSpeed(ms, btn){
     H.speedMs = Number(ms) || 3000;
     const seg = $("segSpeed");
@@ -1445,6 +1687,88 @@
     try{ localStorage.setItem("hrc_speed", String(H.speedMs)); }catch(e){}
   }
 
+  function setTime(sec, btn, silent){
+    H.answerMs = Math.max(5, Math.min(60, Number(sec) || 10)) * 1000;
+    const seg = $("segTime");
+    Array.prototype.forEach.call(seg.querySelectorAll("button"), b => b.classList.toggle("on", b === btn));
+    try{ localStorage.setItem("hrc_answer", String(H.answerMs)); }catch(e){}
+    /* 진행 중이고 아직 답안 시간 전이면 이번 라운드부터 바로 적용 */
+    if (!silent && db && H.state === "sighting" && H.round){
+      const now = nowMs();
+      const base = Number(H.meta.answerAt) || (H.startAt + H.sightMs + ANSWER_PAD_MS);
+      if (now < base + pausedTotal(now) + 250){
+        metaRef.update({ answerMs: H.answerMs }).catch(() => {});
+        toast("이번 라운드 답안 시간을 " + (H.answerMs / 1000) + "초로 바꿨습니다", 1800);
+      } else {
+        toast("다음 라운드부터 " + (H.answerMs / 1000) + "초로 적용됩니다", 1800);
+      }
+    }
+  }
+
+  /* ================= 문제 편집 ================= */
+  function optionRowHTML(r, i, o){
+    const cOpts = Object.keys(COLORS).map(k => '<option value="' + k + '"' + (k === o.c ? " selected" : "") + '>' + COLORS[k].name + '</option>').join("");
+    const tOpts = Object.keys(TYPE_NAME).map(k => '<option value="' + k + '"' + (k === o.t ? " selected" : "") + '>' + TYPE_NAME[k] + '</option>').join("");
+    const wOpts = Object.keys(WINDOW_STYLE).map(k => '<option value="' + k + '"' + (k === o.w ? " selected" : "") + '>' + WINDOW_STYLE[k].name + '</option>').join("");
+    return '<label class="eopt">' +
+      '<input type="radio" name="cor' + r + '" value="' + i + '"' + (Number(ROUNDS[r].correct) === i ? " checked" : "") + '>' +
+      '<select data-k="c">' + cOpts + '</select>' +
+      '<select data-k="t">' + tOpts + '</select>' +
+      '<input type="text" data-k="p" value="' + esc(o.p) + '" maxlength="12" spellcheck="false">' +
+      '<select data-k="w">' + wOpts + '</select>' +
+      '</label>';
+  }
+
+  function buildEditor(){
+    const box = $("editList");
+    box.innerHTML = ROUNDS.map((R, r) =>
+      '<div class="eround" data-r="' + r + '">' +
+        '<div class="rh2"><b>' + (r + 1) + '번</b><span>' + esc(TIER_LABEL[tierOf(r)]) + ' · 현상금 ' + fmtWonShort(ROUND_BOUNTY[r]) + '</span></div>' +
+        R.opts.map((o, i) => optionRowHTML(r, i, o)).join("") +
+      '</div>'
+    ).join("");
+  }
+
+  function saveEditor(){
+    const out = [];
+    const roots = $("editList").querySelectorAll(".eround");
+    for (let r = 0; r < roots.length; r++){
+      const root = roots[r];
+      const rows = root.querySelectorAll(".eopt");
+      const opts = [];
+      for (let i = 0; i < rows.length; i++){
+        const row = rows[i];
+        const get = k => row.querySelector('[data-k="' + k + '"]');
+        opts.push({
+          c: get("c").value, t: get("t").value,
+          p: (get("p").value || "").trim(),
+          w: get("w").value
+        });
+      }
+      const checked = root.querySelector('input[type=radio]:checked');
+      if (!checked){ toast((r + 1) + "번 정답을 선택해 주세요.", 2600); return; }
+      if (opts.some(o => !o.p)){ toast((r + 1) + "번 번호판을 모두 입력해 주세요.", 2600); return; }
+      const correct = Number(checked.value);
+      out.push({ car: opts[correct], correct: correct, opts: opts });
+    }
+    if (out.length !== TOTAL_ROUNDS){ toast("문제가 10개가 아닙니다. 다시 시도해 주세요.", 2600); return; }
+    ROUNDS = cloneRounds(out);
+    try{ localStorage.setItem("hrc_rounds", JSON.stringify(ROUNDS)); }catch(e){}
+    paintPlan();
+    if (H.state === "idle") $("qrHero").innerHTML = carSVG(ROUNDS[0].car);
+    $("editModal").classList.remove("on");
+    toast("문제 10개를 저장했습니다 — [▶ 목격 시작]으로 진행하세요", 2800);
+  }
+
+  function resetEditor(){
+    try{ localStorage.removeItem("hrc_rounds"); }catch(e){}
+    ROUNDS = cloneRounds(DEFAULT_ROUNDS);
+    buildEditor();
+    paintPlan();
+    if (H.state === "idle") $("qrHero").innerHTML = carSVG(ROUNDS[0].car);
+    toast("기본 문제로 되돌렸습니다", 2200);
+  }
+
   /* ================= 부트 ================= */
   function boot(){
     const savedSpeed = Number(localStorage.getItem("hrc_speed")) || 3000;
@@ -1456,9 +1780,21 @@
     });
     setSpeed(savedSpeed, found || seg.querySelector('button[data-ms="3000"]'));
 
+    const savedTime = Number(localStorage.getItem("hrc_answer")) || ANSWER_MS;
+    H.answerMs = savedTime;
+    const segT = $("segTime");
+    let foundT = null;
+    Array.prototype.forEach.call(segT.querySelectorAll("button"), b => {
+      if (Number(b.dataset.sec) * 1000 === savedTime) foundT = b;
+      b.addEventListener("click", () => setTime(b.dataset.sec, b));
+    });
+    setTime((foundT || segT.querySelector('button[data-sec="10"]')).dataset.sec,
+            foundT || segT.querySelector('button[data-sec="10"]'), true);
+
     buildCity();
+    paintPlan();
+    $("qrHero").innerHTML = carSVG(ROUNDS[0].car);
     if (window.__QR_SRC){ $("qrImg").src = window.__QR_SRC; $("qrImg2").src = window.__QR_SRC; }
-    if ($("qrHero")) $("qrHero").innerHTML = carSVG(ROUNDS[0].car);
 
     $("btnStart").addEventListener("click", startSighting);
     $("btnReplay").addEventListener("click", doReplay);
@@ -1470,8 +1806,15 @@
     $("btnCloseQR").addEventListener("click", () => $("qrModal").classList.remove("on"));
     $("qrModal").addEventListener("click", e => { if (e.target === $("qrModal")) $("qrModal").classList.remove("on"); });
 
+    $("btnEdit").addEventListener("click", () => { buildEditor(); $("editModal").classList.add("on"); });
+    $("btnEditClose").addEventListener("click", () => $("editModal").classList.remove("on"));
+    $("btnEditSave").addEventListener("click", saveEditor);
+    $("btnEditReset").addEventListener("click", resetEditor);
+    $("editModal").addEventListener("click", e => { if (e.target === $("editModal")) $("editModal").classList.remove("on"); });
+
     document.addEventListener("keydown", e => {
-      if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+      if (e.target && /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+      if ($("editModal").classList.contains("on")){ if (e.key === "Escape") $("editModal").classList.remove("on"); return; }
       if (e.code === "Space"){ e.preventDefault(); startSighting(); }
       if (e.key === "e" || e.key === "E") doReveal();
       if (e.key === "r" || e.key === "R") nextRound();
@@ -1489,6 +1832,9 @@
     const snd = localStorage.getItem("hrc_sound");
     setSound(snd === null ? true : snd === "1");
   }
+
+  /* 검증용 훅 (화면에는 영향 없음) */
+  window.__hrc = { carSVG: carSVG, getRounds: () => ROUNDS, H: H, COLOR: COLORS, WIN: WINDOW_STYLE, TYPE: TYPE_NAME };
 
   boot();
 })();
