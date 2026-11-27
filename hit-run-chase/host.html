@@ -91,6 +91,11 @@
   .plan h3{margin:0 0 8px;font-family:var(--serif);font-size:19px;font-weight:900;letter-spacing:-.03em;color:#FFEFD2}
   .plan h3 em{font-style:normal;color:var(--amber-lt)}
   .plan table{width:100%;border-collapse:collapse;font-size:12.5px}
+  .stagebar{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 9px}
+  .stagebar .sc{display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(255,201,74,.34);background:rgba(245,165,36,.1);border-radius:99px;padding:4px 9px;font-size:11px;font-weight:900;color:#FFE3AE;white-space:nowrap}
+  .stagebar .sc b{color:var(--amber-lt);font-family:var(--mono);font-size:11px;letter-spacing:0}
+  .stagebar .sc.on{border-color:rgba(255,201,74,.9);background:rgba(245,165,36,.26);color:#FFF6E2;box-shadow:0 0 0 1px rgba(245,165,36,.22)}
+  .stagebar .sc.dim{opacity:.45;border-color:var(--line);background:transparent;color:#93A6BC}
   .plan th{font-size:10.5px;font-weight:900;letter-spacing:.1em;color:#6E8299;text-align:left;padding:0 8px 5px}
   .plan td{padding:4px 8px;border-top:1px solid rgba(255,255,255,.06);font-weight:800;color:#D6E2F0}
   .plan td.b{font-family:var(--mono);color:var(--amber-lt);text-align:right;white-space:nowrap}
@@ -145,6 +150,7 @@
   .roundTag{background:rgba(10,17,29,.78);border:1px solid rgba(245,165,36,.35);border-radius:14px;padding:10px 16px;backdrop-filter:blur(4px)}
   .roundTag b{display:block;font-family:var(--serif);font-size:24px;font-weight:900;letter-spacing:-.03em;color:#FFF3DC;line-height:1.1}
   .roundTag span{display:block;margin-top:4px;font-size:13px;font-weight:900;color:var(--amber-lt)}
+  .roundTag em{display:inline-flex;align-items:center;margin-top:7px;font-style:normal;font-size:11.5px;font-weight:900;letter-spacing:0;color:#0B1220;background:linear-gradient(180deg,#FFD98A,#F5A524);border-radius:99px;padding:3px 10px;white-space:nowrap}
   .bigTimer{background:rgba(10,17,29,.78);border:1px solid var(--line2);border-radius:14px;padding:8px 18px;backdrop-filter:blur(4px);font-family:var(--mono);font-size:40px;font-weight:800;line-height:1;color:#EAF1FA;text-align:right}
   .bigTimer small{font-size:15px;color:var(--muted);font-family:var(--sans);margin-left:4px}
   .bigTimer.hot{color:var(--rose);border-color:rgba(251,113,133,.5)}
@@ -325,6 +331,11 @@
         <div class="idleRight">
           <div class="plan">
             <h3>현상금 <em>5천만</em> 사냥 · 10문제 3단계</h3>
+            <div class="stagebar" id="stageBar">
+              <span class="sc" data-stage="0"><b>1~3</b> 번호판</span>
+              <span class="sc" data-stage="1"><b>4~6</b> 번호판+차종</span>
+              <span class="sc" data-stage="2"><b>7~10</b> 번호판+차종+색깔+유리창</span>
+            </div>
             <table>
               <thead><tr><th>라운드</th><th>출제 포인트</th><th style="text-align:right">현상금</th></tr></thead>
               <tbody id="planBody"></tbody>
@@ -356,7 +367,7 @@
         <div class="carWrap" id="carWrap"></div>
 
         <div class="hudTop">
-          <div class="roundTag"><b id="runRound">제 1 의 목격</b><span id="runBounty">현상금 500만 원</span></div>
+          <div class="roundTag"><b id="runRound">제 1 의 목격</b><span id="runBounty">현상금 500만 원</span><em id="runStage">1~3 · 번호판</em></div>
           <div class="bigTimer" id="bigTimer"><span class="lab" id="bigTimerLab">관찰</span><span id="bigTimerNum">3.0</span><small>초</small></div>
         </div>
         <div class="phaseMsg" id="phaseMsg">목격 준비 — 차량이 곧 지나갑니다</div>
@@ -473,13 +484,18 @@
     blue:{name:"파란 미러 선팅", short:"미러 선팅", main:"#5C93FF", edge:"#1E3EA0", op:.95},
     cracked:{name:"금 간 유리창", short:"금 간 유리", main:"#DDF2FE", edge:"#9BC9E5", op:.7}
   };
-  const TIER_LABEL = ["번호판만","번호판+색","번호판+색+유리창"];
+  const TIER_LABEL = ["번호판만","번호판+차종","번호판+차종+색깔+유리창"];
+  const STAGE_TEXT = ["번호판","번호판+차종","번호판+차종+색깔+유리창"];
+  const STAGE_RANGE = ["1~3","4~6","7~10"];
   const ROUND_BOUNTY = [
     5000000, 7000000, 10000000, 13000000, 15000000,
     20000000, 25000000, 30000000, 40000000, 50000000
   ];
 
-  /* ================= 기본 문제 (10문제 · 3단계) ================= */
+  /* ================= 기본 문제 (10문제 · 3단계) =================
+     1~3  : 번호판만 다름 (차종·색깔·유리창 모두 동일)
+     4~6  : 번호판 + 차종만 다름 (색깔·유리창은 같은 것으로 고정)
+     7~10 : 번호판 + 차종 + 색깔 + 유리창 네 가지를 모두 조합해 다름 */
   const DEFAULT_ROUNDS = [
     /* 1~3 : 똑같은 차량 — 번호판만 다르게 */
     { car:{c:"red",t:"sedan",p:"24가 3571",w:"clear"}, correct:1, opts:[
@@ -503,55 +519,55 @@
       {c:"blue",t:"truck",p:"72무 2136",w:"clear"},
       {c:"blue",t:"truck",p:"72무 2631",w:"clear"}
     ]},
-    /* 4~6 : 번호판 + 색깔 */
-    { car:{c:"red",t:"suv",p:"48거 7924",w:"black"}, correct:0, opts:[
-      {c:"red",t:"suv",p:"48거 7924",w:"black"},
-      {c:"blue",t:"suv",p:"48거 7924",w:"black"},
+    /* 4~6 : 번호판 + 차종만 다름 — 색깔·유리창은 5개 보기 모두 같은 값으로 고정 */
+    { car:{c:"red",t:"suv",p:"48거 7924",w:"black"}, correct:2, opts:[
+      {c:"red",t:"sedan",p:"48거 7924",w:"black"},
       {c:"red",t:"suv",p:"48거 7942",w:"black"},
-      {c:"white",t:"suv",p:"48거 7924",w:"black"},
-      {c:"gray",t:"suv",p:"48거 7942",w:"black"}
+      {c:"red",t:"suv",p:"48거 7924",w:"black"},
+      {c:"red",t:"van",p:"48거 7924",w:"black"},
+      {c:"red",t:"truck",p:"48거 7492",w:"black"}
     ]},
-    { car:{c:"white",t:"sedan",p:"05허 6639",w:"blue"}, correct:2, opts:[
-      {c:"white",t:"sedan",p:"05허 6693",w:"blue"},
-      {c:"gray",t:"sedan",p:"05허 6639",w:"blue"},
+    { car:{c:"white",t:"sedan",p:"05허 6639",w:"blue"}, correct:1, opts:[
+      {c:"white",t:"suv",p:"05허 6639",w:"blue"},
       {c:"white",t:"sedan",p:"05허 6639",w:"blue"},
-      {c:"teal",t:"sedan",p:"05허 6639",w:"blue"},
-      {c:"blue",t:"sedan",p:"05허 6369",w:"blue"}
+      {c:"white",t:"sedan",p:"05허 6693",w:"blue"},
+      {c:"white",t:"van",p:"05허 6639",w:"blue"},
+      {c:"white",t:"truck",p:"05허 6396",w:"blue"}
     ]},
     { car:{c:"black",t:"van",p:"88소 1419",w:"clear"}, correct:3, opts:[
       {c:"black",t:"van",p:"88소 1491",w:"clear"},
-      {c:"green",t:"van",p:"88소 1419",w:"clear"},
-      {c:"black",t:"van",p:"88소 4191",w:"clear"},
+      {c:"black",t:"sedan",p:"88소 1419",w:"clear"},
+      {c:"black",t:"truck",p:"88소 1419",w:"clear"},
       {c:"black",t:"van",p:"88소 1419",w:"clear"},
-      {c:"white",t:"van",p:"88소 1491",w:"clear"}
+      {c:"black",t:"suv",p:"88소 4191",w:"clear"}
     ]},
-    /* 7~10 : 번호판 + 색깔 + 유리창 */
+    /* 7~10 : 번호판 + 차종 + 색깔 + 유리창 — 네 가지를 모두 조합해 다름 */
     { car:{c:"red",t:"sedan",p:"12가 3456",w:"black"}, correct:1, opts:[
       {c:"red",t:"sedan",p:"12가 3465",w:"black"},
       {c:"red",t:"sedan",p:"12가 3456",w:"black"},
       {c:"blue",t:"sedan",p:"12가 3456",w:"black"},
-      {c:"red",t:"sedan",p:"12거 3456",w:"clear"},
+      {c:"red",t:"suv",p:"12가 3456",w:"black"},
       {c:"red",t:"sedan",p:"12가 3456",w:"clear"}
     ]},
     { car:{c:"white",t:"suv",p:"39허 7712",w:"blue"}, correct:3, opts:[
       {c:"white",t:"suv",p:"39허 7712",w:"black"},
       {c:"gray",t:"suv",p:"39허 7712",w:"blue"},
-      {c:"white",t:"suv",p:"39허 7721",w:"blue"},
+      {c:"white",t:"sedan",p:"39허 7712",w:"blue"},
       {c:"white",t:"suv",p:"39허 7712",w:"blue"},
-      {c:"white",t:"suv",p:"39허 7217",w:"clear"}
+      {c:"white",t:"van",p:"39허 7721",w:"black"}
     ]},
-    { car:{c:"black",t:"sedan",p:"61보 4820",w:"cracked"}, correct:2, opts:[
-      {c:"black",t:"sedan",p:"61보 4820",w:"clear"},
-      {c:"black",t:"sedan",p:"61보 4802",w:"cracked"},
-      {c:"black",t:"sedan",p:"61보 4820",w:"cracked"},
+    { car:{c:"black",t:"van",p:"61보 4820",w:"cracked"}, correct:2, opts:[
+      {c:"black",t:"van",p:"61보 4820",w:"clear"},
+      {c:"black",t:"van",p:"61보 4802",w:"cracked"},
+      {c:"black",t:"van",p:"61보 4820",w:"cracked"},
       {c:"gray",t:"sedan",p:"61보 4820",w:"cracked"},
-      {c:"black",t:"sedan",p:"61보 4820",w:"black"}
+      {c:"black",t:"truck",p:"61보 4820",w:"black"}
     ]},
     { car:{c:"teal",t:"suv",p:"77허 9042",w:"blue"}, correct:4, opts:[
       {c:"teal",t:"suv",p:"77허 9042",w:"black"},
-      {c:"teal",t:"suv",p:"77허 9402",w:"blue"},
-      {c:"green",t:"suv",p:"77허 9042",w:"blue"},
-      {c:"teal",t:"suv",p:"77허 9042",w:"cracked"},
+      {c:"teal",t:"truck",p:"77허 9402",w:"black"},
+      {c:"green",t:"sedan",p:"77허 9042",w:"blue"},
+      {c:"teal",t:"van",p:"77허 9042",w:"blue"},
       {c:"teal",t:"suv",p:"77허 9042",w:"blue"}
     ]}
   ];
@@ -572,6 +588,16 @@
     return n.toLocaleString("ko-KR") + "만";
   }
   function tierOf(i){ return i < 3 ? 0 : (i < 6 ? 1 : 2); }
+  function stageOfRound(n){ const r = Number(n) || 1; return r <= 3 ? 0 : (r <= 6 ? 1 : 2); }
+  function paintStageBar(cur){
+    const bar = $("stageBar");
+    if (!bar) return;
+    const t = stageOfRound(cur);
+    Array.prototype.forEach.call(bar.querySelectorAll(".sc"), el => {
+      el.classList.toggle("on", Number(el.dataset.stage) === t);
+      el.classList.remove("dim");
+    });
+  }
   function plateOf(r){ return (r && r.car && r.car.p) || ""; }
 
   function cloneRounds(arr){
@@ -777,7 +803,9 @@
     const midi = (+m[3] + 1) * 12 + NOTE[m[1]] + acc;
     return 440 * Math.pow(2, (midi - 69) / 12);
   }
-  const A = { ctx:null, master:null, music:null, sfx:null, muted:false, siren:null, engine:null, bgmTimer:0, bgmMode:"", bgmStep:0, bgmNext:0, ko:null };
+  const A = { ctx:null, master:null, boost:null, music:null, sfx:null, muted:false, siren:null, engine:null, bgmTimer:0, bgmEndTimer:0, bgmGate:null, bgmMode:"", bgmStep:0, bgmNext:0, ko:null };
+  const MASTER_ON = 1.0;      /* 소리 켜졌을 때 마스터 게인 */
+  const BOOST = 2.0;          /* 컴프레서 뒤 메이크업 게인 — 강연장 스피커용 볼륨 */
   let NOISE_BUF = null;
 
   function unlock(){
@@ -788,12 +816,16 @@
         const ctx = new Ctx();
         A.ctx = ctx;
         A.master = ctx.createGain();
-        A.master.gain.value = A.muted ? 0.0001 : 0.9;
+        A.master.gain.value = A.muted ? 0.0001 : MASTER_ON;
+        /* 마스터 출력단: 컴프레서로 찢어짐을 막고, 메이크업 게인으로 크게 */
         const comp = ctx.createDynamicsCompressor();
-        comp.threshold.value = -14; comp.knee.value = 20; comp.ratio.value = 6;
-        A.master.connect(comp); comp.connect(ctx.destination);
-        A.music = ctx.createGain(); A.music.gain.value = 0.26; A.music.connect(A.master);
-        A.sfx = ctx.createGain(); A.sfx.gain.value = 0.85; A.sfx.connect(A.master);
+        comp.threshold.value = -16; comp.knee.value = 26; comp.ratio.value = 8;
+        comp.attack.value = 0.003; comp.release.value = 0.22;
+        const boost = ctx.createGain(); boost.gain.value = BOOST;
+        A.boost = boost;
+        A.master.connect(comp); comp.connect(boost); boost.connect(ctx.destination);
+        A.music = ctx.createGain(); A.music.gain.value = 0.65; A.music.connect(A.master);
+        A.sfx = ctx.createGain(); A.sfx.gain.value = 1.0; A.sfx.connect(A.master);
         voicePrep();
       }catch(e){ A.ctx = null; }
     }
@@ -887,7 +919,7 @@
     flt.type = "bandpass"; flt.frequency.value = 1250; flt.Q.value = 1.1;
     const g = ctx.createGain();
     g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.075, t + 0.35);
+    g.gain.exponentialRampToValueAtTime(0.16, t + 0.32);
     let tt = t;
     for (let i = 0; i < 40; i++){
       osc.frequency.setValueAtTime(i % 2 ? 690 : 980, tt);
@@ -912,6 +944,7 @@
   function engineStart(dur){
     const ctx = unlock();
     if (!ctx || A.muted || A.engine) return;
+    dur = Math.max(0.35, Number(dur) || 3);
     const t = ctx.currentTime;
     const osc = ctx.createOscillator(); osc.type = "sawtooth";
     osc.frequency.setValueAtTime(58, t);
@@ -920,8 +953,8 @@
     const lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 340; lp.Q.value = 3.2;
     const g = ctx.createGain();
     g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.15, t + Math.min(0.7, dur * 0.3));
-    g.gain.setValueAtTime(0.15, t + dur * 0.62);
+    g.gain.exponentialRampToValueAtTime(0.26, t + Math.min(0.5, dur * 0.3));
+    g.gain.setValueAtTime(0.26, t + dur * 0.62);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur + 0.2);
     const lfo = ctx.createOscillator(); lfo.frequency.value = 11;
     const lg = ctx.createGain(); lg.gain.value = 0.04;
@@ -941,44 +974,110 @@
     const ctx = unlock();
     if (!ctx || A.muted) return;
     const t = ctx.currentTime;
-    tone({ f:2100, f2:900, dur:0.34, type:"sawtooth", gain:0.09, t:t, flt:{type:"bandpass", f:1800, q:3} });
-    hit({ f:5200, f2:1400, dur:0.36, ftype:"bandpass", q:2.4, gain:0.11, t:t });
-    tone({ f:120, f2:48, dur:0.3, type:"sine", gain:0.1, t:t + 0.02 });
+    tone({ f:2100, f2:900, dur:0.34, type:"sawtooth", gain:0.13, t:t, flt:{type:"bandpass", f:1800, q:3} });
+    hit({ f:5200, f2:1400, dur:0.36, ftype:"bandpass", q:2.4, gain:0.16, t:t });
+    tone({ f:120, f2:48, dur:0.3, type:"sine", gain:0.14, t:t + 0.02 });
   }
 
   const BGM = {
     spb(mode){ return mode === "suspense" ? 0.145 : 0.1; },
+    bus(){ return A.bgmGate || A.music; },
     tick(mode, step, t){
       const e = step % 16;
+      const bus = BGM.bus();
       if (mode === "chase"){
-        if (e % 4 === 0) tone({ f:135, f2:48, dur:0.18, type:"sine", gain:0.26, t:t, bus:A.music });
+        if (e % 4 === 0) tone({ f:135, f2:48, dur:0.18, type:"sine", gain:0.34, t:t, bus:bus });
         if (e === 4 || e === 12){
-          hit({ f:2000, dur:0.09, ftype:"bandpass", q:1.2, gain:0.1, t:t, bus:A.music });
-          tone({ f:240, dur:0.06, type:"triangle", gain:0.06, t:t, bus:A.music });
+          hit({ f:2000, dur:0.09, ftype:"bandpass", q:1.2, gain:0.14, t:t, bus:bus });
+          tone({ f:240, dur:0.06, type:"triangle", gain:0.09, t:t, bus:bus });
         }
-        if (e % 2 === 1) hit({ f:8800, dur:0.016, ftype:"highpass", gain:0.04, t:t, bus:A.music });
+        if (e % 2 === 1) hit({ f:8800, dur:0.016, ftype:"highpass", gain:0.06, t:t, bus:bus });
         const bass = ["A1","A1","F1","G1"];
         if (e % 4 === 0 || e === 6 || e === 10)
-          tone({ f:hz(bass[Math.floor(step/16)%4]), dur:0.16, type:"triangle", gain:0.16, t:t, bus:A.music, flt:{type:"lowpass", f:420, q:1.2} });
+          tone({ f:hz(bass[Math.floor(step/16)%4]), dur:0.16, type:"triangle", gain:0.22, t:t, bus:bus, flt:{type:"lowpass", f:420, q:1.2} });
         const lead = ["A4","C5","E5","A5","G4","B4","D5","G5"];
         if (e % 2 === 0)
-          tone({ f:hz(lead[(step >> 1) % 8]), dur:0.14, type:"sawtooth", gain:0.035, t:t, bus:A.music, flt:{type:"lowpass", f:2600} });
-        if (e === 14) tone({ f:1500, f2:2600, dur:0.16, type:"sawtooth", gain:0.03, t:t, bus:A.music });
+          tone({ f:hz(lead[(step >> 1) % 8]), dur:0.14, type:"sawtooth", gain:0.05, t:t, bus:bus, flt:{type:"lowpass", f:2600} });
+        if (e === 14) tone({ f:1500, f2:2600, dur:0.16, type:"sawtooth", gain:0.045, t:t, bus:bus });
+        /* 추격 신호음 — 8step마다 짧게 울리는 경찰 사이렌 */
+        if (e === 2 || e === 10) tone({ f:740, f2:1040, dur:0.18, type:"square", gain:0.05, t:t, bus:bus, flt:{type:"bandpass", f:1100, q:1.4} });
       } else if (mode === "suspense"){
-        if (e === 0) tone({ f:hz("A1"), dur:1.1, type:"triangle", gain:0.1, t:t, bus:A.music, flt:{type:"lowpass", f:300} });
-        if (e === 8) tone({ f:hz("F1"), dur:1.1, type:"triangle", gain:0.09, t:t, bus:A.music, flt:{type:"lowpass", f:300} });
-        if (e % 4 === 2) hit({ f:3000, dur:0.03, ftype:"bandpass", q:3, gain:0.05, t:t, bus:A.music });
-        tone({ f:hz(step % 32 < 16 ? "E4" : "C4"), dur:0.16, type:"sine", gain:0.028, t:t, bus:A.music });
+        if (e === 0) tone({ f:hz("A1"), dur:1.1, type:"triangle", gain:0.12, t:t, bus:bus, flt:{type:"lowpass", f:300} });
+        if (e === 8) tone({ f:hz("F1"), dur:1.1, type:"triangle", gain:0.11, t:t, bus:bus, flt:{type:"lowpass", f:300} });
+        if (e % 4 === 2) hit({ f:3000, dur:0.03, ftype:"bandpass", q:3, gain:0.06, t:t, bus:bus });
+        tone({ f:hz(step % 32 < 16 ? "E4" : "C4"), dur:0.16, type:"sine", gain:0.036, t:t, bus:bus });
       }
     }
   };
-  function bgmStart(mode){
+
+  /* 차량 통과 전용 BGM — 속도 설정(7s/5s/3s/1.8s/1.0s)과 같은 길이로 흐르고
+     차량이 화면을 빠져나가는 순간 같이 멈춥니다 (진행자 노트북 스피커 전용) */
+  function passRiser(ms, gate){
+    if (!A.ctx || !gate) return;
+    const ctx = A.ctx;
+    const dur = Math.max(0.5, (Number(ms) || 3000) / 1000);
+    const t0 = ctx.currentTime + 0.02;
+    /* 1) 긴장이 차오르는 상승 현 — 필터가 열리며 고음으로 치솟음 */
+    const osc = ctx.createOscillator(); osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(98, t0);
+    osc.frequency.exponentialRampToValueAtTime(196, t0 + dur * 0.5);
+    osc.frequency.exponentialRampToValueAtTime(400, t0 + dur * 0.98);
+    const flt = ctx.createBiquadFilter(); flt.type = "lowpass"; flt.Q.value = 6;
+    flt.frequency.setValueAtTime(300, t0);
+    flt.frequency.exponentialRampToValueAtTime(3000, t0 + dur * 0.95);
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(0.085, t0 + Math.min(0.45, dur * 0.35));
+    g.gain.setValueAtTime(0.11, t0 + dur * 0.8);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    osc.connect(flt); flt.connect(g); g.connect(gate);
+    osc.start(t0); osc.stop(t0 + dur + 0.05);
+    /* 2) 점점 빨라지는 심장박동 베이스 */
+    let tt = t0, gap = Math.max(0.16, dur / 10);
+    for (let i = 0; i < 24 && tt < t0 + dur - 0.08; i++){
+      tone({ f:68, f2:40, dur:0.12, type:"sine", gain:0.3, t:tt, bus:gate });
+      tone({ f:136, f2:82, dur:0.07, type:"triangle", gain:0.09, t:tt, bus:gate });
+      tt += gap; gap *= 0.9;
+    }
+    /* 3) 엔진 회전 — 통과 시간에 맞춰 RPM 상승 */
+    const eng = ctx.createOscillator(); eng.type = "sawtooth";
+    eng.frequency.setValueAtTime(46, t0);
+    eng.frequency.linearRampToValueAtTime(120, t0 + dur * 0.8);
+    eng.frequency.linearRampToValueAtTime(92, t0 + dur);
+    const lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 430; lp.Q.value = 4;
+    const eg = ctx.createGain();
+    eg.gain.setValueAtTime(0.0001, t0);
+    eg.gain.exponentialRampToValueAtTime(0.1, t0 + Math.min(0.3, dur * 0.25));
+    eg.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    eng.connect(lp); lp.connect(eg); eg.connect(gate);
+    eng.start(t0); eng.stop(t0 + dur + 0.05);
+  }
+
+  function bgmStart(mode, ms){
     const ctx = unlock();
     if (!ctx || A.muted) return;
-    if (A.bgmTimer && A.bgmMode === mode) return;
     bgmStop();
-    A.bgmMode = mode; BGM.step = 0; A.bgmNext = ctx.currentTime + 0.12;
+    const gate = ctx.createGain();
+    gate.gain.setValueAtTime(1, ctx.currentTime);
+    gate.connect(A.music);
+    A.bgmGate = gate;
+    A.bgmMode = mode; BGM.step = 0; A.bgmNext = ctx.currentTime + 0.06;
     A.bgmTimer = setInterval(bgmTick, 25);
+    if (ms && Number(ms) > 0){
+      /* 차량이 화면을 벗어나는 시각(= 통과 시간 끝)에 게이트를 닫아 BGM을 정확히 끊습니다 */
+      const end = ctx.currentTime + Number(ms) / 1000;
+      try{
+        gate.gain.setValueAtTime(1, Math.max(ctx.currentTime, end - 0.1));
+        gate.gain.linearRampToValueAtTime(0.0001, end);
+      }catch(e){}
+      A.bgmEndTimer = setTimeout(() => {
+        if (A.bgmGate !== gate) return;
+        if (A.bgmTimer){ clearInterval(A.bgmTimer); A.bgmTimer = 0; }
+        A.bgmMode = "";
+        try{ gate.disconnect(); }catch(e){}
+      }, Math.round(Number(ms)) + 400);
+    }
+    if (mode === "chase") passRiser(ms, gate);
   }
   function bgmTick(){
     if (!A.ctx || A.muted || !A.bgmMode) return;
@@ -992,6 +1091,17 @@
   }
   function bgmStop(){
     if (A.bgmTimer){ clearInterval(A.bgmTimer); A.bgmTimer = 0; }
+    if (A.bgmEndTimer){ clearTimeout(A.bgmEndTimer); A.bgmEndTimer = 0; }
+    if (A.bgmGate && A.ctx){
+      const g = A.bgmGate;
+      try{
+        g.gain.cancelScheduledValues(A.ctx.currentTime);
+        g.gain.setValueAtTime(Math.max(0.0002, g.gain.value), A.ctx.currentTime);
+        g.gain.linearRampToValueAtTime(0.0001, A.ctx.currentTime + 0.08);
+      }catch(e){}
+      setTimeout(() => { try{ g.disconnect(); }catch(e){} }, 300);
+    }
+    A.bgmGate = null;
     A.bgmMode = "";
   }
 
@@ -1001,12 +1111,12 @@
     const t = ctx.currentTime + 0.02;
     const notes = finalRound ? [523.25, 659.25, 783.99, 1046.5, 1318.5, 1568] : [523.25, 659.25, 783.99, 1046.5];
     notes.forEach((f, i) => {
-      tone({ f:f, dur:0.34, type:"triangle", gain:0.2, t:t + i * 0.09 });
-      tone({ f:f * 2, dur:0.2, type:"sine", gain:0.06, t:t + i * 0.09 });
+      tone({ f:f, dur:0.34, type:"triangle", gain:0.28, t:t + i * 0.09 });
+      tone({ f:f * 2, dur:0.2, type:"sine", gain:0.09, t:t + i * 0.09 });
     });
-    tone({ f:1046.5, dur:0.9, type:"sawtooth", gain:0.08, t:t + 0.44, flt:{type:"lowpass", f:3200} });
-    hit({ f:9000, dur:0.6, ftype:"highpass", gain:0.09, t:t + 0.44 });
-    hit({ f:220, f2:60, dur:0.5, ftype:"lowpass", gain:0.14, t:t + 0.02 });
+    tone({ f:1046.5, dur:0.9, type:"sawtooth", gain:0.1, t:t + 0.44, flt:{type:"lowpass", f:3200} });
+    hit({ f:9000, dur:0.6, ftype:"highpass", gain:0.12, t:t + 0.44 });
+    hit({ f:220, f2:60, dur:0.5, ftype:"lowpass", gain:0.19, t:t + 0.02 });
     const fl = $("flash");
     fl.classList.add("on");
     setTimeout(() => fl.classList.remove("on"), 720);
@@ -1018,8 +1128,8 @@
     if (!ctx || A.muted) return;
     const t = ctx.currentTime + 0.05;
     [0, 1, 2].forEach(i => {
-      tone({ f: i === 2 ? 880 : 620, dur:0.14, type:"triangle", gain:0.16, t: t + i * 1.0 });
-      tone({ f: i === 2 ? 1320 : 930, dur:0.09, type:"sine", gain:0.05, t: t + i * 1.0 });
+      tone({ f: i === 2 ? 880 : 620, dur:0.14, type:"triangle", gain:0.24, t: t + i * 1.0 });
+      tone({ f: i === 2 ? 1320 : 930, dur:0.09, type:"sine", gain:0.08, t: t + i * 1.0 });
     });
   }
   function tickBlip(){
@@ -1032,14 +1142,16 @@
     A.muted = !on;
     $("btnSound").innerHTML = on ? "🔊 소리 ON" : "🔇 음소거";
     $("btnSound").classList.toggle("on", on);
-    if (A.master){ try{ A.master.gain.value = on ? 0.9 : 0.0001; }catch(e){} }
+    if (A.master){ try{ A.master.gain.value = on ? MASTER_ON : 0.0001; }catch(e){} }
     if (!on){
       bgmStop(); sirenStop(); engineStop();
       if ("speechSynthesis" in window){ try{ window.speechSynthesis.cancel(); }catch(e){} }
     } else if (H.state === "sighting"){
       const el = nowMs() - H.startAt;
-      if (el >= 0 && el < H.sightMs){ sirenStart(); engineStart(H.sightMs - el); bgmStart("chase"); }
-      else if (el >= H.sightMs) bgmStart("suspense");
+      if (el >= 0 && el < H.sightMs){
+        const remain = Math.max(300, H.sightMs - el);
+        sirenStart(); engineStart(remain / 1000); bgmStart("chase", remain);
+      } else if (el >= H.sightMs) bgmStart("suspense");
     }
     try{ localStorage.setItem("hrc_sound", on ? "1" : "0"); }catch(e){}
   }
@@ -1182,6 +1294,7 @@
       return '<tr><td>' + (i + 1) + 'R</td><td class="n">' + esc(TIER_LABEL[t]) + ' · ' +
         esc(colorName(r.car.c) + " " + typeName(r.car.t)) + '</td><td class="b">' + fmtWonShort(ROUND_BOUNTY[i]) + '</td></tr>';
     }).join("");
+    paintStageBar(H.round || 1);
   }
 
   function buildCity(){
@@ -1233,8 +1346,11 @@
 
   function paintRunHead(){
     const R = currentRound();
+    const st = stageOfRound(H.round || 1);
     $("runRound").textContent = "제 " + (H.round || 1) + " 의 목격";
     $("runBounty").textContent = "현상금 " + fmtWon(ROUND_BOUNTY[((H.round || 1) - 1) % TOTAL_ROUNDS]);
+    $("runStage").textContent = STAGE_RANGE[st] + " · " + STAGE_TEXT[st];
+    paintStageBar(H.round || 1);
     const wrap = $("carWrap");
     wrap.innerHTML = carSVG(R.car);
     wrap.style.opacity = "0";
@@ -1263,13 +1379,24 @@
     const wait = H.startAt - nowMs();
     if (nowMs() >= H.startAt){
       const el = nowMs() - H.startAt;
-      if (el < H.sightMs){ sirenStart(); engineStart(H.sightMs - el); bgmStart("chase"); }
-      else bgmStart("suspense");
+      if (el < H.sightMs){
+        const remain = Math.max(300, H.sightMs - el);
+        sirenStart(); engineStart(remain / 1000); bgmStart("chase", remain);
+      } else bgmStart("suspense");
       return;
     }
     setTimeout(() => { if (H.state === "sighting") countdownBeeps(); }, Math.max(0, wait - COUNT_MS + 400));
-    setTimeout(() => { if (H.state !== "sighting") return; sirenStart(); engineStart(H.sightMs); bgmStart("chase"); }, Math.max(0, wait));
-    setTimeout(() => { if (H.state !== "sighting") return; sirenStop(); engineStop(); screech(); bgmStart("suspense"); }, Math.max(0, wait + H.sightMs));
+    /* 차량이 화면에 들어오는 순간 — 통과 BGM을 실제 남은 통과 시간에 맞춰 시작 */
+    setTimeout(() => {
+      if (H.state !== "sighting") return;
+      const passMs = Math.max(300, H.startAt + H.sightMs - nowMs());
+      sirenStart(); engineStart(passMs / 1000); bgmStart("chase", passMs);
+    }, Math.max(0, wait));
+    /* 차량이 화면을 완전히 벗어나는 순간 — 통과 BGM을 끊고 긴장감 유지용 앤드로 전환 */
+    setTimeout(() => {
+      if (H.state !== "sighting") return;
+      sirenStop(); engineStop(); screech(); bgmStart("suspense");
+    }, Math.max(0, wait + H.sightMs));
   }
 
   function startRunLoop(){
@@ -1322,6 +1449,7 @@
         $("bigTimer").classList.remove("paused");
         if (el >= sight){ wrap.classList.remove("show"); wrap.style.opacity = "0"; }
         sirenStop(); engineStop();
+        bgmStart("suspense");
         settlePause();
       }
       H.raf = requestAnimationFrame(runLoop);
@@ -1564,7 +1692,7 @@
     const wrap = $("carWrap");
     wrap.classList.remove("show"); void wrap.offsetWidth; wrap.classList.add("show");
     wrap.style.opacity = "1";
-    sirenStart(); engineStart(H.replay.ms / 1000);
+    sirenStart(); engineStart(H.replay.ms / 1000); bgmStart("chase", H.replay.ms);
     speak("한 번 더 지나갑니다!", { rate:1.12, pitch:1.05 });
     setTimeout(() => { if (H.replay.active){ screech(); } }, H.replay.ms - 80);
     setTimeout(() => {
@@ -1834,7 +1962,11 @@
   }
 
   /* 검증용 훅 (화면에는 영향 없음) */
-  window.__hrc = { carSVG: carSVG, getRounds: () => ROUNDS, H: H, COLOR: COLORS, WIN: WINDOW_STYLE, TYPE: TYPE_NAME };
+  window.__hrc = { carSVG: carSVG, getRounds: () => ROUNDS, H: H, COLOR: COLORS, WIN: WINDOW_STYLE, TYPE: TYPE_NAME, A: A,
+    audio: () => ({ ctx: A.ctx ? A.ctx.state : null, muted: A.muted, master: A.master ? A.master.gain.value : null,
+      boost: A.boost ? A.boost.gain.value : null, music: A.music ? A.music.gain.value : null, sfx: A.sfx ? A.sfx.gain.value : null,
+      bgmMode: A.bgmMode, bgmPlaying: !!A.bgmTimer, bgmGate: A.bgmGate ? A.bgmGate.gain.value : null,
+      siren: !!A.siren, engine: !!A.engine }) };
 
   boot();
 })();
